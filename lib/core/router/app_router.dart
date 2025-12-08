@@ -6,15 +6,15 @@ import 'package:frontend/features/auth/presentation/register_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_create_data.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
-import 'package:frontend/features/herd/presentation/herd_add_animal_details_screen.dart';
-import 'package:frontend/features/herd/presentation/herd_add_animal_screen.dart';
-import 'package:frontend/features/herd/presentation/herd_animal_screen.dart';
-import 'package:frontend/features/herd/presentation/herd_edit_animal_details_screen.dart';
-import 'package:frontend/features/herd/presentation/herd_edit_animal_screen.dart';
+import 'package:frontend/features/herd/presentation/pages/herd_add_animal_details_screen.dart';
+import 'package:frontend/features/herd/presentation/pages/herd_add_animal_screen.dart';
+import 'package:frontend/features/herd/presentation/pages/herd_animal_screen.dart';
+import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_details_screen.dart';
+import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/features/splash/presentation/splash_screen.dart';
 import 'package:frontend/features/home/presentation/home_screen.dart';
-import 'package:frontend/features/herd/presentation/herd_screen.dart';
+import 'package:frontend/features/herd/presentation/pages/herd_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',

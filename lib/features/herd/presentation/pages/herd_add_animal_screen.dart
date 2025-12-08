@@ -4,6 +4,10 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_gender_chip.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_page_header.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_section_title.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_text_field.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -104,7 +108,6 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
       return;
     }
 
-    // НИКАКИХ запросов на сервер тут
     final draft = CattleCreateData(
       name: name,
       tagNumber: tag,
@@ -135,45 +138,14 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: AppIcons.svg('arrow', size: 32),
-                              onPressed: () => context.pop(),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                'Добавление животного',
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.primary3,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 48,
-                            ), // симметрия под иконку слева
-                          ],
+                        HerdPageHeader(
+                          title: 'Добавление животного',
+                          onBack: () => context.pop(),
                         ),
 
                         const SizedBox(height: 12),
 
-                        const Text(
-                          'Основная информация',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primary3,
-                          ),
-                        ),
+                        const HerdSectionTitle(text: 'Основная информация'),
 
                         const SizedBox(height: 24),
 
@@ -186,10 +158,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        TextField(
-                          controller: _nameController,
-                          decoration: _inputDecoration(),
-                        ),
+                        HerdTextField(controller: _nameController),
 
                         const SizedBox(height: 24),
 
@@ -202,9 +171,8 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        TextField(
+                        HerdTextField(
                           controller: _tagController,
-                          decoration: _inputDecoration(),
                           keyboardType: TextInputType.text,
                         ),
 
@@ -222,7 +190,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                         Row(
                           children: [
                             Expanded(
-                              child: _GenderChip(
+                              child: HerdGenderChip(
                                 label: 'Женский',
                                 isActive: _gender == AnimalGender.female,
                                 onTap: () =>
@@ -231,7 +199,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                             ),
                             const SizedBox(width: 18),
                             Expanded(
-                              child: _GenderChip(
+                              child: HerdGenderChip(
                                 label: 'Мужской',
                                 isActive: _gender == AnimalGender.male,
                                 onTap: () =>
@@ -255,25 +223,21 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                                 ),
                               ),
                             ),
-
-                            // инпут справа, фиксированной ширины
                             SizedBox(
-                              width: 190, // как в макете, можно 150–170
-                              child: TextField(
+                              width: 190,
+                              child: HerdTextField(
                                 controller: _birthDateController,
+                                hint: '31.12.2020',
                                 readOnly: true,
                                 onTap: _pickDate,
-                                decoration: _inputDecoration(
-                                  hint: '31.12.2020',
-                                  prefixIcon: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                    ),
-                                    child: AppIcons.svg(
-                                      'calendar',
-                                      size: 18,
-                                      color: AppColors.primary3,
-                                    ),
+                                prefixIcon: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
+                                  child: AppIcons.svg(
+                                    'calendar',
+                                    size: 18,
+                                    color: AppColors.primary3,
                                   ),
                                 ),
                               ),
@@ -311,7 +275,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),
-                                  backgroundColor: Color.fromRGBO(
+                                  backgroundColor: const Color.fromRGBO(
                                     213,
                                     215,
                                     218,
@@ -348,66 +312,6 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  InputDecoration _inputDecoration({String? hint, Widget? prefixIcon}) {
-    return InputDecoration(
-      hintText: hint,
-      filled: true,
-      fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      prefixIcon: prefixIcon,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.additional2),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.additional2),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.success, width: 1),
-      ),
-    );
-  }
-}
-
-class _GenderChip extends StatelessWidget {
-  final String label;
-  final bool isActive;
-  final VoidCallback onTap;
-
-  const _GenderChip({
-    required this.label,
-    required this.isActive,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final background = isActive ? AppColors.primary1 : AppColors.additional2;
-    final textColor = isActive ? Colors.white : AppColors.primary3;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 36,
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: textColor,
-          ),
-        ),
       ),
     );
   }

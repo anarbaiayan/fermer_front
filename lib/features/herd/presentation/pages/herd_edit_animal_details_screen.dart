@@ -5,34 +5,47 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:frontend/features/herd/domain/entities/health_status.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/data/models/cattle_details_dto.dart';
-import 'package:frontend/features/herd/application/herd_providers.dart';
-import 'package:frontend/features/herd/domain/entities/cattle_create_data.dart';
-import 'package:frontend/features/herd/data/models/cattle_mappers.dart';
+import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
+import 'package:frontend/features/herd/domain/entities/health_status.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_page_header.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_section_title.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_text_field.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_input_decoration.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
-class HerdAddAnimalDetailsScreen extends ConsumerStatefulWidget {
-  final CattleCreateData draft;
+class HerdEditAnimalDetailsScreen extends ConsumerStatefulWidget {
+  final CattleEditData draft;
 
-  const HerdAddAnimalDetailsScreen({super.key, required this.draft});
+  const HerdEditAnimalDetailsScreen({super.key, required this.draft});
 
   @override
-  ConsumerState<HerdAddAnimalDetailsScreen> createState() =>
-      _HerdAddAnimalDetailsScreenState();
+  ConsumerState<HerdEditAnimalDetailsScreen> createState() =>
+      _HerdEditAnimalDetailsScreenState();
 }
 
-class _HerdAddAnimalDetailsScreenState
-    extends ConsumerState<HerdAddAnimalDetailsScreen> {
-  final _breedController = TextEditingController();
-  final _groupController = TextEditingController();
+class _HerdEditAnimalDetailsScreenState
+    extends ConsumerState<HerdEditAnimalDetailsScreen> {
+  late final TextEditingController _breedController;
+  late final TextEditingController _groupController;
   final _eventController = TextEditingController();
 
   HealthStatus? _healthStatus;
   bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _breedController = TextEditingController(text: widget.draft.breed ?? '');
+    _groupController = TextEditingController(
+      text: widget.draft.animalGroup ?? '',
+    );
+    _healthStatus = widget.draft.healthStatus;
+  }
 
   @override
   void dispose() {
@@ -42,37 +55,9 @@ class _HerdAddAnimalDetailsScreenState
     super.dispose();
   }
 
-  void _onSkip() async {
-    final herdApi = ref.read(herdApiProvider);
-
-    setState(() => _isSaving = true);
-
-    try {
-      final dto = cattleToDtoForCreate(
-        name: widget.draft.name,
-        tagNumber: widget.draft.tagNumber,
-        gender: widget.draft.gender,
-        dateOfBirth: widget.draft.dateOfBirth,
-      );
-
-      await herdApi.createCattle(dto);
-
-      ref.invalidate(cattleListProvider);
-
-      if (!mounted) return; // ⬅ проверка перед context
-      await _showSuccessDialog(context);
-
-      if (!mounted) return;
-      context.go('/herd');
-    } catch (e) {
-      if (!mounted) return; // ⬅ проверка перед ScaffoldMessenger
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка при создании животного: $e')),
-      );
-    } finally {
-      if (!mounted) return; // ⬅ проверка перед setState
-      setState(() => _isSaving = false);
-    }
+  String? _emptyToNull(String text) {
+    final value = text.trim();
+    return value.isEmpty ? null : value;
   }
 
   Future<void> _onSave() async {
@@ -81,46 +66,52 @@ class _HerdAddAnimalDetailsScreenState
     setState(() => _isSaving = true);
 
     try {
-      final baseDto = cattleToDtoForCreate(
-        name: widget.draft.name,
-        tagNumber: widget.draft.tagNumber,
-        gender: widget.draft.gender,
-        dateOfBirth: widget.draft.dateOfBirth,
-      );
-
-      final createdDto = await herdApi.createCattle(baseDto);
-      final createdId = createdDto.id;
-      if (createdId == null) {
-        throw Exception('Сервер не вернул id животного');
-      }
-
       final detailsDto = CattleDetailsDto(
         breed: _emptyToNull(_breedController.text),
         animalGroup: _emptyToNull(_groupController.text),
         healthStatus: _healthStatus?.apiValue,
+        lastMilkYield: widget.draft.lastMilkYield,
+        lastCalvingDate: widget.draft.lastCalvingDate != null
+            ? _formatDate(widget.draft.lastCalvingDate!)
+            : null,
+        lastInseminationDate: widget.draft.lastInseminationDate != null
+            ? _formatDate(widget.draft.lastInseminationDate!)
+            : null,
+        pregnancyStatus: widget.draft.pregnancyStatus,
+        isDryPeriod: widget.draft.isDryPeriod,
       );
 
-      await herdApi.updateDetails(id: createdId, details: detailsDto);
+      await herdApi.updateDetails(id: widget.draft.id, details: detailsDto);
 
       ref.invalidate(cattleListProvider);
+      ref.invalidate(cattleByIdProvider(widget.draft.id));
 
       if (!mounted) return;
+
       await _showSuccessDialog(context);
+      if (!mounted) return;
 
-      if (!mounted) return;
       context.go('/herd');
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка при сохранении деталей: $e')),
-      );
+    } catch (e, st) {
+      debugPrint('UPDATE DETAILS error: $e\n$st');
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка при сохранении изменений: $e')),
+        );
+      }
     } finally {
-      if (!mounted) return;
-      setState(() => _isSaving = false);
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
-  Future<void> _showSuccessDialog(BuildContext context) async {
+  String _formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+  Future<void> _showSuccessDialog(BuildContext context) {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -129,7 +120,7 @@ class _HerdAddAnimalDetailsScreenState
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 36, 24, 36),
+            padding: const EdgeInsets.fromLTRB(42, 36, 42, 36),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -140,21 +131,12 @@ class _HerdAddAnimalDetailsScreenState
                 ),
                 const SizedBox(height: 12),
                 const Text(
-                  'Карточка животного\nуспешно создана!',
+                  'Карточка животного\nуспешно обновлена!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary3,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Список всех животных Вы найдете\nв разделе “Стадо”.\nРедактирование и добавление данных доступно\nвнутри карточки животного.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: AppColors.authSmallText,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -172,18 +154,13 @@ class _HerdAddAnimalDetailsScreenState
                       ),
                     ),
                     onPressed: () => Navigator.of(ctx).pop(),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Понятно',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primary1,
-                          ),
-                        ),
-                      ],
+                    child: const Text(
+                      'Понятно',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary1,
+                      ),
                     ),
                   ),
                 ),
@@ -193,11 +170,6 @@ class _HerdAddAnimalDetailsScreenState
         );
       },
     );
-  }
-
-  String? _emptyToNull(String text) {
-    final value = text.trim();
-    return value.isEmpty ? null : value;
   }
 
   @override
@@ -218,44 +190,15 @@ class _HerdAddAnimalDetailsScreenState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: AppIcons.svg('arrow', size: 32),
-                              onPressed: () => context.pop(),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                'Добавление животного',
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.primary3,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 48,
-                            ), // симметрия под иконку слева
-                          ],
+                        HerdPageHeader(
+                          title: 'Редактирование карточки',
+                          onBack: () => context.pop(),
                         ),
 
                         const SizedBox(height: 12),
 
-                        const Text(
-                          'Дополнительная информация',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primary3,
-                          ),
+                        const HerdSectionTitle(
+                          text: 'Дополнительная информация',
                         ),
 
                         const SizedBox(height: 24),
@@ -269,11 +212,9 @@ class _HerdAddAnimalDetailsScreenState
                           ),
                         ),
                         const SizedBox(height: 8),
-                        TextField(
+                        HerdTextField(
                           controller: _breedController,
-                          decoration: _inputDecoration(
-                            hint: 'Введите название',
-                          ),
+                          hint: 'Введите название',
                         ),
 
                         const SizedBox(height: 24),
@@ -281,7 +222,6 @@ class _HerdAddAnimalDetailsScreenState
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            // ---- Левый текст ----
                             const Text(
                               'Группа',
                               style: TextStyle(
@@ -290,10 +230,7 @@ class _HerdAddAnimalDetailsScreenState
                                 color: AppColors.primary3,
                               ),
                             ),
-
                             const Spacer(),
-
-                            // ---- Кнопка справа ----
                             SizedBox(
                               width: 265,
                               height: 36,
@@ -310,8 +247,7 @@ class _HerdAddAnimalDetailsScreenState
                                     ),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .center, // ⬅ центрируем!
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
@@ -364,7 +300,7 @@ class _HerdAddAnimalDetailsScreenState
                         const SizedBox(height: 8),
                         DropdownButtonFormField<HealthStatus>(
                           initialValue: _healthStatus,
-                          decoration: _inputDecoration(
+                          decoration: herdInputDecoration(
                             hint: 'Выбрать из списка',
                           ),
                           items: HealthStatus.values
@@ -393,20 +329,18 @@ class _HerdAddAnimalDetailsScreenState
                           ),
                         ),
                         const SizedBox(height: 8),
-                        TextField(
+                        HerdTextField(
                           controller: _eventController,
-                          decoration: _inputDecoration(
-                            hint: 'Добавить событие',
-                            suffixIcon: IconButton(
-                              icon: const Icon(
-                                Icons.add,
-                                size: 20,
-                                color: AppColors.primary1,
-                              ),
-                              onPressed: () {
-                                // TODO: добавить событие в список
-                              },
+                          hint: 'Добавить событие',
+                          suffixIcon: IconButton(
+                            icon: const Icon(
+                              Icons.add,
+                              size: 20,
+                              color: AppColors.primary1,
                             ),
+                            onPressed: () {
+                              // TODO: добавить событие в список
+                            },
                           ),
                         ),
 
@@ -416,7 +350,9 @@ class _HerdAddAnimalDetailsScreenState
                           children: [
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: _isSaving ? null : _onSkip,
+                                onPressed: _isSaving
+                                    ? null
+                                    : () => context.pop(),
                                 style: OutlinedButton.styleFrom(
                                   minimumSize: const Size.fromHeight(50),
                                   backgroundColor: const Color.fromRGBO(
@@ -462,28 +398,6 @@ class _HerdAddAnimalDetailsScreenState
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  InputDecoration _inputDecoration({String? hint, Widget? suffixIcon}) {
-    return InputDecoration(
-      hintText: hint,
-      filled: true,
-      fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      suffixIcon: suffixIcon,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.additional2),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.additional2),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.success, width: 1),
       ),
     );
   }

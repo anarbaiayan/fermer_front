@@ -10,7 +10,7 @@ import 'package:frontend/features/herd/presentation/widgets/herd_list_item.dart'
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'widgets/herd_empty_state.dart';
+import '../widgets/herd_empty_state.dart';
 
 class HerdScreen extends ConsumerWidget {
   const HerdScreen({super.key});
