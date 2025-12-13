@@ -130,7 +130,14 @@ class _HerdEditAnimalDetailsScreenState
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
-      builder: (_) => AddCattleEventSheet(cattleId: widget.draft.id),
+      builder: (_) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: SingleChildScrollView(
+          child: AddCattleEventSheet(cattleId: widget.draft.id),
+        ),
+      ),
     );
   }
 
