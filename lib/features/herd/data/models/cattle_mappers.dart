@@ -1,6 +1,6 @@
+import 'package:frontend/features/herd/domain/entities/cattle.dart';
+import 'package:frontend/features/herd/domain/entities/cattle_gender.dart';
 import 'package:intl/intl.dart';
-import '../../domain/entities/cattle.dart';
-import '../../domain/entities/cattle_gender.dart';
 import 'cattle_dto.dart';
 import 'cattle_details_dto.dart';
 
@@ -18,31 +18,54 @@ Cattle cattleFromDto(CattleDto dto) {
 }
 
 CattleDetails cattleDetailsFromDto(CattleDetailsDto dto) {
-  DateTime? parse(String? s) => s == null ? null : _dateFmt.parse(s);
+  DateTime? tryParseDate(String? s) {
+    final v = s?.trim();
+    if (v == null || v.isEmpty) return null;
+    try {
+      return _dateFmt.parse(v);
+    } catch (_) {
+      // если вдруг бэк пришлет dd.MM.yyyy или с временем - не падаем
+      try {
+        return DateTime.parse(v);
+      } catch (_) {
+        return null;
+      }
+    }
+  }
 
   return CattleDetails(
     breed: dto.breed,
     animalGroup: dto.animalGroup,
     healthStatus: dto.healthStatus,
+
+    lastWeight: dto.lastWeight,
+    vaccinationInfo: dto.vaccinationInfo,
+
     lastMilkYield: dto.lastMilkYield,
-    lastCalvingDate: parse(dto.lastCalvingDate),
-    lastInseminationDate: parse(dto.lastInseminationDate),
+    lastCalvingDate: tryParseDate(dto.lastCalvingDate),
+    lastInseminationDate: tryParseDate(dto.lastInseminationDate),
     pregnancyStatus: dto.pregnancyStatus,
     isDryPeriod: dto.isDryPeriod,
+
+    firstInseminationDate: tryParseDate(dto.firstInseminationDate),
+    expectedCalvingDate: tryParseDate(dto.expectedCalvingDate),
   );
 }
 
+/// Теперь create умеет принимать details (как требует POST /api/cattle)
 CattleDto cattleToDtoForCreate({
   required String name,
   required String tagNumber,
   required CattleGender gender,
   required DateTime dateOfBirth,
+  CattleDetailsDto? details,
 }) {
   return CattleDto(
     name: name,
     tagNumber: tagNumber,
     gender: gender.apiValue,
     dateOfBirth: _dateFmt.format(dateOfBirth),
+    details: details, // <- ключевое
   );
 }
 
@@ -53,10 +76,17 @@ CattleDetailsDto detailsToDtoForUpdate(CattleDetails details) {
     breed: details.breed,
     animalGroup: details.animalGroup,
     healthStatus: details.healthStatus,
+
+    lastWeight: details.lastWeight,
+    vaccinationInfo: details.vaccinationInfo,
+
     lastMilkYield: details.lastMilkYield,
     lastCalvingDate: format(details.lastCalvingDate),
     lastInseminationDate: format(details.lastInseminationDate),
     pregnancyStatus: details.pregnancyStatus,
     isDryPeriod: details.isDryPeriod,
+
+    firstInseminationDate: format(details.firstInseminationDate),
+    expectedCalvingDate: format(details.expectedCalvingDate),
   );
 }

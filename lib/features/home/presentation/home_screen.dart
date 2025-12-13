@@ -12,12 +12,8 @@ import 'widgets/briefSection/animal_status_card.dart';
 import 'widgets/briefSection/summary_tabs.dart';
 import '../../../features/auth/application/auth_providers.dart';
 
-// новые импорты
 import 'package:frontend/features/herd/application/herd_providers.dart';
-import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
-import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 
-// ⬇ новый провайдер времени последнего обновления
 final herdLastUpdatedProvider = StateProvider<DateTime?>((ref) => null);
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -44,9 +40,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final herdAsync = ref.watch(cattleListProvider);
+    final statsAsync = ref.watch(cattleStatisticsProvider);
 
-    // читаем последнее время обновления
     final lastUpdatedDt = ref.watch(herdLastUpdatedProvider);
     final lastUpdatedLabel = _formatTimeAgo(lastUpdatedDt);
 
@@ -54,60 +49,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: const FermerPlusAppBar(),
       bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
       body: AppPage(
-        child: herdAsync.when(
+        child: statsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, _) => Center(
             child: Text(
-              'Ошибка при загрузке стада:\n$err',
+              'Ошибка при загрузке статистики:\n$err',
               textAlign: TextAlign.center,
             ),
           ),
-          data: (herd) {
-            // ---- агрегируем статы по статусам ----
-            int milkingCows = 0, milkingHeifers = 0;
-            int dryCows = 0, dryHeifers = 0;
-            int openCows = 0, openHeifers = 0;
-            int inseminatedCows = 0, inseminatedHeifers = 0;
-
-            for (final c in herd) {
-              final resolved = AnimalCategoryResolver.resolve(
-                gender: c.gender,
-                dateOfBirth: c.dateOfBirth,
-              );
-              final category = resolved.category;
-              final isCow = category == AnimalCategory.cow;
-              final isHeifer = category == AnimalCategory.heifer;
-
-              final d = c.details;
-
-              final bool isDry = d?.isDryPeriod == true;
-              final bool isMilking =
-                  !isDry && (d?.lastMilkYield != null && d!.lastMilkYield! > 0);
-
-              final String? preg = d?.pregnancyStatus;
-              final bool isOpen = preg == 'NOT_PREGNANT';
-              final bool isInseminated = preg == 'INSEMINATED';
-
-              // дойные/сухостой
-              if (isDry) {
-                if (isCow) dryCows++;
-                if (isHeifer) dryHeifers++;
-              } else if (isMilking) {
-                if (isCow) milkingCows++;
-                if (isHeifer) milkingHeifers++;
-              }
-
-              // открытые/осемененные
-              if (isOpen) {
-                if (isCow) openCows++;
-                if (isHeifer) openHeifers++;
-              } else if (isInseminated) {
-                if (isCow) inseminatedCows++;
-                if (isHeifer) inseminatedHeifers++;
-              }
-            }
-
-            final totalAnimals = herd.length;
+          data: (stats) {
+            final totalAnimals = stats.total;
 
             return ListView(
               children: [
@@ -139,35 +90,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     totalAnimals: totalAnimals,
                     lastUpdated: lastUpdatedDt == null ? '—' : lastUpdatedLabel,
                     onRefresh: () {
-                      // перезагрузить провайдер со стадом
-                      ref.invalidate(cattleListProvider);
+                      ref.invalidate(cattleStatisticsProvider);
 
-                      // сохранить новое время обновления
                       ref.read(herdLastUpdatedProvider.notifier).state =
                           DateTime.now();
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Список обновляется...')),
+                        const SnackBar(content: Text('Данные обновляются...')),
                       );
                     },
                   ),
                   const SizedBox(height: 24),
+
                   const Text(
                     'Статусы животных',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 12),
+
                   AnimalStatusCard(
-                    milkingCows: milkingCows,
-                    milkingHeifers: milkingHeifers,
-                    dryCows: dryCows,
-                    dryHeifers: dryHeifers,
-                    openCows: openCows,
-                    openHeifers: openHeifers,
-                    inseminatedCows: inseminatedCows,
-                    inseminatedHeifers: inseminatedHeifers,
+                    lactating: stats.lactating,
+                    dryPeriod: stats.dryPeriod,
+                    open: stats.open,
+                    inseminated: stats.inseminated,
                   ),
                 ] else if (_summaryTabIndex == 1) ...[
+                  // тут позже подключим остальные поля статистики (cows/heifers/etc)
                   QuantitySummarySection(),
                 ] else ...[
                   const SizedBox(height: 24),
@@ -179,7 +127,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                 const SizedBox(height: 40),
 
-                // временная кнопка "Выйти"
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: SizedBox(
@@ -190,10 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         await ref
                             .read(authControllerProvider.notifier)
                             .logout();
-
-                        if (context.mounted) {
-                          context.go('/login');
-                        }
+                        if (context.mounted) context.go('/login');
                       },
                       child: const Text(
                         'Выйти',

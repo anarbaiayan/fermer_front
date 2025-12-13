@@ -3,25 +3,17 @@ import '../../../../../core/widgets/app_card.dart';
 import '../../../../../core/theme/app_colors.dart';
 
 class AnimalStatusCard extends StatelessWidget {
-  final int milkingCows;
-  final int milkingHeifers;
-  final int dryCows;
-  final int dryHeifers;
-  final int openCows;
-  final int openHeifers;
-  final int inseminatedCows;
-  final int inseminatedHeifers;
+  final int lactating;
+  final int dryPeriod;
+  final int open;
+  final int inseminated;
 
   const AnimalStatusCard({
     super.key,
-    required this.milkingCows,
-    required this.milkingHeifers,
-    required this.dryCows,
-    required this.dryHeifers,
-    required this.openCows,
-    required this.openHeifers,
-    required this.inseminatedCows,
-    required this.inseminatedHeifers,
+    required this.lactating,
+    required this.dryPeriod,
+    required this.open,
+    required this.inseminated,
   });
 
   @override
@@ -34,9 +26,7 @@ class AnimalStatusCard extends StatelessWidget {
               child: _StatusItemCard(
                 title: 'Дойные',
                 badgeColor: Colors.red,
-                badgeValue: milkingCows + milkingHeifers,
-                cows: milkingCows,
-                heifers: milkingHeifers,
+                badgeValue: lactating,
               ),
             ),
             const SizedBox(width: 12),
@@ -44,9 +34,7 @@ class AnimalStatusCard extends StatelessWidget {
               child: _StatusItemCard(
                 title: 'Сухостой',
                 badgeColor: const Color(0xFF3E5BD8),
-                badgeValue: dryCows + dryHeifers,
-                cows: dryCows,
-                heifers: dryHeifers,
+                badgeValue: dryPeriod,
               ),
             ),
           ],
@@ -58,9 +46,7 @@ class AnimalStatusCard extends StatelessWidget {
               child: _StatusItemCard(
                 title: 'Открытые',
                 badgeColor: AppColors.success,
-                badgeValue: openCows + openHeifers,
-                cows: openCows,
-                heifers: openHeifers,
+                badgeValue: open,
               ),
             ),
             const SizedBox(width: 12),
@@ -68,9 +54,7 @@ class AnimalStatusCard extends StatelessWidget {
               child: _StatusItemCard(
                 title: 'Осемененные',
                 badgeColor: Colors.teal,
-                badgeValue: inseminatedCows + inseminatedHeifers,
-                cows: inseminatedCows,
-                heifers: inseminatedHeifers,
+                badgeValue: inseminated,
               ),
             ),
           ],
@@ -84,15 +68,11 @@ class _StatusItemCard extends StatelessWidget {
   final String title;
   final Color badgeColor;
   final int badgeValue;
-  final int cows;
-  final int heifers;
 
   const _StatusItemCard({
     required this.title,
     required this.badgeColor,
     required this.badgeValue,
-    required this.cows,
-    required this.heifers,
   });
 
   @override
@@ -136,11 +116,7 @@ class _StatusItemCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Коровы: $cows',
-            style: TextStyle(fontSize: 12, color: AppColors.primary3),
-          ),
-          Text(
-            'Тёлки: $heifers',
+            'Всего: $badgeValue',
             style: TextStyle(fontSize: 12, color: AppColors.primary3),
           ),
         ],

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
+import 'package:frontend/core/widgets/app_success_dialog.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
+import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_sheet.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/data/models/cattle_details_dto.dart';
@@ -81,14 +82,24 @@ class _HerdEditAnimalDetailsScreenState
         isDryPeriod: widget.draft.isDryPeriod,
       );
 
-      await herdApi.updateDetails(id: widget.draft.id, details: detailsDto);
+      await herdApi.patchDetails(
+        cattleId: widget.draft.id,
+        details: detailsDto,
+      );
 
       ref.invalidate(cattleListProvider);
       ref.invalidate(cattleByIdProvider(widget.draft.id));
 
       if (!mounted) return;
 
-      await _showSuccessDialog(context);
+      await showAppSuccessDialog(
+        context,
+        title: 'Карточка животного\nуспешно обновлена!',
+        iconAsset: 'assets/icons/success.svg',
+        buttonText: 'Понятно',
+        iconHeight: 50,
+        iconWidth: 50,
+      );
       if (!mounted) return;
 
       context.go('/herd');
@@ -111,64 +122,15 @@ class _HerdEditAnimalDetailsScreenState
     return DateFormat('yyyy-MM-dd').format(date);
   }
 
-  Future<void> _showSuccessDialog(BuildContext context) {
-    return showDialog(
+  Future<void> _openAddEventSheet() async {
+    await showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
-      builder: (ctx) {
-        return Dialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(42, 36, 42, 36),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/success.svg',
-                  width: 50,
-                  height: 50,
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Карточка животного\nуспешно обновлена!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary3,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(
-                        color: AppColors.primary1,
-                        width: 1.4,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    onPressed: () => Navigator.of(ctx).pop(),
-                    child: const Text(
-                      'Понятно',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primary1,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      builder: (_) => AddCattleEventSheet(cattleId: widget.draft.id),
     );
   }
 
@@ -338,9 +300,7 @@ class _HerdEditAnimalDetailsScreenState
                               size: 20,
                               color: AppColors.primary1,
                             ),
-                            onPressed: () {
-                              // TODO: добавить событие в список
-                            },
+                            onPressed: _openAddEventSheet,
                           ),
                         ),
 

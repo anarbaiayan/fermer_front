@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
+import 'package:frontend/core/widgets/app_success_dialog.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
+import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_sheet.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_page_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_section_title.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_text_field.dart';
@@ -16,13 +17,11 @@ import 'package:frontend/features/herd/domain/entities/health_status.dart';
 import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/data/models/cattle_details_dto.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
-import 'package:frontend/features/herd/domain/entities/cattle_create_data.dart';
-import 'package:frontend/features/herd/data/models/cattle_mappers.dart';
 
 class HerdAddAnimalDetailsScreen extends ConsumerStatefulWidget {
-  final CattleCreateData draft;
+  final int cattleId;
 
-  const HerdAddAnimalDetailsScreen({super.key, required this.draft});
+  const HerdAddAnimalDetailsScreen({super.key, required this.cattleId});
 
   @override
   ConsumerState<HerdAddAnimalDetailsScreen> createState() =>
@@ -46,37 +45,24 @@ class _HerdAddAnimalDetailsScreenState
     super.dispose();
   }
 
-  void _onSkip() async {
-    final herdApi = ref.read(herdApiProvider);
+  String? _emptyToNull(String text) {
+    final value = text.trim();
+    return value.isEmpty ? null : value;
+  }
 
-    setState(() => _isSaving = true);
-
-    try {
-      final dto = cattleToDtoForCreate(
-        name: widget.draft.name,
-        tagNumber: widget.draft.tagNumber,
-        gender: widget.draft.gender,
-        dateOfBirth: widget.draft.dateOfBirth,
-      );
-
-      await herdApi.createCattle(dto);
-
-      ref.invalidate(cattleListProvider);
-
-      if (!mounted) return;
-      await _showSuccessDialog(context);
-
-      if (!mounted) return;
-      context.go('/herd');
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка при создании животного: $e')),
-      );
-    } finally {
-      if (!mounted) return;
-      setState(() => _isSaving = false);
-    }
+  Future<void> _onSkip() async {
+    await showAppSuccessDialog(
+      context,
+      title: 'Карточка животного\nуспешно создана!',
+      message:
+          'Список всех животных Вы найдете\nв разделе “Стадо”.\nРедактирование и добавление данных доступно\nвнутри карточки животного.',
+      iconAsset: 'assets/icons/success.svg',
+      buttonText: 'Понятно',
+      iconHeight: 50,
+      iconWidth: 50,
+    );
+    if (!mounted) return;
+    context.go('/herd');
   }
 
   Future<void> _onSave() async {
@@ -85,33 +71,30 @@ class _HerdAddAnimalDetailsScreenState
     setState(() => _isSaving = true);
 
     try {
-      final baseDto = cattleToDtoForCreate(
-        name: widget.draft.name,
-        tagNumber: widget.draft.tagNumber,
-        gender: widget.draft.gender,
-        dateOfBirth: widget.draft.dateOfBirth,
-      );
-
-      final createdDto = await herdApi.createCattle(baseDto);
-      final createdId = createdDto.id;
-      if (createdId == null) {
-        throw Exception('Сервер не вернул id животного');
-      }
-
       final detailsDto = CattleDetailsDto(
         breed: _emptyToNull(_breedController.text),
         animalGroup: _emptyToNull(_groupController.text),
         healthStatus: _healthStatus?.apiValue,
       );
 
-      await herdApi.updateDetails(id: createdId, details: detailsDto);
+      await herdApi.updateDetails(id: widget.cattleId, details: detailsDto);
 
       ref.invalidate(cattleListProvider);
+      ref.invalidate(cattleByIdProvider(widget.cattleId));
 
       if (!mounted) return;
-      await _showSuccessDialog(context);
-
+      await showAppSuccessDialog(
+        context,
+        title: 'Карточка животного\nуспешно создана!',
+        message:
+            'Список всех животных Вы найдете\nв разделе “Стадо”.\nРедактирование и добавление данных доступно\nвнутри карточки животного.',
+        iconAsset: 'assets/icons/success.svg',
+        buttonText: 'Понятно',
+        iconHeight: 50,
+        iconWidth: 50,
+      );
       if (!mounted) return;
+
       context.go('/herd');
     } catch (e) {
       if (!mounted) return;
@@ -124,88 +107,22 @@ class _HerdAddAnimalDetailsScreenState
     }
   }
 
-  Future<void> _showSuccessDialog(BuildContext context) async {
-    return showDialog(
+  Future<void> _openAddEventSheet() async {
+    await showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
-      builder: (ctx) {
-        return Dialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 36, 24, 36),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/success.svg',
-                  width: 50,
-                  height: 50,
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Карточка животного\nуспешно создана!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary3,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Список всех животных Вы найдете\nв разделе “Стадо”.\nРедактирование и добавление данных доступно\nвнутри карточки животного.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: AppColors.authSmallText,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(
-                        color: AppColors.primary1,
-                        width: 1.4,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    onPressed: () => Navigator.of(ctx).pop(),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Понятно',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primary1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      builder: (_) => AddCattleEventSheet(cattleId: widget.cattleId),
     );
-  }
-
-  String? _emptyToNull(String text) {
-    final value = text.trim();
-    return value.isEmpty ? null : value;
   }
 
   @override
   Widget build(BuildContext context) {
+    // UI оставляем как у тебя (он уже вынесен в виджеты)
+    // build блок не меняю
     return Scaffold(
       backgroundColor: AppColors.primary1,
       appBar: const FermerPlusAppBar(),
@@ -226,13 +143,10 @@ class _HerdAddAnimalDetailsScreenState
                           title: 'Добавление животного',
                           onBack: () => context.pop(),
                         ),
-
                         const SizedBox(height: 12),
-
                         const HerdSectionTitle(
                           text: 'Дополнительная информация',
                         ),
-
                         const SizedBox(height: 24),
 
                         const Text(
@@ -251,6 +165,7 @@ class _HerdAddAnimalDetailsScreenState
 
                         const SizedBox(height: 24),
 
+                        // группа (как у тебя)
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -267,9 +182,7 @@ class _HerdAddAnimalDetailsScreenState
                               width: 265,
                               height: 36,
                               child: GestureDetector(
-                                onTap: () {
-                                  // TODO: выбор группы
-                                },
+                                onTap: () {},
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -280,8 +193,6 @@ class _HerdAddAnimalDetailsScreenState
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         _groupController.text.isEmpty
@@ -343,11 +254,8 @@ class _HerdAddAnimalDetailsScreenState
                                 ),
                               )
                               .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _healthStatus = value;
-                            });
-                          },
+                          onChanged: (value) =>
+                              setState(() => _healthStatus = value),
                         ),
 
                         const SizedBox(height: 8),
@@ -370,9 +278,7 @@ class _HerdAddAnimalDetailsScreenState
                               size: 20,
                               color: AppColors.primary1,
                             ),
-                            onPressed: () {
-                              // TODO: добавить событие в список
-                            },
+                            onPressed: _openAddEventSheet,
                           ),
                         ),
 

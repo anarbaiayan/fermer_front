@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
-import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
-import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class QuantitySummarySection extends ConsumerWidget {
@@ -11,9 +9,9 @@ class QuantitySummarySection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final herdAsync = ref.watch(cattleListProvider);
+    final statsAsync = ref.watch(cattleStatisticsProvider);
 
-    return herdAsync.when(
+    return statsAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, _) => Padding(
         padding: const EdgeInsets.only(top: 8),
@@ -22,44 +20,16 @@ class QuantitySummarySection extends ConsumerWidget {
           style: const TextStyle(fontSize: 13, color: AppColors.additional3),
         ),
       ),
-      data: (herd) {
-        // ---- агрегация по категориям ----
-        final total = herd.length;
+      data: (stats) {
+        final total = stats.total;
 
-        int cows = 0;
-        int heifers = 0;
-        int bulls = 0;
-        int calves = 0;
-        int fattening = 0;
-        int removed = 0;
+        final cows = stats.cows;
+        final heifers = stats.heifers;
+        final bulls = stats.bulls;
+        final calves = stats.calves;
+        final fattening = stats.fattening;
+        final removed = stats.derived; // "derived" = выведенные
 
-        for (final c in herd) {
-          final resolved = AnimalCategoryResolver.resolve(
-            gender: c.gender,
-            dateOfBirth: c.dateOfBirth,
-          );
-          final category = resolved.category;
-
-          switch (category) {
-            case AnimalCategory.cow:
-              cows++;
-              break;
-            case AnimalCategory.heifer:
-              heifers++;
-              break;
-            case AnimalCategory.bull:
-              bulls++;
-              break;
-            case AnimalCategory.calf:
-              calves++;
-              break;
-            default:
-              // если есть другие категории - пока игнорим
-              break;
-          }
-        }
-
-        // считаем, сколько реально непустых групп
         final groupsCount = [
           cows,
           heifers,
@@ -124,8 +94,11 @@ class QuantitySummarySection extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          // иконка обновления пока декоративная
-                          AppIcons.svg("refresh", size: 13),
+                          InkWell(
+                            onTap: () =>
+                                ref.invalidate(cattleStatisticsProvider),
+                            child: AppIcons.svg("refresh", size: 13),
+                          ),
                         ],
                       ),
                     ),
@@ -212,7 +185,6 @@ class QuantitySummarySection extends ConsumerWidget {
 
             const SizedBox(height: 8),
 
-            // ----- Сетка групп: три пары -----
             Column(
               children: [
                 const SizedBox(height: 8),

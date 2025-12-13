@@ -4,7 +4,6 @@ import 'package:frontend/features/auth/presentation/widgets/register_flow_models
 import 'package:frontend/features/auth/presentation/widgets/register_password_screen.dart';
 import 'package:frontend/features/auth/presentation/register_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
-import 'package:frontend/features/herd/domain/entities/cattle_create_data.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_details_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_screen.dart';
@@ -44,8 +43,8 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/herd/add/details',
       builder: (context, state) {
-        final draft = state.extra as CattleCreateData;
-        return HerdAddAnimalDetailsScreen(draft: draft);
+        final cattleId = state.extra! as int;
+        return HerdAddAnimalDetailsScreen(cattleId: cattleId);
       },
     ),
 

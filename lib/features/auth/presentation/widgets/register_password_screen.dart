@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/app_success_dialog.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_header.dart';
 import 'package:go_router/go_router.dart';
@@ -63,7 +63,9 @@ class RegisterStep2Screen extends HookConsumerWidget {
         return;
       }
 
-      await ref.read(authControllerProvider.notifier).register(
+      await ref
+          .read(authControllerProvider.notifier)
+          .register(
             phoneNumber: phone,
             password: pass,
             firstName: initialData.firstName,
@@ -76,15 +78,28 @@ class RegisterStep2Screen extends HookConsumerWidget {
       if (newState.tokens != null &&
           newState.error == null &&
           context.mounted) {
-        await _showSuccessDialog(context);
+        await showAppSuccessDialog(
+          context,
+          title: 'Вы успешно\nзарегистрировались\nв Fermer+!',
+          message:
+              'Для того, чтобы начать использовать\nприложение, нажмите на кнопку "Начать работу"',
+          iconAsset: 'assets/icons/user-success.svg',
+          iconHeight: 111,
+          iconWidth: 111,
+          onButtonPressed: () {},
+          buttonText: 'Начать работу ',
+          buttonIcon: const Icon(Icons.arrow_forward_rounded),
+          buttonIconSize: 18,
+          buttonIconAfterText: true,
+        );
         if (context.mounted) {
           context.go('/home');
         }
       } else if (newState.error != null && context.mounted) {
         // дополнительно покажем Snackbar с ошибкой сервера
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(newState.error!)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(newState.error!)));
       }
     }
 
@@ -133,8 +148,7 @@ class RegisterStep2Screen extends HookConsumerWidget {
                         decoration: _outlinedInputDecoration(
                           hintText: 'Введите номер',
                           // если глобальная ошибка, тоже подсветим поле
-                          hasError:
-                              phoneError.value != null || hasGlobalError,
+                          hasError: phoneError.value != null || hasGlobalError,
                         ),
                       ),
                       if (phoneError.value != null) ...[
@@ -280,10 +294,7 @@ class RegisterStep2Screen extends HookConsumerWidget {
     return InputDecoration(
       hintText: hintText,
       isDense: true,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 14,
-        vertical: 14,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       suffixIcon: suffixIcon,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
@@ -301,82 +312,4 @@ class RegisterStep2Screen extends HookConsumerWidget {
       ),
     );
   }
-}
-
-Future<void> _showSuccessDialog(BuildContext context) async {
-  return showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (ctx) {
-      return Dialog(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 36, 24, 36),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset(
-                'assets/icons/user-success.svg',
-                width: 111,
-                height: 111,
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                'Вы успешно\nзарегистрировались\nв Fermer+!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary3,
-                ),
-              ),
-              const SizedBox(height: 7),
-              const Text(
-                'Для того, чтобы начать использовать\nприложение, нажмите на кнопку "Начать работу"',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 11, color: AppColors.authSmallText),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(
-                      color: AppColors.primary1,
-                      width: 1.4,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  onPressed: () => Navigator.of(ctx).pop(),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Начать работу',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primary1,
-                        ),
-                      ),
-                      SizedBox(width: 6),
-                      Icon(
-                        Icons.arrow_forward_rounded,
-                        size: 18,
-                        color: AppColors.primary1,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
 }

@@ -4,6 +4,9 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
+import 'package:frontend/features/herd/data/datasources/herd_api.dart';
+import 'package:frontend/features/herd/data/models/cattle_mappers.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_gender_chip.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_page_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_section_title.dart';
@@ -15,7 +18,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:frontend/features/herd/domain/entities/cattle_gender.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
-import 'package:frontend/features/herd/domain/entities/cattle_create_data.dart';
 
 enum AnimalGender { female, male }
 
@@ -35,7 +37,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
   AnimalGender _gender = AnimalGender.female;
   DateTime? _birthDate;
   String? _categoryText;
-  final bool _isLoading = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -108,14 +110,40 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
       return;
     }
 
-    final draft = CattleCreateData(
-      name: name,
-      tagNumber: tag,
-      gender: _cattleGender,
-      dateOfBirth: _birthDate!,
-    );
+    final herdApi = ref.read(herdApiProvider);
 
-    context.push('/herd/add/details', extra: draft);
+    setState(() => _isLoading = true);
+
+    try {
+      final dto = cattleToDtoForCreate(
+        name: name,
+        tagNumber: tag,
+        gender: _cattleGender,
+        dateOfBirth: _birthDate!,
+        details: null, // на шаге 1 не шлём детали
+      );
+
+      final created = await herdApi.createCattle(dto);
+
+      final id = created.id;
+      if (id == null) {
+        throw Exception('Сервер не вернул id животного');
+      }
+
+      // список можно обновить сразу, чтобы оно появилось в стаде
+      ref.invalidate(cattleListProvider);
+
+      if (!mounted) return;
+      context.push('/herd/add/details', extra: id);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка при создании животного: $e')),
+      );
+    } finally {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+    }
   }
 
   @override

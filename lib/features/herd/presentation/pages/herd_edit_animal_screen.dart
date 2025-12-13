@@ -4,6 +4,9 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
+import 'package:frontend/features/herd/data/datasources/herd_api.dart';
+import 'package:frontend/features/herd/data/models/cattle_dto.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
@@ -38,7 +41,8 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
   AnimalGender _gender = AnimalGender.female;
   DateTime? _birthDate;
   String? _categoryText;
-  final bool _isLoading = false;
+
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -79,16 +83,16 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
     );
 
     if (picked != null) {
-      _birthDate = picked;
-      _birthDateController.text = DateFormat('dd.MM.yyyy').format(picked);
+      setState(() {
+        _birthDate = picked;
+        _birthDateController.text = DateFormat('dd.MM.yyyy').format(picked);
+      });
       _recalculateCategory();
     }
   }
 
   void _onGenderChanged(AnimalGender gender) {
-    setState(() {
-      _gender = gender;
-    });
+    setState(() => _gender = gender);
     _recalculateCategory();
   }
 
@@ -124,6 +128,8 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
   }
 
   Future<void> _onNext() async {
+    final herdApi = ref.read(herdApiProvider);
+
     final name = _nameController.text.trim();
     final tag = _tagController.text.trim();
 
@@ -134,25 +140,55 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
       return;
     }
 
-    final details = widget.cattle.details;
+    setState(() => _isLoading = true);
 
-    final draft = CattleEditData(
-      id: widget.cattle.id,
-      name: name,
-      tagNumber: tag,
-      gender: _cattleGender,
-      dateOfBirth: _birthDate!,
-      breed: details?.breed,
-      animalGroup: details?.animalGroup,
-      healthStatus: _mapHealthEnum(details?.healthStatus),
-      lastMilkYield: details?.lastMilkYield,
-      lastCalvingDate: details?.lastCalvingDate,
-      lastInseminationDate: details?.lastInseminationDate,
-      pregnancyStatus: details?.pregnancyStatus,
-      isDryPeriod: details?.isDryPeriod,
-    );
+    try {
+      // ✅ PUT /api/cattle/{id} - обновляем основную инфу
+      final dto = CattleDto(
+        id: widget.cattle.id,
+        name: name,
+        tagNumber: tag,
+        gender: _cattleGender.apiValue,
+        dateOfBirth: DateFormat('yyyy-MM-dd').format(_birthDate!),
+        // важно: details не шлем в PUT основной инфы
+        details: null,
+      );
 
-    context.push('/herd/edit/details', extra: draft);
+      await herdApi.updateCattleMain(id: widget.cattle.id, dto: dto);
+
+      // (не обязательно, но полезно)
+      ref.invalidate(cattleListProvider);
+      ref.invalidate(cattleByIdProvider(widget.cattle.id));
+
+      // draft для details экрана - берём то, что уже было в details
+      final details = widget.cattle.details;
+
+      final draft = CattleEditData(
+        id: widget.cattle.id,
+        name: name,
+        tagNumber: tag,
+        gender: _cattleGender,
+        dateOfBirth: _birthDate!,
+        breed: details?.breed,
+        animalGroup: details?.animalGroup,
+        healthStatus: _mapHealthEnum(details?.healthStatus),
+        lastMilkYield: details?.lastMilkYield,
+        lastCalvingDate: details?.lastCalvingDate,
+        lastInseminationDate: details?.lastInseminationDate,
+        pregnancyStatus: details?.pregnancyStatus,
+        isDryPeriod: details?.isDryPeriod,
+      );
+
+      if (!mounted) return;
+      context.push('/herd/edit/details', extra: draft);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Ошибка при сохранении: $e')));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -179,13 +215,8 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                           title: 'Редактирование карточки',
                           onBack: () => context.pop(),
                         ),
-
                         const SizedBox(height: 12),
-
-                        const HerdSectionTitle(
-                          text: 'Основная информация',
-                        ),
-
+                        const HerdSectionTitle(text: 'Основная информация'),
                         const SizedBox(height: 24),
 
                         const Text(
@@ -197,9 +228,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        HerdTextField(
-                          controller: _nameController,
-                        ),
+                        HerdTextField(controller: _nameController),
 
                         const SizedBox(height: 24),
 

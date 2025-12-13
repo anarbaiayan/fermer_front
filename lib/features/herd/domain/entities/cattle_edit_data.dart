@@ -12,11 +12,18 @@ class CattleEditData {
   final String? breed;
   final String? animalGroup;
   final HealthStatus? healthStatus;
+
+  final double? lastWeight;
+  final String? vaccinationInfo;
+
   final double? lastMilkYield;
   final DateTime? lastCalvingDate;
   final DateTime? lastInseminationDate;
   final String? pregnancyStatus;
   final bool? isDryPeriod;
+
+  final DateTime? firstInseminationDate;
+  final DateTime? expectedCalvingDate;
 
   const CattleEditData({
     required this.id,
@@ -27,10 +34,14 @@ class CattleEditData {
     this.breed,
     this.animalGroup,
     this.healthStatus,
+    this.lastWeight,
+    this.vaccinationInfo,
     this.lastMilkYield,
     this.lastCalvingDate,
     this.lastInseminationDate,
     this.pregnancyStatus,
     this.isDryPeriod,
+    this.firstInseminationDate,
+    this.expectedCalvingDate,
   });
 }
