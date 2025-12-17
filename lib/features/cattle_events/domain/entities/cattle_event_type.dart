@@ -52,17 +52,17 @@ extension CattleEventTypeX on CattleEventType {
   String get display {
     switch (this) {
       case CattleEventType.calving:
-        return 'Отел';
+        return 'Отёл';
       case CattleEventType.insemination:
         return 'Осеменение';
       case CattleEventType.mating:
-        return 'Случка';
+        return 'Случка(покрытие самки)';
       case CattleEventType.synchronization:
         return 'Синхронизация';
       case CattleEventType.dryPeriod:
         return 'Сухостой';
       case CattleEventType.heatPeriod:
-        return 'Охота';
+        return 'Период жара(охота)';
       case CattleEventType.pregnancyConfirmation:
         return 'Подтверждение стельности';
       case CattleEventType.vaccination:
@@ -72,7 +72,7 @@ extension CattleEventTypeX on CattleEventType {
       case CattleEventType.weighing:
         return 'Взвешивание';
       case CattleEventType.hoofTrimming:
-        return 'Обрезка копыт';
+        return 'Расчистка копыт';
       case CattleEventType.antiparasiticTreatment:
         return 'Антипаразитарная обработка';
       case CattleEventType.weaning:

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/features/cattle_events/presentation/widgets/days_stepper_field.dart';
+import 'package:frontend/features/herd/domain/entities/pregnancy_status.dart';
 
 class DynamicEventFields extends StatelessWidget {
   final String? eventType;
@@ -13,11 +16,11 @@ class DynamicEventFields extends StatelessWidget {
   final TextEditingController bullTagCtrl;
   final TextEditingController customTypeCtrl;
 
-  final bool? pregnancyResult;
-  final void Function(bool? v) onPregnancyResultChanged;
-
   final String? calvingDifficulty;
   final void Function(String? v) onCalvingDifficultyChanged;
+
+  final PregnancyStatus? pregnancyStatus;
+  final void Function(PregnancyStatus? v) onPregnancyStatusChanged;
 
   final TextEditingController endDateCtrl;
   final VoidCallback? onPickEndDate;
@@ -27,6 +30,20 @@ class DynamicEventFields extends StatelessWidget {
 
   final TextEditingController heatEndCtrl;
   final VoidCallback? onPickHeatEnd;
+
+  final int treatmentDaysValue;
+  final VoidCallback onMinusTreatmentDays;
+  final VoidCallback onPlusTreatmentDays;
+
+  final bool? matingSuccess;
+  final void Function(bool? v) onMatingSuccessChanged;
+
+  // UI helpers from parent (screen/sheet)
+  final Widget Function({required String label, required Widget field})
+  labeledRightField;
+  final InputDecoration Function({required String hint, Widget? prefixIcon})
+  dec;
+  final Widget calendarIcon;
 
   const DynamicEventFields({
     super.key,
@@ -39,8 +56,6 @@ class DynamicEventFields extends StatelessWidget {
     required this.weightCtrl,
     required this.bullNameCtrl,
     required this.bullTagCtrl,
-    required this.pregnancyResult,
-    required this.onPregnancyResultChanged,
     required this.calvingDifficulty,
     required this.onCalvingDifficultyChanged,
     required this.endDateCtrl,
@@ -50,206 +65,389 @@ class DynamicEventFields extends StatelessWidget {
     required this.heatEndCtrl,
     required this.onPickHeatEnd,
     required this.customTypeCtrl,
+    required this.treatmentDaysValue,
+    required this.onMinusTreatmentDays,
+    required this.onPlusTreatmentDays,
+    required this.matingSuccess,
+    required this.onMatingSuccessChanged,
+    required this.labeledRightField,
+    required this.dec,
+    required this.calendarIcon,
+    required this.pregnancyStatus,
+    required this.onPregnancyStatusChanged,
   });
-
-  InputDecoration _dec(String label, {String? hint}) => InputDecoration(
-    filled: true,
-    fillColor: Colors.white,
-    border: const OutlineInputBorder(),
-    labelText: label,
-    hintText: hint,
-  );
 
   @override
   Widget build(BuildContext context) {
     final t = eventType;
-
     if (t == null) return const SizedBox.shrink();
 
-    // ВАЖНО: мы не хардкодим категории - только тип события.
-    // Доступные типы придут от бэка (available-types).
     if (t == 'VACCINATION') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const FieldTitle('Вакцина'),
           TextField(
             controller: vaccineNameCtrl,
-            decoration: _dec(
-              'Название вакцины',
-              hint: 'Например: Против бруцеллёза',
-            ),
+            decoration: dec(hint: 'Наименование вакцины'),
           ),
+          const SizedBox(height: 24),
         ],
       );
     }
 
     if (t == 'WEIGHING') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const FieldTitle('Вес (кг)'),
           TextField(
             controller: weightCtrl,
             keyboardType: TextInputType.number,
-            decoration: _dec('Вес (кг)', hint: 'Например: 520.5'),
+            decoration: dec(hint: 'Результат взвешивания'),
           ),
+          const SizedBox(height: 24),
         ],
       );
     }
 
     if (t == 'ILLNESS_TREATMENT') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const FieldTitle('Диагноз'),
           TextField(
             controller: diagnosisCtrl,
-            decoration: _dec('Диагноз', hint: 'Например: Мастит'),
+            decoration: dec(hint: 'Название заболевания'),
           ),
           const SizedBox(height: 12),
+
+          const FieldTitle('Препарат'),
           TextField(
             controller: drugNameCtrl,
-            decoration: _dec('Препарат', hint: 'Например: Эстрофан'),
+            decoration: dec(hint: 'Название препарата'),
           ),
           const SizedBox(height: 12),
+
+          const FieldTitle('Дозировка'),
           TextField(
             controller: dosageCtrl,
-            decoration: _dec('Дозировка', hint: 'Например: 2'),
+            decoration: dec(hint: 'Количество'),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: treatmentDaysCtrl,
-            keyboardType: TextInputType.number,
-            decoration: _dec('Дней лечения', hint: 'Например: 7'),
+
+          DaysStepperField(
+            label: 'Длительность лечения (дни)',
+            value: treatmentDaysValue,
+            onMinus: onMinusTreatmentDays,
+            onPlus: onPlusTreatmentDays,
           ),
-          const SizedBox(height: 12),
+
+          const SizedBox(height: 24),
+
+          // оставляем как было (не labeledRight), потому что у тебя в макете так
+          const FieldTitle('Дата окончания'),
           TextField(
             controller: endDateCtrl,
             readOnly: true,
             onTap: onPickEndDate,
-            decoration: _dec('Дата окончания', hint: 'Выберите дату'),
+            decoration: dec(hint: 'Выберите дату', prefixIcon: calendarIcon),
           ),
+          const SizedBox(height: 24),
         ],
       );
     }
 
     if (t == 'ANTIPARASITIC_TREATMENT') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const FieldTitle('Препарат'),
           TextField(
             controller: drugNameCtrl,
-            decoration: _dec('Препарат', hint: 'Например: Ивермектин'),
+            decoration: dec(hint: 'Название препарата'),
           ),
           const SizedBox(height: 12),
+
+          const FieldTitle('Дозировка'),
           TextField(
             controller: dosageCtrl,
-            decoration: _dec('Дозировка', hint: 'Например: 2'),
+            decoration: dec(hint: 'Количество'),
           ),
+          const SizedBox(height: 24),
         ],
       );
     }
 
-    if (t == 'INSEMINATION' || t == 'MATING') {
+    if (t == 'INSEMINATION') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(
-            controller: bullNameCtrl,
-            decoration: _dec('Имя отца', hint: 'Например: Богатырь'),
-          ),
-          const SizedBox(height: 12),
+          const FieldTitle('Бирка самца'),
           TextField(
             controller: bullTagCtrl,
-            decoration: _dec('Бирка отца', hint: 'Например: BULL-001'),
+            decoration: dec(hint: 'Укажите номер бирки'),
           ),
+          const SizedBox(height: 24),
+        ],
+      );
+    }
+
+    if (t == 'MATING') {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const FieldTitle('Бирка самки'),
+          TextField(
+            controller: bullTagCtrl,
+            decoration: dec(hint: 'Укажите номер бирки'),
+          ),
+          const SizedBox(height: 24),
+
+          const FieldTitle('Успешность'),
+          Row(
+            children: [
+              Expanded(
+                child: _ChoiceRadioTile(
+                  title: 'Успешно',
+                  value: true,
+                  groupValue: matingSuccess,
+                  onChanged: (v) => onMatingSuccessChanged(v),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _ChoiceRadioTile(
+                  title: 'Безуспешно',
+                  value: false,
+                  groupValue: matingSuccess,
+                  onChanged: (v) => onMatingSuccessChanged(v),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
         ],
       );
     }
 
     if (t == 'CALVING') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DropdownButtonFormField<String>(
-            initialValue: calvingDifficulty,
-            items: const [
-              'EASY',
-              'MEDIUM',
-              'HARD',
-            ].map((v) => DropdownMenuItem(value: v, child: Text(v))).toList(),
-            onChanged: onCalvingDifficultyChanged,
-            decoration: _dec('Сложность отела', hint: 'Выберите'),
+          const FieldTitle('Сложность'),
+          Row(
+            children: [
+              Expanded(
+                child: _ChoiceRadioTile<String>(
+                  title: 'Лёгкий',
+                  value: 'EASY',
+                  groupValue: calvingDifficulty,
+                  onChanged: onCalvingDifficultyChanged,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _ChoiceRadioTile<String>(
+                  title: 'Средний',
+                  value: 'MEDIUM',
+                  groupValue: calvingDifficulty,
+                  onChanged: onCalvingDifficultyChanged,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _ChoiceRadioTile<String>(
+                  title: 'Тяжелый',
+                  value: 'HARD',
+                  groupValue: calvingDifficulty,
+                  onChanged: onCalvingDifficultyChanged,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: bullNameCtrl,
-            decoration: _dec('Имя отца', hint: 'Например: Богатырь'),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: bullTagCtrl,
-            decoration: _dec('Бирка отца', hint: 'Например: BULL-001'),
-          ),
+          const SizedBox(height: 24),
         ],
       );
     }
 
     if (t == 'PREGNANCY_CONFIRMATION') {
-      return DropdownButtonFormField<bool>(
-        initialValue: pregnancyResult,
-        items: const [
-          DropdownMenuItem(value: true, child: Text('Беременна')),
-          DropdownMenuItem(value: false, child: Text('Не беременна')),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const FieldTitle('Результат'),
+          DropdownButtonFormField<PregnancyStatus>(
+            initialValue: pregnancyStatus,
+            items: PregnancyStatus.values
+                .map((s) => DropdownMenuItem(value: s, child: Text(s.display)))
+                .toList(),
+            onChanged: onPregnancyStatusChanged,
+            decoration: dec(hint: 'Выберите'),
+          ),
+          const SizedBox(height: 24),
         ],
-        onChanged: onPregnancyResultChanged,
-        decoration: _dec('Результат проверки'),
       );
     }
 
+    // ✅ HEAT_PERIOD - только начало/конец и в стиле "слева текст - справа инпут"
     if (t == 'HEAT_PERIOD') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(
-            controller: heatStartCtrl,
-            readOnly: true,
-            onTap: onPickHeatStart,
-            decoration: _dec('Начало охоты', hint: 'Выберите дату'),
+          labeledRightField(
+            label: 'Дата начала',
+            field: TextField(
+              controller: heatStartCtrl,
+              readOnly: true,
+              onTap: onPickHeatStart,
+              decoration: dec(hint: '31.12.2025', prefixIcon: calendarIcon),
+            ),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: heatEndCtrl,
-            readOnly: true,
-            onTap: onPickHeatEnd,
-            decoration: _dec('Конец охоты', hint: 'Выберите дату'),
+          labeledRightField(
+            label: 'Дата конца',
+            field: TextField(
+              controller: heatEndCtrl,
+              readOnly: true,
+              onTap: onPickHeatEnd,
+              decoration: dec(hint: '31.12.2025', prefixIcon: calendarIcon),
+            ),
           ),
+          const SizedBox(height: 24),
         ],
       );
     }
 
     if (t == 'SYNCHRONIZATION') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const FieldTitle('Препарат'),
           TextField(
             controller: drugNameCtrl,
-            decoration: _dec('Препарат', hint: 'Например: Овсинх'),
+            decoration: dec(hint: 'Например: Овсинх'),
           ),
           const SizedBox(height: 12),
+
+          const FieldTitle('Дозировка'),
           TextField(
             controller: dosageCtrl,
-            decoration: _dec('Дозировка', hint: 'Например: 2'),
+            decoration: dec(hint: 'Например: 2'),
           ),
+          const SizedBox(height: 24),
+        ],
+      );
+    }
+
+    if (t == 'DRY_PERIOD') {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          labeledRightField(
+            label: 'Дата окончания\n(необязательно)',
+            field: TextField(
+              controller: endDateCtrl,
+              readOnly: true,
+              onTap: onPickEndDate,
+              decoration: dec(hint: '31.12.2025', prefixIcon: calendarIcon),
+            ),
+          ),
+          const SizedBox(height: 24),
         ],
       );
     }
 
     if (t == 'OTHER') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const FieldTitle('Название события'),
           TextField(
             controller: customTypeCtrl,
-            decoration: _dec(
-              'Название события',
-              hint: 'Например: Переезд в другую группу',
-            ),
+            decoration: dec(hint: 'Например: Переезд в другую группу'),
           ),
+          const SizedBox(height: 24),
         ],
       );
     }
 
-    // DRY_PERIOD, WEANING, HOOF_TRIMMING - без доп полей (только дата + заметки)
     return const SizedBox.shrink();
+  }
+}
+
+class FieldTitle extends StatelessWidget {
+  final String text;
+  const FieldTitle(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: AppColors.primary3,
+        ),
+      ),
+    );
+  }
+}
+
+class _ChoiceRadioTile<T> extends StatelessWidget {
+  final String title;
+  final T value;
+  final T? groupValue;
+  final ValueChanged<T?> onChanged;
+
+  const _ChoiceRadioTile({
+    required this.title,
+    required this.value,
+    required this.groupValue,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final selected = groupValue == value;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () => onChanged(value),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Row(
+          children: [
+            Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: selected ? AppColors.primary1 : AppColors.additional2,
+                  width: 2,
+                ),
+                color: selected ? AppColors.primary1 : Colors.transparent,
+              ),
+              child: selected
+                  ? const Center(
+                      child: Icon(Icons.check, size: 14, color: Colors.white),
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: selected ? AppColors.primary3 : AppColors.additional3,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

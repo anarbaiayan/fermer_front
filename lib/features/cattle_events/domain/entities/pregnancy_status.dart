@@ -2,7 +2,7 @@ enum PregnancyStatus {
   pregnant,
   notPregnant,
   abortion,
-  unknown,
+  unconfirmed,
 }
 
 extension PregnancyStatusX on PregnancyStatus {
@@ -14,35 +14,21 @@ extension PregnancyStatusX on PregnancyStatus {
         return 'NOT_PREGNANT';
       case PregnancyStatus.abortion:
         return 'ABORTION';
-      case PregnancyStatus.unknown:
-        return 'UNKNOWN';
+      case PregnancyStatus.unconfirmed:
+        return 'UNCONFIRMED';
     }
   }
 
   String get display {
     switch (this) {
       case PregnancyStatus.pregnant:
-        return 'Беременна';
+        return 'Стельная';
       case PregnancyStatus.notPregnant:
-        return 'Не беременна';
+        return 'Не стельная';
       case PregnancyStatus.abortion:
-        return 'Аборт / выкидыш';
-      case PregnancyStatus.unknown:
+        return 'Аборт/выкидыш';
+      case PregnancyStatus.unconfirmed:
         return 'Результат не подтвержден';
-    }
-  }
-
-  static PregnancyStatus fromApi(String value) {
-    switch (value) {
-      case 'PREGNANT':
-        return PregnancyStatus.pregnant;
-      case 'NOT_PREGNANT':
-        return PregnancyStatus.notPregnant;
-      case 'ABORTION':
-        return PregnancyStatus.abortion;
-      case 'UNKNOWN':
-      default:
-        return PregnancyStatus.unknown;
     }
   }
 }

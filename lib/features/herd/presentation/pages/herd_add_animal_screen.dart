@@ -8,8 +8,9 @@ import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/data/models/cattle_mappers.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_gender_chip.dart';
-import 'package:frontend/features/herd/presentation/widgets/herd_page_header.dart';
+import 'package:frontend/core/widgets/page_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_section_title.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_steps_indicator.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_text_field.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:go_router/go_router.dart';
@@ -172,6 +173,8 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                         ),
 
                         const SizedBox(height: 12),
+                        const HerdStepsIndicator(currentStep: 1),
+                        const SizedBox(height: 20),
 
                         const HerdSectionTitle(text: 'Основная информация'),
 

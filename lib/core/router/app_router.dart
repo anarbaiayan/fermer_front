@@ -3,6 +3,7 @@ import 'package:frontend/features/auth/presentation/login_screen.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_flow_models.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_password_screen.dart';
 import 'package:frontend/features/auth/presentation/register_screen.dart';
+import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_details_screen.dart';
@@ -75,6 +76,14 @@ final GoRouter appRouter = GoRouter(
 
         final id = int.parse(idStr); // тут уже точно число
         return HerdAnimalScreen(id: id);
+      },
+    ),
+
+    GoRoute(
+      path: '/herd/:id/events/add',
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return AddCattleEventScreen(cattleId: id);
       },
     ),
   ],

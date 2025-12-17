@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
-import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_sheet.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_animal_content.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HerdAnimalScreen extends ConsumerWidget {
@@ -15,28 +15,6 @@ class HerdAnimalScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cattleAsync = ref.watch(cattleByIdProvider(id));
-
-    Future<void> openAddEventSheet() async {
-      await showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-        ),
-        builder: (_) => Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: SingleChildScrollView(
-            child: AddCattleEventSheet(cattleId: id),
-          ),
-        ),
-      );
-
-      // после закрытия - обновим карточку, чтобы журнал перерисовался
-      ref.invalidate(cattleByIdProvider(id));
-    }
 
     return Scaffold(
       backgroundColor: AppColors.primary1,
@@ -79,7 +57,9 @@ class HerdAnimalScreen extends ConsumerWidget {
               ),
               data: (cattle) => HerdAnimalContent(
                 cattle: cattle,
-                onAddEvent: openAddEventSheet,
+                onAddEvent: () {
+                  context.push('/herd/${cattle.id}/events/add');
+                },
               ),
             ),
           ),

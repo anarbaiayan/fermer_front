@@ -115,7 +115,7 @@ Future<void> showAppSuccessDialog(
                   message,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 11,
+                    fontSize: 14,
                     color: AppColors.authSmallText,
                   ),
                 ),

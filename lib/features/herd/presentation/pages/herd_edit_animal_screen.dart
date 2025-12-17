@@ -14,7 +14,7 @@ import 'package:frontend/features/herd/domain/entities/cattle_gender.dart';
 import 'package:frontend/features/herd/domain/entities/health_status.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_gender_chip.dart';
-import 'package:frontend/features/herd/presentation/widgets/herd_page_header.dart';
+import 'package:frontend/core/widgets/page_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_section_title.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_text_field.dart';
 import 'package:go_router/go_router.dart';

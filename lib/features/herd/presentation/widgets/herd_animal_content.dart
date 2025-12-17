@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
+import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:frontend/features/herd/presentation/widgets/cattle_events_preview.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
@@ -26,6 +27,9 @@ class HerdAnimalContent extends StatelessWidget {
       gender: cattle.gender,
       dateOfBirth: cattle.dateOfBirth,
     );
+    final category = resolved.category;
+    final headerColor = _categoryColor(category);
+
     final ageMonths = resolved.ageInMonths;
     final ageText = formatAge(ageMonths);
 
@@ -101,8 +105,8 @@ class HerdAnimalContent extends StatelessWidget {
                           ),
                           gradient: LinearGradient(
                             colors: [
-                              const Color.fromRGBO(247, 223, 163, 0.4),
-                              const Color.fromRGBO(255, 255, 255, 1),
+                              headerColor.withOpacity(0.35),
+                              Colors.white,
                             ],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
@@ -282,6 +286,21 @@ class HerdAnimalContent extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Color _categoryColor(AnimalCategory? category) {
+    switch (category) {
+      case AnimalCategory.bull:
+        return const Color(0xFF4A78C1);
+      case AnimalCategory.calf:
+        return const Color(0xFFF7DFA3);
+      case AnimalCategory.cow:
+        return const Color(0xFFB7E4C7);
+      case AnimalCategory.heifer:
+        return const Color(0xFFF4C2C2);
+      default:
+        return AppColors.additional2;
+    }
   }
 
   Widget _infoRow(String label, String? value) {

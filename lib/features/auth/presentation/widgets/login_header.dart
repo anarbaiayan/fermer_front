@@ -33,7 +33,7 @@ class LoginHeader extends StatelessWidget {
         Text(
           'Введите информацию для входа в личный кабинет',
           style: TextStyle(
-            fontSize: 11,
+            fontSize: 14,
             color: AppColors.authSmallText,
           ),
         ),

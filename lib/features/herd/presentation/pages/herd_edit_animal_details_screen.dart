@@ -11,7 +11,7 @@ import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/data/models/cattle_details_dto.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/domain/entities/health_status.dart';
-import 'package:frontend/features/herd/presentation/widgets/herd_page_header.dart';
+import 'package:frontend/core/widgets/page_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_section_title.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_text_field.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_input_decoration.dart';

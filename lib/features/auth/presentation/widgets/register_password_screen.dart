@@ -82,7 +82,7 @@ class RegisterStep2Screen extends HookConsumerWidget {
           context,
           title: 'Вы успешно\nзарегистрировались\nв Fermer+!',
           message:
-              'Для того, чтобы начать использовать\nприложение, нажмите на кнопку "Начать работу"',
+              'Для того, чтобы начать использовать\nприложение, нажмите на кнопку\n"Начать работу"',
           iconAsset: 'assets/icons/user-success.svg',
           iconHeight: 111,
           iconWidth: 111,

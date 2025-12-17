@@ -20,10 +20,12 @@ class HerdScreen extends ConsumerWidget {
     final cattleListAsync = ref.watch(cattleListProvider);
 
     // показываем FAB только если список успешно загрузился и не пустой
-    final showFab = cattleListAsync.maybeWhen(
+    final hasCattle = cattleListAsync.maybeWhen(
       data: (cattle) => cattle.isNotEmpty,
       orElse: () => false,
     );
+
+    final showFab = hasCattle;
 
     return Scaffold(
       appBar: const FermerPlusAppBar(),
@@ -31,8 +33,8 @@ class HerdScreen extends ConsumerWidget {
 
       floatingActionButton: showFab
           ? Padding(
-            padding: const EdgeInsets.all(12),
-            child: FloatingActionButton(
+              padding: const EdgeInsets.all(12),
+              child: FloatingActionButton(
                 onPressed: () => context.push('/herd/add'),
                 backgroundColor: AppColors.primary1,
                 elevation: 4,
@@ -41,15 +43,11 @@ class HerdScreen extends ConsumerWidget {
                   width: 63,
                   height: 63,
                   child: Center(
-                    child: AppIcons.svg(
-                      'plus',
-                      size: 24,
-                      color: Colors.white,
-                    ),
+                    child: AppIcons.svg('plus', size: 24, color: Colors.white),
                   ),
                 ),
               ),
-          )
+            )
           : null,
 
       body: AppPage(
@@ -76,18 +74,20 @@ class HerdScreen extends ConsumerWidget {
                   ),
                 ),
                 const Spacer(),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: AppIcons.svg("search2", size: 20),
-                  onPressed: () {
-                    // TODO: сортировка/вид
-                  },
-                ),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: AppIcons.svg("dots", size: 20),
-                  onPressed: () {},
-                ),
+                if (hasCattle) ...[
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: AppIcons.svg("search2", size: 20),
+                    onPressed: () {
+                      // TODO: поиск
+                    },
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: AppIcons.svg("dots", size: 20),
+                    onPressed: () {},
+                  ),
+                ],
               ],
             ),
 
@@ -95,8 +95,7 @@ class HerdScreen extends ConsumerWidget {
 
             Expanded(
               child: cattleListAsync.when(
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
                 error: (err, stack) => Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

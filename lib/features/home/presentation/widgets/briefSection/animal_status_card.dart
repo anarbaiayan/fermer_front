@@ -106,6 +106,9 @@ class _StatusItemCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,

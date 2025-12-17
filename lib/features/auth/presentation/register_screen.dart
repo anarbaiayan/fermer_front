@@ -57,7 +57,7 @@ class RegisterStep1Screen extends HookWidget {
                     Text(
                       'Введите информацию для регистрации',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 14,
                         color: AppColors.authSmallText,
                       ),
                     ),
@@ -75,7 +75,7 @@ class RegisterStep1Screen extends HookWidget {
                     const SizedBox(height: 8),
                     TextField(
                       controller: firstNameController,
-                      decoration: _outlinedInputDecoration('Заполните поле'),
+                      decoration: _outlinedInputDecoration('Введите имя'),
                     ),
 
                     const SizedBox(height: 16),
@@ -92,7 +92,7 @@ class RegisterStep1Screen extends HookWidget {
                     const SizedBox(height: 8),
                     TextField(
                       controller: lastNameController,
-                      decoration: _outlinedInputDecoration('Заполните поле'),
+                      decoration: _outlinedInputDecoration('Введите фамилию'),
                     ),
 
                     const SizedBox(height: 16),
@@ -109,7 +109,7 @@ class RegisterStep1Screen extends HookWidget {
                     const SizedBox(height: 8),
                     TextField(
                       controller: farmNameController,
-                      decoration: _outlinedInputDecoration('Заполните поле'),
+                      decoration: _outlinedInputDecoration('Введите название фермы'),
                     ),
 
                     const SizedBox(height: 32),

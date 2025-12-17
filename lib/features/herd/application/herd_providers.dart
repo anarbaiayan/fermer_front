@@ -20,6 +20,18 @@ final cattleListProvider = FutureProvider.autoDispose<List<Cattle>>((
   return dtos.map(cattleFromDto).toList();
 });
 
+final cattleDetailsProvider = FutureProvider.autoDispose
+    .family<CattleDetails?, int>((ref, id) async {
+      final api = ref.read(herdApiProvider);
+
+      try {
+        final dto = await api.getDetails(id); // GET /api/details/{cattleId}
+        return cattleDetailsFromDto(dto);
+      } catch (_) {
+        return null;
+      }
+    });
+
 final cattleByIdProvider = FutureProvider.autoDispose.family<Cattle, int>((
   ref,
   id,
@@ -31,6 +43,6 @@ final cattleByIdProvider = FutureProvider.autoDispose.family<Cattle, int>((
 
 final cattleStatisticsProvider =
     FutureProvider.autoDispose<CattleStatisticsDto>((ref) async {
-  final api = ref.read(herdApiProvider);
-  return api.getCattleStatistics();
-});
+      final api = ref.read(herdApiProvider);
+      return api.getCattleStatistics();
+    });

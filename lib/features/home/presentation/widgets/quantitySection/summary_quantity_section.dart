@@ -164,7 +164,7 @@ class QuantitySummarySection extends ConsumerWidget {
                           const Text(
                             'Посмотреть',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 14,
                               color: AppColors.additional1,
                               fontWeight: FontWeight.w500,
                             ),
