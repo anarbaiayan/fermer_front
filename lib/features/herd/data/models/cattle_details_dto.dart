@@ -1,19 +1,22 @@
 class CattleDetailsDto {
   final String? breed;
   final String? animalGroup;
-  final String? healthStatus; // "HEALTHY", "SICK" и тд
+  final String? healthStatus;
 
   final double? lastWeight;
   final String? vaccinationInfo;
 
   final double? lastMilkYield;
-  final String? lastCalvingDate; // "2024-03-15"
+  final String? lastCalvingDate;
   final String? lastInseminationDate;
-  final String? pregnancyStatus; // "PREGNANT", "NOT_PREGNANT"
+  final String? pregnancyStatus;
   final bool? isDryPeriod;
 
   final String? firstInseminationDate;
   final String? expectedCalvingDate;
+
+  // NEW: назначение быка
+  final String? bullPurpose; // "BREEDING" | "FATTENING"
 
   const CattleDetailsDto({
     this.breed,
@@ -28,6 +31,7 @@ class CattleDetailsDto {
     this.isDryPeriod,
     this.firstInseminationDate,
     this.expectedCalvingDate,
+    this.bullPurpose, // NEW
   });
 
   factory CattleDetailsDto.fromJson(Map<String, dynamic> json) {
@@ -47,6 +51,8 @@ class CattleDetailsDto {
 
       firstInseminationDate: json['firstInseminationDate'] as String?,
       expectedCalvingDate: json['expectedCalvingDate'] as String?,
+
+      bullPurpose: json['bullPurpose'] as String?, // NEW
     );
   }
 
@@ -67,9 +73,10 @@ class CattleDetailsDto {
 
       'firstInseminationDate': firstInseminationDate,
       'expectedCalvingDate': expectedCalvingDate,
+
+      'bullPurpose': bullPurpose, // NEW
     };
 
-    // важно: для PATCH/POST не отправляем null поля
     map.removeWhere((k, v) => v == null);
     return map;
   }

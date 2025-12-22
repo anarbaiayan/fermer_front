@@ -1,3 +1,5 @@
+import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
+
 import 'cattle_gender.dart';
 
 class CattleDetails {
@@ -16,6 +18,7 @@ class CattleDetails {
 
   final DateTime? firstInseminationDate;
   final DateTime? expectedCalvingDate;
+  final BullPurpose? bullPurpose;
 
   const CattleDetails({
     this.breed,
@@ -30,6 +33,7 @@ class CattleDetails {
     this.isDryPeriod,
     this.firstInseminationDate,
     this.expectedCalvingDate,
+    this.bullPurpose,
   });
 }
 

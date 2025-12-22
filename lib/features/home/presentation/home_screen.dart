@@ -99,6 +99,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         const SnackBar(content: Text('Данные обновляются...')),
                       );
                     },
+                    onDetails: () {
+                      context.go('/herd');
+                    },
                   ),
                   const SizedBox(height: 24),
 

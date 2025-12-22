@@ -246,7 +246,7 @@ class DynamicEventFields extends StatelessWidget {
                   onChanged: onCalvingDifficultyChanged,
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 8),
               Expanded(
                 child: _ChoiceRadioTile<String>(
                   title: 'Средний',
@@ -255,7 +255,7 @@ class DynamicEventFields extends StatelessWidget {
                   onChanged: onCalvingDifficultyChanged,
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 8),
               Expanded(
                 child: _ChoiceRadioTile<String>(
                   title: 'Тяжелый',
@@ -364,7 +364,7 @@ class DynamicEventFields extends StatelessWidget {
           const FieldTitle('Название события'),
           TextField(
             controller: customTypeCtrl,
-            decoration: dec(hint: 'Например: Переезд в другую группу'),
+            decoration: dec(hint: 'Введите название'),
           ),
           const SizedBox(height: 24),
         ],
@@ -416,12 +416,13 @@ class _ChoiceRadioTile<T> extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       onTap: () => onChanged(value),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 22,
-              height: 22,
+              width: 20,
+              height: 20,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
@@ -432,17 +433,30 @@ class _ChoiceRadioTile<T> extends StatelessWidget {
               ),
               child: selected
                   ? const Center(
-                      child: Icon(Icons.check, size: 14, color: Colors.white),
+                      child: Icon(Icons.check, size: 12, color: Colors.white),
                     )
                   : null,
             ),
-            const SizedBox(width: 10),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: selected ? AppColors.primary3 : AppColors.additional3,
+            const SizedBox(width: 6),
+
+            // ✅ текст всегда ужимается и не дает overflow
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: selected
+                        ? AppColors.primary3
+                        : AppColors.additional3,
+                  ),
+                ),
               ),
             ),
           ],

@@ -64,10 +64,10 @@ class HerdSummaryCard extends StatelessWidget {
                   height: 36,
                   child: FermerPlusSmallButton(
                     text: 'Подробнее',
-                    onPressed: () {},
+                    onPressed: onDetails ?? () {},
                     height: 30,
                     width: 123,
-                    backgroundColor: Color.fromRGBO(30, 71, 50, 0.8),
+                    backgroundColor: AppColors.primary1,
                   ),
                 ),
               ],

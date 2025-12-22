@@ -105,7 +105,7 @@ class HerdListItem extends ConsumerWidget {
                   // ---- ЗДОРОВЬЕ И СОБЫТИЕ ИЗ DETAILS ----
                   detailsAsync.when(
                     loading: () => const SizedBox(height: 0),
-                    error: (_, __) => const SizedBox(height: 0),
+                    error: (_, _) => const SizedBox(height: 0),
                     data: (details) {
                       final raw = details?.healthStatus;
                       HealthStatus? hs;

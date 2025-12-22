@@ -12,6 +12,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../widgets/herd_empty_state.dart';
 
+final herdRefreshingProvider = StateProvider.autoDispose<bool>((ref) => false);
+
 class HerdScreen extends ConsumerWidget {
   const HerdScreen({super.key});
 
@@ -130,17 +132,36 @@ class HerdScreen extends ConsumerWidget {
                     return const HerdEmptyState();
                   }
 
-                  return ListView(
+                  Future<void> refresh() async {
+                    if (ref.read(herdRefreshingProvider)) return;
+
+                    ref.read(herdRefreshingProvider.notifier).state = true;
+                    try {
+                      ref.invalidate(cattleListProvider);
+
+                      ref.invalidate(cattleDetailsProvider);
+
+                      await ref.read(cattleListProvider.future);
+                    } finally {
+                      ref.read(herdRefreshingProvider.notifier).state = false;
+                    }
+                  }
+
+                  return Stack(
                     children: [
-                      _QuantityCard(
-                        total: cattle.length,
-                        onRefresh: () => ref.invalidate(cattleListProvider),
+                      ListView(
+                        children: [
+                          _QuantityCard(
+                            total: cattle.length,
+                            onRefresh: refresh,
+                          ),
+                          const SizedBox(height: 15),
+                          _HeaderWithFilter(),
+                          const SizedBox(height: 15),
+                          ..._buildCattleCards(context, cattle),
+                          const SizedBox(height: 80),
+                        ],
                       ),
-                      const SizedBox(height: 15),
-                      _HeaderWithFilter(),
-                      const SizedBox(height: 15),
-                      ..._buildCattleCards(context, cattle),
-                      const SizedBox(height: 80),
                     ],
                   );
                 },
@@ -169,7 +190,7 @@ class HerdScreen extends ConsumerWidget {
 
 class _QuantityCard extends StatelessWidget {
   final int total;
-  final VoidCallback onRefresh;
+  final Future<void> Function() onRefresh;
 
   const _QuantityCard({required this.total, required this.onRefresh});
 
@@ -231,7 +252,9 @@ class _QuantityCard extends StatelessWidget {
 
                   // ---- Refresh icon ----
                   GestureDetector(
-                    onTap: onRefresh,
+                    onTap: () async {
+                      await onRefresh();
+                    },
                     child: AppIcons.svg("refresh", size: 13),
                   ),
                 ],

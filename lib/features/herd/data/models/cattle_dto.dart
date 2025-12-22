@@ -7,16 +7,13 @@ class CattleDto {
   final String gender;
   final String dateOfBirth;
 
-  // детали (может быть либо details:{}, либо плоские поля)
   final CattleDetailsDto? details;
 
-  // базовые поля от бэка
   final String? category;
   final int? ageInMonths;
   final String? ageDisplay;
   final bool? detailsCompleted;
 
-  // дополнительные поля из swagger response (optional, чтобы не ломать)
   final String? cattleState;
   final double? currentWeight;
   final String? lastWeighedDate;
@@ -28,6 +25,20 @@ class CattleDto {
   final int? daysPregnant;
   final int? daysAfterCalving;
   final String? weaningDate;
+  // плоские поля из GET /api/cattle/{id}
+  final String? breed;
+  final String? animalGroup;
+  final String? healthStatus;
+  final double? lastWeight;
+  final String? vaccinationInfo;
+  final double? lastMilkYield;
+  final String? lastCalvingDate;
+  final String? lastInseminationDate;
+  final String? pregnancyStatus;
+  final bool? isDryPeriod;
+  final String? firstInseminationDate;
+  final String? expectedCalvingDate;
+  final String? bullPurpose;
 
   const CattleDto({
     this.id,
@@ -51,16 +62,31 @@ class CattleDto {
     this.daysPregnant,
     this.daysAfterCalving,
     this.weaningDate,
+    this.breed,
+    this.animalGroup,
+    this.healthStatus,
+    this.lastWeight,
+    this.vaccinationInfo,
+    this.lastMilkYield,
+    this.lastCalvingDate,
+    this.lastInseminationDate,
+    this.pregnancyStatus,
+    this.isDryPeriod,
+    this.firstInseminationDate,
+    this.expectedCalvingDate,
+    this.bullPurpose,
   });
 
   factory CattleDto.fromJson(Map<String, dynamic> json) {
     CattleDetailsDto? details;
 
-    // 1) вариант: details: { ... }
-    if (json['details'] != null) {
-      details = CattleDetailsDto.fromJson(json['details'] as Map<String, dynamic>);
+    // 1) вариант: details: { ... } (POST/GET может так вернуть)
+    if (json['details'] is Map<String, dynamic>) {
+      details = CattleDetailsDto.fromJson(
+        json['details'] as Map<String, dynamic>,
+      );
     } else {
-      // 2) вариант: плоские детали на верхнем уровне
+      // 2) вариант: плоские детали на верхнем уровне (/api/cattle/{id})
       final hasAnyDetailsField =
           json['breed'] != null ||
           json['animalGroup'] != null ||
@@ -73,7 +99,8 @@ class CattleDto {
           json['pregnancyStatus'] != null ||
           json['isDryPeriod'] != null ||
           json['firstInseminationDate'] != null ||
-          json['expectedCalvingDate'] != null;
+          json['expectedCalvingDate'] != null ||
+          json['bullPurpose'] != null; // <-- ВАЖНО: добавили
 
       if (hasAnyDetailsField) {
         details = CattleDetailsDto(
@@ -89,6 +116,7 @@ class CattleDto {
           isDryPeriod: json['isDryPeriod'] as bool?,
           firstInseminationDate: json['firstInseminationDate'] as String?,
           expectedCalvingDate: json['expectedCalvingDate'] as String?,
+          bullPurpose: json['bullPurpose'] as String?, // <-- ВАЖНО: добавили
         );
       }
     }
@@ -106,12 +134,28 @@ class CattleDto {
       tagNumber: json['tagNumber'] as String,
       gender: json['gender'] as String,
       dateOfBirth: json['dateOfBirth'] as String,
-      details: details,
+
+      details: details, // как было
+      // NEW: плоские
+      breed: json['breed'] as String?,
+      animalGroup: json['animalGroup'] as String?,
+      healthStatus: json['healthStatus'] as String?,
+      lastWeight: (json['lastWeight'] as num?)?.toDouble(),
+      vaccinationInfo: json['vaccinationInfo'] as String?,
+      lastMilkYield: (json['lastMilkYield'] as num?)?.toDouble(),
+      lastCalvingDate: json['lastCalvingDate'] as String?,
+      lastInseminationDate: json['lastInseminationDate'] as String?,
+      pregnancyStatus: json['pregnancyStatus'] as String?,
+      isDryPeriod: json['isDryPeriod'] as bool?,
+      firstInseminationDate: json['firstInseminationDate'] as String?,
+      expectedCalvingDate: json['expectedCalvingDate'] as String?,
+      bullPurpose: json['bullPurpose'] as String?,
+
+      // остальное как было
       category: json['category'] as String?,
       ageInMonths: asInt(json['ageInMonths']),
       ageDisplay: json['ageDisplay'] as String?,
       detailsCompleted: json['detailsCompleted'] as bool?,
-
       cattleState: json['cattleState'] as String?,
       currentWeight: (json['currentWeight'] as num?)?.toDouble(),
       lastWeighedDate: json['lastWeighedDate'] as String?,

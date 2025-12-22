@@ -21,6 +21,7 @@ import 'package:frontend/features/herd/domain/entities/animal_category_resolver.
 import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/data/models/cattle_details_dto.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
+import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
 
 class HerdAddAnimalDetailsScreen extends ConsumerStatefulWidget {
   final int cattleId;
@@ -48,6 +49,7 @@ class _HerdAddAnimalDetailsScreenState
   HealthStatus? _healthStatus;
   bool? _isPregnant;
   bool? _isDryPeriod;
+  BullPurpose? _bullPurpose;
 
   bool _saving = false;
 
@@ -66,7 +68,11 @@ class _HerdAddAnimalDetailsScreenState
   }
 
   String? _nn(String v) => v.trim().isEmpty ? null : v.trim();
-  double? _dd(String v) => double.tryParse(v.replaceAll(',', '.'));
+  double? _dd(String v) {
+    final s = v.trim().replaceAll(',', '.');
+    if (s.isEmpty) return null;
+    return double.tryParse(s);
+  }
 
   Future<void> _pickDate({
     required String help,
@@ -125,13 +131,16 @@ class _HerdAddAnimalDetailsScreenState
             ? null
             : (_isPregnant! ? 'PREGNANT' : 'NOT_PREGNANT'),
         isDryPeriod: _isPregnant == true ? _isDryPeriod : null,
+        bullPurpose: _bullPurpose?.apiValue,
       );
 
       final api = ref.read(herdApiProvider);
       await api.updateDetails(id: widget.cattleId, details: details);
 
-      ref.invalidate(cattleListProvider);
+      ref.invalidate(cattleDetailsProvider(widget.cattleId));
+
       ref.invalidate(cattleByIdProvider(widget.cattleId));
+      ref.invalidate(cattleListProvider);
 
       if (!mounted) return;
       await showAppSuccessDialog(
@@ -162,6 +171,7 @@ class _HerdAddAnimalDetailsScreenState
         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
       ),
       builder: (_) => AddCattleEventSheet(cattleId: widget.cattleId),
+      backgroundColor: AppColors.background,
     );
   }
 
@@ -176,6 +186,7 @@ class _HerdAddAnimalDetailsScreenState
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         child: Container(
           color: AppColors.background,
+          height: double.infinity,
           child: cattleAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (e, _) => Center(child: Text('Ошибка: $e')),
@@ -187,6 +198,8 @@ class _HerdAddAnimalDetailsScreenState
               final isCowOrHeifer =
                   resolved.category == AnimalCategory.cow ||
                   resolved.category == AnimalCategory.heifer;
+
+              final isBull = resolved.category == AnimalCategory.bull;
 
               return AppPage(
                 child: SingleChildScrollView(
@@ -317,6 +330,37 @@ class _HerdAddAnimalDetailsScreenState
                             : (v) => setState(() => _healthStatus = v),
                       ),
 
+                      if (isBull) ...[
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Назначение',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primary3,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        DropdownButtonFormField<BullPurpose>(
+                          initialValue: _bullPurpose,
+                          decoration: herdInputDecoration(
+                            hint: 'Выбрать из списка',
+                          ),
+                          items: BullPurpose.values
+                              .map(
+                                (p) => DropdownMenuItem(
+                                  value: p,
+                                  child: Text(p.display),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: _saving
+                              ? null
+                              : (v) => setState(() => _bullPurpose = v),
+                        ),
+                      ],
+
                       if (isCowOrHeifer) ...[
                         const SizedBox(height: 16),
                         const Text(
@@ -405,7 +449,7 @@ class _HerdAddAnimalDetailsScreenState
                         const SizedBox(height: 8),
 
                         DropdownButtonFormField<bool>(
-                          value: _isPregnant,
+                          initialValue: _isPregnant,
                           decoration: herdInputDecoration(
                             hint: 'Выбрать из списка',
                           ),
@@ -448,7 +492,7 @@ class _HerdAddAnimalDetailsScreenState
                           const SizedBox(height: 8),
 
                           DropdownButtonFormField<bool>(
-                            value: _isDryPeriod,
+                            initialValue: _isDryPeriod,
                             decoration: herdInputDecoration(
                               hint: 'Выбрать из списка',
                             ),

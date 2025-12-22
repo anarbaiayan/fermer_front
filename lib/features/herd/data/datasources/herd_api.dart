@@ -74,6 +74,7 @@ class HerdApi {
   Future<CattleDto> getCattleById(int id) async {
     try {
       final response = await _dio.get('/cattle/$id');
+      debugPrint('GET /cattle/$id response: ${response.data}');
       return CattleDto.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw ApiException(
@@ -165,6 +166,7 @@ class HerdApi {
   Future<CattleDetailsDto> getDetails(int cattleId) async {
     try {
       final response = await _dio.get('/details/$cattleId');
+      debugPrint('GET /details/$cattleId response: ${response.data}');
       return CattleDetailsDto.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw ApiException(
@@ -181,11 +183,12 @@ class HerdApi {
   }) async {
     try {
       final json = details.toJson();
-      debugPrint('PATCH details payload: $json');
+      debugPrint('PATCH /details/$id send: $json');
 
       // 1) новый endpoint
       try {
         final r = await _dio.patch('/details/$id', data: json);
+        debugPrint('PATCH /details/$id status=${r.statusCode} data=${r.data}');
         return CattleDetailsDto.fromJson(r.data as Map<String, dynamic>);
       } on DioException catch (e) {
         if (e.response?.statusCode != 404) rethrow;

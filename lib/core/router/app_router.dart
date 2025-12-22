@@ -1,4 +1,7 @@
 import 'package:frontend/core/screens/not_found_screen.dart';
+import 'package:frontend/features/auth/presentation/forgot_password_code_screen.dart';
+import 'package:frontend/features/auth/presentation/forgot_password_new_password_screen.dart';
+import 'package:frontend/features/auth/presentation/forgot_password_phone_screen.dart';
 import 'package:frontend/features/auth/presentation/login_screen.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_flow_models.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_password_screen.dart';
@@ -84,6 +87,36 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
         return AddCattleEventScreen(cattleId: id);
+      },
+    ),
+
+    GoRoute(
+      path: '/forgot-password',
+      builder: (context, state) => const ForgotPasswordPhoneScreen(),
+    ),
+    GoRoute(
+      path: '/forgot-password/code',
+      builder: (context, state) {
+        final phone = state.extra as String?; // можно null
+        return ForgotPasswordCodeScreen(phoneNumber: phone);
+      },
+    ),
+    GoRoute(
+      path: '/forgot-password/new',
+      builder: (context, state) {
+        final extra = state.extra;
+
+        if (extra is Map) {
+          final phone = extra['phone'] as String?;
+          final code = extra['code'] as String?;
+          return ForgotPasswordNewPasswordScreen(
+            phoneNumber: phone,
+            code: code,
+          );
+        }
+
+        // fallback если вдруг пришли без extra
+        return const ForgotPasswordNewPasswordScreen();
       },
     ),
   ],

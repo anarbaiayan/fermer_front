@@ -8,6 +8,7 @@ import 'package:frontend/features/herd/domain/entities/animal_category_resolver.
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/presentation/utils/cattle_formatters.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_small_action_card.dart';
+import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -28,6 +29,10 @@ class HerdAnimalContent extends StatelessWidget {
       dateOfBirth: cattle.dateOfBirth,
     );
     final category = resolved.category;
+    final isCow = category == AnimalCategory.cow;
+    final isHeifer = category == AnimalCategory.heifer;
+    final isBull = category == AnimalCategory.bull;
+
     final headerColor = _categoryColor(category);
 
     final ageMonths = resolved.ageInMonths;
@@ -39,6 +44,17 @@ class HerdAnimalContent extends StatelessWidget {
 
     final tagText = '#${cattle.tagNumber}';
     final birthDateText = DateFormat('dd.MM.yyyy').format(cattle.dateOfBirth);
+    String fmtDate(DateTime? d) =>
+        d == null ? '—' : DateFormat('dd.MM.yyyy').format(d);
+
+    String fmtMilk(double? v) => v == null ? '—' : '${v.toStringAsFixed(0)} л';
+
+    String pregnancyText(String? raw) {
+      if (raw == null || raw.isEmpty) return '—';
+      if (raw == 'PREGNANT') return 'Беременная';
+      if (raw == 'NOT_PREGNANT') return 'Не беременная';
+      return '—';
+    }
 
     return Column(
       children: [
@@ -214,6 +230,55 @@ class HerdAnimalContent extends StatelessWidget {
                             _infoRow('Порода', details?.breed),
                             _infoRow('Группа', details?.animalGroup),
                             _healthInfoRow('Состояние здоровья', healthText),
+
+                            // ---- для коровы / тёлки (как на макете) ----
+                            if (isCow) ...[
+                              _infoRow(
+                                'Последний надой\n(л/день)',
+                                fmtMilk(details?.lastMilkYield),
+                              ),
+                              _infoRow(
+                                'Последний отел',
+                                fmtDate(details?.lastCalvingDate),
+                              ),
+                              _infoRow(
+                                'Последнее\nосеменение',
+                                fmtDate(details?.lastInseminationDate),
+                              ),
+                              _infoRow(
+                                'Статус суягности',
+                                pregnancyText(details?.pregnancyStatus),
+                              ),
+                              _infoRow(
+                                'Сухостой',
+                                details?.isDryPeriod == null
+                                    ? '—'
+                                    : (details!.isDryPeriod! ? 'Да' : 'Нет'),
+                              ),
+                            ],
+
+                            if (isHeifer) ...[
+                              _infoRow(
+                                'Первое\nосеменение',
+                                fmtDate(details?.firstInseminationDate),
+                              ),
+                              _infoRow(
+                                'Планируемая дата\nотела',
+                                fmtDate(details?.expectedCalvingDate),
+                              ),
+                              _infoRow(
+                                'Статус суягности',
+                                pregnancyText(details?.pregnancyStatus),
+                              ),
+                            ],
+
+                            // ---- для быка ----
+                            if (isBull) ...[
+                              _infoRow(
+                                'Назначение',
+                                details?.bullPurpose?.display,
+                              ),
+                            ],
                           ],
                         ),
                       ),
