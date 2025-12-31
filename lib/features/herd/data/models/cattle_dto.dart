@@ -172,19 +172,15 @@ class CattleDto {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{
-      if (id != null) 'id': id,
+      'id': id,
       'name': name,
       'tagNumber': tagNumber,
-      'gender': gender,
-      'dateOfBirth': dateOfBirth,
-      if (details != null) 'details': details!.toJson(),
+      'gender': gender, // "FEMALE"/"MALE"
+      'dateOfBirth': dateOfBirth, // "yyyy-MM-dd"
+      'details': details?.toJson(), // ✅ ВОТ ЭТО
     };
 
-    // на всякий: если вдруг details пустой, лучше не слать
-    if (map['details'] is Map && (map['details'] as Map).isEmpty) {
-      map.remove('details');
-    }
-
+    map.removeWhere((k, v) => v == null);
     return map;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
+import 'package:frontend/features/herd/domain/entities/upcoming_event.dart';
 
 import 'cattle_gender.dart';
 
@@ -20,6 +21,13 @@ class CattleDetails {
   final DateTime? expectedCalvingDate;
   final BullPurpose? bullPurpose;
 
+  final bool? isPregnant;
+  final String? reproductiveState;
+  final String? productionState;
+
+  final List<UpcomingEvent>? upcomingEvents;
+
+
   const CattleDetails({
     this.breed,
     this.animalGroup,
@@ -34,6 +42,10 @@ class CattleDetails {
     this.firstInseminationDate,
     this.expectedCalvingDate,
     this.bullPurpose,
+    this.isPregnant,
+    this.reproductiveState,
+    this.productionState,
+    this.upcomingEvents,
   });
 }
 

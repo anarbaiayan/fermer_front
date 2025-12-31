@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/cattle_events/presentation/widgets/dynamic_event_fields.dart';
-import 'package:frontend/features/herd/domain/entities/pregnancy_status.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -46,7 +45,6 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
   final _bullNameCtrl = TextEditingController();
   final _bullTagCtrl = TextEditingController();
 
-  PregnancyStatus? _pregnancyStatus;
   String? _calvingDifficulty;
 
   DateTime? _endDate;
@@ -161,7 +159,6 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
     _bullNameCtrl.clear();
     _bullTagCtrl.clear();
 
-    _pregnancyStatus = null;
     _calvingDifficulty = null;
 
     _endDate = null;
@@ -209,26 +206,12 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
 
     if (t == 'INSEMINATION' || t == 'MATING') {
       data['bullName'] = nn(_bullNameCtrl.text);
-      data['bullTagNumber'] = nn(_bullTagCtrl.text);
+      data['bullTag'] = nn(_bullTagCtrl.text);
     }
 
     if (t == 'CALVING') {
-      data['calvingDifficulty'] = _calvingDifficulty;
-      data['bullName'] = nn(_bullNameCtrl.text);
-      data['bullTagNumber'] = nn(_bullTagCtrl.text);
-    }
-
-    if (t == 'PREGNANCY_CONFIRMATION') {
-      if (_pregnancyStatus != null) {
-        data['pregnancyStatus'] = _pregnancyStatus!.apiValue;
-
-        // backward compatibility for backend (если пока только bool)
-        if (_pregnancyStatus == PregnancyStatus.pregnant) {
-          data['pregnancyResult'] = true;
-        } else if (_pregnancyStatus == PregnancyStatus.notPregnant) {
-          data['pregnancyResult'] = false;
-        }
-      }
+      data['calvingEase'] = _calvingDifficulty;
+      data['bullTag'] = nn(_bullTagCtrl.text);
     }
 
     if (t == 'HEAT_PERIOD') {
@@ -437,10 +420,7 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
                     weightCtrl: _weightCtrl,
                     bullNameCtrl: _bullNameCtrl,
                     bullTagCtrl: _bullTagCtrl,
-                    pregnancyStatus: _pregnancyStatus,
                     customTypeCtrl: _customTypeCtrl,
-                    onPregnancyStatusChanged: (v) =>
-                        setState(() => _pregnancyStatus = v),
                     calvingDifficulty: _calvingDifficulty,
                     onCalvingDifficultyChanged: (v) =>
                         setState(() => _calvingDifficulty = v),

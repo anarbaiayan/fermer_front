@@ -1,6 +1,8 @@
+import 'package:frontend/features/herd/data/models/upcoming_event_dto.dart';
 import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_gender.dart';
+import 'package:frontend/features/herd/domain/entities/upcoming_event.dart';
 import 'package:intl/intl.dart';
 import 'cattle_dto.dart';
 import 'cattle_details_dto.dart';
@@ -53,6 +55,39 @@ Cattle cattleFromDto(CattleDto dto) {
 }
 
 CattleDetails cattleDetailsFromDto(CattleDetailsDto dto) {
+  List<UpcomingEvent>? mapUpcoming(List<UpcomingEventDto>? list) {
+    if (list == null || list.isEmpty) return null;
+
+    DateTime? tryParseDate(String? s) {
+      final v = s?.trim();
+      if (v == null || v.isEmpty) return null;
+      try {
+        return _dateFmt.parse(v);
+      } catch (_) {
+        try {
+          return DateTime.parse(v);
+        } catch (_) {
+          return null;
+        }
+      }
+    }
+
+    return list
+        .map(
+          (e) => UpcomingEvent(
+            id: e.id ?? 0,
+            eventType: e.eventType ?? 'UNKNOWN',
+            title: (e.title == null || e.title!.trim().isEmpty)
+                ? (e.eventType ?? 'Событие')
+                : e.title!.trim(),
+            plannedDate: tryParseDate(e.plannedDate),
+            daysUntil: e.daysUntil,
+            priority: e.priority,
+          ),
+        )
+        .toList();
+  }
+
   DateTime? tryParseDate(String? s) {
     final v = s?.trim();
     if (v == null || v.isEmpty) return null;
@@ -86,6 +121,10 @@ CattleDetails cattleDetailsFromDto(CattleDetailsDto dto) {
     bullPurpose: dto.bullPurpose == null
         ? null
         : BullPurposeX.fromApi(dto.bullPurpose!),
+    isPregnant: dto.isPregnant,
+    reproductiveState: dto.reproductiveState,
+    productionState: dto.productionState,
+    upcomingEvents: mapUpcoming(dto.upcomingEvents),
   );
 }
 

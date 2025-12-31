@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
@@ -97,6 +99,9 @@ class HerdApi {
       );
       return CattleDto.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
+      debugPrint(
+        'POST /cattle error status=${e.response?.statusCode} data=${e.response?.data}',
+      );
       final status = e.response?.statusCode;
       final data = e.response?.data;
 
@@ -181,22 +186,63 @@ class HerdApi {
     required int id,
     required CattleDetailsDto details,
   }) async {
-    try {
-      final json = details.toJson();
-      debugPrint('PATCH /details/$id send: $json');
+    final json = details.toJson();
+    debugPrint('PATCH /details/$id send: $json');
 
-      // 1) новый endpoint
-      try {
-        final r = await _dio.patch('/details/$id', data: json);
-        debugPrint('PATCH /details/$id status=${r.statusCode} data=${r.data}');
-        return CattleDetailsDto.fromJson(r.data as Map<String, dynamic>);
-      } on DioException catch (e) {
-        if (e.response?.statusCode != 404) rethrow;
-        // 2) fallback на старый, если бэк ещё где-то не обновился
-        final r = await _dio.patch('/cattle/$id/details', data: json);
-        return CattleDetailsDto.fromJson(r.data as Map<String, dynamic>);
+    try {
+      final r = await _dio.patch(
+        '/details/$id',
+        data: json,
+        options: Options(
+          responseType: ResponseType.plain, // КЛЮЧЕВО
+          validateStatus: (code) =>
+              code != null, // чтобы не кидало исключение до чтения body
+        ),
+      );
+
+      debugPrint('PATCH /details/$id status=${r.statusCode}');
+      debugPrint('PATCH /details/$id rawBody=${r.data}');
+
+      // если вдруг всё-таки пришёл JSON строкой - попробуем распарсить
+      if (r.data is String) {
+        final s = (r.data as String).trim();
+        if (s.startsWith('{')) {
+          final map = jsonDecode(s) as Map<String, dynamic>;
+          return CattleDetailsDto.fromJson(map);
+        }
       }
+
+      throw ApiException('Сервер вернул не-JSON: ${r.data}', r.statusCode);
     } on DioException catch (e) {
+      debugPrint(
+        'PATCH /details/$id DioException status=${e.response?.statusCode}',
+      );
+      debugPrint('PATCH /details/$id DioException data=${e.response?.data}');
+      throw ApiException(
+        e.message ?? 'Ошибка при обновлении деталей',
+        e.response?.statusCode,
+      );
+    }
+  }
+
+  Future<void> patchDetailsNoResponse({
+    required int id,
+    required CattleDetailsDto details,
+  }) async {
+    final json = details.toJson();
+    debugPrint('PATCH /details/$id send: $json');
+
+    try {
+      final r = await _dio.patch(
+        '/details/$id',
+        data: json,
+        options: Options(responseType: ResponseType.plain),
+      );
+
+      debugPrint('PATCH /details/$id status=${r.statusCode}');
+    } on DioException catch (e) {
+      debugPrint('PATCH /details/$id failed status=${e.response?.statusCode}');
+      debugPrint('PATCH /details/$id failed body=${e.response?.data}');
       throw ApiException(
         e.message ?? 'Ошибка при обновлении деталей',
         e.response?.statusCode,

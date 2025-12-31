@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:frontend/features/herd/data/models/cattle_statistics_dto.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:frontend/features/herd/data/datasources/herd_api.dart';
@@ -12,7 +13,7 @@ final cattleListProvider = FutureProvider.autoDispose<List<Cattle>>((
 
   final dtos = await api.getCattleList(
     page: 0,
-    size: 50,
+    size: 200,
     sortBy: 'createdAt',
     sortDirection: 'DESC',
   );
@@ -23,11 +24,16 @@ final cattleListProvider = FutureProvider.autoDispose<List<Cattle>>((
 final cattleDetailsProvider = FutureProvider.autoDispose
     .family<CattleDetails?, int>((ref, id) async {
       final api = ref.read(herdApiProvider);
+      debugPrint('>>> cattleDetailsProvider called for id=$id');
 
       try {
         final dto = await api.getDetails(id); // GET /api/details/{cattleId}
+        debugPrint(
+          '>>> cattleDetailsProvider dto.upcomingEvents=${dto.upcomingEvents?.length}',
+        );
         return cattleDetailsFromDto(dto);
-      } catch (_) {
+      } catch (e) {
+        debugPrint('>>> cattleDetailsProvider ERROR: $e');
         return null;
       }
     });

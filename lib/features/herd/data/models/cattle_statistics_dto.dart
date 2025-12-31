@@ -1,29 +1,31 @@
 class CattleStatisticsDto {
-  final int lactating;
-  final int dryPeriod;
+  final int pregnant;
   final int open;
   final int inseminated;
+  final int lactating;
+  final int dryPeriod;
 
   final int cows;
   final int heifers;
   final int calves;
   final int bulls;
-  final int fattening;
-  final int derived;
 
+  final int sick;
+  final int healthy;
   final int total;
 
   const CattleStatisticsDto({
-    required this.lactating,
-    required this.dryPeriod,
+    required this.pregnant,
     required this.open,
     required this.inseminated,
+    required this.lactating,
+    required this.dryPeriod,
     required this.cows,
     required this.heifers,
     required this.calves,
     required this.bulls,
-    required this.fattening,
-    required this.derived,
+    required this.sick,
+    required this.healthy,
     required this.total,
   });
 
@@ -36,16 +38,17 @@ class CattleStatisticsDto {
 
   factory CattleStatisticsDto.fromJson(Map<String, dynamic> json) {
     return CattleStatisticsDto(
-      lactating: _asInt(json['lactating']),
-      dryPeriod: _asInt(json['dryPeriod']),
+      pregnant: _asInt(json['pregnant']),
       open: _asInt(json['open']),
       inseminated: _asInt(json['inseminated']),
+      lactating: _asInt(json['lactating']),
+      dryPeriod: _asInt(json['dryPeriod']),
       cows: _asInt(json['cows']),
       heifers: _asInt(json['heifers']),
       calves: _asInt(json['calves']),
       bulls: _asInt(json['bulls']),
-      fattening: _asInt(json['fattening']),
-      derived: _asInt(json['derived']),
+      sick: _asInt(json['sick']),
+      healthy: _asInt(json['healthy']),
       total: _asInt(json['total']),
     );
   }

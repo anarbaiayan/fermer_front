@@ -81,7 +81,15 @@ class CattleEventsPreview extends ConsumerWidget {
               );
             }
 
-            return Column(children: items.map(_EventRow.new).toList());
+            final visible = items
+                .where((e) => !e.eventType.startsWith('SYSTEM_'))
+                .toList();
+
+            if (visible.isEmpty) {
+              return const Text('Пока нет событий');
+            }
+
+            return Column(children: visible.map(_EventRow.new).toList());
           },
         ),
       ],
@@ -95,7 +103,7 @@ class _EventRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = displayEventType(e.eventType);
+    final title = CattleEventTypeX.fromApi(e.eventType)?.display ?? e.eventType;
     final dateText = DateFormat('dd.MM.yyyy').format(e.eventDate);
     final info = _buildInfoText(e);
 

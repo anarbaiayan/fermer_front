@@ -6,7 +6,9 @@ import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/data/datasources/herd_api.dart';
+import 'package:frontend/features/herd/data/models/cattle_details_dto.dart';
 import 'package:frontend/features/herd/data/models/cattle_mappers.dart';
+import 'package:frontend/features/herd/domain/entities/reproductive_state.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_gender_chip.dart';
 import 'package:frontend/core/widgets/page_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_section_title.dart';
@@ -34,6 +36,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
   final _nameController = TextEditingController();
   final _tagController = TextEditingController();
   final _birthDateController = TextEditingController();
+  final _breedController = TextEditingController();
 
   AnimalGender _gender = AnimalGender.female;
   DateTime? _birthDate;
@@ -45,6 +48,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
     _nameController.dispose();
     _tagController.dispose();
     _birthDateController.dispose();
+    _breedController.dispose();
     super.dispose();
   }
 
@@ -103,10 +107,11 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
   Future<void> _onNext() async {
     final name = _nameController.text.trim();
     final tag = _tagController.text.trim();
+    final breed = _breedController.text.trim();
 
-    if (name.isEmpty || tag.isEmpty || _birthDate == null) {
+    if (name.isEmpty || tag.isEmpty || _birthDate == null || breed.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Заполните имя, бирку и дату рождения')),
+        const SnackBar(content: Text('Заполните имя, бирку, породу и дату рождения')),
       );
       return;
     }
@@ -116,23 +121,41 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
     setState(() => _isLoading = true);
 
     try {
+      final resolved = AnimalCategoryResolver.resolve(
+        gender: _cattleGender,
+        dateOfBirth: _birthDate!,
+      );
+
+      final category = resolved.category;
+      final isCowOrHeifer =
+          category == AnimalCategory.cow || category == AnimalCategory.heifer;
+
+      final details = CattleDetailsDto(
+        breed: _breedController.text.trim().isEmpty
+            ? null
+            : _breedController.text.trim(),
+
+        // ✅ ВАЖНО: репродуктивное состояние - только для коровы/телки
+        cattleCurrentState: isCowOrHeifer
+            ? ReproductiveState.open.apiValue
+            : null,
+      );
+
       final dto = cattleToDtoForCreate(
         name: name,
         tagNumber: tag,
         gender: _cattleGender,
         dateOfBirth: _birthDate!,
-        details: null, // на шаге 1 не шлём детали
+        details: details,
       );
 
       final created = await herdApi.createCattle(dto);
 
       final id = created.id;
-      if (id == null) {
-        throw Exception('Сервер не вернул id животного');
-      }
+      if (id == null) throw Exception('Сервер не вернул id животного');
 
-      // список можно обновить сразу, чтобы оно появилось в стаде
       ref.invalidate(cattleListProvider);
+      ref.invalidate(cattleStatisticsProvider); // чтобы “open”/total обновились
 
       if (!mounted) return;
       context.push('/herd/add/details', extra: id);
@@ -277,6 +300,22 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                         ),
 
                         const SizedBox(height: 8),
+
+                        const SizedBox(height: 24),
+
+                        const Text(
+                          'Порода',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primary3,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        HerdTextField(
+                          controller: _breedController,
+                          hint: 'Введите породу',
+                        ),
 
                         if (_categoryText != null) ...[
                           const SizedBox(height: 8),

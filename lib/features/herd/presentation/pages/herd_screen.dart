@@ -5,7 +5,6 @@ import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
 import 'package:frontend/core/widgets/app_bottom_nav_bar.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
-import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_list_item.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,6 +19,7 @@ class HerdScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cattleListAsync = ref.watch(cattleListProvider);
+    final statsAsync = ref.watch(cattleStatisticsProvider);
 
     // показываем FAB только если список успешно загрузился и не пустой
     final hasCattle = cattleListAsync.maybeWhen(
@@ -128,6 +128,11 @@ class HerdScreen extends ConsumerWidget {
                   ),
                 ),
                 data: (cattle) {
+                  final total = statsAsync.maybeWhen(
+                    data: (s) => s.total, // <- вот оно
+                    orElse: () =>
+                        cattle.length, // fallback, если stats еще грузится/упал
+                  );
                   if (cattle.isEmpty) {
                     return const HerdEmptyState();
                   }
@@ -138,10 +143,14 @@ class HerdScreen extends ConsumerWidget {
                     ref.read(herdRefreshingProvider.notifier).state = true;
                     try {
                       ref.invalidate(cattleListProvider);
+                      ref.invalidate(cattleStatisticsProvider);
 
                       ref.invalidate(cattleDetailsProvider);
 
-                      await ref.read(cattleListProvider.future);
+                      await Future.wait([
+                        ref.read(cattleListProvider.future),
+                        ref.read(cattleStatisticsProvider.future),
+                      ]);
                     } finally {
                       ref.read(herdRefreshingProvider.notifier).state = false;
                     }
@@ -149,17 +158,41 @@ class HerdScreen extends ConsumerWidget {
 
                   return Stack(
                     children: [
-                      ListView(
-                        children: [
-                          _QuantityCard(
-                            total: cattle.length,
-                            onRefresh: refresh,
+                      CustomScrollView(
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                _QuantityCard(total: total, onRefresh: refresh),
+                                const SizedBox(height: 15),
+                                _HeaderWithFilter(),
+                                const SizedBox(height: 15),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 15),
-                          _HeaderWithFilter(),
-                          const SizedBox(height: 15),
-                          ..._buildCattleCards(context, cattle),
-                          const SizedBox(height: 80),
+
+                          SliverPadding(
+                            padding: const EdgeInsets.only(bottom: 80),
+                            sliver: SliverGrid(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 12,
+                                    mainAxisSpacing: 12,
+                                    childAspectRatio: 1, // квадрат
+                                  ),
+                              delegate: SliverChildBuilderDelegate((
+                                context,
+                                index,
+                              ) {
+                                final item = cattle[index];
+                                return HerdListItem(
+                                  cattle: item,
+                                  onTap: () => context.push('/herd/${item.id}'),
+                                );
+                              }, childCount: cattle.length),
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -171,20 +204,6 @@ class HerdScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  List<Widget> _buildCattleCards(BuildContext context, List<Cattle> cattle) {
-    return [
-      for (final item in cattle) ...[
-        HerdListItem(
-          cattle: item,
-          onTap: () {
-            context.push('/herd/${item.id}');
-          },
-        ),
-        const SizedBox(height: 12),
-      ],
-    ];
   }
 }
 

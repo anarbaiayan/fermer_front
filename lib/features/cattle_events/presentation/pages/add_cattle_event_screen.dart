@@ -3,7 +3,7 @@ import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
 import 'package:frontend/core/widgets/page_header.dart';
-import 'package:frontend/features/herd/domain/entities/pregnancy_status.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -67,8 +67,11 @@ String _dateLabelForType(String? t) {
     case 'INSEMINATION':
       return 'Дата\nосеменения';
 
-    case 'MATING':
-      return 'Дата покрытия';
+    case 'PREGNANCY_NOT_CONFIRMED':
+      return 'Дата проверки';
+
+    case 'HORN_PROCESSING':
+      return 'Дата обработки';
 
     case 'CALVING':
       return 'Дата отела';
@@ -125,7 +128,6 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
   final _bullNameCtrl = TextEditingController();
   final _bullTagCtrl = TextEditingController();
 
-  PregnancyStatus? _pregnancyStatus;
   String? _calvingDifficulty;
 
   DateTime? _endDate;
@@ -240,7 +242,6 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
     _bullNameCtrl.clear();
     _bullTagCtrl.clear();
 
-    _pregnancyStatus = null;
     _calvingDifficulty = null;
 
     _endDate = null;
@@ -288,25 +289,12 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
 
     if (t == 'INSEMINATION' || t == 'MATING') {
       data['bullName'] = nn(_bullNameCtrl.text);
-      data['bullTagNumber'] = nn(_bullTagCtrl.text);
+      data['bullTag'] = nn(_bullTagCtrl.text);
     }
 
     if (t == 'CALVING') {
-      data['calvingDifficulty'] = _calvingDifficulty;
-      data['bullName'] = nn(_bullNameCtrl.text);
-      data['bullTagNumber'] = nn(_bullTagCtrl.text);
-    }
-
-    if (t == 'PREGNANCY_CONFIRMATION') {
-      if (_pregnancyStatus != null) {
-        data['pregnancyStatus'] = _pregnancyStatus!.apiValue;
-
-        if (_pregnancyStatus == PregnancyStatus.pregnant) {
-          data['pregnancyResult'] = true;
-        } else if (_pregnancyStatus == PregnancyStatus.notPregnant) {
-          data['pregnancyResult'] = false;
-        }
-      }
+      data['calvingEase'] = _calvingDifficulty;
+      data['bullTag'] = nn(_bullTagCtrl.text);
     }
 
     if (t == 'HEAT_PERIOD') {
@@ -377,9 +365,13 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
 
       // чтобы сразу обновилось превью
       ref.invalidate(cattleEventsPreviewProvider(widget.cattleId));
+      ref.invalidate(cattleDetailsProvider(widget.cattleId));
+      ref.invalidate(cattleByIdProvider(widget.cattleId));
+      ref.invalidate(cattleStatisticsProvider);
+      ref.invalidate(cattleListProvider);
 
       if (!mounted) return;
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(true);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Событие добавлено')));
@@ -399,9 +391,6 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
       cattleAvailableEventTypesProvider(widget.cattleId),
     );
 
-    // чтобы кнопки не уходили под клаву и не было bottom overflow
-    final keyboardInset = MediaQuery.of(context).viewInsets.bottom;
-
     return Scaffold(
       backgroundColor: AppColors.primary1,
       resizeToAvoidBottomInset: true,
@@ -412,286 +401,331 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
           color: AppColors.background,
           child: SafeArea(
             top: false,
-            child: Column(
-              children: [
-                const SizedBox(height: 26),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: HerdPageHeader(
-                    title: 'Добавить событие',
-                    onBack: () => context.pop(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
-                    child: typesAsync.when(
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      error: (e, _) => Text('Ошибка типов: $e'),
-                      data: (types) {
-                        final parsed = types
-                            .map((raw) => CattleEventTypeX.fromApi(raw))
-                            .whereType<CattleEventType>()
-                            .toList();
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final keyboardInset = MediaQuery.of(context).viewInsets.bottom;
 
-                        final fallbackRaw = types
-                            .where(
-                              (raw) => CattleEventTypeX.fromApi(raw) == null,
-                            )
-                            .toList();
+                return SingleChildScrollView(
+                  // ключевое - скролл учитывает клавиатуру
+                  padding: EdgeInsets.only(bottom: keyboardInset),
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 26),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: HerdPageHeader(
+                              title: 'Добавить событие',
+                              onBack: () => context.pop(),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
 
-                        final dropdownValue =
-                            (_eventType != null && types.contains(_eventType))
-                            ? _eventType
-                            : (types.isNotEmpty ? types.first : null);
+                          // контент
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+                              child: typesAsync.when(
+                                loading: () => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                error: (e, _) => Text('Ошибка типов: $e'),
+                                data: (types) {
+                                  // твой текущий Column с полями - без изменений
+                                  // просто верни его отсюда
+                                  final parsed = types
+                                      .map(
+                                        (raw) => CattleEventTypeX.fromApi(raw),
+                                      )
+                                      .whereType<CattleEventType>()
+                                      .where((t) => !t.isSystem)
+                                      .toList();
 
-                        if (_eventType == null && dropdownValue != null) {
-                          _eventType = dropdownValue;
-                        }
+                                  final fallbackRaw = types
+                                      .where(
+                                        (raw) =>
+                                            raw.startsWith('SYSTEM_') == false,
+                                      )
+                                      .where(
+                                        (raw) =>
+                                            CattleEventTypeX.fromApi(raw) ==
+                                            null,
+                                      )
+                                      .toList();
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Событие',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.primary3,
+                                  final allowedRaw = types
+                                      .where((s) => !s.startsWith('SYSTEM_'))
+                                      .toList();
+
+                                  final dropdownValue =
+                                      (_eventType != null &&
+                                          allowedRaw.contains(_eventType))
+                                      ? _eventType
+                                      : (allowedRaw.isNotEmpty
+                                            ? allowedRaw.first
+                                            : null);
+
+                                  if (_eventType == null &&
+                                      dropdownValue != null) {
+                                    _eventType = dropdownValue;
+                                  }
+
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Событие',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.primary3,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      DropdownButtonFormField<String>(
+                                        initialValue: dropdownValue,
+                                        decoration: _dec(
+                                          hint: 'Выбрать из списка',
+                                        ),
+                                        items: [
+                                          ...parsed.map(
+                                            (t) => DropdownMenuItem(
+                                              value: t.apiValue,
+                                              child: Text(t.display),
+                                            ),
+                                          ),
+                                          ...fallbackRaw.map(
+                                            (raw) => DropdownMenuItem(
+                                              value: raw,
+                                              child: Text(raw),
+                                            ),
+                                          ),
+                                        ],
+                                        onChanged: _saving
+                                            ? null
+                                            : (v) {
+                                                setState(() {
+                                                  _eventType = v;
+                                                  _resetDynamicFieldsOnTypeChange();
+                                                });
+                                              },
+                                      ),
+                                      const SizedBox(height: 22),
+
+                                      if (_eventType != 'HEAT_PERIOD') ...[
+                                        _LabeledRightField(
+                                          label: _dateLabelForType(_eventType),
+                                          field: TextField(
+                                            controller: _eventDateCtrl,
+                                            readOnly: true,
+                                            onTap: _saving
+                                                ? null
+                                                : _pickEventDate,
+                                            decoration: _dec(
+                                              hint: '31.12.2025',
+                                              prefixIcon: Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 12,
+                                                  right: 8,
+                                                ),
+                                                child: AppIcons.svg(
+                                                  'calendar',
+                                                  size: 18,
+                                                  color: AppColors.primary3,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 24),
+                                      ],
+
+                                      DynamicEventFields(
+                                        eventType: _eventType,
+                                        vaccineNameCtrl: _vaccineNameCtrl,
+                                        diagnosisCtrl: _diagnosisCtrl,
+                                        treatmentDaysCtrl: _treatmentDaysCtrl,
+                                        drugNameCtrl: _drugNameCtrl,
+                                        dosageCtrl: _dosageCtrl,
+                                        weightCtrl: _weightCtrl,
+                                        bullNameCtrl: _bullNameCtrl,
+                                        bullTagCtrl: _bullTagCtrl,
+                                        customTypeCtrl: _customTypeCtrl,
+                                        calvingDifficulty: _calvingDifficulty,
+                                        onCalvingDifficultyChanged: (v) =>
+                                            setState(
+                                              () => _calvingDifficulty = v,
+                                            ),
+                                        endDateCtrl: _endDateCtrl,
+                                        onPickEndDate: _saving
+                                            ? null
+                                            : () => _pickDateTo(
+                                                onPicked: (d) => _endDate = d,
+                                                ctrl: _endDateCtrl,
+                                                helpText: 'Дата окончания',
+                                              ),
+                                        heatStartCtrl: _heatStartCtrl,
+                                        onPickHeatStart: _saving
+                                            ? null
+                                            : () => _pickDateTo(
+                                                onPicked: (d) => _heatStart = d,
+                                                ctrl: _heatStartCtrl,
+                                                helpText: 'Начало охоты',
+                                              ),
+                                        heatEndCtrl: _heatEndCtrl,
+                                        onPickHeatEnd: _saving
+                                            ? null
+                                            : () => _pickDateTo(
+                                                onPicked: (d) => _heatEnd = d,
+                                                ctrl: _heatEndCtrl,
+                                                helpText: 'Конец охоты',
+                                              ),
+                                        treatmentDaysValue: _treatmentDays,
+                                        onMinusTreatmentDays: _saving
+                                            ? () {}
+                                            : () {
+                                                setState(() {
+                                                  if (_treatmentDays > 1)
+                                                    _treatmentDays--;
+                                                  _syncTreatmentDaysCtrl();
+                                                });
+                                              },
+                                        onPlusTreatmentDays: _saving
+                                            ? () {}
+                                            : () {
+                                                setState(() {
+                                                  _treatmentDays++;
+                                                  _syncTreatmentDaysCtrl();
+                                                });
+                                              },
+                                        matingSuccess: _matingSuccess,
+                                        onMatingSuccessChanged: (v) =>
+                                            setState(() => _matingSuccess = v),
+                                        labeledRightField:
+                                            ({
+                                              required String label,
+                                              required Widget field,
+                                            }) => _LabeledRightField(
+                                              label: label,
+                                              field: field,
+                                            ),
+                                        dec: ({required hint, prefixIcon}) =>
+                                            _dec(
+                                              hint: hint,
+                                              prefixIcon: prefixIcon,
+                                            ),
+                                        calendarIcon: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 12,
+                                            right: 8,
+                                          ),
+                                          child: AppIcons.svg(
+                                            'calendar',
+                                            size: 18,
+                                            color: AppColors.primary3,
+                                          ),
+                                        ),
+                                      ),
+
+                                      const Text(
+                                        'Комментарий (опционально)',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.primary3,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      TextField(
+                                        controller: _notesCtrl,
+                                        decoration: _dec(hint: ''),
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
-                            const SizedBox(height: 6),
-                            DropdownButtonFormField<String>(
-                              initialValue: dropdownValue,
-                              decoration: _dec(hint: 'Выбрать из списка'),
-                              items: [
-                                ...parsed.map(
-                                  (t) => DropdownMenuItem(
-                                    value: t.apiValue,
-                                    child: Text(t.display),
+                          ),
+
+                          // кнопки теперь часть скролла, и клавиатура их не ломает
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 48,
+                                    child: OutlinedButton(
+                                      onPressed: _saving
+                                          ? null
+                                          : () => Navigator.of(context).pop(),
+                                      style: OutlinedButton.styleFrom(
+                                        backgroundColor: const Color.fromRGBO(
+                                          213,
+                                          215,
+                                          218,
+                                          0.6,
+                                        ),
+                                        side: const BorderSide(
+                                          color: Color(0xFFF3F4F6),
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            6,
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Отменить',
+                                        style: TextStyle(
+                                          color: AppColors.error,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                ...fallbackRaw.map(
-                                  (raw) => DropdownMenuItem(
-                                    value: raw,
-                                    child: Text(raw),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 48,
+                                    child: ElevatedButton(
+                                      onPressed: _saving ? null : _submit,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primary1,
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            6,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        _saving ? 'Сохранение...' : 'Сохранить',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
-                              onChanged: _saving
-                                  ? null
-                                  : (v) {
-                                      setState(() {
-                                        _eventType = v;
-                                        _resetDynamicFieldsOnTypeChange();
-                                      });
-                                    },
                             ),
-
-                            const SizedBox(height: 22),
-
-                            if (_eventType != 'HEAT_PERIOD') ...[
-                              _LabeledRightField(
-                                label: _dateLabelForType(_eventType),
-                                field: TextField(
-                                  controller: _eventDateCtrl,
-                                  readOnly: true,
-                                  onTap: _saving ? null : _pickEventDate,
-                                  decoration: _dec(
-                                    hint: '31.12.2025',
-                                    prefixIcon: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 12,
-                                        right: 8,
-                                      ),
-                                      child: AppIcons.svg(
-                                        'calendar',
-                                        size: 18,
-                                        color: AppColors.primary3,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-                            ],
-
-                            // динамические поля (появляются по типу)
-                            DynamicEventFields(
-                              eventType: _eventType,
-                              vaccineNameCtrl: _vaccineNameCtrl,
-                              diagnosisCtrl: _diagnosisCtrl,
-                              treatmentDaysCtrl: _treatmentDaysCtrl,
-                              drugNameCtrl: _drugNameCtrl,
-                              dosageCtrl: _dosageCtrl,
-                              weightCtrl: _weightCtrl,
-                              bullNameCtrl: _bullNameCtrl,
-                              bullTagCtrl: _bullTagCtrl,
-                              pregnancyStatus: _pregnancyStatus,
-                              customTypeCtrl: _customTypeCtrl,
-                              onPregnancyStatusChanged: (v) =>
-                                  setState(() => _pregnancyStatus = v),
-                              calvingDifficulty: _calvingDifficulty,
-                              onCalvingDifficultyChanged: (v) =>
-                                  setState(() => _calvingDifficulty = v),
-                              endDateCtrl: _endDateCtrl,
-                              onPickEndDate: _saving
-                                  ? null
-                                  : () => _pickDateTo(
-                                      onPicked: (d) => _endDate = d,
-                                      ctrl: _endDateCtrl,
-                                      helpText: 'Дата окончания',
-                                    ),
-                              heatStartCtrl: _heatStartCtrl,
-                              onPickHeatStart: _saving
-                                  ? null
-                                  : () => _pickDateTo(
-                                      onPicked: (d) => _heatStart = d,
-                                      ctrl: _heatStartCtrl,
-                                      helpText: 'Начало охоты',
-                                    ),
-                              heatEndCtrl: _heatEndCtrl,
-                              onPickHeatEnd: _saving
-                                  ? null
-                                  : () => _pickDateTo(
-                                      onPicked: (d) => _heatEnd = d,
-                                      ctrl: _heatEndCtrl,
-                                      helpText: 'Конец охоты',
-                                    ),
-                              treatmentDaysValue: _treatmentDays,
-                              onMinusTreatmentDays: _saving
-                                  ? () {}
-                                  : () {
-                                      setState(() {
-                                        if (_treatmentDays > 1)
-                                          _treatmentDays--;
-                                        _syncTreatmentDaysCtrl();
-                                      });
-                                    },
-                              onPlusTreatmentDays: _saving
-                                  ? () {}
-                                  : () {
-                                      setState(() {
-                                        _treatmentDays++;
-                                        _syncTreatmentDaysCtrl();
-                                      });
-                                    },
-                              matingSuccess: _matingSuccess,
-                              onMatingSuccessChanged: (v) =>
-                                  setState(() => _matingSuccess = v),
-                              labeledRightField:
-                                  ({
-                                    required String label,
-                                    required Widget field,
-                                  }) => _LabeledRightField(
-                                    label: label,
-                                    field: field,
-                                  ),
-
-                              dec: ({required hint, prefixIcon}) =>
-                                  _dec(hint: hint, prefixIcon: prefixIcon),
-                              calendarIcon: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 12,
-                                  right: 8,
-                                ),
-                                child: AppIcons.svg(
-                                  'calendar',
-                                  size: 18,
-                                  color: AppColors.primary3,
-                                ),
-                              ),
-                            ),
-
-                            const Text(
-                              'Комментарий (опционально)',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.primary3,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            TextField(
-                              controller: _notesCtrl,
-                              decoration: _dec(hint: ''),
-                            ),
-                          ],
-                        );
-                      },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-
-                // нижние кнопки - фикс, но поднимаются при клавиатуре
-                AnimatedPadding(
-                  duration: const Duration(milliseconds: 150),
-                  padding: EdgeInsets.fromLTRB(
-                    16,
-                    12,
-                    16,
-                    keyboardInset > 0 ? keyboardInset + 12 : 16,
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 48,
-                          child: OutlinedButton(
-                            onPressed: _saving
-                                ? null
-                                : () => Navigator.of(context).pop(),
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color.fromRGBO(
-                                213,
-                                215,
-                                218,
-                                0.6,
-                              ),
-                              side: const BorderSide(color: Color(0xFFF3F4F6)),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            ),
-                            child: const Text(
-                              'Отменить',
-                              style: TextStyle(
-                                color: AppColors.error,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: SizedBox(
-                          height: 48,
-                          child: ElevatedButton(
-                            onPressed: _saving ? null : _submit,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary1,
-                              foregroundColor: Colors.white, // <-- ВАЖНО
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            ),
-                            child: Text(
-                              _saving ? 'Сохранение...' : 'Сохранить',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                );
+              },
             ),
           ),
         ),

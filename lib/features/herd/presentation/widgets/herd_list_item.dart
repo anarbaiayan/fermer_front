@@ -22,164 +22,122 @@ class HerdListItem extends ConsumerWidget {
     );
     final category = resolved.category;
     final ageText = _formatAge(resolved.ageInMonths);
-
-    // <- ДОГРУЖАЕМ DETAILS ОТДЕЛЬНО
-    final detailsAsync = ref.watch(cattleDetailsProvider(cattle.id));
-
-    // событие (пока как было)
     final tagText = '#${cattle.tagNumber}';
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(213, 215, 218, 0.22),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: _categoryColor(category),
-                shape: BoxShape.circle,
+    final detailsAsync = ref.watch(cattleDetailsProvider(cattle.id));
+
+    return AspectRatio(
+      aspectRatio: 1,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: const Color.fromRGBO(213, 215, 218, 0.22),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
               ),
-              alignment: Alignment.center,
-              child: AppIcons.svg(
-                _categoryIcon(category),
-                size: 18,
-                color: Colors.white,
+            ],
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: _categoryColor(category),
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: AppIcons.svg(
+                  _categoryIcon(category),
+                  size: 22,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
 
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    cattle.name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary3,
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-                  const Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: AppColors.additional2,
-                  ),
-                  const SizedBox(height: 12),
-
-                  Text(
-                    tagText,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: AppColors.primary3,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  Text(
-                    ageText,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: AppColors.primary3,
-                    ),
-                  ),
-
-                  // ---- ЗДОРОВЬЕ И СОБЫТИЕ ИЗ DETAILS ----
-                  detailsAsync.when(
-                    loading: () => const SizedBox(height: 0),
-                    error: (_, _) => const SizedBox(height: 0),
-                    data: (details) {
-                      final raw = details?.healthStatus;
-                      HealthStatus? hs;
-                      if (raw != null && raw.isNotEmpty) {
-                        try {
-                          hs = HealthStatusX.fromApi(raw);
-                        } catch (_) {
-                          hs = null;
-                        }
-                      }
-
-                      final healthText = hs?.display;
-                      final healthColor = _healthColor(hs);
-
-                      final eventText = details?.animalGroup;
-
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (hs != null) ...[
-                            const SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 12,
-                                  height: 12,
-                                  decoration: BoxDecoration(
-                                    color: healthColor,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  healthText!,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: AppColors.primary3,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-
-                          if (eventText != null && eventText.isNotEmpty) ...[
-                            const SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.additional3,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  eventText,
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    color: AppColors.primary3,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ],
-                      );
-                    },
-                  ),
-                ],
+              const SizedBox(height: 12),
+              const Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.additional2,
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+
+              Text(
+                tagText,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary3,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                ageText,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 13, color: AppColors.primary3),
+              ),
+
+              const Spacer(),
+
+              detailsAsync.when(
+                loading: () => const SizedBox(height: 18),
+                error: (_, _) => const SizedBox(height: 18),
+                data: (details) {
+                  final raw = details?.healthStatus;
+                  HealthStatus? hs;
+                  if (raw != null && raw.isNotEmpty) {
+                    try {
+                      hs = HealthStatusX.fromApi(raw);
+                    } catch (_) {
+                      hs = null;
+                    }
+                  }
+                  if (hs == null) return const SizedBox(height: 18);
+
+                  final healthColor = _healthColor(hs);
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: healthColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          hs.display,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppColors.primary3,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/cattle_events/presentation/widgets/days_stepper_field.dart';
-import 'package:frontend/features/herd/domain/entities/pregnancy_status.dart';
 
 class DynamicEventFields extends StatelessWidget {
   final String? eventType;
@@ -18,9 +17,6 @@ class DynamicEventFields extends StatelessWidget {
 
   final String? calvingDifficulty;
   final void Function(String? v) onCalvingDifficultyChanged;
-
-  final PregnancyStatus? pregnancyStatus;
-  final void Function(PregnancyStatus? v) onPregnancyStatusChanged;
 
   final TextEditingController endDateCtrl;
   final VoidCallback? onPickEndDate;
@@ -73,8 +69,6 @@ class DynamicEventFields extends StatelessWidget {
     required this.labeledRightField,
     required this.dec,
     required this.calendarIcon,
-    required this.pregnancyStatus,
-    required this.onPregnancyStatusChanged,
   });
 
   @override
@@ -271,22 +265,8 @@ class DynamicEventFields extends StatelessWidget {
       );
     }
 
-    if (t == 'PREGNANCY_CONFIRMATION') {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const FieldTitle('Результат'),
-          DropdownButtonFormField<PregnancyStatus>(
-            initialValue: pregnancyStatus,
-            items: PregnancyStatus.values
-                .map((s) => DropdownMenuItem(value: s, child: Text(s.display)))
-                .toList(),
-            onChanged: onPregnancyStatusChanged,
-            decoration: dec(hint: 'Выберите'),
-          ),
-          const SizedBox(height: 24),
-        ],
-      );
+    if (t == 'PREGNANCY_CONFIRMATION' || t == 'PREGNANCY_NOT_CONFIRMED') {
+      return const SizedBox(height: 24);
     }
 
     // ✅ HEAT_PERIOD - только начало/конец и в стиле "слева текст - справа инпут"

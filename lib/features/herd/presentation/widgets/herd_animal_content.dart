@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
+import 'package:frontend/features/cattle_events/application/cattle_events_providers.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:frontend/features/herd/presentation/widgets/cattle_events_preview.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
@@ -10,9 +12,10 @@ import 'package:frontend/features/herd/presentation/utils/cattle_formatters.dart
 import 'package:frontend/features/herd/presentation/widgets/herd_small_action_card.dart';
 import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class HerdAnimalContent extends StatelessWidget {
+class HerdAnimalContent extends ConsumerStatefulWidget {
   final Cattle cattle;
   final VoidCallback onAddEvent;
 
@@ -23,7 +26,15 @@ class HerdAnimalContent extends StatelessWidget {
   });
 
   @override
+  ConsumerState<HerdAnimalContent> createState() => _HerdAnimalContentState();
+}
+
+class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
+  bool _showAllUpcoming = false;
+
+  @override
   Widget build(BuildContext context) {
+    final cattle = widget.cattle;
     final resolved = AnimalCategoryResolver.resolve(
       gender: cattle.gender,
       dateOfBirth: cattle.dateOfBirth,
@@ -37,23 +48,50 @@ class HerdAnimalContent extends StatelessWidget {
 
     final ageMonths = resolved.ageInMonths;
     final ageText = formatAge(ageMonths);
-
-    final details = cattle.details;
-    final healthRaw = details?.healthStatus;
-    final healthText = mapHealthStatus(healthRaw);
+    final detailsAsync = ref.watch(cattleDetailsProvider(cattle.id));
+    final details = detailsAsync.value; // может быть null пока грузится
+    final healthText = mapHealthStatus(details?.healthStatus);
 
     final tagText = '#${cattle.tagNumber}';
     final birthDateText = DateFormat('dd.MM.yyyy').format(cattle.dateOfBirth);
-    String fmtDate(DateTime? d) =>
-        d == null ? '—' : DateFormat('dd.MM.yyyy').format(d);
 
-    String fmtMilk(double? v) => v == null ? '—' : '${v.toStringAsFixed(0)} л';
+    String pregnancyLabel(bool? v) =>
+        v == null ? '—' : (v ? 'Беременна' : 'Не беременна');
 
-    String pregnancyText(String? raw) {
-      if (raw == null || raw.isEmpty) return '—';
-      if (raw == 'PREGNANT') return 'Беременная';
-      if (raw == 'NOT_PREGNANT') return 'Не беременная';
-      return '—';
+    String reproductiveLabel(String? raw) {
+      switch (raw) {
+        case 'OPEN':
+          return 'Не осеменена';
+        case 'INSEMINATED':
+          return 'Осеменена';
+        case 'PREGNANT':
+          return 'Беременна';
+        case 'DRY_PERIOD':
+          return 'Сухостой';
+        case 'CALVING_SOON':
+          return 'Скоро отёл';
+        case 'FRESH_COW':
+          return 'Свежая корова';
+        default:
+          return '—';
+      }
+    }
+
+    String productionLabel(String? raw) {
+      switch (raw) {
+        case 'LACTATING':
+          return 'Лактация';
+        case 'DRY':
+          return 'Сухостой';
+        case 'FATTENING':
+          return 'На откорме';
+        case 'BREEDING':
+          return 'Племенное использование';
+        case 'UNKNOWN':
+          return 'Неизвестно';
+        default:
+          return '—';
+      }
     }
 
     return Column(
@@ -224,57 +262,89 @@ class HerdAnimalContent extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _infoRow('Бирка', tagText),
-                            _infoRow('Дата рождения', birthDateText),
-                            _infoRow('Возраст', ageText),
-                            _infoRow('Порода', details?.breed),
-                            _infoRow('Группа', details?.animalGroup),
-                            _healthInfoRow('Состояние здоровья', healthText),
+                            _infoRowOptional(
+                              'Бирка',
+                              tagText,
+                            ), // всегда есть, но ок
+                            _infoRowOptional(
+                              'Дата рождения',
+                              birthDateText,
+                            ), // всегда есть
+                            _infoRowOptional('Возраст', ageText), // всегда есть
+                            _infoRowOptional('Порода', details?.breed),
+                            _infoRowOptional('Группа', details?.animalGroup),
+                            _healthInfoRowOptional(
+                              'Состояние здоровья',
+                              healthText,
+                            ),
 
                             // ---- для коровы / тёлки (как на макете) ----
                             if (isCow) ...[
-                              _infoRow(
+                              _infoRowMilkOptional(
                                 'Последний надой\n(л/день)',
-                                fmtMilk(details?.lastMilkYield),
+                                details?.lastMilkYield,
                               ),
-                              _infoRow(
+                              _infoRowDateOptional(
                                 'Последний отел',
-                                fmtDate(details?.lastCalvingDate),
+                                details?.lastCalvingDate,
                               ),
-                              _infoRow(
+                              _infoRowDateOptional(
                                 'Последнее\nосеменение',
-                                fmtDate(details?.lastInseminationDate),
+                                details?.lastInseminationDate,
                               ),
-                              _infoRow(
-                                'Статус суягности',
-                                pregnancyText(details?.pregnancyStatus),
+
+                              // эти показываем только если реально есть bool/state
+                              if (details?.isPregnant != null)
+                                _infoRowOptional(
+                                  'Беременность',
+                                  pregnancyLabel(details?.isPregnant),
+                                ),
+
+                              _infoRowOptional(
+                                'Репродуктивный статус',
+                                (details?.reproductiveState == null)
+                                    ? null
+                                    : reproductiveLabel(
+                                        details?.reproductiveState,
+                                      ),
                               ),
-                              _infoRow(
-                                'Сухостой',
-                                details?.isDryPeriod == null
-                                    ? '—'
-                                    : (details!.isDryPeriod! ? 'Да' : 'Нет'),
+                              _infoRowOptional(
+                                'Производственный статус',
+                                (details?.productionState == null)
+                                    ? null
+                                    : productionLabel(details?.productionState),
                               ),
                             ],
 
                             if (isHeifer) ...[
-                              _infoRow(
+                              _infoRowDateOptional(
                                 'Первое\nосеменение',
-                                fmtDate(details?.firstInseminationDate),
+                                details?.firstInseminationDate,
                               ),
-                              _infoRow(
+                              _infoRowDateOptional(
                                 'Планируемая дата\nотела',
-                                fmtDate(details?.expectedCalvingDate),
+                                details?.expectedCalvingDate,
                               ),
-                              _infoRow(
-                                'Статус суягности',
-                                pregnancyText(details?.pregnancyStatus),
+
+                              if (details?.isPregnant != null)
+                                _infoRowOptional(
+                                  'Беременность',
+                                  pregnancyLabel(details?.isPregnant),
+                                ),
+
+                              _infoRowOptional(
+                                'Репродуктивный статус',
+                                (details?.reproductiveState == null)
+                                    ? null
+                                    : reproductiveLabel(
+                                        details?.reproductiveState,
+                                      ),
                               ),
                             ],
 
                             // ---- для быка ----
                             if (isBull) ...[
-                              _infoRow(
+                              _infoRowOptional(
                                 'Назначение',
                                 details?.bullPurpose?.display,
                               ),
@@ -325,9 +395,133 @@ class HerdAnimalContent extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
                         child: CattleEventsPreview(
                           cattleId: cattle.id,
-                          onAddPressed: onAddEvent,
+                          onAddPressed: () async {
+                            final res = await context.push<bool>(
+                              '/herd/${cattle.id}/events/add',
+                            );
+
+                            if (res == true) {
+                              ref.invalidate(
+                                cattleEventsPreviewProvider(cattle.id),
+                              );
+                              ref.invalidate(cattleDetailsProvider(cattle.id));
+                              ref.invalidate(cattleByIdProvider(cattle.id));
+                              ref.invalidate(cattleListProvider);
+                              ref.invalidate(cattleStatisticsProvider);
+                            }
+                          },
                         ),
                       ),
+
+                      if ((details?.upcomingEvents?.isNotEmpty ?? false))
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 12),
+                              const Text(
+                                'Ближайшие события',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.primary3,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+
+                              // список (1 или все)
+                              ...(() {
+                                final upcoming = details!.upcomingEvents!;
+                                final visible = _showAllUpcoming
+                                    ? upcoming
+                                    : upcoming.take(1);
+
+                                return visible.map((e) {
+                                  final date = e.plannedDate == null
+                                      ? '—'
+                                      : DateFormat(
+                                          'dd.MM.yyyy',
+                                        ).format(e.plannedDate!);
+
+                                  final left = e.daysUntil == null
+                                      ? ''
+                                      : 'через ${e.daysUntil} дн';
+
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: AppColors.additional2,
+                                        ),
+                                        color: const Color(0xFFF9FAFB),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              e.title,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                color: AppColors.primary3,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                date,
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: AppColors.additional3,
+                                                ),
+                                              ),
+                                              if (left.isNotEmpty)
+                                                Text(
+                                                  left,
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    color:
+                                                        AppColors.additional3,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }).toList();
+                              })(),
+
+                              // кнопка показать все/скрыть
+                              if (details!.upcomingEvents!.length > 1)
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      setState(
+                                        () => _showAllUpcoming =
+                                            !_showAllUpcoming,
+                                      );
+                                    },
+                                    child: Text(
+                                      _showAllUpcoming
+                                          ? 'Скрыть'
+                                          : 'Показать все (${details.upcomingEvents!.length})',
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -368,10 +562,11 @@ class HerdAnimalContent extends StatelessWidget {
     }
   }
 
-  Widget _infoRow(String label, String? value) {
-    if (value == null || value.isEmpty) {
-      value = '—';
-    }
+  bool _hasText(String? v) =>
+      v != null && v.trim().isNotEmpty && v.trim() != '—';
+
+  Widget _infoRowOptional(String label, String? value) {
+    if (!_hasText(value)) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -390,7 +585,7 @@ class HerdAnimalContent extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              value,
+              value!.trim(),
               style: const TextStyle(
                 fontSize: 16,
                 color: AppColors.primary3,
@@ -403,40 +598,55 @@ class HerdAnimalContent extends StatelessWidget {
     );
   }
 
-  Widget _healthInfoRow(String label, String? text) {
-    if (text == null || text.isEmpty) {
-      return _infoRow(label, null);
-    }
-    return Row(
-      children: [
-        SizedBox(
-          width: 150,
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 16,
-              color: AppColors.primary3,
-              fontWeight: FontWeight.w500,
+  Widget _infoRowDateOptional(String label, DateTime? date) {
+    if (date == null) return const SizedBox.shrink();
+    return _infoRowOptional(label, DateFormat('dd.MM.yyyy').format(date));
+  }
+
+  Widget _infoRowMilkOptional(String label, double? v) {
+    if (v == null) return const SizedBox.shrink();
+    // если хочешь скрывать нули - раскомментируй:
+    // if (v == 0) return const SizedBox.shrink();
+    return _infoRowOptional(label, '${v.toStringAsFixed(0)} л');
+  }
+
+  Widget _healthInfoRowOptional(String label, String? text) {
+    if (!_hasText(text)) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 150,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                color: AppColors.primary3,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-        ),
-        Container(
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(shape: BoxShape.circle),
-        ),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 16,
-              color: AppColors.primary3,
-              fontWeight: FontWeight.w400,
+          Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              text!.trim(),
+              style: const TextStyle(
+                fontSize: 16,
+                color: AppColors.primary3,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
