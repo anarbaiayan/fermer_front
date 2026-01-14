@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
-import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
+import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/core/widgets/page_header.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:go_router/go_router.dart';
@@ -127,6 +127,10 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
   final _weightCtrl = TextEditingController();
   final _bullNameCtrl = TextEditingController();
   final _bullTagCtrl = TextEditingController();
+  final _calfTagCtrl = TextEditingController();
+  final _calfNameCtrl = TextEditingController();
+  final _calfBirthWeightCtrl = TextEditingController();
+  String? _calfGender;
 
   String? _calvingDifficulty;
 
@@ -163,6 +167,9 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
     _weightCtrl.dispose();
     _bullNameCtrl.dispose();
     _bullTagCtrl.dispose();
+    _calfTagCtrl.dispose();
+    _calfNameCtrl.dispose();
+    _calfBirthWeightCtrl.dispose();
 
     _endDateCtrl.dispose();
     _heatStartCtrl.dispose();
@@ -241,6 +248,10 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
     _weightCtrl.clear();
     _bullNameCtrl.clear();
     _bullTagCtrl.clear();
+    _calfTagCtrl.clear();
+    _calfNameCtrl.clear();
+    _calfBirthWeightCtrl.clear();
+    _calfGender = null;
 
     _calvingDifficulty = null;
 
@@ -295,6 +306,10 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
     if (t == 'CALVING') {
       data['calvingEase'] = _calvingDifficulty;
       data['bullTag'] = nn(_bullTagCtrl.text);
+      data['calfTag'] = nn(_calfTagCtrl.text);
+      data['calfName'] = nn(_calfNameCtrl.text);
+      data['calfGender'] = _calfGender;
+      data['calfBirthWeight'] = dd(_calfBirthWeightCtrl.text);
     }
 
     if (t == 'HEAT_PERIOD') {
@@ -346,6 +361,30 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
       return;
     }
 
+    if (_eventType == 'CALVING') {
+      if (_calfTagCtrl.text.trim().isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Введите бирку телёнка')));
+        return;
+      }
+      if (_calfGender == null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Выберите пол телёнка')));
+        return;
+      }
+      if (double.tryParse(
+            _calfBirthWeightCtrl.text.trim().replaceAll(',', '.'),
+          ) ==
+          null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Введите вес телёнка при рождении')),
+        );
+        return;
+      }
+    }
+
     setState(() => _saving = true);
 
     try {
@@ -391,10 +430,12 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
       cattleAvailableEventTypesProvider(widget.cattleId),
     );
 
-    return Scaffold(
+    return AppScaffold(
+      bottomNavIndex: null,
+      enableDrawer: false,
       backgroundColor: AppColors.primary1,
-      resizeToAvoidBottomInset: true,
-      appBar: const FermerPlusAppBar(),
+      userName: 'Ахмет Кусаинов',
+      farmName: 'Название фермы',
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         child: Container(
@@ -559,6 +600,13 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                         bullTagCtrl: _bullTagCtrl,
                                         customTypeCtrl: _customTypeCtrl,
                                         calvingDifficulty: _calvingDifficulty,
+                                        calfTagCtrl: _calfTagCtrl,
+                                        calfNameCtrl: _calfNameCtrl,
+                                        calfGender: _calfGender,
+                                        onCalfGenderChanged: (v) =>
+                                            setState(() => _calfGender = v),
+                                        calfBirthWeightCtrl:
+                                            _calfBirthWeightCtrl,
                                         onCalvingDifficultyChanged: (v) =>
                                             setState(
                                               () => _calvingDifficulty = v,

@@ -24,9 +24,23 @@ class CattleDetails {
   final bool? isPregnant;
   final String? reproductiveState;
   final String? productionState;
+  final double? averageMilkYield7Days;
+  final double? averageMilkYield30Days;
+
+  final int? currentLactationNumber;
+  final int? daysInMilk;
+  final int? daysSinceCalving;
+
+  final double? peakMilkYieldCurrentLactation;
+  final double? totalMilkCurrentLactation;
+
+  final DateTime? lastMilkYieldDate;
+
+  final bool? isLactating;
+  final bool? isFreshCow;
+  final bool? isCalvingSoon;
 
   final List<UpcomingEvent>? upcomingEvents;
-
 
   const CattleDetails({
     this.breed,
@@ -46,6 +60,17 @@ class CattleDetails {
     this.reproductiveState,
     this.productionState,
     this.upcomingEvents,
+    this.averageMilkYield7Days,
+    this.averageMilkYield30Days,
+    this.currentLactationNumber,
+    this.daysInMilk,
+    this.daysSinceCalving,
+    this.peakMilkYieldCurrentLactation,
+    this.totalMilkCurrentLactation,
+    this.lastMilkYieldDate,
+    this.isLactating,
+    this.isFreshCow,
+    this.isCalvingSoon,
   });
 }
 

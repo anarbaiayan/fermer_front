@@ -3,7 +3,10 @@ import 'package:frontend/core/icons/app_icons.dart';
 import '../theme/app_colors.dart';
 
 class FermerPlusAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const FermerPlusAppBar({super.key});
+  final VoidCallback? onMenuTap;
+  final bool showBell;
+
+  const FermerPlusAppBar({super.key, this.onMenuTap, this.showBell = true});
 
   @override
   Widget build(BuildContext context) {
@@ -11,21 +14,18 @@ class FermerPlusAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.primary1,
       elevation: 0,
       centerTitle: true,
-
-      // расстояние между leading и названием
       titleSpacing: 24,
-
-      leadingWidth: 56, // чтобы оставить место под 24px + иконку
-
+      leadingWidth: 56,
       leading: Padding(
         padding: const EdgeInsets.only(left: 24),
         child: IconButton(
           padding: EdgeInsets.zero,
           icon: AppIcons.svg('menu', color: Colors.white),
-          onPressed: () {},
+          onPressed: () {
+            onMenuTap?.call();
+          },
         ),
       ),
-
       title: const Text(
         'FERMER+',
         style: TextStyle(
@@ -35,16 +35,18 @@ class FermerPlusAppBar extends StatelessWidget implements PreferredSizeWidget {
           fontWeight: FontWeight.w600,
         ),
       ),
-
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 24),
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            icon: AppIcons.svg('bell', color: Colors.white),
-            onPressed: () {},
-          ),
-        ),
+        if (showBell)
+          Padding(
+            padding: const EdgeInsets.only(right: 24),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: AppIcons.svg('bell', color: Colors.white),
+              onPressed: () {},
+            ),
+          )
+        else
+          const SizedBox(width: 24),
       ],
     );
   }
@@ -52,4 +54,3 @@ class FermerPlusAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(56);
 }
-

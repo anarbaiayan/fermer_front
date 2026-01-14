@@ -8,7 +8,7 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/cattle_events/application/cattle_events_providers.dart';
 import 'package:frontend/features/cattle_events/domain/entities/cattle_event.dart';
 
-class CattleEventsPreview extends ConsumerWidget {
+class CattleEventsPreview extends ConsumerStatefulWidget {
   final int cattleId;
   final VoidCallback onAddPressed;
 
@@ -19,8 +19,17 @@ class CattleEventsPreview extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final async = ref.watch(cattleEventsPreviewProvider(cattleId));
+  ConsumerState<CattleEventsPreview> createState() =>
+      _CattleEventsPreviewState();
+}
+
+class _CattleEventsPreviewState extends ConsumerState<CattleEventsPreview> {
+  // по умолчанию показываем ВСЕ (значит collapsed = false)
+  bool _collapsed = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final async = ref.watch(cattleEventsPreviewProvider(widget.cattleId));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +54,7 @@ class CattleEventsPreview extends ConsumerWidget {
             IconButton(
               padding: EdgeInsets.zero,
               icon: AppIcons.svg('add_event', size: 30),
-              onPressed: onAddPressed,
+              onPressed: widget.onAddPressed,
             ),
           ],
         ),
@@ -67,29 +76,51 @@ class CattleEventsPreview extends ConsumerWidget {
               ),
               const SizedBox(height: 6),
               TextButton(
-                onPressed: () =>
-                    ref.invalidate(cattleEventsPreviewProvider(cattleId)),
+                onPressed: () => ref.invalidate(
+                  cattleEventsPreviewProvider(widget.cattleId),
+                ),
                 child: const Text('Повторить'),
               ),
             ],
           ),
           data: (items) {
-            if (items.isEmpty) {
+            final visible = items
+                .where((e) => !e.eventType.startsWith('SYSTEM_'))
+                .toList();
+
+            if (visible.isEmpty) {
               return const Text(
                 'Пока нет событий',
                 style: TextStyle(fontSize: 14, color: AppColors.additional3),
               );
             }
 
-            final visible = items
-                .where((e) => !e.eventType.startsWith('SYSTEM_'))
-                .toList();
+            const collapsedCount = 1;
+            final canToggle = visible.length > collapsedCount;
 
-            if (visible.isEmpty) {
-              return const Text('Пока нет событий');
-            }
+            final shown = _collapsed
+                ? visible.take(collapsedCount).toList()
+                : visible;
 
-            return Column(children: visible.map(_EventRow.new).toList());
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ...shown.map(_EventRow.new),
+
+                if (canToggle)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton(
+                      onPressed: () => setState(() => _collapsed = !_collapsed),
+                      child: Text(
+                        _collapsed
+                            ? 'Показать все (${visible.length})'
+                            : 'Скрыть',
+                      ),
+                    ),
+                  ),
+              ],
+            );
           },
         ),
       ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
-import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
+import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_animal_content.dart';
 import 'package:go_router/go_router.dart';
@@ -16,9 +16,12 @@ class HerdAnimalScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cattleAsync = ref.watch(cattleByIdProvider(id));
 
-    return Scaffold(
-      backgroundColor: AppColors.primary1,
-      appBar: const FermerPlusAppBar(),
+    return AppScaffold(
+      bottomNavIndex: null,
+      enableDrawer: true,
+      showBell: true,
+      userName: 'Ахмет Кусаинов',
+      farmName: 'Название фермы',
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         child: Container(

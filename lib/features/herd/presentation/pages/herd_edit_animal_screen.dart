@@ -3,7 +3,7 @@ import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
-import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
+import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/data/models/cattle_dto.dart';
@@ -193,9 +193,12 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primary1,
-      appBar: const FermerPlusAppBar(),
+    return AppScaffold(
+      bottomNavIndex: null,
+      enableDrawer: false,
+      showBell: false,
+      userName: 'Ахмет Кусаинов',
+      farmName: 'Название фермы',
       body: Column(
         children: [
           Expanded(

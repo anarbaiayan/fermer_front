@@ -11,6 +11,7 @@ import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/presentation/utils/cattle_formatters.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_small_action_card.dart';
 import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
+import 'package:frontend/features/lactation/application/lactation_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -285,6 +286,26 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                 details?.lastMilkYield,
                               ),
                               _infoRowDateOptional(
+                                'Дата последнего\nнадоя',
+                                details?.lastMilkYieldDate,
+                              ),
+                              _infoRowMilkOptional(
+                                'Средний надой\nза 7 дней',
+                                details?.averageMilkYield7Days,
+                              ),
+                              _infoRowMilkOptional(
+                                'Средний надой\nза 30 дней',
+                                details?.averageMilkYield30Days,
+                              ),
+                              _infoRowMilkOptional(
+                                'Пик надоя\n(текущая лактация)',
+                                details?.peakMilkYieldCurrentLactation,
+                              ),
+                              _infoRowMilkOptional(
+                                'Всего молока\n(текущая лактация)',
+                                details?.totalMilkCurrentLactation,
+                              ),
+                              _infoRowDateOptional(
                                 'Последний отел',
                                 details?.lastCalvingDate,
                               ),
@@ -522,6 +543,37 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                             ],
                           ),
                         ),
+
+                      // Молочная продуктивность коровы (как журнал событий)
+                      if (isCow)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          child: _MilkProductivityPreview(
+                            cattleId: cattle.id,
+                            cattleTagNumber: cattle.tagNumber,
+                            onAddPressed: () async {
+                              final res = await context.push<bool>(
+                                '/herd/${cattle.id}/lactation/add',
+                                extra: {
+                                  'cattleId': cattle.id,
+                                  'cattleTagNumber': cattle.tagNumber,
+                                },
+                              );
+
+                              if (res == true) {
+                                // обновляем лактацию по корове
+                                ref.invalidate(
+                                  lactationsByCattleProvider(cattle.id),
+                                );
+
+                                // если бэк обновляет lastMilkYield/детали - можно тоже дернуть
+                                ref.invalidate(
+                                  cattleDetailsProvider(cattle.id),
+                                );
+                              }
+                            },
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -647,6 +699,63 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _MilkProductivityPreview extends StatelessWidget {
+  final int cattleId;
+  final String cattleTagNumber;
+  final VoidCallback onAddPressed;
+
+  const _MilkProductivityPreview({
+    required this.cattleId,
+    required this.cattleTagNumber,
+    required this.onAddPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: AppColors.primary2,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Center(child: AppIcons.svg('lactation_number')),
+            ),
+            const SizedBox(width: 8),
+            const Expanded(
+              child: Text(
+                'Молочная продуктивность коровы',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary3,
+                ),
+              ),
+            ),
+            IconButton(
+              padding: EdgeInsets.zero,
+              icon: AppIcons.svg('add_event', size: 30),
+              onPressed: onAddPressed,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        const Divider(height: 1, color: AppColors.additional2),
+        const SizedBox(height: 8),
+        const Text(
+          'Добавьте надой (утро/вечер), чтобы вести лактацию.',
+          style: TextStyle(fontSize: 14, color: AppColors.additional3),
+        ),
+      ],
     );
   }
 }

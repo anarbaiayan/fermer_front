@@ -44,6 +44,10 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
   final _weightCtrl = TextEditingController();
   final _bullNameCtrl = TextEditingController();
   final _bullTagCtrl = TextEditingController();
+  final _calfTagCtrl = TextEditingController();
+  final _calfNameCtrl = TextEditingController();
+  final _calfBirthWeightCtrl = TextEditingController();
+  String? _calfGender;
 
   String? _calvingDifficulty;
 
@@ -80,6 +84,9 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
     _weightCtrl.dispose();
     _bullNameCtrl.dispose();
     _bullTagCtrl.dispose();
+    _calfTagCtrl.dispose();
+    _calfNameCtrl.dispose();
+    _calfBirthWeightCtrl.dispose();
 
     _endDateCtrl.dispose();
     _heatStartCtrl.dispose();
@@ -158,6 +165,10 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
     _weightCtrl.clear();
     _bullNameCtrl.clear();
     _bullTagCtrl.clear();
+    _calfTagCtrl.clear();
+    _calfNameCtrl.clear();
+    _calfBirthWeightCtrl.clear();
+    _calfGender = null;
 
     _calvingDifficulty = null;
 
@@ -212,6 +223,11 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
     if (t == 'CALVING') {
       data['calvingEase'] = _calvingDifficulty;
       data['bullTag'] = nn(_bullTagCtrl.text);
+
+      data['calfTag'] = nn(_calfTagCtrl.text);
+      data['calfName'] = nn(_calfNameCtrl.text);
+      data['calfGender'] = _calfGender;
+      data['calfBirthWeight'] = dd(_calfBirthWeightCtrl.text);
     }
 
     if (t == 'HEAT_PERIOD') {
@@ -263,6 +279,30 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
         context,
       ).showSnackBar(const SnackBar(content: Text('Введите название события')));
       return;
+    }
+
+    if (_eventType == 'CALVING') {
+      if (_calfTagCtrl.text.trim().isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Введите бирку телёнка')));
+        return;
+      }
+      if (_calfGender == null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Выберите пол телёнка')));
+        return;
+      }
+      if (double.tryParse(
+            _calfBirthWeightCtrl.text.trim().replaceAll(',', '.'),
+          ) ==
+          null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Введите вес телёнка при рождении')),
+        );
+        return;
+      }
     }
 
     setState(() => _saving = true);
@@ -422,6 +462,12 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
                     bullTagCtrl: _bullTagCtrl,
                     customTypeCtrl: _customTypeCtrl,
                     calvingDifficulty: _calvingDifficulty,
+                    calfTagCtrl: _calfTagCtrl,
+                    calfNameCtrl: _calfNameCtrl,
+                    calfGender: _calfGender,
+                    onCalfGenderChanged: (v) => setState(() => _calfGender = v),
+                    calfBirthWeightCtrl: _calfBirthWeightCtrl,
+
                     onCalvingDifficultyChanged: (v) =>
                         setState(() => _calvingDifficulty = v),
                     endDateCtrl: _endDateCtrl,

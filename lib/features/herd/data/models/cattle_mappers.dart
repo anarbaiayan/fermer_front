@@ -124,6 +124,17 @@ CattleDetails cattleDetailsFromDto(CattleDetailsDto dto) {
     isPregnant: dto.isPregnant,
     reproductiveState: dto.reproductiveState,
     productionState: dto.productionState,
+    averageMilkYield7Days: dto.averageMilkYield7Days,
+    averageMilkYield30Days: dto.averageMilkYield30Days,
+    currentLactationNumber: dto.currentLactationNumber,
+    daysInMilk: dto.daysInMilk,
+    daysSinceCalving: dto.daysSinceCalving,
+    peakMilkYieldCurrentLactation: dto.peakMilkYieldCurrentLactation,
+    totalMilkCurrentLactation: dto.totalMilkCurrentLactation,
+    lastMilkYieldDate: tryParseDate(dto.lastMilkYieldDate),
+    isLactating: dto.isLactating,
+    isFreshCow: dto.isFreshCow,
+    isCalvingSoon: dto.isCalvingSoon,
     upcomingEvents: mapUpcoming(dto.upcomingEvents),
   );
 }

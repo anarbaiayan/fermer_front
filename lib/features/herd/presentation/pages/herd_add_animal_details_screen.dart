@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
+import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/core/widgets/app_success_dialog.dart';
-import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_sheet.dart';
 import 'package:frontend/core/widgets/page_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_section_title.dart';
@@ -129,9 +129,14 @@ class _HerdAddAnimalDetailsScreenState
   Widget build(BuildContext context) {
     final cattleAsync = ref.watch(cattleByIdProvider(widget.cattleId));
 
-    return Scaffold(
+    return AppScaffold(
+      bottomNavIndex: null,
+      enableDrawer: false,
+      showBell: false,
+      showAppBar: true,
       backgroundColor: AppColors.primary1,
-      appBar: const FermerPlusAppBar(),
+      userName: 'Ахмет Кусаинов',
+      farmName: 'Название фермы',
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         child: Container(
@@ -244,7 +249,9 @@ class _HerdAddAnimalDetailsScreenState
                       const SizedBox(height: 8),
                       HerdTextField(
                         controller: _eventCtrl,
+                        readOnly: true,
                         hint: 'Добавить событие',
+                        onTap: _saving ? null : _openAddEvent,
                         suffixIcon: IconButton(
                           icon: const Icon(
                             Icons.add,

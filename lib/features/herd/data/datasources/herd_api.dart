@@ -283,4 +283,29 @@ class HerdApi {
       );
     }
   }
+
+  Future<List<Map<String, dynamic>>> getCattleSimpleByCategory({
+    required String category,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/cattle/category/${category.toUpperCase()}/simple',
+      );
+
+      final data = response.data;
+      if (data is List) {
+        return data.cast<Map<String, dynamic>>();
+      }
+
+      throw ApiException(
+        'Неожиданный формат ответа simple cattle list',
+        response.statusCode,
+      );
+    } on DioException catch (e) {
+      throw ApiException(
+        e.message ?? 'Ошибка при получении списка скота по категории',
+        e.response?.statusCode,
+      );
+    }
+  }
 }

@@ -27,6 +27,23 @@ class CattleDetailsDto {
   final String? reproductiveState;
   final String? productionState;
 
+  // NEW milk/lactation fields (read-only from GET /api/details/{cattleId})
+  final double? averageMilkYield7Days;
+  final double? averageMilkYield30Days;
+
+  final int? currentLactationNumber;
+  final int? daysInMilk;
+  final int? daysSinceCalving;
+
+  final double? peakMilkYieldCurrentLactation;
+  final double? totalMilkCurrentLactation;
+
+  final String? lastMilkYieldDate;
+
+  final bool? isLactating;
+  final bool? isFreshCow;
+  final bool? isCalvingSoon;
+
   final List<UpcomingEventDto>? upcomingEvents;
 
   const CattleDetailsDto({
@@ -48,9 +65,27 @@ class CattleDetailsDto {
     this.reproductiveState,
     this.productionState,
     this.upcomingEvents,
+    this.averageMilkYield7Days,
+    this.averageMilkYield30Days,
+    this.currentLactationNumber,
+    this.daysInMilk,
+    this.daysSinceCalving,
+    this.peakMilkYieldCurrentLactation,
+    this.totalMilkCurrentLactation,
+    this.lastMilkYieldDate,
+    this.isLactating,
+    this.isFreshCow,
+    this.isCalvingSoon,
   });
 
   factory CattleDetailsDto.fromJson(Map<String, dynamic> json) {
+    int? asInt(dynamic v) {
+      if (v == null) return null;
+      if (v is int) return v;
+      if (v is num) return v.toInt();
+      return int.tryParse(v.toString());
+    }
+
     return CattleDetailsDto(
       breed: json['breed'] as String?,
       animalGroup: json['animalGroup'] as String?,
@@ -70,6 +105,21 @@ class CattleDetailsDto {
       isPregnant: json['isPregnant'] as bool?,
       reproductiveState: json['reproductiveState'] as String?,
       productionState: json['productionState'] as String?,
+      averageMilkYield7Days: (json['averageMilkYield7Days'] as num?)
+          ?.toDouble(),
+      averageMilkYield30Days: (json['averageMilkYield30Days'] as num?)
+          ?.toDouble(),
+      currentLactationNumber: asInt(json['currentLactationNumber']),
+      daysInMilk: asInt(json['daysInMilk']),
+      daysSinceCalving: asInt(json['daysSinceCalving']),
+      peakMilkYieldCurrentLactation:
+          (json['peakMilkYieldCurrentLactation'] as num?)?.toDouble(),
+      totalMilkCurrentLactation: (json['totalMilkCurrentLactation'] as num?)
+          ?.toDouble(),
+      lastMilkYieldDate: json['lastMilkYieldDate'] as String?,
+      isLactating: json['isLactating'] as bool?,
+      isFreshCow: json['isFreshCow'] as bool?,
+      isCalvingSoon: json['isCalvingSoon'] as bool?,
       upcomingEvents: (json['upcomingEvents'] as List?)
           ?.whereType<Map<String, dynamic>>()
           .map(UpcomingEventDto.fromJson)
@@ -100,6 +150,17 @@ class CattleDetailsDto {
       // 'isPregnant': isPregnant,
       // 'reproductiveState': reproductiveState,
       // 'productionState': productionState,
+      // 'averageMilkYield7Days': averageMilkYield7Days,
+      // 'averageMilkYield30Days': averageMilkYield30Days,
+      // 'currentLactationNumber': currentLactationNumber,
+      // 'daysInMilk': daysInMilk,
+      // 'daysSinceCalving': daysSinceCalving,
+      // 'peakMilkYieldCurrentLactation': peakMilkYieldCurrentLactation,
+      // 'totalMilkCurrentLactation': totalMilkCurrentLactation,
+      // 'lastMilkYieldDate': lastMilkYieldDate,
+      // 'isLactating': isLactating,
+      // 'isFreshCow': isFreshCow,
+      // 'isCalvingSoon': isCalvingSoon,
     };
 
     map.removeWhere((k, v) => v == null);

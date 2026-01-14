@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
-import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
-import 'package:frontend/core/widgets/app_bottom_nav_bar.dart';
+import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_list_item.dart';
@@ -29,9 +28,12 @@ class HerdScreen extends ConsumerWidget {
 
     final showFab = hasCattle;
 
-    return Scaffold(
-      appBar: const FermerPlusAppBar(),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 1),
+    return AppScaffold(
+      bottomNavIndex: 1,
+      userName: 'Ахмет Кусаинов',
+      farmName: 'Название фермы',
+      enableDrawer: true,
+      showBell: true,
 
       floatingActionButton: showFab
           ? Padding(
@@ -51,7 +53,7 @@ class HerdScreen extends ConsumerWidget {
               ),
             )
           : null,
-
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: AppPage(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +147,10 @@ class HerdScreen extends ConsumerWidget {
                       ref.invalidate(cattleListProvider);
                       ref.invalidate(cattleStatisticsProvider);
 
-                      ref.invalidate(cattleDetailsProvider);
+                      for (final c in cattle) {
+                        ref.invalidate(cattleDetailsProvider(c.id));
+                        ref.invalidate(cattleByIdProvider(c.id));
+                      }
 
                       await Future.wait([
                         ref.read(cattleListProvider.future),

@@ -6,7 +6,9 @@ import 'package:frontend/features/auth/presentation/login_screen.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_flow_models.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_password_screen.dart';
 import 'package:frontend/features/auth/presentation/register_screen.dart';
+import 'package:frontend/features/cattle_events/presentation/pages/add_bulk_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_screen.dart';
+import 'package:frontend/features/cattle_events/presentation/pages/events_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_details_screen.dart';
@@ -14,6 +16,10 @@ import 'package:frontend/features/herd/presentation/pages/herd_add_animal_screen
 import 'package:frontend/features/herd/presentation/pages/herd_animal_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_details_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_screen.dart';
+import 'package:frontend/features/lactation/presentation/pages/add_bulk_lactation_screen.dart';
+import 'package:frontend/features/lactation/presentation/pages/add_lactation_screen.dart';
+import 'package:frontend/features/lactation/presentation/pages/lactation_screen.dart';
+import 'package:frontend/features/profile/presentation/pages/profile_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/features/splash/presentation/splash_screen.dart';
 import 'package:frontend/features/home/presentation/home_screen.dart';
@@ -118,6 +124,39 @@ final GoRouter appRouter = GoRouter(
         // fallback если вдруг пришли без extra
         return const ForgotPasswordNewPasswordScreen();
       },
+    ),
+
+    GoRoute(
+      path: '/lactation',
+      builder: (context, state) => const LactationScreen(),
+    ),
+
+    GoRoute(
+      path: '/herd/:id/lactation/add',
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        final extra = state.extra;
+        final tag = (extra is Map && extra['cattleTagNumber'] is String)
+            ? extra['cattleTagNumber'] as String
+            : '';
+        return AddLactationScreen(cattleId: id, cattleTagNumber: tag);
+      },
+    ),
+
+    GoRoute(
+      path: '/lactation/bulk/add',
+      builder: (context, state) => const AddBulkLactationScreen(),
+    ),
+
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
+    ),
+
+    GoRoute(path: '/events', builder: (context, state) => const EventsScreen()),
+    GoRoute(
+      path: '/events/bulk/add',
+      builder: (context, state) => const AddBulkCattleEventScreen(),
     ),
   ],
 );

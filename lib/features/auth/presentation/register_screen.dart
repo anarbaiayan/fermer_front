@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_header.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_steps_indicator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -47,9 +48,7 @@ class RegisterStep1Screen extends HookWidget {
 
               // ----- ВСЁ ОСТАЛЬНОЕ В PADDING -----
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -61,6 +60,9 @@ class RegisterStep1Screen extends HookWidget {
                         color: AppColors.authSmallText,
                       ),
                     ),
+
+                    const SizedBox(height: 32),
+                    const HerdStepsIndicator(currentStep: 1),
 
                     const SizedBox(height: 32),
                     // Имя
@@ -109,7 +111,9 @@ class RegisterStep1Screen extends HookWidget {
                     const SizedBox(height: 8),
                     TextField(
                       controller: farmNameController,
-                      decoration: _outlinedInputDecoration('Введите название фермы'),
+                      decoration: _outlinedInputDecoration(
+                        'Введите название фермы',
+                      ),
                     ),
 
                     const SizedBox(height: 32),

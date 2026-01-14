@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/widgets/app_page.dart';
-import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
+import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/features/home/presentation/widgets/briefSection/search_field.dart';
 import 'package:frontend/features/home/presentation/widgets/quantitySection/summary_quantity_section.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../core/widgets/app_bottom_nav_bar.dart';
 import 'widgets/briefSection/herd_summary_card.dart';
 import 'widgets/briefSection/animal_status_card.dart';
 import 'widgets/briefSection/summary_tabs.dart';
-import '../../../features/auth/application/auth_providers.dart';
 
 import 'package:frontend/features/herd/application/herd_providers.dart';
 
@@ -45,9 +43,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final lastUpdatedDt = ref.watch(herdLastUpdatedProvider);
     final lastUpdatedLabel = _formatTimeAgo(lastUpdatedDt);
 
-    return Scaffold(
-      appBar: const FermerPlusAppBar(),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
+    return AppScaffold(
+      bottomNavIndex: 0,
+      userName: 'Ахмет Кусаинов',
+      farmName: 'Название фермы',
       body: AppPage(
         child: statsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -127,31 +126,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     style: const TextStyle(fontSize: 14, color: Colors.black54),
                   ),
                 ],
-
-                const SizedBox(height: 40),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: FilledButton(
-                      onPressed: () async {
-                        await ref
-                            .read(authControllerProvider.notifier)
-                            .logout();
-                        if (context.mounted) context.go('/login');
-                      },
-                      child: const Text(
-                        'Выйти',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
 
                 const SizedBox(height: 40),
               ],

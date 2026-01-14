@@ -24,7 +24,7 @@ class LoginRegisterBlock extends StatelessWidget {
           child: Text(
             'Зарегистрируйтесь для использования платформы Fermer+',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 11, color: AppColors.authSmallText),
+            style: TextStyle(fontSize: 13, color: AppColors.authSmallText),
           ),
         ),
         const SizedBox(height: 22),

@@ -5,6 +5,7 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_success_dialog.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_header.dart';
+import 'package:frontend/features/herd/presentation/widgets/herd_steps_indicator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -124,10 +125,12 @@ class RegisterStep2Screen extends HookConsumerWidget {
                       Text(
                         'Введите информацию для регистрации',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 14,
                           color: AppColors.authSmallText,
                         ),
                       ),
+                      const SizedBox(height: 32),
+                      const HerdStepsIndicator(currentStep: 2),
 
                       const SizedBox(height: 32),
 

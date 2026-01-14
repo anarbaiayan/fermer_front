@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:frontend/features/cattle_events/application/planned_events_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -55,6 +56,9 @@ class LoginScreen extends HookConsumerWidget {
           .login(phoneNumber: phone, password: pass);
 
       final newState = ref.read(authControllerProvider);
+      ref.invalidate(plannedEventsProvider('PENDING'));
+      ref.invalidate(plannedEventsProvider('COMPLETED'));
+
       if (newState.tokens != null &&
           newState.error == null &&
           context.mounted) {

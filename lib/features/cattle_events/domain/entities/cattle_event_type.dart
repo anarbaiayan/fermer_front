@@ -11,6 +11,7 @@ enum CattleEventType {
   dryPeriod,
   heatPeriod,
   synchronization,
+  mating,
 
   pregnancyConfirmation,
   pregnancyNotConfirmed,
@@ -54,6 +55,8 @@ extension CattleEventTypeX on CattleEventType {
         return 'HEAT_PERIOD';
       case CattleEventType.synchronization:
         return 'SYNCHRONIZATION';
+      case CattleEventType.mating:
+        return 'MATING';
 
       case CattleEventType.pregnancyConfirmation:
         return 'PREGNANCY_CONFIRMATION';
@@ -107,6 +110,8 @@ extension CattleEventTypeX on CattleEventType {
         return 'Период охоты';
       case CattleEventType.synchronization:
         return 'Синхронизация';
+      case CattleEventType.mating:
+        return 'Покрытие';
 
       case CattleEventType.pregnancyConfirmation:
         return 'Подтверждение стельности';
@@ -162,6 +167,8 @@ extension CattleEventTypeX on CattleEventType {
         return CattleEventType.heatPeriod;
       case 'SYNCHRONIZATION':
         return CattleEventType.synchronization;
+      case 'MATING':
+        return CattleEventType.mating;
 
       case 'PREGNANCY_CONFIRMATION':
         return CattleEventType.pregnancyConfirmation;

@@ -14,6 +14,11 @@ class DynamicEventFields extends StatelessWidget {
   final TextEditingController bullNameCtrl;
   final TextEditingController bullTagCtrl;
   final TextEditingController customTypeCtrl;
+  final TextEditingController? calfTagCtrl;
+  final TextEditingController? calfNameCtrl;
+  final String? calfGender;
+  final void Function(String? v)? onCalfGenderChanged;
+  final TextEditingController? calfBirthWeightCtrl;
 
   final String? calvingDifficulty;
   final void Function(String? v) onCalvingDifficultyChanged;
@@ -69,6 +74,11 @@ class DynamicEventFields extends StatelessWidget {
     required this.labeledRightField,
     required this.dec,
     required this.calendarIcon,
+    this.calfTagCtrl,
+    this.calfNameCtrl,
+    this.calfGender,
+    this.onCalfGenderChanged,
+    this.calfBirthWeightCtrl,
   });
 
   @override
@@ -260,6 +270,41 @@ class DynamicEventFields extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 16),
+
+          const FieldTitle('Бирка телёнка'),
+          TextField(
+            controller: calfTagCtrl,
+            decoration: dec(hint: 'Введите номер бирки'),
+          ),
+          const SizedBox(height: 12),
+
+          const FieldTitle('Имя телёнка'),
+          TextField(
+            controller: calfNameCtrl,
+            decoration: dec(hint: 'Введите имя телёнка'),
+          ),
+          const SizedBox(height: 12),
+
+          const FieldTitle('Пол телёнка'),
+          DropdownButtonFormField<String>(
+            value: calfGender,
+            decoration: dec(hint: 'Выберите'),
+            items: const [
+              DropdownMenuItem(value: 'MALE', child: Text('Самец')),
+              DropdownMenuItem(value: 'FEMALE', child: Text('Самка')),
+            ],
+            onChanged: onCalfGenderChanged,
+          ),
+          const SizedBox(height: 12),
+
+          const FieldTitle('Вес при рождении (кг)'),
+          TextField(
+            controller: calfBirthWeightCtrl,
+            keyboardType: TextInputType.number,
+            decoration: dec(hint: 'Введите вес'),
+          ),
+
           const SizedBox(height: 24),
         ],
       );
@@ -305,14 +350,14 @@ class DynamicEventFields extends StatelessWidget {
           const FieldTitle('Препарат'),
           TextField(
             controller: drugNameCtrl,
-            decoration: dec(hint: 'Например: Овсинх'),
+            decoration: dec(hint: 'Введите название препарата'),
           ),
           const SizedBox(height: 12),
 
           const FieldTitle('Дозировка'),
           TextField(
             controller: dosageCtrl,
-            decoration: dec(hint: 'Например: 2'),
+            decoration: dec(hint: 'Введите дозировку'),
           ),
           const SizedBox(height: 24),
         ],

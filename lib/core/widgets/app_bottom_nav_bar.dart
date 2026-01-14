@@ -15,18 +15,26 @@ class AppBottomNavBar extends StatelessWidget {
       selectedItemColor: AppColors.primary1,
       unselectedItemColor: AppColors.additional3,
       type: BottomNavigationBarType.fixed,
-
       onTap: (index) {
         if (index == currentIndex) return;
         switch (index) {
-          case 0: context.go('/home'); break;
-          case 1: context.go('/herd'); break;
-          case 2: context.go('/events'); break;
-          case 3: context.go('/reports'); break;
-          case 4: context.go('/profile'); break;
+          case 0:
+            context.go('/home');
+            break;
+          case 1:
+            context.go('/herd');
+            break;
+          case 2:
+            context.go('/events');
+            break;
+          case 3:
+            context.go('/reports');
+            break;
+          case 4:
+            context.go('/lactation');
+            break;
         }
       },
-
       items: [
         BottomNavigationBarItem(
           icon: AppIcons.svg('home', color: AppColors.additional3),
@@ -49,9 +57,9 @@ class AppBottomNavBar extends StatelessWidget {
           label: 'Отчеты',
         ),
         BottomNavigationBarItem(
-          icon: AppIcons.svg('user', color: AppColors.additional3),
-          activeIcon: AppIcons.svg('user', color: AppColors.primary1),
-          label: 'Профиль',
+          icon: AppIcons.svg('lactation', color: AppColors.additional3),
+          activeIcon: AppIcons.svg('lactation', color: AppColors.primary1),
+          label: 'Лактация',
         ),
       ],
     );
