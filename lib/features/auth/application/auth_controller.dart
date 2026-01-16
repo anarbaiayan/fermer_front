@@ -1,13 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:frontend/core/network/token_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../data/datasources/auth_api.dart';
 import '../data/models/login_request_dto.dart';
 import '../data/models/register_request_dto.dart';
 import '../data/models/refresh_request_dto.dart';
-import '../data/models/logout_request_dto.dart';
 import '../domain/entities/user.dart';
 import '../domain/entities/tokens.dart';
-import 'package:frontend/core/storage/token_storage.dart';
 
 class AuthState {
   final bool isLoading;
@@ -35,9 +34,9 @@ class AuthState {
 
 class AuthController extends StateNotifier<AuthState> {
   final AuthApi _api;
-  final TokenStorage _storage;
+  final TokenRepository _tokens;
 
-  AuthController(this._api, this._storage) : super(const AuthState());
+  AuthController(this._api, this._tokens) : super(const AuthState());
 
   // ---------- helper для извлечения сообщения с бэка ----------
   String _mapDioError(DioException e, {required bool isLogin}) {
@@ -111,7 +110,11 @@ class AuthController extends StateNotifier<AuthState> {
 
       state = AuthState(isLoading: false, user: user, tokens: tokens);
 
-      await _storage.saveTokens(tokens);
+      await _tokens.save(
+        access: tokens.accessToken,
+        refresh: tokens.refreshToken,
+        type: tokens.tokenType,
+      );
     } on DioException catch (e) {
       final message = _mapDioError(e, isLogin: true);
       state = state.copyWith(isLoading: false, error: message);
@@ -163,7 +166,11 @@ class AuthController extends StateNotifier<AuthState> {
 
       state = AuthState(isLoading: false, user: user, tokens: tokens);
 
-      await _storage.saveTokens(tokens);
+      await _tokens.save(
+        access: tokens.accessToken,
+        refresh: tokens.refreshToken,
+        type: tokens.tokenType,
+      );
     } on DioException catch (e) {
       final message = _mapDioError(e, isLogin: false);
       state = state.copyWith(isLoading: false, error: message);
@@ -177,7 +184,19 @@ class AuthController extends StateNotifier<AuthState> {
 
   // ---------- REFRESH ----------
   Future<void> refreshToken() async {
-    final currentTokens = state.tokens ?? await _storage.loadTokens();
+    final access = await _tokens.accessToken;
+    final refresh = await _tokens.refreshToken;
+    final type = await _tokens.tokenType ?? 'Bearer';
+
+    final currentTokens = (access != null && refresh != null)
+        ? Tokens(
+            accessToken: access,
+            refreshToken: refresh,
+            tokenType: type,
+            expiresIn: 0,
+          )
+        : null;
+
     if (currentTokens == null) return;
 
     try {
@@ -193,7 +212,11 @@ class AuthController extends StateNotifier<AuthState> {
       );
 
       state = state.copyWith(tokens: tokens);
-      await _storage.saveTokens(tokens);
+      await _tokens.save(
+        access: tokens.accessToken,
+        refresh: tokens.refreshToken,
+        type: tokens.tokenType,
+      );
     } catch (_) {
       // можно добавить: state = state.copyWith(error: 'Сессия истекла');
     }
@@ -201,22 +224,7 @@ class AuthController extends StateNotifier<AuthState> {
 
   // ---------- LOGOUT ----------
   Future<void> logout() async {
-    final currentTokens = state.tokens ?? await _storage.loadTokens();
-    if (currentTokens == null) {
-      await _storage.clearTokens();
-      state = const AuthState();
-      return;
-    }
-
-    try {
-      await _api.logout(
-        LogoutRequestDto(refreshToken: currentTokens.refreshToken),
-      );
-    } catch (_) {
-      // даже если logout на бэке упал - всё равно очистим локально
-    }
-
-    await _storage.clearTokens();
+    await _tokens.clear();
     state = const AuthState();
   }
 }

@@ -1,6 +1,5 @@
-// bulk_event_providers.dart
+import 'package:frontend/features/cattle_events/data/datasources/cattle_events_api.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'cattle_events_providers.dart';
 
 List<String> _stripSystem(List<String> types) =>
     types.where((t) => !t.startsWith('SYSTEM_')).toList();
@@ -17,11 +16,11 @@ final bulkAvailableEventTypesProvider = FutureProvider.autoDispose
 
       if (ids.isEmpty) return const [];
 
-      // Параллельно забираем через КЕШИРУЕМЫЙ provider, а не через api
+      // Берем API напрямую, БЕЗ ref.watch других providers
+      final api = ref.read(cattleEventsApiProvider);
+
       final lists = await Future.wait(
-        ids.map(
-          (id) => ref.watch(cattleAvailableEventTypesProvider(id).future),
-        ),
+        ids.map((id) => api.getAvailableTypes(cattleId: id)),
       );
 
       // intersection

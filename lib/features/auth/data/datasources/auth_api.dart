@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:frontend/core/network/dio_client.dart';
 import '../models/login_request_dto.dart';
 import '../models/register_request_dto.dart';
@@ -14,6 +15,7 @@ class AuthApi {
     final res = await _client.post(
       '/auth/login',
       data: body.toJson(),
+      options: Options(extra: {'skipAuth': true}),
     );
     return AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
   }
@@ -22,6 +24,7 @@ class AuthApi {
     final res = await _client.post(
       '/auth/register',
       data: body.toJson(),
+      options: Options(extra: {'skipAuth': true}),
     );
     return AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
   }
@@ -30,6 +33,7 @@ class AuthApi {
     final res = await _client.post(
       '/auth/refresh',
       data: body.toJson(),
+      options: Options(extra: {'skipAuth': true}),
     );
     return AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
   }
@@ -38,6 +42,7 @@ class AuthApi {
     await _client.post(
       '/auth/logout',
       data: body.toJson(),
+      options: Options(extra: {'skipAuth': true}),
     );
   }
 }

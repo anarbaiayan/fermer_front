@@ -52,9 +52,9 @@ class AppBottomNavBar extends StatelessWidget {
           label: 'События',
         ),
         BottomNavigationBarItem(
-          icon: AppIcons.svg('checklist', color: AppColors.additional3),
-          activeIcon: AppIcons.svg('checklist', color: AppColors.primary1),
-          label: 'Отчеты',
+          icon: AppIcons.svg('diet1', color: AppColors.additional3),
+          activeIcon: AppIcons.svg('diet1', color: AppColors.primary1),
+          label: 'Рацион',
         ),
         BottomNavigationBarItem(
           icon: AppIcons.svg('lactation', color: AppColors.additional3),

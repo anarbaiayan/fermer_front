@@ -41,7 +41,7 @@ class _AddBulkLactationScreenState
   void initState() {
     super.initState();
     _dateCtrl.text = _dmy.format(_date);
-    _timeCtrl.text = _formatTime(_time);
+    _applyDefaultTimeForMilkingTime(_milkingTime); // MORNING -> 06:30
   }
 
   @override
@@ -93,13 +93,17 @@ class _AddBulkLactationScreenState
       context: context,
       initialTime: _time,
       builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(
-              context,
-            ).colorScheme.copyWith(primary: AppColors.primary1),
+        final base = Theme.of(context);
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: Theme(
+            data: base.copyWith(
+              colorScheme: base.colorScheme.copyWith(
+                primary: AppColors.primary1,
+              ),
+            ),
+            child: child!,
           ),
-          child: child!,
         );
       },
     );

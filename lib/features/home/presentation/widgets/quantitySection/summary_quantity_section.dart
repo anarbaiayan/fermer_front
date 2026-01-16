@@ -27,16 +27,12 @@ class QuantitySummarySection extends ConsumerWidget {
         final heifers = stats.heifers;
         final bulls = stats.bulls;
         final calves = stats.calves;
-        final sick = stats.sick;
-        final healthy = stats.healthy;
 
         final groupsCount = [
           cows,
           heifers,
           bulls,
           calves,
-          sick,
-          healthy,
         ].where((v) => v > 0).length;
 
         return Column(
@@ -214,18 +210,6 @@ class QuantitySummarySection extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                _GroupPair(
-                  left: _GroupCell(
-                    title: 'Больные',
-                    value: sick,
-                    valueColor: const Color.fromARGB(255, 225, 8, 22),
-                  ),
-                  right: _GroupCell(
-                    title: 'Здоровые',
-                    value: healthy,
-                    valueColor: const Color.fromRGBO(74, 174, 98, 1),
-                  ),
-                ),
               ],
             ),
           ],

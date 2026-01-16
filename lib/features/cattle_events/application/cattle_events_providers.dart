@@ -65,8 +65,8 @@ final cattleEventsListProvider = FutureProvider.family<List<CattleEvent>, int>((
   return page.content.map(_toEntity).toList();
 });
 
-final cattleAvailableEventTypesProvider =
-    FutureProvider.family<List<String>, int>((ref, cattleId) async {
+final cattleAvailableEventTypesProvider = FutureProvider.autoDispose
+    .family<List<String>, int>((ref, cattleId) async {
       final api = ref.read(cattleEventsApiProvider);
       return api.getAvailableTypes(cattleId: cattleId);
     });

@@ -48,8 +48,7 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
     _date = now;
     _dateCtrl.text = _dmy.format(now);
 
-    _time = TimeOfDay.fromDateTime(now);
-    _timeCtrl.text = _formatTime(_time);
+    _setTime(_defaultTimeFor(_milkingTime));
   }
 
   @override
@@ -99,23 +98,27 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
       context: context,
       initialTime: _time,
       builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(
-              context,
-            ).colorScheme.copyWith(primary: AppColors.primary1),
+        final base = Theme.of(context);
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: Theme(
+            data: base.copyWith(
+              colorScheme: base.colorScheme.copyWith(
+                primary: AppColors.primary1,
+              ),
+            ),
+            child: child!,
           ),
-          child: child!,
         );
       },
     );
 
     if (picked != null) {
-      setState(() {
-        _time = picked;
-        _timeCtrl.text = _formatTime(picked);
-      });
-    }
+  setState(() {
+    _setTime(picked);
+  });
+}
+
   }
 
   DateTime _buildMilkingDateTime(DateTime date, TimeOfDay time) {
@@ -175,6 +178,18 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  TimeOfDay _defaultTimeFor(String milkingTime) {
+    // milkingTime: MORNING/EVENING
+    return milkingTime == 'EVENING'
+        ? const TimeOfDay(hour: 18, minute: 30)
+        : const TimeOfDay(hour: 6, minute: 30);
+  }
+
+  void _setTime(TimeOfDay t) {
+    _time = t;
+    _timeCtrl.text = _formatTime(t);
   }
 
   @override
@@ -354,7 +369,12 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                             ],
                             onChanged: (v) {
                               if (v == null) return;
-                              setState(() => _milkingTime = v);
+                              setState(() {
+                                _milkingTime = v;
+                                _setTime(
+                                  _defaultTimeFor(v),
+                                ); // MORNING->06:30, EVENING->18:30
+                              });
                             },
                           ),
 

@@ -272,6 +272,10 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                               birthDateText,
                             ), // всегда есть
                             _infoRowOptional('Возраст', ageText), // всегда есть
+                            _infoRowOptional(
+                              'Категория',
+                              _categoryTitle(category),
+                            ),
                             _infoRowOptional('Порода', details?.breed),
                             _infoRowOptional('Группа', details?.animalGroup),
                             _healthInfoRowOptional(
@@ -611,6 +615,21 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
         return const Color(0xFFF4C2C2);
       default:
         return AppColors.additional2;
+    }
+  }
+
+  String _categoryTitle(AnimalCategory? category) {
+    switch (category) {
+      case AnimalCategory.cow:
+        return 'Корова';
+      case AnimalCategory.heifer:
+        return 'Тёлка';
+      case AnimalCategory.bull:
+        return 'Бык';
+      case AnimalCategory.calf:
+        return 'Телёнок';
+      default:
+        return '—';
     }
   }
 
