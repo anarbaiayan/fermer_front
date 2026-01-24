@@ -20,6 +20,11 @@ import 'package:frontend/features/lactation/presentation/pages/add_bulk_lactatio
 import 'package:frontend/features/lactation/presentation/pages/add_lactation_screen.dart';
 import 'package:frontend/features/lactation/presentation/pages/lactation_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/profile_screen.dart';
+import 'package:frontend/features/rations/presentation/pages/add_user_rations_screen.dart';
+import 'package:frontend/features/rations/presentation/pages/generate_ration_template_screen.dart';
+import 'package:frontend/features/rations/presentation/pages/inventory_screen.dart';
+import 'package:frontend/features/rations/presentation/pages/ration_template_details_screen.dart';
+import 'package:frontend/features/rations/presentation/pages/rations_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/features/splash/presentation/splash_screen.dart';
 import 'package:frontend/features/home/presentation/home_screen.dart';
@@ -157,6 +162,36 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/events/bulk/add',
       builder: (context, state) => const AddBulkCattleEventScreen(),
+    ),
+    GoRoute(
+      path: '/rations',
+      builder: (context, state) => const RationsScreen(),
+    ),
+    GoRoute(
+      path: '/rations/stocks/add',
+      builder: (context, state) => const AddUserRationsScreen(),
+    ),
+    GoRoute(
+      path: '/rations/generate',
+      builder: (context, state) => const GenerateRationTemplateScreen(),
+    ),
+    GoRoute(
+      path: '/rations/templates/:id',
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return RationTemplateDetailsScreen(id: id);
+      },
+    ),
+    GoRoute(
+      path: '/rations/stocks',
+      builder: (context, state) => const UserRationsStocksScreen(),
+    ),
+    GoRoute(
+      path: '/rations/stocks/:type',
+      builder: (context, state) {
+        final type = state.pathParameters['type'];
+        return UserRationsStocksScreen(filterType: type);
+      },
     ),
   ],
 );

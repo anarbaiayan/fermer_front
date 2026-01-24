@@ -3,6 +3,7 @@ import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/features/cattle_events/application/cattle_events_providers.dart';
+import 'package:frontend/features/cattle_events/data/datasources/cattle_events_api.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:frontend/features/herd/presentation/widgets/cattle_events_preview.dart';
@@ -32,6 +33,7 @@ class HerdAnimalContent extends ConsumerStatefulWidget {
 
 class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
   bool _showAllUpcoming = false;
+  final Set<int> _completedUpcomingIds = {};
 
   @override
   Widget build(BuildContext context) {
@@ -404,9 +406,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                 title: 'Рацион   ',
                                 subtitle: 'Выберите рацион',
                                 icon: AppIcons.svg('diet', size: 26),
-                                onTap: () {
-                                  // TODO
-                                },
+                                onTap: () => context.push('/rations'),
                               ),
                             ),
                           ],
@@ -457,10 +457,16 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
                               // список (1 или все)
                               ...(() {
-                                final upcoming = details!.upcomingEvents!;
+                                final upcomingAll = details!.upcomingEvents!
+                                    .where(
+                                      (e) =>
+                                          !_completedUpcomingIds.contains(e.id),
+                                    )
+                                    .toList();
+
                                 final visible = _showAllUpcoming
-                                    ? upcoming
-                                    : upcoming.take(1);
+                                    ? upcomingAll
+                                    : upcomingAll.take(1);
 
                                 return visible.map((e) {
                                   final date = e.plannedDate == null
@@ -473,53 +479,199 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                       ? ''
                                       : 'через ${e.daysUntil} дн';
 
+                                  final eventId = e.id; // int?
+
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 8),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: AppColors.additional2,
+                                    child: Dismissible(
+                                      key: ValueKey('upcoming_$eventId'),
+                                      direction: DismissDirection.startToEnd,
+                                      background: Container(
+                                        alignment: Alignment.centerLeft,
+                                        padding: const EdgeInsets.only(
+                                          left: 16,
                                         ),
-                                        color: const Color(0xFFF9FAFB),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              e.title,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.success.withOpacity(
+                                            0.15,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: const Row(
+                                          children: [
+                                            Icon(
+                                              Icons.check_circle,
+                                              color: AppColors.success,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Завершить',
+                                              style: TextStyle(
                                                 color: AppColors.primary3,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                date,
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: AppColors.additional3,
+                                          ],
+                                        ),
+                                      ),
+
+                                      confirmDismiss: (_) async {
+                                        // 1) подтверждение (по желанию)
+                                        final ok =
+                                            await showDialog<bool>(
+                                              context: context,
+                                              barrierDismissible: true,
+                                              builder: (ctx) => AlertDialog(
+                                                title: const Text(
+                                                  'Завершить событие?',
+                                                ),
+                                                content: Text(
+                                                  'Отметить "${e.title}" как выполненное?',
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.of(
+                                                          ctx,
+                                                        ).pop(false),
+                                                    child: const Text('Отмена'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () =>
+                                                        Navigator.of(
+                                                          ctx,
+                                                        ).pop(true),
+                                                    child: const Text(
+                                                      'Завершить',
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ) ??
+                                            false;
+
+                                        if (!ok) return false;
+
+                                        // 2) PATCH до удаления
+                                        try {
+                                          final api = ref.read(
+                                            cattleEventsApiProvider,
+                                          );
+                                          await api.completeEvent(
+                                            eventId: eventId,
+                                          );
+
+                                          // 3) важно: убрать элемент ЛОКАЛЬНО, чтобы Dismissible не ругался
+                                          if (mounted) {
+                                            setState(
+                                              () => _completedUpcomingIds.add(
+                                                eventId,
+                                              ),
+                                            );
+                                          }
+
+                                          // 4) обновим провайдеры (можно тут, можно в onDismissed)
+                                          ref.invalidate(
+                                            cattleDetailsProvider(cattle.id),
+                                          );
+                                          ref.invalidate(
+                                            cattleEventsPreviewProvider(
+                                              cattle.id,
+                                            ),
+                                          );
+
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Событие завершено',
                                                 ),
                                               ),
-                                              if (left.isNotEmpty)
-                                                Text(
-                                                  left,
+                                            );
+                                          }
+
+                                          return true; // теперь можно “dismiss”
+                                        } catch (err) {
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                content: Text('Ошибка: $err'),
+                                              ),
+                                            );
+                                          }
+                                          return false; // не dismiss
+                                        }
+                                      },
+
+                                      // можно оставить пустым или только invalidate
+                                      onDismissed: (_) {
+                                        ref.invalidate(
+                                          cattleByIdProvider(cattle.id),
+                                        );
+                                        ref.invalidate(cattleListProvider);
+                                        ref.invalidate(
+                                          cattleStatisticsProvider,
+                                        );
+                                      },
+
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            border: Border.all(
+                                              color: AppColors.additional2,
+                                            ),
+                                            color: const Color(0xFFF9FAFB),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  e.title,
                                                   style: const TextStyle(
-                                                    fontSize: 12,
-                                                    color:
-                                                        AppColors.additional3,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: AppColors.primary3,
                                                   ),
                                                 ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    date,
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color:
+                                                          AppColors.additional3,
+                                                    ),
+                                                  ),
+                                                  if (left.isNotEmpty)
+                                                    Text(
+                                                      left,
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: AppColors
+                                                            .additional3,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   );
