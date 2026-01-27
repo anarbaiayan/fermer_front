@@ -4,6 +4,8 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/core/widgets/app_button.dart';
+import 'package:frontend/features/herd/domain/entities/animal_category.dart';
+import 'package:frontend/features/herd/domain/entities/production_state.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -11,7 +13,9 @@ import '../../application/rations_providers.dart';
 import '../widgets/ration_template_card.dart';
 
 class RationsScreen extends ConsumerWidget {
-  const RationsScreen({super.key});
+  final AnimalCategory? category;
+  final ProductionState? productionState;
+  const RationsScreen({super.key, this.category, this.productionState});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -153,10 +157,38 @@ class RationsScreen extends ConsumerWidget {
                           );
                         }
 
+                        final filteredTemplates = templates.where((t) {
+                          final templateCategory = AnimalCategoryX.fromApi(
+                            t.animalCategory,
+                          );
+                          final templateProductionState =
+                              ProductionStateX.fromApi(t.productionState);
+
+                          final matchesCategory =
+                              category == null || templateCategory == category;
+                          final matchesState =
+                              productionState == null ||
+                              templateProductionState == productionState;
+
+                          return matchesCategory && matchesState;
+                        }).toList();
+
+                        if (filteredTemplates.isEmpty) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 30),
+                            child: Center(
+                              child: Text(
+                                'Нет рационов, подходящих для этого животного',
+                                style: TextStyle(color: AppColors.additional3),
+                              ),
+                            ),
+                          );
+                        }
+
                         return Column(
                           children: [
                             const SizedBox(height: 6),
-                            ...templates.map(
+                            ...filteredTemplates.map(
                               (t) => Padding(
                                 padding: const EdgeInsets.only(bottom: 12),
                                 child: RationTemplateCard(

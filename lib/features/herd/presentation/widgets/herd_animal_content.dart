@@ -406,7 +406,13 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                 title: 'Рацион   ',
                                 subtitle: 'Выберите рацион',
                                 icon: AppIcons.svg('diet', size: 26),
-                                onTap: () => context.push('/rations'),
+                                onTap: () => context.push(
+                                  '/rations',
+                                  extra: {
+                                    'category': category,
+                                    'productionState': details?.productionState,
+                                  },
+                                ),
                               ),
                             ),
                           ],

@@ -11,6 +11,7 @@ import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_ev
 import 'package:frontend/features/cattle_events/presentation/pages/events_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
+import 'package:frontend/features/herd/domain/entities/production_state.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_details_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_animal_screen.dart';
@@ -165,7 +166,21 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/rations',
-      builder: (context, state) => const RationsScreen(),
+      builder: (context, state) {
+        final Map<String, dynamic>? arguments =
+            state.extra as Map<String, dynamic>?;
+
+        final category = arguments?['category'];
+        final productionStateString = arguments?['productionState'];
+
+        final productionState = productionStateString != null
+            ? ProductionStateX.fromApi(productionStateString)
+            : null;
+        return RationsScreen(
+          category: category,
+          productionState: productionState,
+        );
+      },
     ),
     GoRoute(
       path: '/rations/stocks/add',
