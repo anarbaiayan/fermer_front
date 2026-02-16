@@ -21,6 +21,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:frontend/features/herd/domain/entities/cattle_gender.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 enum AnimalGender { female, male }
 
@@ -55,18 +56,16 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
   CattleGender get _cattleGender =>
       _gender == AnimalGender.male ? CattleGender.male : CattleGender.female;
 
-  Future<void> _pickDate() async {
+  Future<void> _openBirthDateDialog() async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
+    final initialDate = _birthDate ?? now;
+
+    final picked = await showDialog<DateTime>(
       context: context,
-      initialDate: now,
-      firstDate: DateTime(now.year - 20),
-      lastDate: now,
-      helpText: 'Выберите дату рождения',
+      builder: (context) => _BirthDateDialog(initialDate: initialDate),
     );
 
-    if (picked != null) {
-      if (!mounted) return;
+    if (picked != null && mounted) {
       setState(() {
         _birthDate = picked;
         _birthDateController.text = DateFormat('dd.MM.yyyy').format(picked);
@@ -113,9 +112,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
 
     if (name.isEmpty || tag.isEmpty || _birthDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Заполните имя, бирку и дату рождения'),
-        ),
+        const SnackBar(content: Text('Заполните имя, бирку и дату рождения')),
       );
       return;
     }
@@ -292,7 +289,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                                 controller: _birthDateController,
                                 hint: '31.12.2020',
                                 readOnly: true,
-                                onTap: _pickDate,
+                                onTap: _openBirthDateDialog,
                                 prefixIcon: Padding(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 12,
@@ -392,6 +389,135 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _BirthDateDialog extends StatefulWidget {
+  final DateTime initialDate;
+  const _BirthDateDialog({required this.initialDate});
+
+  @override
+  State<_BirthDateDialog> createState() => _BirthDateDialogState();
+}
+
+class _BirthDateDialogState extends State<_BirthDateDialog> {
+  bool inputMode = false;
+  late DateTime selectedDate;
+  late TextEditingController controller;
+
+  final mask = MaskTextInputFormatter(
+    mask: '##.##.####',
+    filter: {'#': RegExp(r'[0-9]')},
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = widget.initialDate;
+    controller = TextEditingController(
+      text: DateFormat('dd.MM.yyyy').format(selectedDate),
+    );
+  }
+
+  DateTime? _parse(String value) {
+    try {
+      return DateFormat('dd.MM.yyyy').parseStrict(value);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  bool _inRange(DateTime d) {
+    final now = DateTime.now();
+    final min = DateTime(now.year - 20, now.month, now.day);
+    final max = DateTime(now.year, now.month, now.day);
+    return !d.isBefore(min) && !d.isAfter(max);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 20, now.month, now.day);
+    final lastDate = DateTime(now.year, now.month, now.day);
+
+    return AlertDialog(
+      titlePadding: const EdgeInsets.fromLTRB(16, 12, 8, 0),
+      contentPadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+      actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      title: Row(
+        children: [
+          const Expanded(child: Text('Дата рождения')),
+          IconButton(
+            tooltip: inputMode ? 'Календарь' : 'Ввод',
+            icon: Icon(inputMode ? Icons.calendar_today : Icons.edit),
+            onPressed: () => setState(() => inputMode = !inputMode),
+          ),
+        ],
+      ),
+      content: SizedBox(
+        width: 320,
+        child: inputMode
+            ? TextField(
+                controller: controller,
+                keyboardType: TextInputType.number,
+                inputFormatters: [mask],
+                decoration: const InputDecoration(hintText: 'ДД.ММ.ГГГГ'),
+                onChanged: (v) {
+                  if (mask.getUnmaskedText().length == 8) {
+                    final parsed = _parse(v);
+                    if (parsed != null && _inRange(parsed)) {
+                      selectedDate = parsed;
+                    }
+                  }
+                },
+              )
+            : CalendarDatePicker(
+                initialDate: selectedDate,
+                firstDate: firstDate,
+                lastDate: lastDate,
+                onDateChanged: (d) {
+                  selectedDate = d;
+                  controller.text = DateFormat('dd.MM.yyyy').format(d);
+                },
+              ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Отмена'),
+        ),
+        TextButton(
+          onPressed: () {
+            if (inputMode) {
+              final parsed = _parse(controller.text);
+              if (parsed == null) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('Неверная дата')));
+                return;
+              }
+              if (!_inRange(parsed)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Дата вне допустимого диапазона'),
+                  ),
+                );
+                return;
+              }
+              selectedDate = parsed;
+            }
+            Navigator.pop(context, selectedDate);
+          },
+          child: const Text('OK'),
+        ),
+      ],
     );
   }
 }

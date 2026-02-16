@@ -4,6 +4,7 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/core/widgets/app_success_dialog.dart';
+import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/features/cattle_events/application/bulk_event_providers.dart';
 import 'package:frontend/features/cattle_events/application/cattle_events_providers.dart';
 import 'package:frontend/features/cattle_events/application/simple_cattle_providers.dart';
@@ -184,7 +185,7 @@ class _AddBulkCattleEventScreenState
 
   Future<void> _pickEventDate() async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
+    final picked = await showMaskedDatePicker(
       context: context,
       initialDate: _eventDate ?? now,
       firstDate: DateTime(now.year - 20),
@@ -205,7 +206,7 @@ class _AddBulkCattleEventScreenState
     required String helpText,
   }) async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
+    final picked = await showMaskedDatePicker(
       context: context,
       initialDate: now,
       firstDate: DateTime(now.year - 20),

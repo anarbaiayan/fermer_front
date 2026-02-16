@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
-import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/core/widgets/app_page.dart';
+import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
+import 'package:frontend/features/herd/domain/entities/cattle.dart';
+import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_list_item.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,14 +15,31 @@ import '../widgets/herd_empty_state.dart';
 final herdRefreshingProvider = StateProvider.autoDispose<bool>((ref) => false);
 
 class HerdScreen extends ConsumerWidget {
-  const HerdScreen({super.key});
+  final HerdFilterType? filter;
+  const HerdScreen({super.key, this.filter});
+
+  bool _matchesFilter({
+    required HerdFilterType filter,
+    required String? reproductiveState,
+    required String? productionState,
+  }) {
+    switch (filter) {
+      case HerdFilterType.lactating:
+        return productionState == 'LACTATING';
+      case HerdFilterType.dryPeriod:
+        return reproductiveState == 'DRY_PERIOD' || productionState == 'DRY';
+      case HerdFilterType.open:
+        return reproductiveState == 'OPEN';
+      case HerdFilterType.inseminated:
+        return reproductiveState == 'INSEMINATED';
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cattleListAsync = ref.watch(cattleListProvider);
     final statsAsync = ref.watch(cattleStatisticsProvider);
 
-    // показываем FAB только если список успешно загрузился и не пустой
     final hasCattle = cattleListAsync.maybeWhen(
       data: (cattle) => cattle.isNotEmpty,
       orElse: () => false,
@@ -34,7 +53,6 @@ class HerdScreen extends ConsumerWidget {
       farmName: 'Название фермы',
       enableDrawer: true,
       showBell: true,
-
       floatingActionButton: showFab
           ? Padding(
               padding: const EdgeInsets.all(12),
@@ -60,7 +78,6 @@ class HerdScreen extends ConsumerWidget {
           children: [
             const SizedBox(height: 9),
 
-            // Верхняя строка: стрелка + заголовок + иконки
             Row(
               children: [
                 IconButton(
@@ -130,14 +147,63 @@ class HerdScreen extends ConsumerWidget {
                   ),
                 ),
                 data: (cattle) {
-                  final total = statsAsync.maybeWhen(
-                    data: (s) => s.total, // <- вот оно
-                    orElse: () =>
-                        cattle.length, // fallback, если stats еще грузится/упал
-                  );
-                  if (cattle.isEmpty) {
-                    return const HerdEmptyState();
+                  if (cattle.isEmpty) return const HerdEmptyState();
+
+                  // ---------- FILTER MODE ----------
+                  if (filter != null) {
+                    final filtered = <Cattle>[];
+                    var loadingCount = 0;
+
+                    for (final c in cattle) {
+                      final st = ref.watch(cattleDetailsProvider(c.id));
+
+                      if (st.isLoading) loadingCount++;
+
+                      final details = st.maybeWhen(
+                        data: (d) => d,
+                        orElse: () => null,
+                      );
+
+                      final repro = details?.reproductiveState;
+                      final prod = details?.productionState;
+
+                      if (_matchesFilter(
+                        filter: filter!,
+                        reproductiveState: repro,
+                        productionState: prod,
+                      )) {
+                        filtered.add(c);
+                      }
+                    }
+
+                    // Важно: если ещё грузим детали и пока ничего не совпало - не показывай пустую страницу.
+                    if (filtered.isEmpty) {
+                      if (loadingCount > 0) {
+                        return const Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CircularProgressIndicator(),
+                              SizedBox(height: 12),
+                              Text(
+                                'Загружаем данные для фильтра...',
+                                style: TextStyle(color: AppColors.additional3),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      return const HerdEmptyState();
+                    }
+
+                    return _Grid(cattle: filtered);
                   }
+
+                  // ---------- NORMAL MODE ----------
+                  final total = statsAsync.maybeWhen(
+                    data: (s) => s.total,
+                    orElse: () => cattle.length,
+                  );
 
                   Future<void> refresh() async {
                     if (ref.read(herdRefreshingProvider)) return;
@@ -147,6 +213,7 @@ class HerdScreen extends ConsumerWidget {
                       ref.invalidate(cattleListProvider);
                       ref.invalidate(cattleStatisticsProvider);
 
+                      // не обязательно инвалидировать details всех, но оставим как у тебя
                       for (final c in cattle) {
                         ref.invalidate(cattleDetailsProvider(c.id));
                         ref.invalidate(cattleByIdProvider(c.id));
@@ -161,44 +228,40 @@ class HerdScreen extends ConsumerWidget {
                     }
                   }
 
-                  return Stack(
-                    children: [
-                      CustomScrollView(
-                        slivers: [
-                          SliverToBoxAdapter(
-                            child: Column(
-                              children: [
-                                _QuantityCard(total: total, onRefresh: refresh),
-                                const SizedBox(height: 15),
-                                _HeaderWithFilter(),
-                                const SizedBox(height: 15),
-                              ],
-                            ),
-                          ),
-
-                          SliverPadding(
-                            padding: const EdgeInsets.only(bottom: 80),
-                            sliver: SliverGrid(
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 12,
-                                    mainAxisSpacing: 12,
-                                    childAspectRatio: 1, // квадрат
-                                  ),
-                              delegate: SliverChildBuilderDelegate((
-                                context,
-                                index,
-                              ) {
-                                final item = cattle[index];
-                                return HerdListItem(
-                                  cattle: item,
-                                  onTap: () => context.push('/herd/${item.id}'),
-                                );
-                              }, childCount: cattle.length),
-                            ),
-                          ),
-                        ],
+                  return CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            _QuantityCard(total: total, onRefresh: refresh),
+                            const SizedBox(height: 15),
+                            _HeaderWithFilter(),
+                            const SizedBox(height: 15),
+                          ],
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.only(bottom: 80),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio: 0.62,
+                              ),
+                          delegate: SliverChildBuilderDelegate((
+                            context,
+                            index,
+                          ) {
+                            final item = cattle[index];
+                            return HerdListItem(
+                              cattle: item,
+                              showHealth: true,
+                              onTap: () => context.push('/herd/${item.id}'),
+                            );
+                          }, childCount: cattle.length),
+                        ),
                       ),
                     ],
                   );
@@ -225,7 +288,6 @@ class _QuantityCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // ---- Иконка слева (как в макете) ----
           Container(
             width: 44,
             height: 44,
@@ -235,10 +297,7 @@ class _QuantityCard extends StatelessWidget {
             ),
             child: Center(child: AppIcons.svg("health", size: 30)),
           ),
-
           const SizedBox(width: 16),
-
-          // ---- Основная правая часть ----
           Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -249,7 +308,6 @@ class _QuantityCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  // ---- Текст ----
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,12 +331,8 @@ class _QuantityCard extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  // ---- Refresh icon ----
                   GestureDetector(
-                    onTap: () async {
-                      await onRefresh();
-                    },
+                    onTap: () async => onRefresh(),
                     child: AppIcons.svg("refresh", size: 13),
                   ),
                 ],
@@ -312,6 +366,38 @@ class _HeaderWithFilter extends StatelessWidget {
           onPressed: () {
             // TODO: фильтры
           },
+        ),
+      ],
+    );
+  }
+}
+
+class _Grid extends StatelessWidget {
+  final List<Cattle> cattle;
+  const _Grid({required this.cattle});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.only(bottom: 80),
+          sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.62,
+            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final item = cattle[index];
+              return HerdListItem(
+                cattle: item,
+                showHealth: true,
+                onTap: () => context.push('/herd/${item.id}'),
+              );
+            }, childCount: cattle.length),
+          ),
         ),
       ],
     );

@@ -11,6 +11,7 @@ import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_ev
 import 'package:frontend/features/cattle_events/presentation/pages/events_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
+import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
 import 'package:frontend/features/herd/domain/entities/production_state.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_details_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_screen.dart';
@@ -49,7 +50,13 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
-    GoRoute(path: '/herd', builder: (context, state) => const HerdScreen()),
+    GoRoute(
+      path: '/herd',
+      builder: (context, state) {
+        final filter = state.extra as HerdFilterType?;
+        return HerdScreen(filter: filter);
+      },
+    ),
 
     // сначала add
     GoRoute(

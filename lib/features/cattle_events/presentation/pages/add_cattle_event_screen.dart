@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
+import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/core/widgets/page_header.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:go_router/go_router.dart';
@@ -202,7 +203,7 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
 
   Future<void> _pickEventDate() async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
+    final picked = await showMaskedDatePicker(
       context: context,
       initialDate: _eventDate ?? now,
       firstDate: DateTime(now.year - 20),
@@ -222,14 +223,17 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
     required String helpText,
   }) async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
+
+    final picked = await showMaskedDatePicker(
       context: context,
       initialDate: now,
       firstDate: DateTime(now.year - 20),
       lastDate: DateTime(now.year + 5),
       helpText: helpText,
     );
+
     if (picked == null) return;
+
     onPicked(picked);
     ctrl.text = _dmy.format(picked);
     setState(() {});

@@ -3,6 +3,7 @@ import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
+import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/features/cattle_events/application/cattle_events_providers.dart';
 import 'package:frontend/features/cattle_events/application/planned_events_providers.dart';
 import 'package:frontend/features/cattle_events/domain/entities/planned_event.dart';
@@ -49,48 +50,29 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
   }
 
   Future<void> _pickFrom() async {
-    final picked = await showDatePicker(
+    final picked = await showMaskedDatePicker(
       context: context,
       initialDate: _dateFrom,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(
-              context,
-            ).colorScheme.copyWith(primary: AppColors.primary1),
-          ),
-          child: child!,
-        );
-      },
+      helpText: 'Дата начала',
     );
     if (picked == null) return;
 
     final normalized = DateTime(picked.year, picked.month, picked.day);
     setState(() {
       _dateFrom = normalized;
-      // чтобы диапазон не стал "в минус"
       if (_dateTo.isBefore(_dateFrom)) _dateTo = _dateFrom;
     });
   }
 
   Future<void> _pickTo() async {
-    final picked = await showDatePicker(
+    final picked = await showMaskedDatePicker(
       context: context,
       initialDate: _dateTo,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(
-              context,
-            ).colorScheme.copyWith(primary: AppColors.primary1),
-          ),
-          child: child!,
-        );
-      },
+      helpText: 'Дата окончания',
     );
     if (picked == null) return;
 
@@ -471,6 +453,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                             iconName: iconName,
                             primaryHint: primaryHint,
                             secondaryHint: secondary,
+                            secondaryHintColor: AppColors.error,
                             onTap: () => _showEventActionsSheet(e),
                           );
                         },
@@ -631,7 +614,7 @@ class _EventCard extends StatelessWidget {
 
   final String primaryHint;
   final String? secondaryHint;
-  final Color secondaryHintColor;
+  final Color? secondaryHintColor;
 
   final VoidCallback? onTap;
 
@@ -645,7 +628,7 @@ class _EventCard extends StatelessWidget {
     required this.iconName,
     required this.primaryHint,
     this.secondaryHint,
-    this.secondaryHintColor = AppColors.error,
+    this.secondaryHintColor,
     this.onTap,
   });
 

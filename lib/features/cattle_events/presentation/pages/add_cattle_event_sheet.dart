@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/features/cattle_events/presentation/widgets/dynamic_event_fields.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -118,15 +119,16 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
   }
 
   Future<void> _pickEventDate() async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
+    final picked = await showMaskedDatePicker(
       context: context,
-      initialDate: _eventDate ?? now,
-      firstDate: DateTime(now.year - 20),
-      lastDate: DateTime(now.year + 5),
+      initialDate: _eventDate ?? DateTime.now(),
+      firstDate: DateTime(DateTime.now().year - 20),
+      lastDate: DateTime(DateTime.now().year + 5),
       helpText: 'Выберите дату события',
     );
+
     if (picked == null) return;
+
     setState(() {
       _eventDate = picked;
       _eventDateCtrl.text = _dmy.format(picked);
@@ -139,14 +141,16 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
     required String helpText,
   }) async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
+    final picked = await showMaskedDatePicker(
       context: context,
       initialDate: now,
       firstDate: DateTime(now.year - 20),
       lastDate: DateTime(now.year + 5),
       helpText: helpText,
     );
+
     if (picked == null) return;
+
     onPicked(picked);
     ctrl.text = _dmy.format(picked);
     setState(() {});

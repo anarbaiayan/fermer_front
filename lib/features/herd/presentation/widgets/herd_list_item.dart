@@ -11,8 +11,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class HerdListItem extends ConsumerWidget {
   final Cattle cattle;
   final VoidCallback? onTap;
+  final bool showHealth;
 
-  const HerdListItem({super.key, required this.cattle, this.onTap});
+  const HerdListItem({
+    super.key,
+    required this.cattle,
+    this.onTap,
+    this.showHealth = true,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,58 +26,42 @@ class HerdListItem extends ConsumerWidget {
       gender: cattle.gender,
       dateOfBirth: cattle.dateOfBirth,
     );
+
     final category = resolved.category;
     final ageText = _formatAge(resolved.ageInMonths);
     final tagText = '#${cattle.tagNumber}';
+    final nameText = (cattle.name).trim().isEmpty
+        ? 'Без имени'
+        : cattle.name.trim();
 
-    final detailsAsync = ref.watch(cattleDetailsProvider(cattle.id));
+    final detailsAsync = showHealth
+        ? ref.watch(cattleDetailsProvider(cattle.id))
+        : null;
 
-    return AspectRatio(
-      aspectRatio: 1,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: const Color.fromRGBO(213, 215, 218, 0.22),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: _categoryColor(category),
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: AppIcons.svg(
-                  _categoryIcon(category),
-                  size: 22,
-                  color: Colors.white,
-                ),
-              ),
-
-              const SizedBox(height: 12),
-              const Divider(
-                height: 1,
-                thickness: 1,
-                color: AppColors.additional2,
-              ),
-              const SizedBox(height: 12),
-
-              Text(
-                tagText,
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromRGBO(213, 215, 218, 0.22),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // --- NAME (TOP) ---
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                nameText,
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -81,66 +71,189 @@ class HerdListItem extends ConsumerWidget {
                   color: AppColors.primary3,
                 ),
               ),
-              const SizedBox(height: 6),
-              Text(
-                ageText,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 13, color: AppColors.primary3),
+            ),
+
+            const SizedBox(height: 10),
+
+            // --- ICON ---
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: _categoryColor(category),
+                shape: BoxShape.circle,
               ),
+              alignment: Alignment.center,
+              child: AppIcons.svg(
+                _categoryIcon(category),
+                size: 22,
+                color: Colors.white,
+              ),
+            ),
 
-              const Spacer(),
+            const SizedBox(height: 12),
+            const Divider(
+              height: 1,
+              thickness: 1,
+              color: AppColors.additional2,
+            ),
+            const SizedBox(height: 12),
 
-              detailsAsync.when(
-                loading: () => const SizedBox(height: 18),
-                error: (_, _) => const SizedBox(height: 18),
+            // --- TAG ---
+            Text(
+              tagText,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primary3,
+              ),
+            ),
+            const SizedBox(height: 6),
+
+            // --- AGE ---
+            Text(
+              ageText,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 13, color: AppColors.primary3),
+            ),
+
+            const SizedBox(height: 12),
+
+            // --- STATUSES + HEALTH (BOTTOM) ---
+            if (!showHealth)
+              const SizedBox(height: 40)
+            else
+              detailsAsync!.when(
+                loading: () => const SizedBox(height: 40),
+                error: (_, __) => const SizedBox(height: 40),
                 data: (details) {
-                  final raw = details?.healthStatus;
-                  HealthStatus? hs;
-                  if (raw != null && raw.isNotEmpty) {
-                    try {
-                      hs = HealthStatusX.fromApi(raw);
-                    } catch (_) {
-                      hs = null;
-                    }
-                  }
-                  if (hs == null) return const SizedBox(height: 18);
+                  final statusLine = _buildStatusLine(details);
+                  final healthLine = _buildHealthLine(details);
 
-                  final healthColor = _healthColor(hs);
-
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          color: healthColor,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Flexible(
-                        child: Text(
-                          hs.display,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: AppColors.primary3,
-                          ),
-                        ),
-                      ),
-                    ],
+                  // здоровье должно быть "в самом низу"
+                  return SizedBox(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (statusLine != null) ...[
+                          statusLine,
+                          const SizedBox(height: 8),
+                        ],
+                        healthLine ?? const SizedBox(height: 18),
+                      ],
+                    ),
                   );
                 },
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );
+  }
+
+  // ---- Status line: reproductive + production ----
+  Widget? _buildStatusLine(dynamic details) {
+    // details тип у тебя nullable/модель - оставил dynamic чтобы не упереться в импорт dto
+    // Поменяй dynamic на конкретный тип, если хочешь: CattleDetails? details
+    final repro = (details?.reproductiveState as String?)?.trim();
+    final prod = (details?.productionState as String?)?.trim();
+
+    final parts = <String>[];
+    final reproLabel = _reproLabel(repro);
+    final prodLabel = _prodLabel(prod);
+
+    if (reproLabel != null && reproLabel.isNotEmpty) parts.add(reproLabel);
+    if (prodLabel != null && prodLabel.isNotEmpty) parts.add(prodLabel);
+
+    if (parts.isEmpty) return null;
+
+    return Text(
+      parts.join(' - '),
+      textAlign: TextAlign.center,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(
+        fontSize: 12,
+        color: AppColors.additional3,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
+  // ---- Health line: dot + text ----
+  Widget? _buildHealthLine(dynamic details) {
+    final raw = (details?.healthStatus as String?)?.trim();
+    if (raw == null || raw.isEmpty) return null;
+
+    HealthStatus? hs;
+    try {
+      hs = HealthStatusX.fromApi(raw);
+    } catch (_) {
+      hs = null;
+    }
+    if (hs == null) return null;
+
+    final healthColor = _healthColor(hs);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(color: healthColor, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            hs.display,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 13, color: AppColors.primary3),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String? _reproLabel(String? raw) {
+    switch (raw) {
+      case 'OPEN':
+        return 'Не осеменена';
+      case 'INSEMINATED':
+        return 'Осеменена';
+      case 'PREGNANT':
+        return 'Беременна';
+      case 'DRY_PERIOD':
+        return 'Сухостой';
+      case 'CALVING_SOON':
+        return 'Скоро отёл';
+      case 'FRESH_COW':
+        return 'Свежая';
+      default:
+        return null;
+    }
+  }
+
+  String? _prodLabel(String? raw) {
+    switch (raw) {
+      case 'LACTATING':
+        return 'Лактация';
+      case 'DRY':
+        return 'Сухостой';
+      case 'FATTENING':
+        return 'Откорм';
+      case 'BREEDING':
+        return 'Племенная';
+      case 'UNKNOWN':
+      default:
+        return null;
+    }
   }
 
   String _formatAge(int months) {

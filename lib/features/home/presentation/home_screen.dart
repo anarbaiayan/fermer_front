@@ -116,6 +116,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     dryPeriod: stats.dryPeriod,
                     open: stats.open,
                     inseminated: stats.inseminated,
+                    onTap: (type) => context.push('/herd', extra: type),
                   ),
 
                   const SizedBox(height: 24),
@@ -184,10 +185,7 @@ class _HealthStatusCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          width: 1,
-          color: AppColors.additional2
-        ),
+        border: Border.all(width: 1, color: AppColors.additional2),
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(213, 215, 218, 0.22),

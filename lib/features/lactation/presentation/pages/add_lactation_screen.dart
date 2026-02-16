@@ -4,6 +4,7 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/core/widgets/app_success_dialog.dart';
+import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/features/lactation/application/lactation_providers.dart';
 import 'package:frontend/features/lactation/data/models/create_lactation_dto.dart';
 import 'package:go_router/go_router.dart';
@@ -62,29 +63,20 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
   }
 
   Future<void> _pickDate() async {
-    final picked = await showDatePicker(
+    final picked = await showMaskedDatePicker(
       context: context,
       initialDate: _date,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(
-              context,
-            ).colorScheme.copyWith(primary: AppColors.primary1),
-          ),
-          child: child!,
-        );
-      },
+      helpText: 'Выберите дату',
     );
 
-    if (picked != null) {
-      setState(() {
-        _date = picked;
-        _dateCtrl.text = _dmy.format(picked);
-      });
-    }
+    if (picked == null) return;
+
+    setState(() {
+      _date = picked;
+      _dateCtrl.text = _dmy.format(picked);
+    });
   }
 
   String _formatTime(TimeOfDay t) {
@@ -114,11 +106,10 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
     );
 
     if (picked != null) {
-  setState(() {
-    _setTime(picked);
-  });
-}
-
+      setState(() {
+        _setTime(picked);
+      });
+    }
   }
 
   DateTime _buildMilkingDateTime(DateTime date, TimeOfDay time) {

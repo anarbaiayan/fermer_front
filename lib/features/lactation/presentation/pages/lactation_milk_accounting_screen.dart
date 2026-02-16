@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/features/lactation/application/lactation_providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -21,21 +22,12 @@ class LactationMilkAccountingSection extends ConsumerWidget {
     Future<void> pickFrom() async {
       if (range.mode != LactationRangeMode.period) return;
 
-      final picked = await showDatePicker(
+      final picked = await showMaskedDatePicker(
         context: context,
         initialDate: range.from,
         firstDate: DateTime(2020),
         lastDate: DateTime(2100),
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: Theme.of(
-                context,
-              ).colorScheme.copyWith(primary: AppColors.primary1),
-            ),
-            child: child!,
-          );
-        },
+        helpText: 'Дата начала периода',
       );
 
       if (picked != null) {
@@ -46,21 +38,12 @@ class LactationMilkAccountingSection extends ConsumerWidget {
     Future<void> pickTo() async {
       if (range.mode != LactationRangeMode.period) return;
 
-      final picked = await showDatePicker(
+      final picked = await showMaskedDatePicker(
         context: context,
         initialDate: range.to,
         firstDate: DateTime(2020),
         lastDate: DateTime(2100),
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: Theme.of(
-                context,
-              ).colorScheme.copyWith(primary: AppColors.primary1),
-            ),
-            child: child!,
-          );
-        },
+        helpText: 'Дата конца периода',
       );
 
       if (picked != null) {
