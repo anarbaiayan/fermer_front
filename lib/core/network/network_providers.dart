@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'dio_client.dart';
@@ -7,7 +6,7 @@ import 'auth_interceptor.dart';
 import 'token_repository.dart';
 
 final baseUrlProvider = Provider<String>((ref) {
-  return dotenv.env['BASE_URL'] ?? 'http://localhost:8080/api';
+  return 'http://45.136.70.121:8888/api';
 });
 
 BaseOptions _baseOptions(String baseUrl) => BaseOptions(

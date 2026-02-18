@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
+import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
 import 'package:frontend/features/home/presentation/widgets/briefSection/search_field.dart';
 import 'package:frontend/features/home/presentation/widgets/quantitySection/summary_quantity_section.dart';
 import 'package:go_router/go_router.dart';
@@ -133,7 +134,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: _HealthStatusCard(
                           title: 'Здоровые',
                           value: stats.healthy,
-                          color: const Color(0xFF4AAE62), // зелёный
+                          color: const Color(0xFF4AAE62),
+                          onTap: () => context.push(
+                            '/herd',
+                            extra: HerdFilterType.healthy,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -141,7 +146,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: _HealthStatusCard(
                           title: 'Больные',
                           value: stats.sick,
-                          color: const Color(0xFFE10816), // красный
+                          color: const Color(0xFFE10816),
+                          onTap: () =>
+                              context.push('/herd', extra: HerdFilterType.sick),
                         ),
                       ),
                     ],
@@ -171,70 +178,79 @@ class _HealthStatusCard extends StatelessWidget {
   final String title;
   final int value;
   final Color color;
+  final VoidCallback? onTap;
 
   const _HealthStatusCard({
     required this.title,
     required this.value,
     required this.color,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(width: 1, color: AppColors.additional2),
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromRGBO(213, 215, 218, 0.22),
-            offset: Offset(0, 4),
-            blurRadius: 20,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 26,
-                height: 26,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  value.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.primary3,
-                  ),
-                ),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(width: 1, color: AppColors.additional2),
+            boxShadow: const [
+              BoxShadow(
+                color: Color.fromRGBO(213, 215, 218, 0.22),
+                offset: Offset(0, 4),
+                blurRadius: 20,
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Всего: $value',
-            style: const TextStyle(fontSize: 12, color: AppColors.primary3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 26,
+                    height: 26,
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      value.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.primary3,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Всего: $value',
+                style: const TextStyle(fontSize: 12, color: AppColors.primary3),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

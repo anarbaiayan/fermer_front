@@ -130,7 +130,7 @@ class HerdListItem extends ConsumerWidget {
             else
               detailsAsync!.when(
                 loading: () => const SizedBox(height: 40),
-                error: (_, __) => const SizedBox(height: 40),
+                error: (_, _) => const SizedBox(height: 40),
                 data: (details) {
                   final statusLine = _buildStatusLine(details);
                   final healthLine = _buildHealthLine(details);

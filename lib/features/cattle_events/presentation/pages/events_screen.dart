@@ -424,7 +424,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                       return ListView.separated(
                         padding: const EdgeInsets.only(top: 6, bottom: 90),
                         itemCount: filtered.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 14),
+                        separatorBuilder: (_, _) => const SizedBox(height: 14),
                         itemBuilder: (context, i) {
                           final e = filtered[i];
 

@@ -98,7 +98,7 @@ class _SelectCattleSheetState extends State<SelectCattleSheet> {
               child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: widget.items.length,
-                separatorBuilder: (_, __) => const Divider(height: 1),
+                separatorBuilder: (_, _) => const Divider(height: 1),
                 itemBuilder: (context, i) {
                   final c = widget.items[i];
                   final isOn = selected.contains(c.id);

@@ -3,4 +3,7 @@ enum HerdFilterType {
   dryPeriod, // Сухостой
   open, // Открытые
   inseminated, // Осемененные
+
+  healthy,
+  sick,
 }

@@ -22,16 +22,26 @@ class HerdScreen extends ConsumerWidget {
     required HerdFilterType filter,
     required String? reproductiveState,
     required String? productionState,
+    required String? healthStatus,
   }) {
     switch (filter) {
       case HerdFilterType.lactating:
         return productionState == 'LACTATING';
+
       case HerdFilterType.dryPeriod:
         return reproductiveState == 'DRY_PERIOD' || productionState == 'DRY';
+
       case HerdFilterType.open:
         return reproductiveState == 'OPEN';
+
       case HerdFilterType.inseminated:
         return reproductiveState == 'INSEMINATED';
+
+      case HerdFilterType.healthy:
+        return healthStatus == 'HEALTHY';
+
+      case HerdFilterType.sick:
+        return healthStatus == 'SICK';
     }
   }
 
@@ -166,11 +176,14 @@ class HerdScreen extends ConsumerWidget {
 
                       final repro = details?.reproductiveState;
                       final prod = details?.productionState;
+                      final health = details?.healthStatus;
+
 
                       if (_matchesFilter(
                         filter: filter!,
                         reproductiveState: repro,
                         productionState: prod,
+                        healthStatus: health,
                       )) {
                         filtered.add(c);
                       }
