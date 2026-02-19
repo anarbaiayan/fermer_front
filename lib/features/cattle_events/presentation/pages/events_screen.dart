@@ -269,7 +269,6 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
       enableDrawer: true,
       showBell: true,
       showAppBar: true,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: AppPage(
         child: Stack(

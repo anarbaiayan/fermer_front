@@ -20,7 +20,6 @@ class HerdAnimalScreen extends ConsumerWidget {
       bottomNavIndex: null,
       enableDrawer: true,
       showBell: true,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),

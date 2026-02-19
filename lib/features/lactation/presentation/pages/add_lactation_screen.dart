@@ -187,7 +187,6 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
   Widget build(BuildContext context) {
     return AppScaffold(
       bottomNavIndex: null,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       enableDrawer: false,
       showBell: false,

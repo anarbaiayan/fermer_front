@@ -438,7 +438,6 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
       bottomNavIndex: null,
       enableDrawer: false,
       backgroundColor: AppColors.primary1,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),

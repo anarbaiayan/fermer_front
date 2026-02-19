@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
@@ -161,10 +162,19 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
       if (!mounted) return;
       context.push('/herd/add/details', extra: id);
     } catch (e) {
+      String message = 'Ошибка при создании животного';
+
+      if (e is ApiException) {
+        message = e.message;
+      } else {
+        message = e.toString();
+      }
+
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка при создании животного: $e')),
-      );
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     } finally {
       if (!mounted) return;
       setState(() => _isLoading = false);
@@ -179,7 +189,6 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
       showBell: false,
       showAppBar: true,
       backgroundColor: AppColors.primary1,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: Column(
         children: [

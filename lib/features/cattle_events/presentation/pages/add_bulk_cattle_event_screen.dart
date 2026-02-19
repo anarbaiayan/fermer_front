@@ -415,7 +415,6 @@ class _AddBulkCattleEventScreenState
       enableDrawer: false,
       showAppBar: true,
       showBell: false,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: LayoutBuilder(
         builder: (context, constraints) {

@@ -11,7 +11,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const userName = 'Ахмет Кусаинов';
     const farmName = 'Название фермы';
     const phone = '+7 709 851 31 21';
     const String? email = null;
@@ -19,7 +18,6 @@ class ProfileScreen extends StatelessWidget {
     final headerColor = const Color(0xFFB7E4C7);
 
     return AppScaffold(
-      userName: userName,
       farmName: farmName,
       body: SafeArea(
         child: ClipRRect(
@@ -94,22 +92,6 @@ class ProfileScreen extends StatelessWidget {
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
                                   ),
-                                ),
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        userName,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColors.primary3,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ),
 

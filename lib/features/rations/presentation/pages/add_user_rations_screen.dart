@@ -125,7 +125,6 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
       enableDrawer: false,
       showBell: false,
       showAppBar: true,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: AppPage(
         child: Column(

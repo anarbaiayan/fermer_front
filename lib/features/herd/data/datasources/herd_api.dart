@@ -99,17 +99,19 @@ class HerdApi {
       );
       return CattleDto.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      debugPrint(
-        'POST /cattle error status=${e.response?.statusCode} data=${e.response?.data}',
-      );
       final status = e.response?.statusCode;
       final data = e.response?.data;
 
       String msg = 'Не удалось создать животное';
 
       if (data is Map<String, dynamic>) {
-        if (data['message'] is String) msg = data['message'] as String;
-        if (data['error'] is String) msg = data['error'] as String;
+        if (data['message'] != null) {
+          msg = data['message'].toString();
+        } else if (data['error'] != null) {
+          msg = data['error'].toString();
+        }
+      } else if (data is String) {
+        msg = data;
       } else if (e.message != null) {
         msg = e.message!;
       }

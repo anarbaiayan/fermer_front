@@ -25,7 +25,6 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
       enableDrawer: true,
       showBell: false,
       showAppBar: true,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       backgroundColor: AppColors.primary1,
       body: ClipRRect(

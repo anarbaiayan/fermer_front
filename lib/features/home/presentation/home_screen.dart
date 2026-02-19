@@ -47,7 +47,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return AppScaffold(
       bottomNavIndex: 0,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: AppPage(
         child: statsAsync.when(

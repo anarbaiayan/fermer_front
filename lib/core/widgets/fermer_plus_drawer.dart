@@ -10,16 +10,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../features/auth/application/auth_providers.dart';
 
 class FermerPlusDrawer extends ConsumerWidget {
-  final String userName;
   final String farmName;
   final String? avatarUrl;
 
-  const FermerPlusDrawer({
-    super.key,
-    required this.userName,
-    required this.farmName,
-    this.avatarUrl,
-  });
+  const FermerPlusDrawer({super.key, required this.farmName, this.avatarUrl});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,15 +31,6 @@ class FermerPlusDrawer extends ConsumerWidget {
                 children: [
                   _AvatarCircle(avatarUrl: avatarUrl),
                   const SizedBox(height: 14),
-                  Text(
-                    userName,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary1,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
                   Text(
                     '"$farmName"',
                     style: const TextStyle(

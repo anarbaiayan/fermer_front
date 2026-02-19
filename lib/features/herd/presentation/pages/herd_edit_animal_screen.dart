@@ -198,7 +198,6 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
       bottomNavIndex: null,
       enableDrawer: false,
       showBell: false,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: Column(
         children: [

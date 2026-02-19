@@ -135,7 +135,6 @@ class _HerdAddAnimalDetailsScreenState
       showBell: false,
       showAppBar: true,
       backgroundColor: AppColors.primary1,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),

@@ -8,7 +8,6 @@ class AppScaffold extends StatelessWidget {
   final Widget body;
   final int? bottomNavIndex;
 
-  final String userName;
   final String farmName;
   final String? avatarUrl;
 
@@ -25,7 +24,6 @@ class AppScaffold extends StatelessWidget {
     super.key,
     required this.body,
     this.bottomNavIndex,
-    required this.userName,
     required this.farmName,
     this.avatarUrl,
     this.enableDrawer = true,
@@ -41,7 +39,6 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
       drawer: enableDrawer
           ? FermerPlusDrawer(
-              userName: userName,
               farmName: farmName,
               avatarUrl: avatarUrl,
             )

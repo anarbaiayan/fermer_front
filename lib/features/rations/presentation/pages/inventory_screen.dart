@@ -25,7 +25,6 @@ class UserRationsStocksScreen extends ConsumerWidget {
       enableDrawer: true,
       showBell: true,
       showAppBar: true,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: AppPage(
         child: Column(

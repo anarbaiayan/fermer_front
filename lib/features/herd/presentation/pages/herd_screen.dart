@@ -14,39 +14,36 @@ import '../widgets/herd_empty_state.dart';
 
 final herdRefreshingProvider = StateProvider.autoDispose<bool>((ref) => false);
 
-class HerdScreen extends ConsumerWidget {
+class HerdScreen extends ConsumerStatefulWidget {
   final HerdFilterType? filter;
   const HerdScreen({super.key, this.filter});
 
-  bool _matchesFilter({
-    required HerdFilterType filter,
-    required String? reproductiveState,
-    required String? productionState,
-    required String? healthStatus,
-  }) {
-    switch (filter) {
-      case HerdFilterType.lactating:
-        return productionState == 'LACTATING';
+  @override
+  ConsumerState<HerdScreen> createState() => _HerdScreenState();
+}
 
-      case HerdFilterType.dryPeriod:
-        return reproductiveState == 'DRY_PERIOD' || productionState == 'DRY';
+class _HerdScreenState extends ConsumerState<HerdScreen> {
+  final _searchController = TextEditingController();
+  bool _isSearchMode = false;
 
-      case HerdFilterType.open:
-        return reproductiveState == 'OPEN';
-
-      case HerdFilterType.inseminated:
-        return reproductiveState == 'INSEMINATED';
-
-      case HerdFilterType.healthy:
-        return healthStatus == 'HEALTHY';
-
-      case HerdFilterType.sick:
-        return healthStatus == 'SICK';
-    }
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ref.read(activeHerdFilterProvider.notifier).state = widget.filter;
+      ref.read(herdSearchQueryProvider.notifier).state = '';
+    });
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final cattleListAsync = ref.watch(cattleListProvider);
     final statsAsync = ref.watch(cattleStatisticsProvider);
 
@@ -55,15 +52,12 @@ class HerdScreen extends ConsumerWidget {
       orElse: () => false,
     );
 
-    final showFab = hasCattle;
-
     return AppScaffold(
       bottomNavIndex: 1,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       enableDrawer: true,
       showBell: true,
-      floatingActionButton: showFab
+      floatingActionButton: hasCattle
           ? Padding(
               padding: const EdgeInsets.all(12),
               child: FloatingActionButton(
@@ -87,132 +81,63 @@ class HerdScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 9),
-
-            Row(
-              children: [
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: AppIcons.svg('arrow', size: 32),
-                  onPressed: () => context.go('/home'),
-                ),
-                const SizedBox(width: 4),
-                const Text(
-                  'Весь скот',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary3,
-                  ),
-                ),
-                const Spacer(),
-                if (hasCattle) ...[
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: AppIcons.svg("search2", size: 20),
-                    onPressed: () {
-                      // TODO: поиск
-                    },
-                  ),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: AppIcons.svg("dots", size: 20),
-                    onPressed: () {},
-                  ),
-                ],
-              ],
+            _SearchBar(
+              isSearchMode: _isSearchMode,
+              controller: _searchController,
+              hasCattle: hasCattle,
+              onSearchOpen: () => setState(() => _isSearchMode = true),
+              onSearchClose: () {
+                _searchController.clear();
+                ref.read(herdSearchQueryProvider.notifier).state = '';
+                setState(() => _isSearchMode = false);
+              },
+              onChanged: (v) =>
+                  ref.read(herdSearchQueryProvider.notifier).state = v,
             ),
-
             const SizedBox(height: 12),
-
             Expanded(
               child: cattleListAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (err, stack) => Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        'Ошибка при загрузке списка',
-                        style: TextStyle(
-                          color: AppColors.primary3,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '$err',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: AppColors.additional3,
-                          fontSize: 13,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () => ref.invalidate(cattleListProvider),
-                        child: const Text('Повторить'),
-                      ),
-                    ],
-                  ),
+                error: (err, _) => _ErrorView(
+                  error: err,
+                  onRetry: () => ref.invalidate(cattleListProvider),
                 ),
                 data: (cattle) {
-                  if (cattle.isEmpty) return const HerdEmptyState();
-
-                  // ---------- FILTER MODE ----------
-                  if (filter != null) {
-                    final filtered = <Cattle>[];
-                    var loadingCount = 0;
-
-                    for (final c in cattle) {
-                      final st = ref.watch(cattleDetailsProvider(c.id));
-
-                      if (st.isLoading) loadingCount++;
-
-                      final details = st.maybeWhen(
-                        data: (d) => d,
-                        orElse: () => null,
-                      );
-
-                      final repro = details?.reproductiveState;
-                      final prod = details?.productionState;
-                      final health = details?.healthStatus;
-
-
-                      if (_matchesFilter(
-                        filter: filter!,
-                        reproductiveState: repro,
-                        productionState: prod,
-                        healthStatus: health,
-                      )) {
-                        filtered.add(c);
-                      }
-                    }
-
-                    // Важно: если ещё грузим детали и пока ничего не совпало - не показывай пустую страницу.
-                    if (filtered.isEmpty) {
-                      if (loadingCount > 0) {
-                        return const Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircularProgressIndicator(),
-                              SizedBox(height: 12),
-                              Text(
-                                'Загружаем данные для фильтра...',
-                                style: TextStyle(color: AppColors.additional3),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return const HerdEmptyState();
-                    }
-
-                    return _Grid(cattle: filtered);
+                  if (cattle.isEmpty) {
+                    return const Center(child: HerdEmptyState());
                   }
 
-                  // ---------- NORMAL MODE ----------
+                  final (:list, :isLoadingDetails) = ref.watch(
+                    visibleCattleProvider,
+                  );
+
+                  // Детали ещё грузятся и список пока пуст
+                  if (list.isEmpty && isLoadingDetails) {
+                    return const Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 12),
+                          Text(
+                            'Загружаем данные для фильтра...',
+                            style: TextStyle(color: AppColors.additional3),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  if (list.isEmpty) {
+                    return const Center(child: HerdEmptyState());
+                  }
+
+                  // Режим фильтра — просто грид
+                  if (widget.filter != null) {
+                    return _Grid(cattle: list);
+                  }
+
+                  // Обычный режим — с карточкой количества и заголовком
                   final total = statsAsync.maybeWhen(
                     data: (s) => s.total,
                     orElse: () => cattle.length,
@@ -220,18 +145,14 @@ class HerdScreen extends ConsumerWidget {
 
                   Future<void> refresh() async {
                     if (ref.read(herdRefreshingProvider)) return;
-
                     ref.read(herdRefreshingProvider.notifier).state = true;
                     try {
                       ref.invalidate(cattleListProvider);
                       ref.invalidate(cattleStatisticsProvider);
-
-                      // не обязательно инвалидировать details всех, но оставим как у тебя
                       for (final c in cattle) {
                         ref.invalidate(cattleDetailsProvider(c.id));
                         ref.invalidate(cattleByIdProvider(c.id));
                       }
-
                       await Future.wait([
                         ref.read(cattleListProvider.future),
                         ref.read(cattleStatisticsProvider.future),
@@ -248,7 +169,7 @@ class HerdScreen extends ConsumerWidget {
                           children: [
                             _QuantityCard(total: total, onRefresh: refresh),
                             const SizedBox(height: 15),
-                            _HeaderWithFilter(),
+                            const _HeaderWithFilter(),
                             const SizedBox(height: 15),
                           ],
                         ),
@@ -267,13 +188,13 @@ class HerdScreen extends ConsumerWidget {
                             context,
                             index,
                           ) {
-                            final item = cattle[index];
+                            final item = list[index];
                             return HerdListItem(
                               cattle: item,
                               showHealth: true,
                               onTap: () => context.push('/herd/${item.id}'),
                             );
-                          }, childCount: cattle.length),
+                          }, childCount: list.length),
                         ),
                       ),
                     ],
@@ -288,6 +209,110 @@ class HerdScreen extends ConsumerWidget {
   }
 }
 
+// ─────────────────────────────────────────────
+// Extracted widgets
+// ─────────────────────────────────────────────
+
+class _SearchBar extends StatelessWidget {
+  final bool isSearchMode;
+  final bool hasCattle;
+  final TextEditingController controller;
+  final VoidCallback onSearchOpen;
+  final VoidCallback onSearchClose;
+  final ValueChanged<String> onChanged;
+
+  const _SearchBar({
+    required this.isSearchMode,
+    required this.hasCattle,
+    required this.controller,
+    required this.onSearchOpen,
+    required this.onSearchClose,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          padding: EdgeInsets.zero,
+          icon: AppIcons.svg('arrow', size: 32),
+          onPressed: () => context.go('/home'),
+        ),
+        const SizedBox(width: 4),
+        if (!isSearchMode) ...[
+          const Text(
+            'Весь скот',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: AppColors.primary3,
+            ),
+          ),
+          const Spacer(),
+        ] else
+          Expanded(
+            child: TextField(
+              controller: controller,
+              autofocus: true,
+              onChanged: onChanged,
+              decoration: const InputDecoration(
+                hintText: 'Поиск по имени или бирке',
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        if (hasCattle)
+          isSearchMode
+              ? IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.close),
+                  onPressed: onSearchClose,
+                )
+              : IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: AppIcons.svg("search2", size: 20),
+                  onPressed: onSearchOpen,
+                ),
+      ],
+    );
+  }
+}
+
+class _ErrorView extends StatelessWidget {
+  final Object error;
+  final VoidCallback onRetry;
+
+  const _ErrorView({required this.error, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'Ошибка при загрузке списка',
+            style: TextStyle(
+              color: AppColors.primary3,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '$error',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: AppColors.additional3, fontSize: 13),
+          ),
+          const SizedBox(height: 16),
+          TextButton(onPressed: onRetry, child: const Text('Повторить')),
+        ],
+      ),
+    );
+  }
+}
+
 class _QuantityCard extends StatelessWidget {
   final int total;
   final Future<void> Function() onRefresh;
@@ -296,69 +321,68 @@ class _QuantityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: AppColors.primary2,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(child: AppIcons.svg("health", size: 30)),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: AppColors.primary2,
+            borderRadius: BorderRadius.circular(8),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: AppColors.additional2, width: 1),
+          child: Center(child: AppIcons.svg("health", size: 30)),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: AppColors.additional2, width: 1),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Количество',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primary3,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Всего скота: $total',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppColors.primary3,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Количество',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primary3,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Всего скота: $total',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: AppColors.primary3,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () async => onRefresh(),
-                    child: AppIcons.svg("refresh", size: 13),
-                  ),
-                ],
-              ),
+                GestureDetector(
+                  onTap: () async => onRefresh(),
+                  child: AppIcons.svg("refresh", size: 13),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
 class _HeaderWithFilter extends StatelessWidget {
+  const _HeaderWithFilter();
+
   @override
   Widget build(BuildContext context) {
     return Row(

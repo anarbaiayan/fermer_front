@@ -129,7 +129,6 @@ class _HerdEditAnimalDetailsScreenState
       bottomNavIndex: null,
       enableDrawer: false,
       showBell: false,
-      userName: 'Ахмет Кусаинов',
       farmName: 'Название фермы',
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),

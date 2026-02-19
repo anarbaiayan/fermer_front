@@ -5,6 +5,7 @@ import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/features/cattle_events/application/cattle_events_providers.dart';
 import 'package:frontend/features/cattle_events/data/datasources/cattle_events_api.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
+import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:frontend/features/herd/presentation/widgets/cattle_events_preview.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
@@ -34,6 +35,67 @@ class HerdAnimalContent extends ConsumerStatefulWidget {
 class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
   bool _showAllUpcoming = false;
   final Set<int> _completedUpcomingIds = {};
+  bool _isDeleting = false;
+
+  Future<void> _confirmDelete(BuildContext context) async {
+    final ok =
+        await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Удалить животное?'),
+            content: const Text('Это действие нельзя отменить. Вы уверены?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text('Отмена'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text('Удалить'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+
+    if (!ok) return;
+
+    await _deleteCattle(context);
+  }
+
+  Future<void> _deleteCattle(BuildContext context) async {
+    final cattle = widget.cattle;
+
+    setState(() => _isDeleting = true);
+
+    try {
+      final api = ref.read(herdApiProvider);
+      await api.deleteCattle(cattle.id);
+
+      ref.invalidate(cattleListProvider);
+      ref.invalidate(cattleStatisticsProvider);
+      ref.invalidate(cattleDetailsProvider(cattle.id));
+      ref.invalidate(cattleByIdProvider(cattle.id));
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Животное удалено')));
+        context.pop();
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка удаления: $e')));
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isDeleting = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,666 +159,734 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
       }
     }
 
-    return Column(
+    return Stack(
       children: [
-        // верхняя часть - скролл
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(top: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // верхняя строка: назад + заголовок
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
+        Column(
+          children: [
+            // верхняя часть - скролл
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: AppIcons.svg('arrow', size: 32),
-                      onPressed: () => context.pop(),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Информация о животном',
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary3,
+                    // верхняя строка: назад + заголовок
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: AppIcons.svg('arrow', size: 32),
+                          onPressed: () => context.pop(),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 48), // симметрия под иконку слева
-                  ],
-                ),
-
-                const SizedBox(height: 12),
-
-                // ОДНА большая карточка, как в дизайне
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1, color: AppColors.additional2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.04),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // шапка с именем и градиентом
-                      Container(
-                        height: 90,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(10),
-                          ),
-                          gradient: LinearGradient(
-                            colors: [
-                              headerColor.withOpacity(0.35),
-                              Colors.white,
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: SizedBox(
-                          height:
-                              32, // чтобы было место и для текста, и для кнопки
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              // имя строго по центру
-                              Center(
-                                child: Text(
-                                  cattle.name,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.primary3,
-                                  ),
-                                ),
-                              ),
-
-                              // иконка "три точки" в правом верхнем углу
-                              Positioned(
-                                right: 10,
-                                top: 10,
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                  icon: AppIcons.svg('dots', size: 20),
-                                  onPressed: () {
-                                    // TODO: меню действий
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      const Divider(height: 0.5, color: AppColors.additional2),
-
-                      // "Основная информация"
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: AppColors.additional2,
-                                width: 1,
-                              ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Информация о животном',
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primary3,
                             ),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
+                        ),
+                        const SizedBox(width: 48), // симметрия под иконку слева
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // ОДНА большая карточка, как в дизайне
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          width: 1,
+                          color: AppColors.additional2,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.04),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // шапка с именем и градиентом
+                          Container(
+                            height: 90,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(10),
+                              ),
+                              gradient: LinearGradient(
+                                colors: [
+                                  headerColor.withOpacity(0.35),
+                                  Colors.white,
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
+                            child: SizedBox(
+                              height:
+                                  32, // чтобы было место и для текста, и для кнопки
+                              child: Stack(
                                 alignment: Alignment.center,
-                                child: AppIcons.svg('info', size: 34),
-                              ),
-                              const SizedBox(width: 16),
-                              const Expanded(
-                                child: Text(
-                                  'Основная информация',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.primary3,
+                                children: [
+                                  // имя строго по центру
+                                  Center(
+                                    child: Text(
+                                      cattle.name,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.primary3,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              IconButton(
-                                padding: EdgeInsets.zero,
-                                icon: AppIcons.svg('edit', size: 30),
-                                onPressed: () {
-                                  context.push('/herd/edit', extra: cattle);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
 
-                      // данные
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _infoRowOptional(
-                              'Бирка',
-                              tagText,
-                            ), // всегда есть, но ок
-                            _infoRowOptional(
-                              'Дата рождения',
-                              birthDateText,
-                            ), // всегда есть
-                            _infoRowOptional('Возраст', ageText), // всегда есть
-                            _infoRowOptional(
-                              'Категория',
-                              _categoryTitle(category),
-                            ),
-                            _infoRowOptional('Порода', details?.breed),
-                            _infoRowOptional('Группа', details?.animalGroup),
-                            _healthInfoRowOptional(
-                              'Состояние здоровья',
-                              healthText,
-                            ),
-
-                            // ---- для коровы / тёлки (как на макете) ----
-                            if (isCow) ...[
-                              _infoRowMilkOptional(
-                                'Последний надой\n(л/день)',
-                                details?.lastMilkYield,
-                              ),
-                              _infoRowDateOptional(
-                                'Дата последнего\nнадоя',
-                                details?.lastMilkYieldDate,
-                              ),
-                              _infoRowMilkOptional(
-                                'Средний надой\nза 7 дней',
-                                details?.averageMilkYield7Days,
-                              ),
-                              _infoRowMilkOptional(
-                                'Средний надой\nза 30 дней',
-                                details?.averageMilkYield30Days,
-                              ),
-                              _infoRowMilkOptional(
-                                'Пик надоя\n(текущая лактация)',
-                                details?.peakMilkYieldCurrentLactation,
-                              ),
-                              _infoRowMilkOptional(
-                                'Всего молока\n(текущая лактация)',
-                                details?.totalMilkCurrentLactation,
-                              ),
-                              _infoRowDateOptional(
-                                'Последний отел',
-                                details?.lastCalvingDate,
-                              ),
-                              _infoRowDateOptional(
-                                'Последнее\nосеменение',
-                                details?.lastInseminationDate,
-                              ),
-
-                              // эти показываем только если реально есть bool/state
-                              if (details?.isPregnant != null)
-                                _infoRowOptional(
-                                  'Беременность',
-                                  pregnancyLabel(details?.isPregnant),
-                                ),
-
-                              _infoRowOptional(
-                                'Репродуктивный статус',
-                                (details?.reproductiveState == null)
-                                    ? null
-                                    : reproductiveLabel(
-                                        details?.reproductiveState,
+                                  // иконка "три точки" в правом верхнем углу
+                                  Positioned(
+                                    right: 4,
+                                    top: 4,
+                                    child: PopupMenuButton<String>(
+                                      padding: EdgeInsets.zero,
+                                      icon: AppIcons.svg('dots', size: 20),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
                                       ),
-                              ),
-                              _infoRowOptional(
-                                'Производственный статус',
-                                (details?.productionState == null)
-                                    ? null
-                                    : productionLabel(details?.productionState),
-                              ),
-                            ],
-
-                            if (isHeifer) ...[
-                              _infoRowDateOptional(
-                                'Первое\nосеменение',
-                                details?.firstInseminationDate,
-                              ),
-                              _infoRowDateOptional(
-                                'Планируемая дата\nотела',
-                                details?.expectedCalvingDate,
-                              ),
-
-                              if (details?.isPregnant != null)
-                                _infoRowOptional(
-                                  'Беременность',
-                                  pregnancyLabel(details?.isPregnant),
-                                ),
-
-                              _infoRowOptional(
-                                'Репродуктивный статус',
-                                (details?.reproductiveState == null)
-                                    ? null
-                                    : reproductiveLabel(
-                                        details?.reproductiveState,
-                                      ),
-                              ),
-                            ],
-
-                            // ---- для быка ----
-                            if (isBull) ...[
-                              _infoRowOptional(
-                                'Назначение',
-                                details?.bullPurpose?.display,
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // блок с двумя кнопками - внутри той же карточки
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: SmallActionCard(
-                                title: 'Действия',
-                                subtitle: 'Доп. информация',
-                                icon: AppIcons.svg('actions', size: 26),
-                                onTap: () {
-                                  // TODO
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: SmallActionCard(
-                                title: 'Рацион   ',
-                                subtitle: 'Выберите рацион',
-                                icon: AppIcons.svg('diet', size: 26),
-                                onTap: () => context.push(
-                                  '/rations',
-                                  extra: {
-                                    'category': category,
-                                    'productionState': details?.productionState,
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      // Журнал событий - тоже внутри той же карточки
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-                        child: CattleEventsPreview(
-                          cattleId: cattle.id,
-                          onAddPressed: () async {
-                            final res = await context.push<bool>(
-                              '/herd/${cattle.id}/events/add',
-                            );
-
-                            if (res == true) {
-                              ref.invalidate(
-                                cattleEventsPreviewProvider(cattle.id),
-                              );
-                              ref.invalidate(cattleDetailsProvider(cattle.id));
-                              ref.invalidate(cattleByIdProvider(cattle.id));
-                              ref.invalidate(cattleListProvider);
-                              ref.invalidate(cattleStatisticsProvider);
-                            }
-                          },
-                        ),
-                      ),
-
-                      if ((details?.upcomingEvents?.isNotEmpty ?? false))
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 12),
-                              const Text(
-                                'Ближайшие события',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.primary3,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-
-                              // список (1 или все)
-                              ...(() {
-                                final upcomingAll = details!.upcomingEvents!
-                                    .where(
-                                      (e) =>
-                                          !_completedUpcomingIds.contains(e.id),
-                                    )
-                                    .toList();
-
-                                final visible = _showAllUpcoming
-                                    ? upcomingAll
-                                    : upcomingAll.take(1);
-
-                                return visible.map((e) {
-                                  final date = e.plannedDate == null
-                                      ? '—'
-                                      : DateFormat(
-                                          'dd.MM.yyyy',
-                                        ).format(e.plannedDate!);
-
-                                  final left = e.daysUntil == null
-                                      ? ''
-                                      : 'через ${e.daysUntil} дн';
-
-                                  final eventId = e.id; // int?
-
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 8),
-                                    child: Dismissible(
-                                      key: ValueKey('upcoming_$eventId'),
-                                      direction: DismissDirection.startToEnd,
-                                      background: Container(
-                                        alignment: Alignment.centerLeft,
-                                        padding: const EdgeInsets.only(
-                                          left: 16,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.success.withOpacity(
-                                            0.15,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                        ),
-                                        child: const Row(
-                                          children: [
-                                            Icon(
-                                              Icons.check_circle,
-                                              color: AppColors.success,
-                                            ),
-                                            SizedBox(width: 8),
-                                            Text(
-                                              'Завершить',
-                                              style: TextStyle(
-                                                color: AppColors.primary3,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      confirmDismiss: (_) async {
-                                        // 1) подтверждение (по желанию)
-                                        final ok =
-                                            await showDialog<bool>(
-                                              context: context,
-                                              barrierDismissible: true,
-                                              builder: (ctx) => AlertDialog(
-                                                title: const Text(
-                                                  'Завершить событие?',
-                                                ),
-                                                content: Text(
-                                                  'Отметить "${e.title}" как выполненное?',
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.of(
-                                                          ctx,
-                                                        ).pop(false),
-                                                    child: const Text('Отмена'),
-                                                  ),
-                                                  ElevatedButton(
-                                                    onPressed: () =>
-                                                        Navigator.of(
-                                                          ctx,
-                                                        ).pop(true),
-                                                    child: const Text(
-                                                      'Завершить',
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ) ??
-                                            false;
-
-                                        if (!ok) return false;
-
-                                        // 2) PATCH до удаления
-                                        try {
-                                          final api = ref.read(
-                                            cattleEventsApiProvider,
-                                          );
-                                          await api.completeEvent(
-                                            eventId: eventId,
-                                          );
-
-                                          // 3) важно: убрать элемент ЛОКАЛЬНО, чтобы Dismissible не ругался
-                                          if (mounted) {
-                                            setState(
-                                              () => _completedUpcomingIds.add(
-                                                eventId,
-                                              ),
-                                            );
-                                          }
-
-                                          // 4) обновим провайдеры (можно тут, можно в onDismissed)
-                                          ref.invalidate(
-                                            cattleDetailsProvider(cattle.id),
-                                          );
-                                          ref.invalidate(
-                                            cattleEventsPreviewProvider(
-                                              cattle.id,
-                                            ),
-                                          );
-
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                  'Событие завершено',
-                                                ),
-                                              ),
-                                            );
-                                          }
-
-                                          return true; // теперь можно “dismiss”
-                                        } catch (err) {
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text('Ошибка: $err'),
-                                              ),
-                                            );
-                                          }
-                                          return false; // не dismiss
+                                      onSelected: (value) {
+                                        if (value == 'delete') {
+                                          _confirmDelete(context);
                                         }
                                       },
-
-                                      // можно оставить пустым или только invalidate
-                                      onDismissed: (_) {
-                                        ref.invalidate(
-                                          cattleByIdProvider(cattle.id),
-                                        );
-                                        ref.invalidate(cattleListProvider);
-                                        ref.invalidate(
-                                          cattleStatisticsProvider,
-                                        );
-                                      },
-
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                            border: Border.all(
-                                              color: AppColors.additional2,
-                                            ),
-                                            color: const Color(0xFFF9FAFB),
-                                          ),
+                                      itemBuilder: (context) => [
+                                        const PopupMenuItem<String>(
+                                          value: 'delete',
                                           child: Row(
                                             children: [
-                                              Expanded(
-                                                child: Text(
-                                                  e.title,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: AppColors.primary3,
-                                                  ),
-                                                ),
+                                              Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
                                               ),
-                                              const SizedBox(width: 8),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  Text(
-                                                    date,
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      color:
-                                                          AppColors.additional3,
-                                                    ),
-                                                  ),
-                                                  if (left.isNotEmpty)
-                                                    Text(
-                                                      left,
-                                                      style: const TextStyle(
-                                                        fontSize: 12,
-                                                        color: AppColors
-                                                            .additional3,
-                                                      ),
-                                                    ),
-                                                ],
+                                              SizedBox(width: 8),
+                                              Text(
+                                                'Удалить',
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
                                               ),
                                             ],
                                           ),
                                         ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const Divider(
+                            height: 0.5,
+                            color: AppColors.additional2,
+                          ),
+
+                          // "Основная информация"
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: AppColors.additional2,
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: AppIcons.svg('info', size: 34),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  const Expanded(
+                                    child: Text(
+                                      'Основная информация',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.primary3,
                                       ),
                                     ),
-                                  );
-                                }).toList();
-                              })(),
-
-                              // кнопка показать все/скрыть
-                              if (details!.upcomingEvents!.length > 1)
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: TextButton(
+                                  ),
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    icon: AppIcons.svg('edit', size: 30),
                                     onPressed: () {
-                                      setState(
-                                        () => _showAllUpcoming =
-                                            !_showAllUpcoming,
-                                      );
+                                      context.push('/herd/edit', extra: cattle);
                                     },
-                                    child: Text(
-                                      _showAllUpcoming
-                                          ? 'Скрыть'
-                                          : 'Показать все (${details.upcomingEvents!.length})',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          // данные
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _infoRowOptional(
+                                  'Бирка',
+                                  tagText,
+                                ), // всегда есть, но ок
+                                _infoRowOptional(
+                                  'Дата рождения',
+                                  birthDateText,
+                                ), // всегда есть
+                                _infoRowOptional(
+                                  'Возраст',
+                                  ageText,
+                                ), // всегда есть
+                                _infoRowOptional(
+                                  'Категория',
+                                  _categoryTitle(category),
+                                ),
+                                _infoRowOptional('Порода', details?.breed),
+                                _infoRowOptional(
+                                  'Группа',
+                                  details?.animalGroup,
+                                ),
+                                _healthInfoRowOptional(
+                                  'Состояние здоровья',
+                                  healthText,
+                                ),
+
+                                // ---- для коровы / тёлки (как на макете) ----
+                                if (isCow) ...[
+                                  _infoRowMilkOptional(
+                                    'Последний надой\n(л/день)',
+                                    details?.lastMilkYield,
+                                  ),
+                                  _infoRowDateOptional(
+                                    'Дата последнего\nнадоя',
+                                    details?.lastMilkYieldDate,
+                                  ),
+                                  _infoRowMilkOptional(
+                                    'Средний надой\nза 7 дней',
+                                    details?.averageMilkYield7Days,
+                                  ),
+                                  _infoRowMilkOptional(
+                                    'Средний надой\nза 30 дней',
+                                    details?.averageMilkYield30Days,
+                                  ),
+                                  _infoRowMilkOptional(
+                                    'Пик надоя\n(текущая лактация)',
+                                    details?.peakMilkYieldCurrentLactation,
+                                  ),
+                                  _infoRowMilkOptional(
+                                    'Всего молока\n(текущая лактация)',
+                                    details?.totalMilkCurrentLactation,
+                                  ),
+                                  _infoRowDateOptional(
+                                    'Последний отел',
+                                    details?.lastCalvingDate,
+                                  ),
+                                  _infoRowDateOptional(
+                                    'Последнее\nосеменение',
+                                    details?.lastInseminationDate,
+                                  ),
+
+                                  // эти показываем только если реально есть bool/state
+                                  if (details?.isPregnant != null)
+                                    _infoRowOptional(
+                                      'Беременность',
+                                      pregnancyLabel(details?.isPregnant),
+                                    ),
+
+                                  _infoRowOptional(
+                                    'Репродуктивный статус',
+                                    (details?.reproductiveState == null)
+                                        ? null
+                                        : reproductiveLabel(
+                                            details?.reproductiveState,
+                                          ),
+                                  ),
+                                  _infoRowOptional(
+                                    'Производственный статус',
+                                    (details?.productionState == null)
+                                        ? null
+                                        : productionLabel(
+                                            details?.productionState,
+                                          ),
+                                  ),
+                                ],
+
+                                if (isHeifer) ...[
+                                  _infoRowDateOptional(
+                                    'Первое\nосеменение',
+                                    details?.firstInseminationDate,
+                                  ),
+                                  _infoRowDateOptional(
+                                    'Планируемая дата\nотела',
+                                    details?.expectedCalvingDate,
+                                  ),
+
+                                  if (details?.isPregnant != null)
+                                    _infoRowOptional(
+                                      'Беременность',
+                                      pregnancyLabel(details?.isPregnant),
+                                    ),
+
+                                  _infoRowOptional(
+                                    'Репродуктивный статус',
+                                    (details?.reproductiveState == null)
+                                        ? null
+                                        : reproductiveLabel(
+                                            details?.reproductiveState,
+                                          ),
+                                  ),
+                                ],
+
+                                // ---- для быка ----
+                                if (isBull) ...[
+                                  _infoRowOptional(
+                                    'Назначение',
+                                    details?.bullPurpose?.display,
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          // блок с двумя кнопками - внутри той же карточки
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: SmallActionCard(
+                                    title: 'Действия',
+                                    subtitle: 'Доп. информация',
+                                    icon: AppIcons.svg('actions', size: 26),
+                                    onTap: () {
+                                      // TODO
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: SmallActionCard(
+                                    title: 'Рацион   ',
+                                    subtitle: 'Выберите рацион',
+                                    icon: AppIcons.svg('diet', size: 26),
+                                    onTap: () => context.push(
+                                      '/rations',
+                                      extra: {
+                                        'category': category,
+                                        'productionState':
+                                            details?.productionState,
+                                      },
                                     ),
                                   ),
                                 ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
 
-                      // Молочная продуктивность коровы (как журнал событий)
-                      if (isCow)
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          child: _MilkProductivityPreview(
-                            cattleId: cattle.id,
-                            cattleTagNumber: cattle.tagNumber,
-                            onAddPressed: () async {
-                              final res = await context.push<bool>(
-                                '/herd/${cattle.id}/lactation/add',
-                                extra: {
-                                  'cattleId': cattle.id,
-                                  'cattleTagNumber': cattle.tagNumber,
+                          const SizedBox(height: 8),
+
+                          // Журнал событий - тоже внутри той же карточки
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                            child: CattleEventsPreview(
+                              cattleId: cattle.id,
+                              onAddPressed: () async {
+                                final res = await context.push<bool>(
+                                  '/herd/${cattle.id}/events/add',
+                                );
+
+                                if (res == true) {
+                                  ref.invalidate(
+                                    cattleEventsPreviewProvider(cattle.id),
+                                  );
+                                  ref.invalidate(
+                                    cattleDetailsProvider(cattle.id),
+                                  );
+                                  ref.invalidate(cattleByIdProvider(cattle.id));
+                                  ref.invalidate(cattleListProvider);
+                                  ref.invalidate(cattleStatisticsProvider);
+                                }
+                              },
+                            ),
+                          ),
+
+                          if ((details?.upcomingEvents?.isNotEmpty ?? false))
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 12),
+                                  const Text(
+                                    'Ближайшие события',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.primary3,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+
+                                  // список (1 или все)
+                                  ...(() {
+                                    final upcomingAll = details!.upcomingEvents!
+                                        .where(
+                                          (e) => !_completedUpcomingIds
+                                              .contains(e.id),
+                                        )
+                                        .toList();
+
+                                    final visible = _showAllUpcoming
+                                        ? upcomingAll
+                                        : upcomingAll.take(1);
+
+                                    return visible.map((e) {
+                                      final date = e.plannedDate == null
+                                          ? '—'
+                                          : DateFormat(
+                                              'dd.MM.yyyy',
+                                            ).format(e.plannedDate!);
+
+                                      final left = e.daysUntil == null
+                                          ? ''
+                                          : 'через ${e.daysUntil} дн';
+
+                                      final eventId = e.id; // int?
+
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8,
+                                        ),
+                                        child: Dismissible(
+                                          key: ValueKey('upcoming_$eventId'),
+                                          direction:
+                                              DismissDirection.startToEnd,
+                                          background: Container(
+                                            alignment: Alignment.centerLeft,
+                                            padding: const EdgeInsets.only(
+                                              left: 16,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.success
+                                                  .withOpacity(0.15),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: const Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.check_circle,
+                                                  color: AppColors.success,
+                                                ),
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  'Завершить',
+                                                  style: TextStyle(
+                                                    color: AppColors.primary3,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+
+                                          confirmDismiss: (_) async {
+                                            // 1) подтверждение (по желанию)
+                                            final ok =
+                                                await showDialog<bool>(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder: (ctx) => AlertDialog(
+                                                    title: const Text(
+                                                      'Завершить событие?',
+                                                    ),
+                                                    content: Text(
+                                                      'Отметить "${e.title}" как выполненное?',
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.of(
+                                                              ctx,
+                                                            ).pop(false),
+                                                        child: const Text(
+                                                          'Отмена',
+                                                        ),
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () =>
+                                                            Navigator.of(
+                                                              ctx,
+                                                            ).pop(true),
+                                                        child: const Text(
+                                                          'Завершить',
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ) ??
+                                                false;
+
+                                            if (!ok) return false;
+
+                                            // 2) PATCH до удаления
+                                            try {
+                                              final api = ref.read(
+                                                cattleEventsApiProvider,
+                                              );
+                                              await api.completeEvent(
+                                                eventId: eventId,
+                                              );
+
+                                              // 3) важно: убрать элемент ЛОКАЛЬНО, чтобы Dismissible не ругался
+                                              if (mounted) {
+                                                setState(
+                                                  () => _completedUpcomingIds
+                                                      .add(eventId),
+                                                );
+                                              }
+
+                                              // 4) обновим провайдеры (можно тут, можно в onDismissed)
+                                              ref.invalidate(
+                                                cattleDetailsProvider(
+                                                  cattle.id,
+                                                ),
+                                              );
+                                              ref.invalidate(
+                                                cattleEventsPreviewProvider(
+                                                  cattle.id,
+                                                ),
+                                              );
+
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                      'Событие завершено',
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+
+                                              return true; // теперь можно “dismiss”
+                                            } catch (err) {
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      'Ошибка: $err',
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              return false; // не dismiss
+                                            }
+                                          },
+
+                                          // можно оставить пустым или только invalidate
+                                          onDismissed: (_) {
+                                            ref.invalidate(
+                                              cattleByIdProvider(cattle.id),
+                                            );
+                                            ref.invalidate(cattleListProvider);
+                                            ref.invalidate(
+                                              cattleStatisticsProvider,
+                                            );
+                                          },
+
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                border: Border.all(
+                                                  color: AppColors.additional2,
+                                                ),
+                                                color: const Color(0xFFF9FAFB),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      e.title,
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            AppColors.primary3,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        date,
+                                                        style: const TextStyle(
+                                                          fontSize: 12,
+                                                          color: AppColors
+                                                              .additional3,
+                                                        ),
+                                                      ),
+                                                      if (left.isNotEmpty)
+                                                        Text(
+                                                          left,
+                                                          style: const TextStyle(
+                                                            fontSize: 12,
+                                                            color: AppColors
+                                                                .additional3,
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList();
+                                  })(),
+
+                                  // кнопка показать все/скрыть
+                                  if (details!.upcomingEvents!.length > 1)
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          setState(
+                                            () => _showAllUpcoming =
+                                                !_showAllUpcoming,
+                                          );
+                                        },
+                                        child: Text(
+                                          _showAllUpcoming
+                                              ? 'Скрыть'
+                                              : 'Показать все (${details.upcomingEvents!.length})',
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+
+                          // Молочная продуктивность коровы (как журнал событий)
+                          if (isCow)
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                              child: _MilkProductivityPreview(
+                                cattleId: cattle.id,
+                                cattleTagNumber: cattle.tagNumber,
+                                onAddPressed: () async {
+                                  final res = await context.push<bool>(
+                                    '/herd/${cattle.id}/lactation/add',
+                                    extra: {
+                                      'cattleId': cattle.id,
+                                      'cattleTagNumber': cattle.tagNumber,
+                                    },
+                                  );
+
+                                  if (res == true) {
+                                    // обновляем лактацию по корове
+                                    ref.invalidate(
+                                      lactationsByCattleProvider(cattle.id),
+                                    );
+
+                                    // если бэк обновляет lastMilkYield/детали - можно тоже дернуть
+                                    ref.invalidate(
+                                      cattleDetailsProvider(cattle.id),
+                                    );
+                                  }
                                 },
-                              );
-
-                              if (res == true) {
-                                // обновляем лактацию по корове
-                                ref.invalidate(
-                                  lactationsByCattleProvider(cattle.id),
-                                );
-
-                                // если бэк обновляет lastMilkYield/детали - можно тоже дернуть
-                                ref.invalidate(
-                                  cattleDetailsProvider(cattle.id),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                    ],
-                  ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
 
-        // нижняя фиксированная кнопка "Закрыть"
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: Container(
-            padding: const EdgeInsets.only(top: 12),
-            child: FermerPlusBigButton(
-              text: 'Закрыть',
-              height: 50,
-              borderRadius: 5,
-              onPressed: () => context.pop(),
+            // нижняя фиксированная кнопка "Закрыть"
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Container(
+                padding: const EdgeInsets.only(top: 12),
+                child: FermerPlusBigButton(
+                  text: 'Закрыть',
+                  height: 50,
+                  borderRadius: 5,
+                  onPressed: () => context.pop(),
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (_isDeleting)
+          Positioned.fill(
+            child: AbsorbPointer(
+              absorbing: true,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: 1,
+                child: Container(
+                  color: Colors.black.withOpacity(0.35),
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+              ),
             ),
           ),
-        ),
       ],
     );
   }
