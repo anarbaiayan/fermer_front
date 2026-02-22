@@ -129,7 +129,9 @@ class _HerdScreenState extends ConsumerState<HerdScreen> {
                   }
 
                   if (list.isEmpty) {
-                    return const Center(child: HerdEmptyState());
+                    return const Center(
+                      child: HerdEmptyState(isSearchResult: true),
+                    );
                   }
 
                   // Режим фильтра — просто грид

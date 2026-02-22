@@ -4,47 +4,56 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 class HerdEmptyState extends StatelessWidget {
-  const HerdEmptyState({super.key});
+  final bool isSearchResult; // ← добавить параметр
+  const HerdEmptyState({super.key, this.isSearchResult = false});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(
-            'assets/image/noResult.png',
-            width: 280,
-            fit: BoxFit.contain,
-          ),
-          const SizedBox(height: 25),
-          const Text(
-            'Ваш список пустует',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: AppColors.primary3,
+    return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/image/noResult.png',
+              width: 280,
+              fit: BoxFit.contain,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            'Добавьте первую карточку своего животного',
-            style: TextStyle(fontSize: 14, color: AppColors.primary3),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 55),
-          SizedBox(
-            width: double.infinity,
-            child: FermerPlusBigButton(
-              text: 'Добавить животное',
-              onPressed: () {
-                context.push('/herd/add'); // новый маршрут
-              },
-              height: 50,
+            const SizedBox(height: 25),
+            Text(
+              isSearchResult ? 'Ничего не найдено' : 'Ваш список пустует',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: AppColors.primary3,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            const SizedBox(height: 12),
+            Text(
+              isSearchResult
+                  ? 'Попробуйте изменить запрос'
+                  : 'Добавьте первую карточку своего животного',
+              style: const TextStyle(fontSize: 14, color: AppColors.primary3),
+              textAlign: TextAlign.center,
+            ),
+            if (!isSearchResult) ...[
+              const SizedBox(height: 55),
+              SizedBox(
+                width: double.infinity,
+                child: FermerPlusBigButton(
+                  text: 'Добавить животное',
+                  onPressed: () => context.push('/herd/add'),
+                  height: 50,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
