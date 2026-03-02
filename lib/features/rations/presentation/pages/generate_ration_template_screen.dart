@@ -165,159 +165,185 @@ class _GenerateRationTemplateScreenState
         child: Container(
           color: AppColors.background,
           child: AppPage(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 12),
-
-                // header
-                Row(
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: AppIcons.svg('arrow', size: 32),
-                      onPressed: () => context.pop(false),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+                return SingleChildScrollView(
+                  padding: EdgeInsets.only(bottom: bottomInset),
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
                     ),
-                    const SizedBox(width: 8),
-                    const Expanded(
-                      child: Text(
-                        'Добавить/Редактировать\nрацион',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary3,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 48),
-                  ],
-                ),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 12),
 
-                const SizedBox(height: 18),
-
-                const _Label('Категория скота'),
-                const SizedBox(height: 6),
-                _Dropdown<AnimalCategory>(
-                  value: _category,
-                  items: AnimalCategory.values
-                      .map(
-                        (x) =>
-                            DropdownMenuItem(value: x, child: Text(x.display)),
-                      )
-                      .toList(),
-                  onChanged: (v) {
-                    if (v == null) return;
-                    setState(() {
-                      _category = v;
-                      _syncProductionWithCategory(v);
-                    });
-                  },
-                ),
-
-                const SizedBox(height: 16),
-
-                if (!_shouldHideProduction(_category)) ...[
-                  const SizedBox(height: 16),
-                  const _Label('Период'),
-                  const SizedBox(height: 6),
-                  _Dropdown<ProductionState>(
-                    value: _production,
-                    items: _allowedProductionStates(_category)
-                        .map(
-                          (x) => DropdownMenuItem(
-                            value: x,
-                            child: Text(x.display),
+                          // header
+                          Row(
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                icon: AppIcons.svg('arrow', size: 32),
+                                onPressed: () => context.pop(false),
+                              ),
+                              const SizedBox(width: 8),
+                              const Expanded(
+                                child: Text(
+                                  'Добавить/Редактировать\nрацион',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.primary3,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 48),
+                            ],
                           ),
-                        )
-                        .toList(),
-                    onChanged: (v) {
-                      if (v == null) return;
-                      setState(() => _production = v);
-                    },
-                  ),
-                ],
 
-                const SizedBox(height: 16),
+                          const SizedBox(height: 18),
 
-                const _Label('Норма в день (кг)'),
-                const SizedBox(height: 6),
-                SizedBox(
-                  height: 48,
-                  child: TextField(
-                    controller: _targetCtrl,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    decoration: _decor(hint: 'Укажите норму'),
-                  ),
-                ),
-
-                const Spacer(),
-
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 48,
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFFE9ECEF),
-                              side: BorderSide.none,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                            ),
-                            onPressed: _saving
-                                ? null
-                                : () => context.pop(false),
-                            child: const Text(
-                              'Отменить',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                          const _Label('Категория скота'),
+                          const SizedBox(height: 6),
+                          _Dropdown<AnimalCategory>(
+                            value: _category,
+                            items: AnimalCategory.values
+                                .map(
+                                  (x) => DropdownMenuItem(
+                                    value: x,
+                                    child: Text(x.display),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (v) {
+                              if (v == null) return;
+                              setState(() {
+                                _category = v;
+                                _syncProductionWithCategory(v);
+                              });
+                            },
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: SizedBox(
-                          height: 48,
-                          child: FilledButton(
-                            style: FilledButton.styleFrom(
-                              backgroundColor: AppColors.primary1,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                            ),
-                            onPressed: _saving ? null : _submit,
-                            child: _saving
-                                ? const SizedBox(
-                                    width: 18,
-                                    height: 18,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.white,
+
+                          const SizedBox(height: 16),
+
+                          if (!_shouldHideProduction(_category)) ...[
+                            const SizedBox(height: 16),
+                            const _Label('Период'),
+                            const SizedBox(height: 6),
+                            _Dropdown<ProductionState>(
+                              value: _production,
+                              items: _allowedProductionStates(_category)
+                                  .map(
+                                    (x) => DropdownMenuItem(
+                                      value: x,
+                                      child: Text(x.display),
                                     ),
                                   )
-                                : const Text(
-                                    'Сохранить',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
+                                  .toList(),
+                              onChanged: (v) {
+                                if (v == null) return;
+                                setState(() => _production = v);
+                              },
+                            ),
+                          ],
+
+                          const SizedBox(height: 16),
+
+                          const _Label('Норма в день (кг)'),
+                          const SizedBox(height: 6),
+                          SizedBox(
+                            height: 48,
+                            child: TextField(
+                              controller: _targetCtrl,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
+                              decoration: _decor(hint: 'Укажите норму'),
+                            ),
+                          ),
+
+                          const Spacer(),
+
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 48,
+                                    child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        backgroundColor: const Color(
+                                          0xFFE9ECEF,
+                                        ),
+                                        side: BorderSide.none,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            24,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: _saving
+                                          ? null
+                                          : () => context.pop(false),
+                                      child: const Text(
+                                        'Отменить',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                     ),
                                   ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 48,
+                                    child: FilledButton(
+                                      style: FilledButton.styleFrom(
+                                        backgroundColor: AppColors.primary1,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            24,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: _saving ? null : _submit,
+                                      child: _saving
+                                          ? const SizedBox(
+                                              width: 18,
+                                              height: 18,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : const Text(
+                                              'Сохранить',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                );
+              },
             ),
           ),
         ),
