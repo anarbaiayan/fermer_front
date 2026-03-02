@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/app_logo.dart';
+import 'package:frontend/core/widgets/app_primary_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
-import 'package:frontend/core/widgets/app_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 
@@ -45,7 +46,6 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
   void _onChanged(int i, String v) {
     if (v.isEmpty) return;
 
-    // если вставили сразу много символов (бывает на некоторых клавиатурах)
     if (v.length > 1) {
       _applyPasted(v);
       return;
@@ -62,7 +62,6 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
   KeyEventResult _onKey(int i, KeyEvent e) {
     if (e is! KeyDownEvent) return KeyEventResult.ignored;
 
-    // backspace - перейти назад, если текущее пустое
     if (e.logicalKey == LogicalKeyboardKey.backspace) {
       if (_c[i].text.isEmpty && i > 0) {
         _f[i - 1].requestFocus();
@@ -79,8 +78,7 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const borderColor = Color(0xFFCBD5E1); // как на макете
-    const dotColor = Color(0xFF6B7280); // цвет точек
+    const dotColor = Color(0xFF6B7280);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -90,17 +88,7 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
             padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
             children: [
               const SizedBox(height: 6),
-              const Center(
-                child: Text(
-                  'FERMER +',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary1,
-                  ),
-                ),
-              ),
+              const AppLogo(height: 40),
               const SizedBox(height: 28),
 
               const Text(
@@ -123,7 +111,7 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
 
               const SizedBox(height: 32),
 
-              // OTP row - строго по центру
+              // OTP row
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -150,7 +138,7 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
                             obscureText: true,
                             obscuringCharacter: '●',
                             style: const TextStyle(
-                              fontSize: 30, // размер точки
+                              fontSize: 30,
                               height: 1.1,
                               fontWeight: FontWeight.w700,
                               color: dotColor,
@@ -158,21 +146,20 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
                             decoration: InputDecoration(
                               counterText: '',
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: const Color.fromARGB(
+                                255,
+                                239,
+                                239,
+                                239,
+                              ),
                               contentPadding: EdgeInsets.zero,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  color: borderColor,
-                                  width: 1,
-                                ),
+                                borderSide: BorderSide.none,
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  color: borderColor,
-                                  width: 1,
-                                ),
+                                borderSide: BorderSide.none,
                               ),
                             ),
                             onChanged: (v) => _onChanged(i, v),
@@ -186,10 +173,8 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
 
               const SizedBox(height: 32),
 
-              FermerPlusBigButton(
+              AppPrimaryButton(
                 text: 'Сбросить пароль',
-                height: 50,
-                borderRadius: 6,
                 onPressed: () {
                   context.push(
                     '/forgot-password/new',

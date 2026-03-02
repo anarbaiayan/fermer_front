@@ -26,14 +26,10 @@ class FermerPlusAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
       ),
-      title: const Text(
-        'FERMER+',
-        style: TextStyle(
-          fontFamily: 'Montserrat',
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
+      title: Image.asset(
+        'assets/icons/logo_white.png',
+        height: 28,
+        fit: BoxFit.contain,
       ),
       actions: [
         if (showBell)

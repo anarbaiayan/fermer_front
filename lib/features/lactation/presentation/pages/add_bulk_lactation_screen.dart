@@ -199,22 +199,26 @@ class _AddBulkLactationScreenState
   InputDecoration _inputDecoration({String? hint, Widget? prefixIcon}) {
     return InputDecoration(
       hintText: hint,
+      hintStyle: TextStyle(
+        fontSize: 14,
+        color: const Color.fromARGB(255, 95, 95, 95),
+      ),
       prefixIcon: prefixIcon,
       prefixIconConstraints: const BoxConstraints(minWidth: 42, minHeight: 42),
       filled: true,
-      fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      fillColor: const Color.fromARGB(255, 239, 239, 239),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.additional2),
+        borderRadius: BorderRadius.circular(40),
+        borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.additional2),
+        borderRadius: BorderRadius.circular(40),
+        borderSide: BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.success),
+        borderRadius: BorderRadius.circular(40),
+        borderSide: BorderSide.none,
       ),
     );
   }
@@ -430,7 +434,7 @@ class _AddBulkLactationScreenState
                                         side: BorderSide.none,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
-                                            6,
+                                            24,
                                           ),
                                         ),
                                       ),
@@ -456,7 +460,7 @@ class _AddBulkLactationScreenState
                                         backgroundColor: AppColors.primary1,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
-                                            6,
+                                            24,
                                           ),
                                         ),
                                       ),
@@ -529,11 +533,10 @@ class _DropdownField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: AppColors.success),
-        color: Colors.white,
+        borderRadius: BorderRadius.circular(40),
+        color: const Color.fromARGB(255, 239, 239, 239),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(

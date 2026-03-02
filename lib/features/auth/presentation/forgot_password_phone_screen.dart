@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/app_logo.dart';
+import 'package:frontend/core/widgets/app_text_field.dart';
+import 'package:frontend/core/widgets/app_primary_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
-import 'package:frontend/core/widgets/app_button.dart';
 import 'package:go_router/go_router.dart';
 
 class ForgotPasswordPhoneScreen extends StatefulWidget {
@@ -32,17 +34,7 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
             children: [
               const SizedBox(height: 6),
 
-              const Center(
-                child: Text(
-                  'FERMER +',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary1,
-                  ),
-                ),
-              ),
+              const AppLogo(height: 40),
 
               const SizedBox(height: 28),
 
@@ -66,52 +58,18 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
 
               const SizedBox(height: 20),
 
-              const Text(
-                'Номер телефона',
-                style: TextStyle(
-                  fontSize: 16 ,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.primary3,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              TextField(
+              AppTextField(
+                label: 'Номер телефона',
+                hintText: '+7 7xx xxx xx xx',
                 controller: _phoneCtrl,
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  hintText: '+7 7xx xxx xx xx',
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 14,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.success,
-                      width: 1,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.success,
-                      width: 1.2,
-                    ),
-                  ),
-                ),
               ),
 
               const SizedBox(height: 16),
 
-              FermerPlusBigButton(
+              AppPrimaryButton(
                 text: 'Получить код',
-                height: 50,
-                borderRadius: 6,
                 onPressed: () {
-                  // пока без бэка - просто идем дальше
                   context.push(
                     '/forgot-password/code',
                     extra: _phoneCtrl.text.trim(),

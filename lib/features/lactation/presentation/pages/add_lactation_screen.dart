@@ -248,6 +248,10 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                               onTap: _pickDate,
                               decoration: InputDecoration(
                                 hintText: '31.12.2025',
+                                hintStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: const Color.fromARGB(255, 95, 95, 95),
+                                ),
                                 prefixIcon: Padding(
                                   padding: const EdgeInsets.only(
                                     left: 12,
@@ -264,28 +268,27 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                                   minHeight: 42,
                                 ),
                                 filled: true,
-                                fillColor: Colors.white,
+                                fillColor: const Color.fromARGB(
+                                  255,
+                                  239,
+                                  239,
+                                  239,
+                                ),
                                 contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 12,
+                                  horizontal: 20,
+                                  vertical: 16,
                                 ),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.additional2,
-                                  ),
+                                  borderRadius: BorderRadius.circular(40),
+                                  borderSide: BorderSide.none,
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.additional2,
-                                  ),
+                                  borderRadius: BorderRadius.circular(40),
+                                  borderSide: BorderSide.none,
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.success,
-                                  ),
+                                  borderRadius: BorderRadius.circular(40),
+                                  borderSide: BorderSide.none,
                                 ),
                               ),
                             ),
@@ -301,6 +304,10 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                               onTap: _pickTime,
                               decoration: InputDecoration(
                                 hintText: '06:30',
+                                hintStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: const Color.fromARGB(255, 95, 95, 95),
+                                ),
                                 prefixIcon: const Padding(
                                   padding: EdgeInsets.only(left: 12, right: 8),
                                   child: Icon(
@@ -314,28 +321,27 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                                   minHeight: 42,
                                 ),
                                 filled: true,
-                                fillColor: Colors.white,
+                                fillColor: const Color.fromARGB(
+                                  255,
+                                  239,
+                                  239,
+                                  239,
+                                ),
                                 contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 12,
+                                  horizontal: 20,
+                                  vertical: 16,
                                 ),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.additional2,
-                                  ),
+                                  borderRadius: BorderRadius.circular(40),
+                                  borderSide: BorderSide.none,
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.additional2,
-                                  ),
+                                  borderRadius: BorderRadius.circular(40),
+                                  borderSide: BorderSide.none,
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.success,
-                                  ),
+                                  borderRadius: BorderRadius.circular(40),
+                                  borderSide: BorderSide.none,
                                 ),
                               ),
                             ),
@@ -407,7 +413,7 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                                         side: BorderSide.none,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
-                                            6,
+                                            24,
                                           ),
                                         ),
                                       ),
@@ -433,7 +439,7 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                                         backgroundColor: AppColors.primary1,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
-                                            6,
+                                            24,
                                           ),
                                         ),
                                       ),
@@ -506,11 +512,10 @@ class _DropdownField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: AppColors.success),
-        color: Colors.white,
+        borderRadius: BorderRadius.circular(40),
+        color: const Color.fromARGB(255, 239, 239, 239),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
@@ -547,23 +552,27 @@ class _TextField extends StatelessWidget {
         keyboardType: keyboardType,
         decoration: InputDecoration(
           hintText: hint.isEmpty ? null : hint,
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: const Color.fromARGB(255, 95, 95, 95),
+          ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: const Color.fromARGB(255, 239, 239, 239),
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 14,
+            horizontal: 20,
+            vertical: 16,
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
-            borderSide: const BorderSide(color: AppColors.additional2),
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide.none,
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
-            borderSide: const BorderSide(color: AppColors.additional2),
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide.none,
           ),
           disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
-            borderSide: const BorderSide(color: AppColors.additional2),
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide.none,
           ),
         ),
       ),

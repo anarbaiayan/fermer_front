@@ -163,22 +163,26 @@ class _AddBulkCattleEventScreenState
   InputDecoration _dec({required String hint, Widget? prefixIcon}) {
     return InputDecoration(
       hintText: hint,
+      hintStyle: TextStyle(
+        fontSize: 14,
+        color: const Color.fromARGB(255, 95, 95, 95),
+      ),
       prefixIcon: prefixIcon,
       prefixIconConstraints: const BoxConstraints(minWidth: 42, minHeight: 42),
       filled: true,
-      fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      fillColor: const Color.fromARGB(255, 239, 239, 239),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.additional2),
+        borderRadius: BorderRadius.circular(40),
+        borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.additional2),
+        borderRadius: BorderRadius.circular(40),
+        borderSide: BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-        borderSide: const BorderSide(color: AppColors.success),
+        borderRadius: BorderRadius.circular(40),
+        borderSide: BorderSide.none,
       ),
     );
   }
@@ -516,13 +520,16 @@ class _AddBulkCattleEventScreenState
                                   ? null
                                   : _openSelectCattleSheet,
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(
-                                  color: AppColors.additional2,
-                                ),
+                                side: BorderSide.none,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6),
+                                  borderRadius: BorderRadius.circular(40),
                                 ),
-                                backgroundColor: Colors.white,
+                                backgroundColor: const Color.fromARGB(
+                                  255,
+                                  239,
+                                  239,
+                                  239,
+                                ),
                               ),
                               child: Row(
                                 children: [
@@ -770,7 +777,7 @@ class _AddBulkCattleEventScreenState
                                     color: Color(0xFFF3F4F6),
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
+                                    borderRadius: BorderRadius.circular(24),
                                   ),
                                 ),
                                 child: const Text(
@@ -793,7 +800,7 @@ class _AddBulkCattleEventScreenState
                                   backgroundColor: AppColors.primary1,
                                   foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
+                                    borderRadius: BorderRadius.circular(24),
                                   ),
                                 ),
                                 child: Text(

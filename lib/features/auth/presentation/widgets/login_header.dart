@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_logo.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({super.key});
@@ -9,33 +10,22 @@ class LoginHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Center(
-          child: Text(
-            'FERMER +',
-            style: TextStyle(
-              fontFamily: 'Montserrat',
-              fontSize: 28,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary1,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
+        const AppLogo(height: 40),
+
+        const SizedBox(height: 32),
+
         const Text(
-          'Вход',
+          'ВХОД',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w600,
-            color: AppColors.primary3,
+            color: AppColors.primary1,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           'Введите информацию для входа в личный кабинет',
-          style: TextStyle(
-            fontSize: 14,
-            color: AppColors.authSmallText,
-          ),
+          style: TextStyle(fontSize: 14, color: AppColors.authSmallText),
         ),
       ],
     );

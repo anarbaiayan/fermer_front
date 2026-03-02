@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/app_logo.dart';
+import 'package:frontend/core/widgets/app_text_field.dart';
+import 'package:frontend/core/widgets/app_primary_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
-import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_success_dialog.dart';
 import 'package:go_router/go_router.dart';
 
@@ -45,17 +47,7 @@ class _ForgotPasswordNewPasswordScreenState
             padding: const EdgeInsets.fromLTRB(0, 24, 0, 24),
             children: [
               const SizedBox(height: 6),
-              const Center(
-                child: Text(
-                  'FERMER +',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary1,
-                  ),
-                ),
-              ),
+              const AppLogo(height: 40),
 
               const SizedBox(height: 28),
 
@@ -79,108 +71,44 @@ class _ForgotPasswordNewPasswordScreenState
 
               const SizedBox(height: 32),
 
-              const Text(
-                'Новый пароль',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary3,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              TextField(
+              AppTextField(
+                label: 'Новый пароль',
+                hintText: 'Введите новый пароль',
                 controller: _pass1,
                 obscureText: !_show1,
-                decoration: InputDecoration(
-                  hintText: 'Введите новый пароль',
-                  filled: true,
-                  fillColor: AppColors.background,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 14,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.additional1),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.primary1,
-                      width: 1.2,
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () => setState(() => _show1 = !_show1),
-                    icon: Icon(
-                      _show1 ? Icons.visibility_off : Icons.visibility,
-                    ),
-                    color: AppColors.additional3,
-                  ),
+                suffixIcon: IconButton(
+                  onPressed: () => setState(() => _show1 = !_show1),
+                  icon: Icon(_show1 ? Icons.visibility_off : Icons.visibility),
+                  color: AppColors.additional3,
                 ),
               ),
 
               const SizedBox(height: 14),
 
-              const Text(
-                'Подтверждение пароля',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary3,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              TextField(
+              AppTextField(
+                label: 'Подтверждение пароля',
+                hintText: 'Введите пароль повторно',
                 controller: _pass2,
                 obscureText: !_show2,
-                decoration: InputDecoration(
-                  hintText: 'Введите пароль повторно',
-                  filled: true,
-                  fillColor: AppColors.background,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 14,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.additional1),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.primary1,
-                      width: 1.2,
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () => setState(() => _show2 = !_show2),
-                    icon: Icon(
-                      _show2 ? Icons.visibility_off : Icons.visibility,
-                    ),
-                    color: AppColors.additional3,
-                  ),
+                suffixIcon: IconButton(
+                  onPressed: () => setState(() => _show2 = !_show2),
+                  icon: Icon(_show2 ? Icons.visibility_off : Icons.visibility),
+                  color: AppColors.additional3,
                 ),
               ),
 
               const SizedBox(height: 18),
 
-              FermerPlusBigButton(
+              AppPrimaryButton(
                 text: 'Установить пароль',
-                height: 50,
-                borderRadius: 6,
                 onPressed: () async {
-                  // пока без бэка: просто вернем на login
                   await showAppSuccessDialog(
                     context,
                     title: 'Новый пароль успешно\nустановлен!',
-                    iconAsset:
-                        'assets/icons/user-success.svg', // если у тебя уже есть
+                    iconAsset: 'assets/icons/user-success.svg',
                     buttonText: 'Войти в Fermer +',
                     iconHeight: 111,
-                    iconWidth: 111
+                    iconWidth: 111,
                   );
 
                   if (!context.mounted) return;

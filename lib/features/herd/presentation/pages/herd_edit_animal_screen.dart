@@ -346,7 +346,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                                     color: AppColors.additional2,
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                                    borderRadius: BorderRadius.circular(24),
                                   ),
                                   backgroundColor: const Color.fromRGBO(
                                     213,
@@ -370,7 +370,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                               child: FermerPlusBigButton(
                                 fontSize: 14,
                                 height: 50,
-                                borderRadius: 5,
+                                borderRadius: 24,
                                 text: _isLoading ? 'Сохранение...' : 'Далее',
                                 onPressed: _isLoading ? () {} : _onNext,
                               ),

@@ -471,7 +471,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 width: 56,
                 height: 56,
                 child: FloatingActionButton(
-                  backgroundColor: const Color(0xFF1F4E3B), // как на скрине
+                  backgroundColor: AppColors.primary1, // как на скрине
                   shape: const CircleBorder(),
                   onPressed: () {
                     context.go('/events/bulk/add');

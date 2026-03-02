@@ -228,7 +228,7 @@ class RationsScreen extends ConsumerWidget {
                     width: 56,
                     height: 56,
                     child: FloatingActionButton(
-                      backgroundColor: const Color(0xFF1F4E3B),
+                      backgroundColor: AppColors.primary1,
                       shape: const CircleBorder(),
                       onPressed: () {
                         context.push('/rations/generate');

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/app_logo.dart';
 
 class RegisterHeader extends StatelessWidget {
   const RegisterHeader({super.key});
@@ -13,18 +14,8 @@ class RegisterHeader extends StatelessWidget {
       children: [
         const SizedBox(height: 20),
 
-        // ----- FERMER + -----
-        const Center(
-          child: Text(
-            'FERMER +',
-            style: TextStyle(
-              fontFamily: 'Montserrat',
-              fontSize: 28,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary1,
-            ),
-          ),
-        ),
+        // ----- Logo -----
+        const AppLogo(height: 40),
 
         const SizedBox(height: 16),
 

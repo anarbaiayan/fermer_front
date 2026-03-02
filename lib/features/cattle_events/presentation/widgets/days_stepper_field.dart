@@ -43,7 +43,7 @@ class DaysStepperField extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: AppColors.additional2),
               ),
               child: Text(

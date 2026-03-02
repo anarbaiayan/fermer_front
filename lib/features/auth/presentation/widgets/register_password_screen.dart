@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/app_text_field.dart';
+import 'package:frontend/core/widgets/app_primary_button.dart';
 import 'package:frontend/core/widgets/app_success_dialog.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_header.dart';
@@ -44,7 +46,7 @@ class RegisterStep2Screen extends HookConsumerWidget {
       phoneError.value = null;
       passwordError.value = null;
 
-      final unmasked = phoneFormatter.getUnmaskedText(); // 7064078385 и т.п.
+      final unmasked = phoneFormatter.getUnmaskedText();
       if (unmasked.length != 10) {
         phoneError.value = 'Введите корректный номер телефона';
         return;
@@ -97,7 +99,6 @@ class RegisterStep2Screen extends HookConsumerWidget {
           context.go('/home');
         }
       } else if (newState.error != null && context.mounted) {
-        // дополнительно покажем Snackbar с ошибкой сервера
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(newState.error!)));
@@ -135,148 +136,70 @@ class RegisterStep2Screen extends HookConsumerWidget {
                       const SizedBox(height: 32),
 
                       // -------- Телефон --------
-                      const Text(
-                        'Номер телефона',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primary3,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextField(
+                      AppTextField(
+                        label: 'Номер телефона',
+                        hintText: 'Введите номер',
                         controller: phoneController,
                         keyboardType: TextInputType.phone,
                         inputFormatters: <TextInputFormatter>[phoneFormatter],
-                        decoration: _outlinedInputDecoration(
-                          hintText: 'Введите номер',
-                          // если глобальная ошибка, тоже подсветим поле
-                          hasError: phoneError.value != null || hasGlobalError,
-                        ),
+                        errorText: phoneError.value,
                       ),
-                      if (phoneError.value != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          phoneError.value!,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: AppColors.error,
-                          ),
-                        ),
-                      ],
 
                       const SizedBox(height: 16),
 
                       // -------- Пароль --------
-                      const Text(
-                        'Пароль',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primary3,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextField(
+                      AppTextField(
+                        label: 'Пароль',
+                        hintText: 'Введите пароль',
                         controller: passwordController,
                         obscureText: !passwordVisible.value,
-                        decoration: _outlinedInputDecoration(
-                          hintText: 'Введите пароль',
-                          hasError:
-                              passwordError.value != null || hasGlobalError,
-                          suffixIcon: IconButton(
-                            onPressed: () =>
-                                passwordVisible.value = !passwordVisible.value,
-                            icon: Icon(
-                              passwordVisible.value
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              size: 20,
-                              color: AppColors.additional3,
-                            ),
+                        suffixIcon: IconButton(
+                          onPressed: () =>
+                              passwordVisible.value = !passwordVisible.value,
+                          icon: Icon(
+                            passwordVisible.value
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            size: 20,
+                            color: AppColors.additional3,
                           ),
                         ),
+                        errorText: passwordError.value != null || hasGlobalError
+                            ? (passwordError.value ??
+                                  authState.error ??
+                                  'Ошибка регистрации. Попробуйте снова.')
+                            : null,
                       ),
 
                       const SizedBox(height: 16),
 
                       // -------- Подтверждение пароля --------
-                      const Text(
-                        'Подтверждение пароля',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primary3,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextField(
+                      AppTextField(
+                        label: 'Подтверждение пароля',
+                        hintText: 'Введите пароль повторно',
                         controller: confirmController,
                         obscureText: !confirmVisible.value,
-                        decoration: _outlinedInputDecoration(
-                          hintText: 'Введите пароль повторно',
-                          hasError:
-                              passwordError.value != null || hasGlobalError,
-                          suffixIcon: IconButton(
-                            onPressed: () =>
-                                confirmVisible.value = !confirmVisible.value,
-                            icon: Icon(
-                              confirmVisible.value
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              size: 20,
-                              color: AppColors.additional3,
-                            ),
+                        suffixIcon: IconButton(
+                          onPressed: () =>
+                              confirmVisible.value = !confirmVisible.value,
+                          icon: Icon(
+                            confirmVisible.value
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            size: 20,
+                            color: AppColors.additional3,
                           ),
                         ),
                       ),
-
-                      // локальная ошибка пароля ИЛИ серверная
-                      if (passwordError.value != null || hasGlobalError) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          passwordError.value ??
-                              authState.error ??
-                              'Ошибка регистрации. Попробуйте снова.',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: AppColors.error,
-                          ),
-                        ),
-                      ],
 
                       const SizedBox(height: 32),
 
-                      SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: AppColors.primary1,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          onPressed: authState.isLoading
-                              ? null
-                              : () => onRegisterPressed(),
-                          child: authState.isLoading
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text(
-                                  'Зарегистрироваться',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                        ),
+                      AppPrimaryButton(
+                        text: 'ЗАРЕГИСТРИРОВАТЬСЯ',
+                        isLoading: authState.isLoading,
+                        onPressed: authState.isLoading
+                            ? null
+                            : () => onRegisterPressed(),
                       ),
                     ],
                   ),
@@ -284,33 +207,6 @@ class RegisterStep2Screen extends HookConsumerWidget {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  InputDecoration _outlinedInputDecoration({
-    required String hintText,
-    bool hasError = false,
-    Widget? suffixIcon,
-  }) {
-    return InputDecoration(
-      hintText: hintText,
-      isDense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      suffixIcon: suffixIcon,
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(
-          color: hasError ? AppColors.error : AppColors.additional1,
-          width: 1,
-        ),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(
-          color: hasError ? AppColors.error : AppColors.primary1,
-          width: 1.5,
         ),
       ),
     );

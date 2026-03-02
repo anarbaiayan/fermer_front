@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_primary_button.dart';
 import '../application/auth_providers.dart';
 import 'widgets/login_header.dart';
 import 'widgets/login_phone_field.dart';
@@ -107,34 +108,10 @@ class LoginScreen extends HookConsumerWidget {
 
                 const SizedBox(height: 46),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.primary1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    onPressed: authState.isLoading ? null : onLoginPressed,
-                    child: authState.isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            'Войти',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                  ),
+                AppPrimaryButton(
+                  text: 'ВОЙТИ',
+                  isLoading: authState.isLoading,
+                  onPressed: authState.isLoading ? null : onLoginPressed,
                 ),
 
                 const SizedBox(height: 18),

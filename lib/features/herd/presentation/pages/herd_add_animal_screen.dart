@@ -358,7 +358,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                                     color: AppColors.additional2,
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                                    borderRadius: BorderRadius.circular(24),
                                   ),
                                   backgroundColor: const Color.fromRGBO(
                                     213,
@@ -382,7 +382,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                               child: FermerPlusBigButton(
                                 fontSize: 14,
                                 height: 50,
-                                borderRadius: 5,
+                                borderRadius: 24,
                                 text: _isLoading ? 'Создание...' : 'Далее',
                                 onPressed: _isLoading ? () {} : _onNext,
                               ),

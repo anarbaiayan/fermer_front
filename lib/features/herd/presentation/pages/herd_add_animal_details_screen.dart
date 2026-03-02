@@ -282,7 +282,7 @@ class _HerdAddAnimalDetailsScreenState
                                   color: Color(0xFFF3F4F6),
                                 ),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
+                                  borderRadius: BorderRadius.circular(24),
                                 ),
                               ),
                               child: const Text(
@@ -299,7 +299,7 @@ class _HerdAddAnimalDetailsScreenState
                           Expanded(
                             child: FermerPlusBigButton(
                               height: 50,
-                              borderRadius: 5,
+                              borderRadius: 24,
                               fontSize: 14,
                               text: _saving ? 'Сохранение...' : 'Сохранить',
                               onPressed: _saving ? () {} : _save,

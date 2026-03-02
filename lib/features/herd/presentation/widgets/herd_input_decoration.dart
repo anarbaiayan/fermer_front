@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/theme/app_colors.dart';
 
 InputDecoration herdInputDecoration({
   String? hint,
@@ -8,22 +7,26 @@ InputDecoration herdInputDecoration({
 }) {
   return InputDecoration(
     hintText: hint,
+    hintStyle: TextStyle(
+      fontSize: 14,
+      color: const Color.fromARGB(255, 95, 95, 95),
+    ),
     filled: true,
-    fillColor: Colors.white,
-    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    fillColor: const Color.fromARGB(255, 239, 239, 239),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     prefixIcon: prefixIcon,
     suffixIcon: suffixIcon,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(6),
-      borderSide: const BorderSide(color: AppColors.additional2),
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide.none,
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(6),
-      borderSide: const BorderSide(color: AppColors.additional2),
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide.none,
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(6),
-      borderSide: const BorderSide(color: AppColors.success, width: 1),
+      borderRadius: BorderRadius.circular(40),
+      borderSide: BorderSide.none,
     ),
   );
 }

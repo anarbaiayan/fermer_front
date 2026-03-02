@@ -261,36 +261,44 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
                                                     ),
                                                 decoration: InputDecoration(
                                                   hintText: 'кг',
+                                                  hintStyle: TextStyle(
+                                                    fontSize: 14,
+                                                    color: const Color.fromARGB(
+                                                      255,
+                                                      95,
+                                                      95,
+                                                      95,
+                                                    ),
+                                                  ),
                                                   isDense: true,
                                                   filled: true,
-                                                  fillColor: Colors.white,
+                                                  fillColor:
+                                                      const Color.fromARGB(
+                                                        255,
+                                                        239,
+                                                        239,
+                                                        239,
+                                                      ),
                                                   contentPadding:
                                                       const EdgeInsets.symmetric(
-                                                        horizontal: 10,
+                                                        horizontal: 16,
                                                         vertical: 10,
                                                       ),
                                                   border: OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                          8,
+                                                          40,
                                                         ),
-                                                    borderSide:
-                                                        const BorderSide(
-                                                          color: AppColors
-                                                              .additional2,
-                                                        ),
+                                                    borderSide: BorderSide.none,
                                                   ),
                                                   enabledBorder:
                                                       OutlineInputBorder(
                                                         borderRadius:
                                                             BorderRadius.circular(
-                                                              8,
+                                                              40,
                                                             ),
                                                         borderSide:
-                                                            const BorderSide(
-                                                              color: AppColors
-                                                                  .additional2,
-                                                            ),
+                                                            BorderSide.none,
                                                       ),
                                                 ),
                                               ),
@@ -322,7 +330,7 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
                           backgroundColor: const Color(0xFFE9ECEF),
                           side: BorderSide.none,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(24),
                           ),
                         ),
                         onPressed: _saving ? null : () => context.pop(false),
@@ -344,7 +352,7 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
                         style: FilledButton.styleFrom(
                           backgroundColor: AppColors.primary1,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(24),
                           ),
                         ),
                         onPressed: _saving ? null : _submit,

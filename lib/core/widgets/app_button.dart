@@ -70,7 +70,7 @@ class FermerPlusBigButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.height = 48,
-    this.borderRadius = 8,
+    this.borderRadius = 24,
     this.fontSize = 16,
   });
 

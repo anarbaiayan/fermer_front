@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
-import '../../../../../core/theme/app_colors.dart';
 
 class SearchField extends StatelessWidget {
   const SearchField({super.key});
@@ -10,9 +9,8 @@ class SearchField extends StatelessWidget {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.additional2, width: 1),
+        color: const Color.fromARGB(255, 239, 239, 239),
+        borderRadius: BorderRadius.circular(40),
       ),
       child: TextField(
         textAlignVertical: TextAlignVertical.center,
@@ -22,12 +20,16 @@ class SearchField extends StatelessWidget {
 
           prefixIcon: Padding(
             padding: EdgeInsets.all(12),
-            child: AppIcons.svg('search', size: 20)
+            child: AppIcons.svg('search', size: 20),
           ),
 
           prefixIconConstraints: BoxConstraints(minWidth: 44, minHeight: 44),
 
           hintText: 'Поиск скота',
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: const Color.fromARGB(255, 95, 95, 95),
+          ),
           border: InputBorder.none,
         ),
       ),

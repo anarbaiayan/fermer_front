@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/app_text_field.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_steps_indicator.dart';
 import 'package:go_router/go_router.dart';
@@ -65,55 +66,30 @@ class RegisterStep1Screen extends HookWidget {
                     const HerdStepsIndicator(currentStep: 1),
 
                     const SizedBox(height: 32),
+
                     // Имя
-                    const Text(
-                      'Имя',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.primary3,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
+                    AppTextField(
+                      label: 'Имя',
+                      hintText: 'Введите имя',
                       controller: firstNameController,
-                      decoration: _outlinedInputDecoration('Введите имя'),
                     ),
 
                     const SizedBox(height: 16),
 
                     // Фамилия
-                    const Text(
-                      'Фамилия',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.primary3,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
+                    AppTextField(
+                      label: 'Фамилия',
+                      hintText: 'Введите фамилию',
                       controller: lastNameController,
-                      decoration: _outlinedInputDecoration('Введите фамилию'),
                     ),
 
                     const SizedBox(height: 16),
 
                     // Название фермы
-                    const Text(
-                      'Название фермы',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.primary3,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
+                    AppTextField(
+                      label: 'Название фермы',
+                      hintText: 'Введите название фермы',
                       controller: farmNameController,
-                      decoration: _outlinedInputDecoration(
-                        'Введите название фермы',
-                      ),
                     ),
 
                     const SizedBox(height: 32),
@@ -125,7 +101,7 @@ class RegisterStep1Screen extends HookWidget {
                         style: FilledButton.styleFrom(
                           backgroundColor: AppColors.primary1,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(24),
                           ),
                         ),
                         onPressed: onNextPressed,
@@ -151,22 +127,6 @@ class RegisterStep1Screen extends HookWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  InputDecoration _outlinedInputDecoration(String hint) {
-    return InputDecoration(
-      hintText: hint,
-      isDense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.additional1, width: 1),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.primary1, width: 1.5),
       ),
     );
   }
