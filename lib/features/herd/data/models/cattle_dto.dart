@@ -27,6 +27,7 @@ class CattleDto {
   final String? weaningDate;
   // плоские поля из GET /api/cattle/{id}
   final String? breed;
+  final String? breedType;
   final String? animalGroup;
   final String? healthStatus;
   final double? lastWeight;
@@ -63,6 +64,7 @@ class CattleDto {
     this.daysAfterCalving,
     this.weaningDate,
     this.breed,
+    this.breedType,
     this.animalGroup,
     this.healthStatus,
     this.lastWeight,
@@ -100,11 +102,13 @@ class CattleDto {
           json['isDryPeriod'] != null ||
           json['firstInseminationDate'] != null ||
           json['expectedCalvingDate'] != null ||
-          json['bullPurpose'] != null; // <-- ВАЖНО: добавили
+          json['bullPurpose'] != null ||
+          json['breedType'] != null; // <-- ВАЖНО: добавили
 
       if (hasAnyDetailsField) {
         details = CattleDetailsDto(
           breed: json['breed'] as String?,
+          breedType: json['breedType'] as String?,
           animalGroup: json['animalGroup'] as String?,
           healthStatus: json['healthStatus'] as String?,
           lastWeight: (json['lastWeight'] as num?)?.toDouble(),
@@ -138,6 +142,7 @@ class CattleDto {
       details: details, // как было
       // NEW: плоские
       breed: json['breed'] as String?,
+      breedType: json['breedType'] as String?,
       animalGroup: json['animalGroup'] as String?,
       healthStatus: json['healthStatus'] as String?,
       lastWeight: (json['lastWeight'] as num?)?.toDouble(),

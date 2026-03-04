@@ -118,7 +118,11 @@ class _GenerateRationTemplateScreenState
   List<ProductionState> _allowedProductionStates(AnimalCategory c) {
     switch (c) {
       case AnimalCategory.cow:
-        return [ProductionState.lactating, ProductionState.dry];
+        return [
+          ProductionState.lactating,
+          ProductionState.dryPhase1,
+          ProductionState.dryPhase2,
+        ];
       case AnimalCategory.bull:
         return [ProductionState.fattening, ProductionState.breeding];
       case AnimalCategory.calf:

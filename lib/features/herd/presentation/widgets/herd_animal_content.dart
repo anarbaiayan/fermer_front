@@ -146,6 +146,10 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
       switch (raw) {
         case 'LACTATING':
           return 'Лактация';
+        case 'DRY_PHASE_1':
+          return 'Сухостой (фаза 1)';
+        case 'DRY_PHASE_2':
+          return 'Сухостой (фаза 2)';
         case 'DRY':
           return 'Сухостой';
         case 'FATTENING':

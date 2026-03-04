@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../../../core/widgets/app_text_field.dart';
@@ -18,9 +19,11 @@ class LoginPhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return AppTextField(
-      label: 'Номер телефона',
-      hintText: 'Введите номер',
+      label: l10n.loginPhoneLabel,
+      hintText: l10n.loginPhoneHint,
       controller: controller,
       keyboardType: TextInputType.phone,
       inputFormatters: <TextInputFormatter>[formatter],

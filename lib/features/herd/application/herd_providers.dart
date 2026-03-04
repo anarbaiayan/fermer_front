@@ -88,7 +88,10 @@ bool _matchesFilterType({
     case HerdFilterType.lactating:
       return productionState == 'LACTATING';
     case HerdFilterType.dryPeriod:
-      return reproductiveState == 'DRY_PERIOD' || productionState == 'DRY';
+      return reproductiveState == 'DRY_PERIOD' ||
+          productionState == 'DRY' ||
+          productionState == 'DRY_PHASE_1' ||
+          productionState == 'DRY_PHASE_2';
     case HerdFilterType.open:
       return reproductiveState == 'OPEN';
     case HerdFilterType.inseminated:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/auth/session_events.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:frontend/core/router/app_router.dart';
 import 'package:frontend/core/theme/app_theme.dart';
@@ -29,10 +30,10 @@ class FermerPlusApp extends ConsumerWidget {
       locale: const Locale('ru', 'RU'),
       supportedLocales: const [
         Locale('ru', 'RU'),
-        Locale('en', 'US'),
         Locale('kk', 'KZ'),
       ],
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

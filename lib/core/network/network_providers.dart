@@ -6,7 +6,7 @@ import 'auth_interceptor.dart';
 import 'token_repository.dart';
 
 final baseUrlProvider = Provider<String>((ref) {
-  return 'http://45.136.70.121:8888/api';
+  return 'https://fer-mer-plus.ru/api';
 });
 
 BaseOptions _baseOptions(String baseUrl) => BaseOptions(

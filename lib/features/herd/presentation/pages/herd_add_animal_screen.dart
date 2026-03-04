@@ -9,6 +9,7 @@ import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/data/models/cattle_details_dto.dart';
 import 'package:frontend/features/herd/data/models/cattle_mappers.dart';
+import 'package:frontend/features/herd/domain/entities/breed_type.dart';
 import 'package:frontend/features/herd/domain/entities/reproductive_state.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_gender_chip.dart';
 import 'package:frontend/core/widgets/page_header.dart';
@@ -43,6 +44,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
   AnimalGender _gender = AnimalGender.female;
   DateTime? _birthDate;
   String? _categoryText;
+  BreedType? _selectedBreedType;
   bool _isLoading = false;
 
   @override
@@ -136,6 +138,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
         breed: _breedController.text.trim().isEmpty
             ? null
             : _breedController.text.trim(),
+        breedType: _selectedBreedType?.apiValue,
 
         // ✅ ВАЖНО: репродуктивное состояние - только для коровы/телки
         cattleCurrentState: isCowOrHeifer
@@ -330,6 +333,51 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                         HerdTextField(
                           controller: _breedController,
                           hint: 'Введите породу',
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        const Text(
+                          'Тип породы',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primary3,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        DropdownButtonFormField<BreedType>(
+                          value: _selectedBreedType,
+                          decoration: InputDecoration(
+                            hintText: 'Выберите тип породы',
+                            hintStyle: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF9E9E9E),
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFFF3F4F6),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(40),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(40),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          items: BreedType.values.map((type) {
+                            return DropdownMenuItem(
+                              value: type,
+                              child: Text(type.displayName),
+                            );
+                          }).toList(),
+                          onChanged: (v) {
+                            setState(() => _selectedBreedType = v);
+                          },
                         ),
 
                         if (_categoryText != null) ...[

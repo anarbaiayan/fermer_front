@@ -36,6 +36,11 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
+    final req = err.requestOptions;
+    if (req.extra['skipAuth'] == true || req.path.startsWith('/auth/')) {
+      return handler.next(err);
+    }
+
     final status = err.response?.statusCode;
     final alreadyRetried = err.requestOptions.extra['__retried'] == true;
 

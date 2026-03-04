@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_outlined_button.dart';
@@ -8,12 +9,14 @@ class LoginRegisterBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       children: [
-        const Center(
+        Center(
           child: Text(
-            'Ещё нет аккаунта?',
-            style: TextStyle(
+            l10n.loginNoAccount,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: AppColors.primary3,
@@ -23,14 +26,14 @@ class LoginRegisterBlock extends StatelessWidget {
         const SizedBox(height: 4),
         Center(
           child: Text(
-            'Зарегистрируйтесь для использования платформы Fermer+',
+            l10n.loginRegisterHint,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13, color: AppColors.authSmallText),
           ),
         ),
         const SizedBox(height: 22),
         AppOutlinedButton(
-          text: 'Зарегистрироваться',
+          text: l10n.loginRegisterButton,
           onPressed: () => context.push('/register-step1'),
         ),
       ],

@@ -2,6 +2,7 @@ import 'package:frontend/features/herd/data/models/upcoming_event_dto.dart';
 
 class CattleDetailsDto {
   final String? breed;
+  final String? breedType;
   final String? animalGroup;
   final String? healthStatus;
 
@@ -48,6 +49,7 @@ class CattleDetailsDto {
 
   const CattleDetailsDto({
     this.breed,
+    this.breedType,
     this.animalGroup,
     this.healthStatus,
     this.lastWeight,
@@ -88,6 +90,7 @@ class CattleDetailsDto {
 
     return CattleDetailsDto(
       breed: json['breed'] as String?,
+      breedType: json['breedType'] as String?,
       animalGroup: json['animalGroup'] as String?,
       healthStatus: json['healthStatus'] as String?,
       lastWeight: (json['lastWeight'] as num?)?.toDouble(),
@@ -130,6 +133,7 @@ class CattleDetailsDto {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{
       'breed': breed,
+      'breedType': breedType,
       'animalGroup': animalGroup,
       'healthStatus': healthStatus,
       'lastWeight': lastWeight,

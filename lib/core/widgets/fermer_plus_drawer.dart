@@ -4,6 +4,7 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/confirm_dialog.dart';
 import 'package:frontend/features/cattle_events/application/planned_events_providers.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -17,6 +18,8 @@ class FermerPlusDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Drawer(
       backgroundColor: Colors.white,
       elevation: 16,
@@ -47,7 +50,7 @@ class FermerPlusDrawer extends ConsumerWidget {
 
             _DrawerItem(
               icon: 'user',
-              text: 'Профиль',
+              text: l10n.drawerProfile,
               onTap: () {
                 Navigator.of(context).pop();
                 context.push('/profile');
@@ -55,7 +58,7 @@ class FermerPlusDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: 'settings',
-              text: 'Настройки',
+              text: l10n.drawerSettings,
               onTap: () {
                 Navigator.of(context).pop();
                 context.push('/settings');
@@ -63,7 +66,7 @@ class FermerPlusDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: 'questions',
-              text: 'Часто задаваемые\nвопросы',
+              text: l10n.drawerFaq,
               onTap: () {
                 Navigator.of(context).pop();
                 context.push('/faq');
@@ -71,7 +74,7 @@ class FermerPlusDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: 'support',
-              text: 'Служба поддержки',
+              text: l10n.drawerSupport,
               onTap: () {
                 Navigator.of(context).pop();
                 context.push('/support');
@@ -79,7 +82,7 @@ class FermerPlusDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: 'referal',
-              text: 'Реферальная\nпрограмма',
+              text: l10n.drawerReferral,
               onTap: () {
                 Navigator.of(context).pop();
                 context.push('/referral');
@@ -102,6 +105,7 @@ class FermerPlusDrawer extends ConsumerWidget {
 
                   final rootNav = Navigator.of(context, rootNavigator: true);
                   final rootCtx = rootNav.context;
+
                   ref.invalidate(plannedEventsProvider('PENDING'));
                   ref.invalidate(plannedEventsProvider('COMPLETED'));
                   ref.invalidate(cattleListProvider);
@@ -111,10 +115,11 @@ class FermerPlusDrawer extends ConsumerWidget {
 
                   final ok = await showConfirmDialog(
                     context: rootCtx,
-                    title: 'Вы действительно\nхотите выйти из Fermer+?',
+                    title: l10n.drawerLogoutConfirm,
                     iconName: 'power_off',
                     iconColor: AppColors.primary1,
-                    confirmText: 'Выйти',
+                    confirmText: l10n.drawerLogoutButton,
+                    cancelText: l10n.dialogCancel,
                   );
 
                   if (!ok) return;
@@ -133,9 +138,9 @@ class FermerPlusDrawer extends ConsumerWidget {
                       color: const Color(0xFFD74B4B),
                     ),
                     const SizedBox(width: 14),
-                    const Text(
-                      'Выйти с аккаунта',
-                      style: TextStyle(
+                    Text(
+                      l10n.drawerLogout,
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFFD74B4B),

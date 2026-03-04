@@ -12,6 +12,7 @@ import 'package:frontend/features/herd/domain/entities/animal_category_resolver.
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_gender.dart';
+import 'package:frontend/features/herd/domain/entities/breed_type.dart';
 import 'package:frontend/features/herd/domain/entities/health_status.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_gender_chip.dart';
@@ -42,6 +43,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
   AnimalGender _gender = AnimalGender.female;
   DateTime? _birthDate;
   String? _categoryText;
+  BreedType? _selectedBreedType;
 
   bool _isLoading = false;
 
@@ -58,6 +60,8 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
     _gender = c.gender == CattleGender.male
         ? AnimalGender.male
         : AnimalGender.female;
+
+    _selectedBreedType = BreedTypeX.tryParse(c.details?.breedType);
 
     _recalculateCategory();
   }
@@ -171,6 +175,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
         gender: _cattleGender,
         dateOfBirth: _birthDate!,
         breed: details?.breed,
+        breedType: _selectedBreedType?.apiValue,
         animalGroup: details?.animalGroup,
         healthStatus: _mapHealthEnum(details?.healthStatus),
         lastMilkYield: details?.lastMilkYield,
@@ -330,6 +335,51 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                             ),
                           ),
                         ],
+
+                        const SizedBox(height: 24),
+
+                        const Text(
+                          'Тип породы',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primary3,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        DropdownButtonFormField<BreedType>(
+                          value: _selectedBreedType,
+                          decoration: InputDecoration(
+                            hintText: 'Выберите тип породы',
+                            hintStyle: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF9E9E9E),
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFFF3F4F6),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(40),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(40),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          items: BreedType.values.map((type) {
+                            return DropdownMenuItem(
+                              value: type,
+                              child: Text(type.displayName),
+                            );
+                          }).toList(),
+                          onChanged: (v) {
+                            setState(() => _selectedBreedType = v);
+                          },
+                        ),
 
                         const SizedBox(height: 22),
 

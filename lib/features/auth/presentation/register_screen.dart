@@ -5,6 +5,7 @@ import 'package:frontend/features/auth/presentation/widgets/register_header.dart
 import 'package:frontend/features/herd/presentation/widgets/herd_steps_indicator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 import 'widgets/register_flow_models.dart';
 
@@ -13,6 +14,8 @@ class RegisterStep1Screen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final firstNameController = useTextEditingController();
     final lastNameController = useTextEditingController();
     final farmNameController = useTextEditingController();
@@ -23,9 +26,9 @@ class RegisterStep1Screen extends HookWidget {
       final farm = farmNameController.text.trim();
 
       if (first.isEmpty || last.isEmpty || farm.isEmpty) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Заполните все поля')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.registerFillAll)),
+        );
         return;
       }
 
@@ -47,7 +50,6 @@ class RegisterStep1Screen extends HookWidget {
             children: [
               const RegisterHeader(),
 
-              // ----- ВСЁ ОСТАЛЬНОЕ В PADDING -----
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
@@ -55,7 +57,7 @@ class RegisterStep1Screen extends HookWidget {
                   children: [
                     const SizedBox(height: 4),
                     Text(
-                      'Введите информацию для регистрации',
+                      l10n.registerSubtitle,
                       style: TextStyle(
                         fontSize: 14,
                         color: AppColors.authSmallText,
@@ -67,28 +69,25 @@ class RegisterStep1Screen extends HookWidget {
 
                     const SizedBox(height: 32),
 
-                    // Имя
                     AppTextField(
-                      label: 'Имя',
-                      hintText: 'Введите имя',
+                      label: l10n.registerFirstName,
+                      hintText: l10n.registerFirstNameHint,
                       controller: firstNameController,
                     ),
 
                     const SizedBox(height: 16),
 
-                    // Фамилия
                     AppTextField(
-                      label: 'Фамилия',
-                      hintText: 'Введите фамилию',
+                      label: l10n.registerLastName,
+                      hintText: l10n.registerLastNameHint,
                       controller: lastNameController,
                     ),
 
                     const SizedBox(height: 16),
 
-                    // Название фермы
                     AppTextField(
-                      label: 'Название фермы',
-                      hintText: 'Введите название фермы',
+                      label: l10n.registerFarmName,
+                      hintText: l10n.registerFarmNameHint,
                       controller: farmNameController,
                     ),
 
@@ -105,18 +104,18 @@ class RegisterStep1Screen extends HookWidget {
                           ),
                         ),
                         onPressed: onNextPressed,
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Продолжить',
-                              style: TextStyle(
+                              l10n.continueText,
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            SizedBox(width: 6),
-                            Icon(Icons.arrow_forward_rounded, size: 18),
+                            const SizedBox(width: 6),
+                            const Icon(Icons.arrow_forward_rounded, size: 18),
                           ],
                         ),
                       ),

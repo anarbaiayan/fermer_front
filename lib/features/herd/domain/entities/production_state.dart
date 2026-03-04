@@ -1,12 +1,21 @@
-enum ProductionState { lactating, dry, fattening, breeding, unknown }
+enum ProductionState {
+  lactating,
+  dryPhase1,
+  dryPhase2,
+  fattening,
+  breeding,
+  unknown,
+}
 
 extension ProductionStateX on ProductionState {
   String get apiValue {
     switch (this) {
       case ProductionState.lactating:
         return 'LACTATING';
-      case ProductionState.dry:
-        return 'DRY';
+      case ProductionState.dryPhase1:
+        return 'DRY_PHASE_1';
+      case ProductionState.dryPhase2:
+        return 'DRY_PHASE_2';
       case ProductionState.fattening:
         return 'FATTENING';
       case ProductionState.breeding:
@@ -20,8 +29,10 @@ extension ProductionStateX on ProductionState {
     switch (this) {
       case ProductionState.lactating:
         return 'Лактация';
-      case ProductionState.dry:
-        return 'Сухостой';
+      case ProductionState.dryPhase1:
+        return 'Сухостой (фаза 1)';
+      case ProductionState.dryPhase2:
+        return 'Сухостой (фаза 2)';
       case ProductionState.fattening:
         return 'На откорме';
       case ProductionState.breeding:
@@ -35,8 +46,11 @@ extension ProductionStateX on ProductionState {
     switch (raw) {
       case 'LACTATING':
         return ProductionState.lactating;
+      case 'DRY_PHASE_1':
       case 'DRY':
-        return ProductionState.dry;
+        return ProductionState.dryPhase1;
+      case 'DRY_PHASE_2':
+        return ProductionState.dryPhase2;
       case 'FATTENING':
         return ProductionState.fattening;
       case 'BREEDING':

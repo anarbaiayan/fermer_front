@@ -10,6 +10,7 @@ class CattleEditData {
 
   // details
   final String? breed;
+  final String? breedType;
   final String? animalGroup;
   final HealthStatus? healthStatus;
 
@@ -32,6 +33,7 @@ class CattleEditData {
     required this.gender,
     required this.dateOfBirth,
     this.breed,
+    this.breedType,
     this.animalGroup,
     this.healthStatus,
     this.lastWeight,

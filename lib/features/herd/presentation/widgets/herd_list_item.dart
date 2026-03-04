@@ -244,6 +244,10 @@ class HerdListItem extends ConsumerWidget {
     switch (raw) {
       case 'LACTATING':
         return 'Лактация';
+      case 'DRY_PHASE_1':
+        return 'Сухостой (ф.1)';
+      case 'DRY_PHASE_2':
+        return 'Сухостой (ф.2)';
       case 'DRY':
         return 'Сухостой';
       case 'FATTENING':

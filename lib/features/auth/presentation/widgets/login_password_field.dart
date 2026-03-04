@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/app_text_field.dart';
 
@@ -20,14 +21,14 @@ class LoginPasswordField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return AppTextField(
-      label: 'Пароль',
+      label: l10n.loginPasswordLabel,
       hintText: '',
       controller: controller,
       obscureText: !isVisible,
-      errorText: hasError
-          ? (errorText ?? 'Неверный пароль. Попробуйте ввести снова.')
-          : null,
+      errorText: hasError ? (errorText ?? l10n.loginPasswordError) : null,
       suffixIcon: IconButton(
         onPressed: onToggleVisibility,
         icon: Icon(

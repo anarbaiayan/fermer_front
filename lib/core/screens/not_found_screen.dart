@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 class NotFoundScreen extends StatelessWidget {
@@ -6,19 +7,22 @@ class NotFoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Страница не найдена',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            Text(
+              l10n.notFoundTitle,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
             FilledButton(
               onPressed: () => context.go('/home'),
-              child: const Text('Вернуться домой'),
+              child: Text(l10n.notFoundGoHome),
             ),
           ],
         ),

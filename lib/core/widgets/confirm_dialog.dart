@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 class ConfirmDialog extends StatelessWidget {
   final String title;
@@ -18,8 +19,8 @@ class ConfirmDialog extends StatelessWidget {
     required this.title,
     this.iconName,
     this.iconColor,
-    this.confirmText = 'Ок',
-    this.cancelText = 'Отменить',
+    required this.confirmText,
+    required this.cancelText,
     this.confirmColor = const Color(0xFFD74B4B),
     this.confirmTextColor = Colors.white,
   });
@@ -86,9 +87,9 @@ class ConfirmDialog extends StatelessWidget {
                         ),
                       ),
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text(
-                        'Отменить',
-                        style: TextStyle(
+                      child: Text(
+                        cancelText,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: AppColors.primary3,
@@ -111,11 +112,13 @@ Future<bool> showConfirmDialog({
   required String title,
   String? iconName,
   Color? iconColor,
-  String confirmText = 'Ок',
-  String cancelText = 'Отменить',
+  String? confirmText,
+  String? cancelText,
   bool barrierDismissible = true,
   Color confirmColor = const Color(0xFFD74B4B),
 }) async {
+  final l10n = AppLocalizations.of(context)!;
+
   final res = await showDialog<bool>(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -123,8 +126,8 @@ Future<bool> showConfirmDialog({
       title: title,
       iconName: iconName,
       iconColor: iconColor,
-      confirmText: confirmText,
-      cancelText: cancelText,
+      confirmText: confirmText ?? l10n.dialogOk,
+      cancelText: cancelText ?? l10n.dialogCancel,
       confirmColor: confirmColor,
     ),
   );

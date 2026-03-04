@@ -8,6 +8,7 @@ import 'package:frontend/core/widgets/app_success_dialog.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_steps_indicator.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -21,6 +22,7 @@ class RegisterStep2Screen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final authState = ref.watch(authControllerProvider);
 
     final phoneController = useTextEditingController();
@@ -42,13 +44,12 @@ class RegisterStep2Screen extends HookConsumerWidget {
     );
 
     Future<void> onRegisterPressed() async {
-      // очищаем старые локальные ошибки
       phoneError.value = null;
       passwordError.value = null;
 
       final unmasked = phoneFormatter.getUnmaskedText();
       if (unmasked.length != 10) {
-        phoneError.value = 'Введите корректный номер телефона';
+        phoneError.value = l10n.loginPhoneError;
         return;
       }
 
@@ -57,12 +58,12 @@ class RegisterStep2Screen extends HookConsumerWidget {
       final confirm = confirmController.text.trim();
 
       if (pass.length < 6) {
-        passwordError.value = 'Минимум 6 символов';
+        passwordError.value = l10n.registerPasswordMin;
         return;
       }
 
       if (pass != confirm) {
-        passwordError.value = 'Пароли не совпадают';
+        passwordError.value = l10n.registerPasswordsMismatch;
         return;
       }
 
@@ -83,14 +84,13 @@ class RegisterStep2Screen extends HookConsumerWidget {
           context.mounted) {
         await showAppSuccessDialog(
           context,
-          title: 'Вы успешно\nзарегистрировались\nв Fermer+!',
-          message:
-              'Для того, чтобы начать использовать\nприложение, нажмите на кнопку\n"Начать работу"',
+          title: l10n.registerSuccessTitle,
+          message: l10n.registerSuccessMessage,
           iconAsset: 'assets/icons/user-success.svg',
           iconHeight: 111,
           iconWidth: 111,
           onButtonPressed: () {},
-          buttonText: 'Начать работу ',
+          buttonText: l10n.registerSuccessButton,
           buttonIcon: const Icon(Icons.arrow_forward_rounded),
           buttonIconSize: 18,
           buttonIconAfterText: true,
@@ -106,6 +106,12 @@ class RegisterStep2Screen extends HookConsumerWidget {
     }
 
     final hasGlobalError = authState.error != null;
+
+    String? passwordFieldErrorText() {
+      if (passwordError.value != null) return passwordError.value;
+      if (hasGlobalError) return authState.error ?? l10n.registerErrorGeneric;
+      return null;
+    }
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -124,7 +130,7 @@ class RegisterStep2Screen extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Введите информацию для регистрации',
+                        l10n.registerSubtitle,
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColors.authSmallText,
@@ -132,13 +138,12 @@ class RegisterStep2Screen extends HookConsumerWidget {
                       ),
                       const SizedBox(height: 32),
                       const HerdStepsIndicator(currentStep: 2),
-
                       const SizedBox(height: 32),
 
-                      // -------- Телефон --------
+                      // Телефон
                       AppTextField(
-                        label: 'Номер телефона',
-                        hintText: 'Введите номер',
+                        label: l10n.loginPhoneLabel,
+                        hintText: l10n.loginPhoneHint,
                         controller: phoneController,
                         keyboardType: TextInputType.phone,
                         inputFormatters: <TextInputFormatter>[phoneFormatter],
@@ -147,10 +152,10 @@ class RegisterStep2Screen extends HookConsumerWidget {
 
                       const SizedBox(height: 16),
 
-                      // -------- Пароль --------
+                      // Пароль
                       AppTextField(
-                        label: 'Пароль',
-                        hintText: 'Введите пароль',
+                        label: l10n.loginPasswordLabel,
+                        hintText: l10n.forgotPasswordNewHint,
                         controller: passwordController,
                         obscureText: !passwordVisible.value,
                         suffixIcon: IconButton(
@@ -164,19 +169,15 @@ class RegisterStep2Screen extends HookConsumerWidget {
                             color: AppColors.additional3,
                           ),
                         ),
-                        errorText: passwordError.value != null || hasGlobalError
-                            ? (passwordError.value ??
-                                  authState.error ??
-                                  'Ошибка регистрации. Попробуйте снова.')
-                            : null,
+                        errorText: passwordFieldErrorText(),
                       ),
 
                       const SizedBox(height: 16),
 
-                      // -------- Подтверждение пароля --------
+                      // Подтверждение пароля
                       AppTextField(
-                        label: 'Подтверждение пароля',
-                        hintText: 'Введите пароль повторно',
+                        label: l10n.forgotPasswordConfirmLabel,
+                        hintText: l10n.forgotPasswordConfirmHint,
                         controller: confirmController,
                         obscureText: !confirmVisible.value,
                         suffixIcon: IconButton(
@@ -195,7 +196,7 @@ class RegisterStep2Screen extends HookConsumerWidget {
                       const SizedBox(height: 32),
 
                       AppPrimaryButton(
-                        text: 'ЗАРЕГИСТРИРОВАТЬСЯ',
+                        text: l10n.registerButton,
                         isLoading: authState.isLoading,
                         onPressed: authState.isLoading
                             ? null

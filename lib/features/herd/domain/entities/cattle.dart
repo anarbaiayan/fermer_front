@@ -5,6 +5,7 @@ import 'cattle_gender.dart';
 
 class CattleDetails {
   final String? breed;
+  final String? breedType;
   final String? animalGroup;
   final String? healthStatus;
 
@@ -44,6 +45,7 @@ class CattleDetails {
 
   const CattleDetails({
     this.breed,
+    this.breedType,
     this.animalGroup,
     this.healthStatus,
     this.lastWeight,

@@ -14,6 +14,7 @@ Cattle cattleFromDto(CattleDto dto) {
       dto.details ??
       CattleDetailsDto(
         breed: dto.breed,
+        breedType: dto.breedType,
         animalGroup: dto.animalGroup,
         healthStatus: dto.healthStatus,
         lastWeight: dto.lastWeight,
@@ -104,6 +105,7 @@ CattleDetails cattleDetailsFromDto(CattleDetailsDto dto) {
 
   return CattleDetails(
     breed: dto.breed,
+    breedType: dto.breedType,
     animalGroup: dto.animalGroup,
     healthStatus: dto.healthStatus,
 
@@ -161,6 +163,7 @@ CattleDetailsDto detailsToDtoForUpdate(CattleDetails details) {
 
   return CattleDetailsDto(
     breed: details.breed,
+    breedType: details.breedType,
     animalGroup: details.animalGroup,
     healthStatus: details.healthStatus,
 

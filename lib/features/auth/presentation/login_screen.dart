@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frontend/features/cattle_events/application/planned_events_providers.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -20,17 +21,16 @@ class LoginScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
     final authState = ref.watch(authControllerProvider);
 
-    // контроллеры
     final phoneController = useTextEditingController();
     final passwordController = useTextEditingController();
 
-    // локальные состояния
     final passwordVisible = useState(false);
     final phoneError = useState<String?>(null);
 
-    // маска телефона: +7 (###) ###-##-##
     final phoneFormatter = useMemoized(
       () => MaskTextInputFormatter(
         mask: '+7 (###) ###-##-##',
@@ -42,9 +42,9 @@ class LoginScreen extends HookConsumerWidget {
     Future<void> onLoginPressed() async {
       phoneError.value = null;
 
-      final unmasked = phoneFormatter.getUnmaskedText(); // "7064078385"
+      final unmasked = phoneFormatter.getUnmaskedText();
       if (unmasked.length != 10) {
-        phoneError.value = 'Введите корректный номер телефона';
+        phoneError.value = l10n.loginPhoneError;
         return;
       }
 
@@ -52,18 +52,32 @@ class LoginScreen extends HookConsumerWidget {
       final pass = passwordController.text;
       if (pass.isEmpty) return;
 
-      await ref
-          .read(authControllerProvider.notifier)
-          .login(phoneNumber: phone, password: pass);
+      try {
+        await ref
+            .read(authControllerProvider.notifier)
+            .login(phoneNumber: phone, password: pass);
+      } catch (e) {
+        // если notifier всё ещё кидает исключение - не даём упасть приложению
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.errorPrefix(e.toString()))),
+          );
+        }
+        return;
+      }
 
       final newState = ref.read(authControllerProvider);
-      ref.invalidate(plannedEventsProvider('PENDING'));
-      ref.invalidate(plannedEventsProvider('COMPLETED'));
 
       if (newState.tokens != null &&
           newState.error == null &&
           context.mounted) {
+        ref.invalidate(plannedEventsProvider('PENDING'));
+        ref.invalidate(plannedEventsProvider('COMPLETED'));
         context.go('/home');
+      } else if (newState.error != null && context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(newState.error!)));
       }
     }
 
@@ -109,7 +123,7 @@ class LoginScreen extends HookConsumerWidget {
                 const SizedBox(height: 46),
 
                 AppPrimaryButton(
-                  text: 'ВОЙТИ',
+                  text: l10n.loginButton,
                   isLoading: authState.isLoading,
                   onPressed: authState.isLoading ? null : onLoginPressed,
                 ),
