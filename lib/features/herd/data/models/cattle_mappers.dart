@@ -1,4 +1,5 @@
 import 'package:frontend/features/herd/data/models/upcoming_event_dto.dart';
+import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_gender.dart';
@@ -52,6 +53,10 @@ Cattle cattleFromDto(CattleDto dto) {
     gender: CattleGenderX.fromApi(dto.gender),
     dateOfBirth: _dateFmt.parse(dto.dateOfBirth),
     details: hasAny ? cattleDetailsFromDto(detailsDto) : null,
+    category:
+        dto.category == null ? null : AnimalCategoryX.fromApi(dto.category!),
+    ageInMonths: dto.ageInMonths,
+    ageDisplay: dto.ageDisplay,
   );
 }
 

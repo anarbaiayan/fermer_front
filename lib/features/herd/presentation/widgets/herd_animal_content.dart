@@ -160,7 +160,8 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
       gender: cattle.gender,
       dateOfBirth: cattle.dateOfBirth,
     );
-    final category = resolved.category;
+    // Категорию берем с бэкенда, при отсутствии — из локального резолвера.
+    final category = cattle.category ?? resolved.category;
     final isCow = category == AnimalCategory.cow;
     final isHeifer = category == AnimalCategory.heifer;
     final isBull = category == AnimalCategory.bull;

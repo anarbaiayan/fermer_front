@@ -1,6 +1,7 @@
 import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
 import 'package:frontend/features/herd/domain/entities/upcoming_event.dart';
 
+import 'animal_category.dart';
 import 'cattle_gender.dart';
 
 class CattleDetails {
@@ -84,6 +85,15 @@ class Cattle {
   final DateTime dateOfBirth;
   final CattleDetails? details;
 
+  /// Категория животного, приходящая с бэкенда.
+  final AnimalCategory? category;
+
+  /// Возраст в месяцах из бэкенда (если есть).
+  final int? ageInMonths;
+
+  /// Человекочитаемое представление возраста с бэкенда (если есть).
+  final String? ageDisplay;
+
   const Cattle({
     required this.id,
     required this.name,
@@ -91,5 +101,8 @@ class Cattle {
     required this.gender,
     required this.dateOfBirth,
     this.details,
+    this.category,
+    this.ageInMonths,
+    this.ageDisplay,
   });
 }

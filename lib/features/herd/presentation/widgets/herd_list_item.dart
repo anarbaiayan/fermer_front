@@ -27,7 +27,8 @@ class HerdListItem extends ConsumerWidget {
       dateOfBirth: cattle.dateOfBirth,
     );
 
-    final category = resolved.category;
+    // Категорию берем с бэкенда, при отсутствии — из локального резолвера.
+    final category = cattle.category ?? resolved.category;
     final ageText = _formatAge(resolved.ageInMonths);
     final tagText = '#${cattle.tagNumber}';
     final nameText = (cattle.name).trim().isEmpty
