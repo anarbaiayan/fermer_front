@@ -4,21 +4,21 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
+import 'package:frontend/features/herd/domain/entities/animal_category.dart';
+import 'package:frontend/features/herd/domain/entities/production_state.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:frontend/features/herd/domain/entities/animal_category.dart';
-import 'package:frontend/features/herd/domain/entities/production_state.dart';
-
 import '../../application/rations_providers.dart';
+import '../../data/models/cattle_ration_dto.dart';
 
-class RationTemplateDetailsScreen extends ConsumerWidget {
-  final int id;
-  const RationTemplateDetailsScreen({super.key, required this.id});
+class CattleRationDetailsScreen extends ConsumerWidget {
+  final int cattleId;
+  const CattleRationDetailsScreen({super.key, required this.cattleId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final async = ref.watch(rationTemplateByIdProvider(id));
+    final async = ref.watch(cattleRationByCattleProvider(cattleId));
 
     return AppScaffold(
       bottomNavIndex: null,
@@ -37,23 +37,16 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
               error: (e, _) => Center(
                 child: Text('Ошибка: $e', textAlign: TextAlign.center),
               ),
-              data: (t) {
-                final cat = AnimalCategoryX.fromApi(t.animalCategory);
-                final prod = ProductionStateX.fromApi(t.productionState);
+              data: (r) {
+                final cat = AnimalCategoryX.fromApi(r.animalCategory ?? '');
+                final prod = ProductionStateX.fromApi(r.productionState ?? '');
 
-                final statusText = t.isOptimal
+                final statusText = r.isOptimal
                     ? 'Активный'
                     : 'Требует внимания';
-
-                final dailyKg = t.totalDailyKg.toStringAsFixed(0);
-                final dailyCost = t.totalDailyCost.toStringAsFixed(0);
+                final dailyKg = r.totalDailyKg.toStringAsFixed(0);
 
                 final headerColor = _categoryColor(cat);
-
-                final usedItems = t.items.where((it) {
-                  final q = (it.quantityKg as num?) ?? 0;
-                  return q != 0;
-                }).toList();
 
                 return Column(
                   children: [
@@ -63,7 +56,6 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // header row
                             Row(
                               children: [
                                 IconButton(
@@ -91,7 +83,6 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
 
                             const SizedBox(height: 12),
 
-                            // big card
                             Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -111,7 +102,6 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // top gradient header with name
                                   Container(
                                     height: 90,
                                     decoration: BoxDecoration(
@@ -129,7 +119,7 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                                     ),
                                     alignment: Alignment.center,
                                     child: Text(
-                                      t.name,
+                                      r.name ?? '',
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                         fontSize: 22,
@@ -144,7 +134,6 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                                     color: AppColors.additional2,
                                   ),
 
-                                  // section: main info title row
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
@@ -164,13 +153,7 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                                       ),
                                       child: Row(
                                         children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            child: AppIcons.svg(
-                                              'info',
-                                              size: 34,
-                                            ),
-                                          ),
+                                          AppIcons.svg('info', size: 34),
                                           const SizedBox(width: 16),
                                           const Expanded(
                                             child: Text(
@@ -187,7 +170,6 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                                     ),
                                   ),
 
-                                  // main info rows
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
@@ -197,17 +179,19 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                                       children: [
                                         _infoRow('Категория', cat.display),
                                         _infoRow('Период', prod.display),
-                                        _infoRow(
-                                          'Стоимость в день',
-                                          '$dailyCost тг.',
-                                        ),
                                         _infoRow('Статус', statusText),
                                         _infoRow('Норма в день', '$dailyKg кг'),
+                                        if ((r.recommendations ?? '')
+                                            .trim()
+                                            .isNotEmpty)
+                                          _infoRow(
+                                            'Рекомендации',
+                                            r.recommendations!.trim(),
+                                          ),
                                       ],
                                     ),
                                   ),
 
-                                  // section: feeds title row
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
@@ -227,12 +211,9 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                                       ),
                                       child: Row(
                                         children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            child: AppIcons.svg(
-                                              'inventory_card',
-                                              size: 34,
-                                            ),
+                                          AppIcons.svg(
+                                            'inventory_card',
+                                            size: 34,
                                           ),
                                           const SizedBox(width: 12),
                                           const Expanded(
@@ -250,7 +231,6 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                                     ),
                                   ),
 
-                                  // feeds list
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(
                                       12,
@@ -259,13 +239,16 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                                       12,
                                     ),
                                     child: Column(
-                                      children: usedItems.map((it) {
-                                        return _RationFeedTile(item: it);
-                                      }).toList(),
+                                      children: r.items
+                                          .map(
+                                            (it) =>
+                                                _CattleRationFeedTile(item: it),
+                                          )
+                                          .toList(),
                                     ),
                                   ),
 
-                                  if (t.warnings.trim().isNotEmpty)
+                                  if ((r.warnings ?? '').trim().isNotEmpty)
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                         12,
@@ -274,7 +257,7 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
                                         12,
                                       ),
                                       child: Text(
-                                        t.warnings,
+                                        r.warnings!.trim(),
                                         style: const TextStyle(
                                           fontSize: 13,
                                           color: AppColors.warning,
@@ -292,7 +275,6 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
 
                     const SizedBox(height: 12),
 
-                    // bottom fixed button
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: FermerPlusBigButton(
@@ -345,7 +327,6 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
           Expanded(
             child: Text(
               value.trim(),
-              textAlign: TextAlign.left,
               style: const TextStyle(
                 fontSize: 16,
                 color: AppColors.primary3,
@@ -359,25 +340,24 @@ class RationTemplateDetailsScreen extends ConsumerWidget {
   }
 }
 
-class _RationFeedTile extends StatefulWidget {
-  final dynamic
-  item; // если у тебя тип есть (RationTemplateItemDto) - поставь его
-  const _RationFeedTile({required this.item});
+class _CattleRationFeedTile extends StatefulWidget {
+  final CattleRationItemDto item;
+  const _CattleRationFeedTile({required this.item});
 
   @override
-  State<_RationFeedTile> createState() => _RationFeedTileState();
+  State<_CattleRationFeedTile> createState() => _CattleRationFeedTileState();
 }
 
-class _RationFeedTileState extends State<_RationFeedTile> {
+class _CattleRationFeedTileState extends State<_CattleRationFeedTile> {
   bool _open = false;
 
   @override
   Widget build(BuildContext context) {
     final it = widget.item;
 
-    final qty = it.quantityKg.toStringAsFixed(2);
-    final price = it.ration.pricePerKg.toStringAsFixed(0);
-    final cost = it.itemCost.toStringAsFixed(0);
+    final minKg = it.minKg.toStringAsFixed(2);
+    final maxKg = it.maxKg.toStringAsFixed(2);
+    final price = it.pricePerKg.toStringAsFixed(0);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -399,7 +379,7 @@ class _RationFeedTileState extends State<_RationFeedTile> {
                 children: [
                   Expanded(
                     child: Text(
-                      it.ration.name,
+                      it.feedName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -418,24 +398,30 @@ class _RationFeedTileState extends State<_RationFeedTile> {
               ),
             ),
           ),
-
           if (_open) ...[
             _FeedDetailRow(
               icon: AppIcons.svg('weight', size: 18),
-              label: 'Потребность (кг)',
-              value: qty,
+              label: 'Мин (кг)',
+              value: minKg,
             ),
             _FeedDetailRow(
               shaded: true,
-              icon: AppIcons.svg('money', size: 18),
-              label: 'Стоимость (кг/тг)',
-              value: price,
+              icon: AppIcons.svg('weight', size: 18),
+              label: 'Макс (кг)',
+              value: maxKg,
             ),
             _FeedDetailRow(
-              icon: AppIcons.svg('cart', size: 18),
-              label: 'Суточный расход (тг)',
-              value: cost,
+              icon: AppIcons.svg('money', size: 18),
+              label: 'Цена (кг/тг)',
+              value: price,
             ),
+            if ((it.note ?? '').trim().isNotEmpty)
+              _FeedDetailRow(
+                shaded: true,
+                icon: AppIcons.svg('info', size: 18),
+                label: 'Заметка',
+                value: it.note!.trim(),
+              ),
           ],
         ],
       ),
@@ -475,12 +461,15 @@ class _FeedDetailRow extends StatelessWidget {
               ),
             ),
           ),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColors.primary3,
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppColors.primary3,
+              ),
             ),
           ),
         ],

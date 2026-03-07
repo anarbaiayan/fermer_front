@@ -10,6 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../application/rations_providers.dart';
 import '../../data/models/create_user_rations_dto.dart';
 import '../../data/models/ration_catalog_item_dto.dart';
+import '../../data/models/user_ration_dto.dart';
 
 class AddUserRationsScreen extends ConsumerStatefulWidget {
   const AddUserRationsScreen({super.key});
@@ -21,30 +22,21 @@ class AddUserRationsScreen extends ConsumerStatefulWidget {
 
 class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
   final Map<int, bool> _selected = {};
-  final Map<int, TextEditingController> _kgControllers = {};
+
+  // что было выбрано при открытии (нужно для diff)
+  Set<int> _initialSelectedIds = {};
+  // feedId -> userRationId (нужно для delete)
+  Map<int, int> _feedIdToUserRationId = {};
 
   bool _saving = false;
+  bool _prefilled = false;
 
-  // раскрытие секций по типам
   final Map<String, bool> _expanded = {
     'COARSE': true,
     'JUICY': true,
     'CONCENTRATED': true,
     'VITAMINS_SUPPLEMENTS': true,
   };
-
-  @override
-  void dispose() {
-    for (final c in _kgControllers.values) {
-      c.dispose();
-    }
-    super.dispose();
-  }
-
-  double? _parseKg(String s) {
-    final v = s.trim().replaceAll(',', '.');
-    return double.tryParse(v);
-  }
 
   String _typeTitle(String type) {
     switch (type) {
@@ -61,48 +53,84 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
     }
   }
 
-  Future<void> _submit() async {
-    // собрать только выбранное и валидировать кг
-    final Map<int, double> payload = {};
-    for (final entry in _selected.entries) {
-      if (entry.value != true) continue;
-      final id = entry.key;
-      final ctrl = _kgControllers[id];
-      final kg = _parseKg(ctrl?.text ?? '');
-      if (kg == null || kg <= 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Укажите количество кг для выбранных кормов'),
-          ),
-        );
-        return;
-      }
-      payload[id] = kg;
+  void _prefillFromUserRations(List<UserRationDto> userRations) {
+    if (_prefilled) return;
+
+    final selectedIds = <int>{};
+    final map = <int, int>{};
+
+    for (final ur in userRations) {
+      selectedIds.add(ur.ration.id);
+      map[ur.ration.id] = ur.id;
     }
 
-    if (payload.isEmpty) {
+    _initialSelectedIds = selectedIds;
+    _feedIdToUserRationId = map;
+
+    // проставляем чекбоксы
+    for (final id in selectedIds) {
+      _selected[id] = true;
+    }
+
+    _prefilled = true;
+  }
+
+  Future<void> _submit() async {
+    // итоговый выбранный сет
+    final currentSelectedIds = _selected.entries
+        .where((e) => e.value == true)
+        .map((e) => e.key)
+        .toSet();
+
+    if (currentSelectedIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Выберите хотя бы один корм')),
       );
       return;
     }
 
+    // diff
+    final toRemove = _initialSelectedIds.difference(currentSelectedIds);
+    final toAdd = currentSelectedIds.difference(_initialSelectedIds);
+
     setState(() => _saving = true);
+
     try {
-      final create = ref.read(createUserRationsProvider);
-      await create(
-        CreateUserRationsDto(rationQuantity: payload, isAvailable: true),
-      );
+      // 1) удаляем снятые галочки
+      if (toRemove.isNotEmpty) {
+        final del = ref.read(deleteUserRationProvider);
+
+        for (final feedId in toRemove) {
+          final userRationId = _feedIdToUserRationId[feedId];
+          if (userRationId == null) continue;
+          await del(userRationId);
+        }
+      }
+
+      // 2) добавляем новые (kg всегда 0)
+      if (toAdd.isNotEmpty) {
+        final create = ref.read(createUserRationsProvider);
+
+        final payload = <int, double>{};
+        for (final id in toAdd) {
+          payload[id] = 0;
+        }
+
+        await create(
+          CreateUserRationsDto(rationQuantity: payload, isAvailable: true),
+        );
+      } else {
+        // если ничего не добавляли, но удаляли - провайдеры уже инвалидируются внутри deleteUserRationProvider
+        // если ни add ни remove - просто закрываем
+      }
 
       if (!mounted) return;
 
       await showAppSuccessDialog(
         context,
-        title: 'Рацион успешно\nдобавлен!',
+        title: 'Запасы успешно\nобновлены!',
         buttonText: 'Перейти к списку',
-        onButtonPressed: () {
-          context.go('/rations');
-        },
+        onButtonPressed: () => context.go('/rations'),
       );
 
       if (mounted) context.pop(true);
@@ -119,6 +147,7 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
   @override
   Widget build(BuildContext context) {
     final catalogAsync = ref.watch(rationCatalogProvider);
+    final userRationsAsync = ref.watch(userRationsProvider);
 
     return AppScaffold(
       bottomNavIndex: null,
@@ -151,173 +180,123 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
             const SizedBox(height: 16),
 
             Expanded(
-              child: catalogAsync.when(
+              child: userRationsAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (e, _) => Center(child: Text('Ошибка: $e')),
-                data: (catalog) {
-                  // группируем по type
-                  final Map<String, List<RationCatalogItemDto>> byType = {};
-                  for (final x in catalog) {
-                    byType.putIfAbsent(x.type, () => []).add(x);
-                  }
+                data: (userRations) {
+                  // ✅ один раз предзаполняем чекбоксы
+                  _prefillFromUserRations(userRations);
 
-                  return ListView(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    children: [
-                      ..._expanded.keys.map((type) {
-                        final items = byType[type] ?? const [];
-                        if (items.isEmpty) return const SizedBox.shrink();
+                  return catalogAsync.when(
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
+                    error: (e, _) => Center(child: Text('Ошибка: $e')),
+                    data: (catalog) {
+                      final Map<String, List<RationCatalogItemDto>> byType = {};
+                      for (final x in catalog) {
+                        byType.putIfAbsent(x.type, () => []).add(x);
+                      }
 
-                        final isOpen = _expanded[type] == true;
+                      return ListView(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        children: [
+                          ..._expanded.keys.map((type) {
+                            final items = byType[type] ?? const [];
+                            if (items.isEmpty) return const SizedBox.shrink();
 
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: AppColors.additional2),
-                          ),
-                          child: Column(
-                            children: [
-                              InkWell(
-                                onTap: () =>
-                                    setState(() => _expanded[type] = !isOpen),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 12,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          _typeTitle(type),
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColors.primary3,
-                                          ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        isOpen
-                                            ? Icons.expand_less
-                                            : Icons.expand_more,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              if (isOpen)
-                                const Divider(
-                                  height: 1,
+                            final isOpen = _expanded[type] == true;
+
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
                                   color: AppColors.additional2,
                                 ),
-
-                              if (isOpen)
-                                ...items.map((x) {
-                                  final checked = _selected[x.id] == true;
-
-                                  _kgControllers.putIfAbsent(
-                                    x.id,
-                                    () => TextEditingController(),
-                                  );
-
-                                  return Container(
-                                    color: checked
-                                        ? const Color(0xFFF3F4F6)
-                                        : Colors.white,
-                                    child: ListTile(
-                                      dense: true,
-                                      leading: Checkbox(
-                                        value: checked,
-                                        activeColor: AppColors.primary1,
-                                        onChanged: (v) {
-                                          setState(() {
-                                            _selected[x.id] = v == true;
-                                            if (v != true) {
-                                              _kgControllers[x.id]?.text = '';
-                                            }
-                                          });
-                                        },
-                                      ),
-                                      title: Text(
-                                        x.name,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: AppColors.primary3,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      trailing: checked
-                                          ? SizedBox(
-                                              width: 110,
-                                              child: TextField(
-                                                controller:
-                                                    _kgControllers[x.id],
-                                                keyboardType:
-                                                    const TextInputType.numberWithOptions(
-                                                      decimal: true,
-                                                    ),
-                                                decoration: InputDecoration(
-                                                  hintText: 'кг',
-                                                  hintStyle: TextStyle(
-                                                    fontSize: 14,
-                                                    color: const Color.fromARGB(
-                                                      255,
-                                                      95,
-                                                      95,
-                                                      95,
-                                                    ),
-                                                  ),
-                                                  isDense: true,
-                                                  filled: true,
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                        255,
-                                                        239,
-                                                        239,
-                                                        239,
-                                                      ),
-                                                  contentPadding:
-                                                      const EdgeInsets.symmetric(
-                                                        horizontal: 16,
-                                                        vertical: 10,
-                                                      ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          40,
-                                                        ),
-                                                    borderSide: BorderSide.none,
-                                                  ),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              40,
-                                                            ),
-                                                        borderSide:
-                                                            BorderSide.none,
-                                                      ),
-                                                ),
-                                              ),
-                                            )
-                                          : null,
+                              ),
+                              child: Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () => setState(
+                                      () => _expanded[type] = !isOpen,
                                     ),
-                                  );
-                                }),
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 12,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              _typeTitle(type),
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: AppColors.primary3,
+                                              ),
+                                            ),
+                                          ),
+                                          Icon(
+                                            isOpen
+                                                ? Icons.expand_less
+                                                : Icons.expand_more,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  if (isOpen)
+                                    const Divider(
+                                      height: 1,
+                                      color: AppColors.additional2,
+                                    ),
+                                  if (isOpen)
+                                    ...items.map((x) {
+                                      final checked = _selected[x.id] == true;
+
+                                      return Container(
+                                        color: checked
+                                            ? const Color(0xFFF3F4F6)
+                                            : Colors.white,
+                                        child: ListTile(
+                                          dense: true,
+                                          leading: Checkbox(
+                                            value: checked,
+                                            activeColor: AppColors.primary1,
+                                            onChanged: _saving
+                                                ? null
+                                                : (v) {
+                                                    setState(() {
+                                                      _selected[x.id] =
+                                                          v == true;
+                                                    });
+                                                  },
+                                          ),
+                                          title: Text(
+                                            x.name,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: AppColors.primary3,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                ],
+                              ),
+                            );
+                          }),
+                        ],
+                      );
+                    },
                   );
                 },
               ),
             ),
 
-            // bottom buttons (как на макете)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Row(
@@ -366,7 +345,7 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
                                 ),
                               )
                             : const Text(
-                                'Добавить',
+                                'Сохранить',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,

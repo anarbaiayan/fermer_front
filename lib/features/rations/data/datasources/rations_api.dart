@@ -1,13 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:frontend/core/network/network_providers.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
+import 'package:frontend/core/network/network_providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../models/ration_catalog_item_dto.dart';
 import '../models/user_ration_dto.dart';
 import '../models/create_user_rations_dto.dart';
-import '../models/ration_template_dto.dart';
-import '../models/generate_ration_template_dto.dart';
+import '../models/cattle_ration_dto.dart';
 
 final rationsApiProvider = Provider<RationsApi>((ref) {
   final dio = ref.read(dioClientProvider).dio;
@@ -17,6 +16,13 @@ final rationsApiProvider = Provider<RationsApi>((ref) {
 class RationsApi {
   final Dio _dio;
   RationsApi(this._dio);
+
+  Never _fail(DioException e, String fallback) {
+    throw ApiException(
+      extractApiMessage(e, fallback: fallback),
+      e.response?.statusCode,
+    );
+  }
 
   // -------- user rations (запасы) --------
 
@@ -30,10 +36,7 @@ class RationsApi {
       final list = (r.data as List).cast<Map<String, dynamic>>();
       return list.map(RationCatalogItemDto.fromJson).toList();
     } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при получении каталога кормов',
-        e.response?.statusCode,
-      );
+      _fail(e, 'Ошибка при получении каталога кормов');
     }
   }
 
@@ -43,10 +46,7 @@ class RationsApi {
       final list = (r.data as List).cast<Map<String, dynamic>>();
       return list.map(UserRationDto.fromJson).toList();
     } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при получении запасов',
-        e.response?.statusCode,
-      );
+      _fail(e, 'Ошибка при получении запасов');
     }
   }
 
@@ -56,10 +56,7 @@ class RationsApi {
       final list = (r.data as List).cast<Map<String, dynamic>>();
       return list.map(UserRationDto.fromJson).toList();
     } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при получении доступных запасов',
-        e.response?.statusCode,
-      );
+      _fail(e, 'Ошибка при получении доступных запасов');
     }
   }
 
@@ -68,15 +65,10 @@ class RationsApi {
       await _dio.post(
         '/user-rations',
         data: dto.toJson(),
-        options: Options(
-          responseType: ResponseType.plain, // важно
-        ),
+        options: Options(responseType: ResponseType.plain),
       );
     } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при создании запасов',
-        e.response?.statusCode,
-      );
+      _fail(e, 'Ошибка при создании запасов');
     }
   }
 
@@ -84,10 +76,7 @@ class RationsApi {
     try {
       await _dio.delete('/user-rations/$id');
     } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при удалении запаса',
-        e.response?.statusCode,
-      );
+      _fail(e, 'Ошибка при удалении запаса');
     }
   }
 
@@ -96,87 +85,56 @@ class RationsApi {
       final r = await _dio.patch('/user-rations/$id/toggle');
       return UserRationDto.fromJson(r.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при смене статуса запаса',
-        e.response?.statusCode,
-      );
+      _fail(e, 'Ошибка при смене статуса запаса');
     }
   }
 
-  // -------- ration templates (рационы) --------
+  // -------- cattle rations (НОВОЕ) --------
 
-  Future<List<RationTemplateDto>> getTemplates() async {
+  // GET /api/cattle/rations
+  Future<List<CattleRationDto>> getAllCattleRations() async {
     try {
-      final r = await _dio.get('/ration-templates');
-      final list = (r.data as List).cast<dynamic>();
-      return list
-          .map((e) => RationTemplateDto.fromJson(e as Map<String, dynamic>))
-          .toList();
+      final r = await _dio.get('/cattle/rations');
+      final list = (r.data as List).cast<Map<String, dynamic>>();
+      return list.map(CattleRationDto.fromJson).toList();
     } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при получении рационов',
-        e.response?.statusCode,
-      );
+      _fail(e, 'Ошибка при получении рационов');
     }
   }
 
-  Future<RationTemplateDto> getTemplateById(int id) async {
+  // GET /api/cattle/{id}/ration
+  // ВАЖНО: тут может происходить первичная генерация -> увеличиваем receiveTimeout
+  Future<CattleRationDto> getCattleRation(int cattleId) async {
     try {
-      final r = await _dio.get('/ration-templates/$id');
-      return RationTemplateDto.fromJson(r.data as Map<String, dynamic>);
-    } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при получении рациона',
-        e.response?.statusCode,
+      final r = await _dio.get(
+        '/cattle/$cattleId/ration',
+        options: Options(receiveTimeout: const Duration(seconds: 90)),
       );
+      return CattleRationDto.fromJson(r.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      _fail(e, 'Ошибка при получении рациона животного');
     }
   }
 
-  Future<RationTemplateDto> generate(GenerateRationTemplateDto dto) async {
+  // POST /api/cattle/{id}/ration/regenerate
+  Future<CattleRationDto> regenerateCattleRation(int cattleId) async {
     try {
       final r = await _dio.post(
-        '/ration-templates/generate',
-        data: dto.toJson(),
+        '/cattle/$cattleId/ration/regenerate',
+        options: Options(receiveTimeout: const Duration(seconds: 90)),
       );
-      return RationTemplateDto.fromJson(r.data as Map<String, dynamic>);
+      return CattleRationDto.fromJson(r.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      // тут как раз прилетает 400 "Insufficient Rations"
-      final msg = (e.response?.data is Map<String, dynamic>)
-          ? ((e.response?.data as Map<String, dynamic>)['message']
-                    ?.toString() ??
-                e.message ??
-                'Ошибка генерации рациона')
-          : (e.message ?? 'Ошибка генерации рациона');
-
-      throw ApiException(msg, e.response?.statusCode);
+      _fail(e, 'Ошибка при генерации рациона');
     }
   }
 
-  Future<void> deleteTemplate(int id) async {
+  // DELETE /api/cattle/rations/{rationId}
+  Future<void> deleteCattleRation(int rationId) async {
     try {
-      await _dio.delete('/ration-templates/$id');
+      await _dio.delete('/cattle/rations/$rationId');
     } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при удалении рациона',
-        e.response?.statusCode,
-      );
-    }
-  }
-
-  Future<RationTemplateDto> generateTemplate(
-    GenerateRationTemplateDto dto,
-  ) async {
-    try {
-      final r = await _dio.post(
-        '/ration-templates/generate',
-        data: dto.toJson(),
-      );
-      return RationTemplateDto.fromJson(r.data as Map<String, dynamic>);
-    } on DioException catch (e) {
-      throw ApiException(
-        e.message ?? 'Ошибка при генерации рациона',
-        e.response?.statusCode,
-      );
+      _fail(e, 'Ошибка при удалении рациона');
     }
   }
 }

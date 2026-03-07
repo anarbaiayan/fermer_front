@@ -16,9 +16,7 @@ class UserRationsStocksScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stocksAsync = ref.watch(userRationsProvider);
-    final title = filterType == null
-        ? 'Запасы'
-        : _typeTitle(filterType!);
+    final title = filterType == null ? 'Запасы' : _typeTitle(filterType!);
 
     return AppScaffold(
       bottomNavIndex: 3,
@@ -26,6 +24,23 @@ class UserRationsStocksScreen extends ConsumerWidget {
       showBell: true,
       showAppBar: true,
       farmName: 'Название фермы',
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(12),
+        child: FloatingActionButton(
+          onPressed: () => context.push('/rations/stocks/add'),
+          backgroundColor: AppColors.primary1,
+          elevation: 4,
+          shape: const CircleBorder(),
+          child: SizedBox(
+            width: 63,
+            height: 63,
+            child: Center(
+              child: AppIcons.svg('plus', size: 24, color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: AppPage(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +200,7 @@ class UserRationsStocksScreen extends ConsumerWidget {
         return 'Сочный корм';
       case 'COARSE':
         return 'Грубые корма';
-      case 'ADDITIVE':
+      case 'VITAMINS_SUPPLEMENTS':
         return 'Добавки';
       default:
         return type;
@@ -331,7 +346,7 @@ class _StockListItemState extends State<StockListItem> {
   Widget build(BuildContext context) {
     final item = widget.item;
 
-    final type = item.ration.type; // COARSE / JUICY / CONCENTRATED / ADDITIVE
+    final type = item.ration.type;
     final color = _typeColor(type);
 
     final title = item.ration.name;
@@ -553,7 +568,7 @@ class _StockListItemState extends State<StockListItem> {
         return const Color(0xFFF4C2C2); // heifer pink
       case 'COARSE':
         return const Color(0xFFF7DFA3); // calf yellow
-      case 'ADDITIVE':
+      case 'VITAMINS_SUPPLEMENTS':
       default:
         return const Color(0xFF4A78C1); // bull blue
     }

@@ -1,29 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
-import 'package:frontend/core/widgets/app_button.dart';
-import 'package:frontend/features/herd/domain/entities/animal_category.dart';
-import 'package:frontend/features/herd/domain/entities/production_state.dart';
+import 'package:frontend/features/rations/presentation/widgets/cattle_ration_card.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../application/rations_providers.dart';
-import '../widgets/ration_template_card.dart';
 
 class RationsScreen extends ConsumerWidget {
-  final AnimalCategory? category;
-  final ProductionState? productionState;
-  const RationsScreen({super.key, this.category, this.productionState});
+  /// если передали cattleId - режим "из карточки животного"
+  final int? cattleId;
+
+  const RationsScreen({super.key, this.cattleId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final availableAsync = ref.watch(userAvailableRationsProvider);
-    final templatesAsync = ref.watch(rationTemplatesProvider);
+
+    // общий список
+    final rationsAsync = ref.watch(cattleRationsProvider);
+
+    // рацион конкретного животного
+    final cattleRationAsync = (cattleId == null)
+        ? const AsyncValue.data(null)
+        : ref.watch(cattleRationByCattleProvider(cattleId!));
+
+    final isFromCattle = cattleId != null;
 
     return AppScaffold(
-      bottomNavIndex: 3, // у тебя "Рационы" - 3
+      bottomNavIndex: 3,
       enableDrawer: true,
       showBell: true,
       showAppBar: true,
@@ -40,209 +48,185 @@ class RationsScreen extends ConsumerWidget {
               );
             }
 
-            // есть запасы -> показываем страницу как на скрине со списком рационов
-            return Stack(
+            return ListView(
+              padding: const EdgeInsets.only(bottom: 24),
               children: [
-                ListView(
-                  padding: const EdgeInsets.only(bottom: 90),
-                  children: [
-                    const SizedBox(height: 10),
-                    _Header(
-                      title: 'Рационы/Запасы',
-                      onBack: () {
-                        if (context.canPop()) {
-                          context.pop();
-                        } else {
-                          context.go('/home');
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 18),
+                const SizedBox(height: 10),
 
-                    // Запасы корма (минимальный блок - можешь расширить потом)
-                    Row(
-                      children: [
-                        const Text(
-                          'Запасы корма',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primary3,
-                          ),
-                        ),
-                        const Spacer(),
-                        InkWell(
-                          onTap: () => context.push('/rations/stocks'),
-                          child: const Icon(Icons.arrow_forward_ios, size: 18),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-
-                    SizedBox(
-                      height: 92,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          _StockTypeChip(
-                            title: 'Концентраты',
-                            color: const Color(0xFF4A78C1),
-                            onTap: () =>
-                                context.push('/rations/stocks/CONCENTRATED'),
-                          ),
-                          _StockTypeChip(
-                            title: 'Сочный корм',
-                            color: const Color(0xFFF7DFA3),
-                            onTap: () => context.push('/rations/stocks/JUICY'),
-                          ),
-                          _StockTypeChip(
-                            title: 'Грубые корма',
-                            color: const Color(0xFFB7E4C7),
-                            onTap: () => context.push('/rations/stocks/COARSE'),
-                          ),
-                          _StockTypeChip(
-                            title: 'Добавки',
-                            color: const Color(0xFFF4C2C2),
-                            onTap: () =>
-                                context.push('/rations/stocks/ADDITIVE'),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 22),
-
-                    Row(
-                      children: [
-                        const Text(
-                          'Список рационов',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primary3,
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
+                // Заголовок разный:
+                // - общий режим: "Список рационов" (как на скрине)
+                // - из карточки: "Рацион животного"
+                _Header(
+                  title: isFromCattle ? 'Рацион животного' : 'Список рационов',
+                  onBack: () {
+                    if (context.canPop()) {
+                      context.pop();
+                    } else {
+                      context.go('/home');
+                    }
+                  },
+                  // фильтр только в общем режиме
+                  trailing: isFromCattle
+                      ? null
+                      : IconButton(
                           padding: EdgeInsets.zero,
                           icon: AppIcons.svg("filter", size: 32),
                           onPressed: () {
                             // TODO: фильтры
                           },
                         ),
-                      ],
+                ),
+
+                const SizedBox(height: 18),
+
+                // Запасы корма (оставляем как было)
+                Row(
+                  children: [
+                    const Text(
+                      'Запасы корма',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary3,
+                      ),
                     ),
-                    const SizedBox(height: 8),
-
-                    templatesAsync.when(
-                      loading: () => const Padding(
-                        padding: EdgeInsets.only(top: 24),
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                      error: (e, _) => Padding(
-                        padding: const EdgeInsets.only(top: 24),
-                        child: Text('Ошибка: $e', textAlign: TextAlign.center),
-                      ),
-                      data: (templates) {
-                        if (templates.isEmpty) {
-                          return const Padding(
-                            padding: EdgeInsets.only(top: 30),
-                            child: Center(
-                              child: Text(
-                                'Рационы пока не сгенерированы',
-                                style: TextStyle(color: AppColors.additional3),
-                              ),
-                            ),
-                          );
-                        }
-
-                        final filteredTemplates = templates.where((t) {
-                          final templateCategory = AnimalCategoryX.fromApi(
-                            t.animalCategory,
-                          );
-                          final templateProductionState =
-                              ProductionStateX.fromApi(t.productionState);
-
-                          final matchesCategory =
-                              category == null || templateCategory == category;
-                          final matchesState =
-                              productionState == null ||
-                              templateProductionState == productionState;
-
-                          return matchesCategory && matchesState;
-                        }).toList();
-
-                        if (filteredTemplates.isEmpty) {
-                          return const Padding(
-                            padding: EdgeInsets.only(top: 30),
-                            child: Center(
-                              child: Text(
-                                'Нет рационов, подходящих для этого животного',
-                                style: TextStyle(color: AppColors.additional3),
-                              ),
-                            ),
-                          );
-                        }
-
-                        return Column(
-                          children: [
-                            const SizedBox(height: 6),
-                            ...filteredTemplates.map(
-                              (t) => Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: RationTemplateCard(
-                                  template: t,
-                                  onTap: () => context.push(
-                                    '/rations/templates/${t.id}',
-                                  ),
-                                  onDelete: () async {
-                                    final del = ref.read(
-                                      deleteRationTemplateProvider,
-                                    );
-                                    await del(t.id);
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Рацион удалён'),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                    const Spacer(),
+                    InkWell(
+                      onTap: () => context.push('/rations/stocks'),
+                      child: const Icon(Icons.arrow_forward_ios, size: 18),
                     ),
                   ],
                 ),
+                const SizedBox(height: 12),
 
-                // FAB "+"
-                Positioned(
-                  right: 14,
-                  bottom: 24,
-                  child: SizedBox(
-                    width: 56,
-                    height: 56,
-                    child: FloatingActionButton(
-                      backgroundColor: AppColors.primary1,
-                      shape: const CircleBorder(),
-                      onPressed: () {
-                        context.push('/rations/generate');
-                      },
-                      child: Center(
-                        child: AppIcons.svg(
-                          'plus',
-                          size: 24,
-                          color: Colors.white,
+                SizedBox(
+                  height: 92,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _StockTypeChip(
+                        title: 'Концентраты',
+                        color: const Color(0xFF4A78C1),
+                        onTap: () =>
+                            context.push('/rations/stocks/CONCENTRATED'),
+                      ),
+                      _StockTypeChip(
+                        title: 'Сочный корм',
+                        color: const Color(0xFFF7DFA3),
+                        onTap: () => context.push('/rations/stocks/JUICY'),
+                      ),
+                      _StockTypeChip(
+                        title: 'Грубые корма',
+                        color: const Color(0xFFB7E4C7),
+                        onTap: () => context.push('/rations/stocks/COARSE'),
+                      ),
+                      _StockTypeChip(
+                        title: 'Добавки',
+                        color: const Color(0xFFF4C2C2),
+                        onTap: () => context.push(
+                          '/rations/stocks/VITAMINS_SUPPLEMENTS',
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
+
+                const SizedBox(height: 22),
+
+                // ===== Секция рационов =====
+                if (isFromCattle) ...[
+                  // режим из карточки - показываем 1 рацион, кликабелен
+                  cattleRationAsync.when(
+                    loading: () => const Padding(
+                      padding: EdgeInsets.only(top: 24),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    error: (e, _) => Padding(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: Text('Ошибка: $e', textAlign: TextAlign.center),
+                    ),
+                    data: (ration) {
+                      if (ration == null) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: Center(
+                            child: Text(
+                              'Рацион ещё не сгенерирован',
+                              style: TextStyle(color: AppColors.additional3),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: CattleRationCard(
+                          ration: ration,
+                          variant: CattleRationCardVariant.fromCattle, // ✅
+                          onTap: () =>
+                              context.push('/rations/cattle/${cattleId!}'),
+                        ),
+                      );
+                    },
+                  ),
+                ] else ...[
+                  // общий режим - список всех рационов, НЕ кликаются
+                  rationsAsync.when(
+                    loading: () => const Padding(
+                      padding: EdgeInsets.only(top: 24),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    error: (e, _) => Padding(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: Text('Ошибка: $e', textAlign: TextAlign.center),
+                    ),
+                    data: (rations) {
+                      if (rations.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: Center(
+                            child: Text(
+                              'Рационы пока не сгенерированы',
+                              style: TextStyle(color: AppColors.additional3),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        children: [
+                          const SizedBox(height: 6),
+                          ...rations.map((r) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: CattleRationCard(
+                                ration: r,
+                                variant: CattleRationCardVariant.overview, // ✅
+                                onTap: null, // ✅ запрет деталей в общем режиме
+                                onDelete: () async {
+                                  final del = ref.read(
+                                    deleteCattleRationProvider,
+                                  );
+                                  await del(r.id);
+
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Рацион удалён'),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            );
+                          }),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ],
             );
           },
@@ -300,8 +284,9 @@ class _EmptyRationsState extends StatelessWidget {
 class _Header extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
+  final Widget? trailing;
 
-  const _Header({required this.title, required this.onBack});
+  const _Header({required this.title, required this.onBack, this.trailing});
 
   @override
   Widget build(BuildContext context) {
@@ -313,14 +298,17 @@ class _Header extends StatelessWidget {
           onPressed: onBack,
         ),
         const SizedBox(width: 6),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: AppColors.primary3,
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: AppColors.primary3,
+            ),
           ),
         ),
+        if (trailing != null) trailing!,
       ],
     );
   }

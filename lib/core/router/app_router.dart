@@ -12,7 +12,6 @@ import 'package:frontend/features/cattle_events/presentation/pages/events_screen
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
-import 'package:frontend/features/herd/domain/entities/production_state.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_details_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_add_animal_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_animal_screen.dart';
@@ -23,7 +22,6 @@ import 'package:frontend/features/lactation/presentation/pages/add_lactation_scr
 import 'package:frontend/features/lactation/presentation/pages/lactation_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/profile_screen.dart';
 import 'package:frontend/features/rations/presentation/pages/add_user_rations_screen.dart';
-import 'package:frontend/features/rations/presentation/pages/generate_ration_template_screen.dart';
 import 'package:frontend/features/rations/presentation/pages/inventory_screen.dart';
 import 'package:frontend/features/rations/presentation/pages/ration_template_details_screen.dart';
 import 'package:frontend/features/rations/presentation/pages/rations_screen.dart';
@@ -174,35 +172,28 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/rations',
       builder: (context, state) {
-        final Map<String, dynamic>? arguments =
-            state.extra as Map<String, dynamic>?;
+        final extra = state.extra;
+        int? cattleId;
 
-        final category = arguments?['category'];
-        final productionStateString = arguments?['productionState'];
+        if (extra is Map<String, dynamic>) {
+          final v = extra['cattleId'];
+          if (v is int) cattleId = v;
+          if (v is String) cattleId = int.tryParse(v);
+        }
 
-        final productionState = productionStateString != null
-            ? ProductionStateX.fromApi(productionStateString)
-            : null;
-        return RationsScreen(
-          category: category,
-          productionState: productionState,
-        );
+        return RationsScreen(cattleId: cattleId);
+      },
+    ),
+    GoRoute(
+      path: '/rations/cattle/:cattleId',
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['cattleId']!);
+        return CattleRationDetailsScreen(cattleId: id);
       },
     ),
     GoRoute(
       path: '/rations/stocks/add',
       builder: (context, state) => const AddUserRationsScreen(),
-    ),
-    GoRoute(
-      path: '/rations/generate',
-      builder: (context, state) => const GenerateRationTemplateScreen(),
-    ),
-    GoRoute(
-      path: '/rations/templates/:id',
-      builder: (context, state) {
-        final id = int.parse(state.pathParameters['id']!);
-        return RationTemplateDetailsScreen(id: id);
-      },
     ),
     GoRoute(
       path: '/rations/stocks',

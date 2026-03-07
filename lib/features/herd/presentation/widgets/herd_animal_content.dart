@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
+import 'package:frontend/core/widgets/app_success_dialog.dart';
 import 'package:frontend/features/cattle_events/application/cattle_events_providers.dart';
 import 'package:frontend/features/cattle_events/data/datasources/cattle_events_api.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
@@ -14,6 +15,7 @@ import 'package:frontend/features/herd/presentation/utils/cattle_formatters.dart
 import 'package:frontend/features/herd/presentation/widgets/herd_small_action_card.dart';
 import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
 import 'package:frontend/features/lactation/application/lactation_providers.dart';
+import 'package:frontend/features/rations/application/rations_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -36,6 +38,9 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
   bool _showAllUpcoming = false;
   final Set<int> _completedUpcomingIds = {};
   bool _isDeleting = false;
+
+  // ✅ новое: загрузка при регенерации рациона
+  bool _isRegenerating = false;
 
   Future<void> _confirmDelete(BuildContext context) async {
     final ok =
@@ -95,6 +100,57 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
         setState(() => _isDeleting = false);
       }
     }
+  }
+
+  // ✅ новое: регенерация рациона + overlay + success dialog
+  Future<void> _regenerateRation() async {
+    if (_isRegenerating) return;
+
+    setState(() => _isRegenerating = true);
+    _showFullScreenLoading(text: 'Генерируется рацион...');
+
+    try {
+      final cattle = widget.cattle;
+      final regen = ref.read(regenerateCattleRationProvider);
+
+      await regen(cattle.id);
+
+      if (!mounted) return;
+
+      ref.invalidate(cattleRationByCattleProvider(cattle.id));
+      ref.invalidate(cattleRationsProvider);
+
+      _hideFullScreenLoading();
+
+      await showAppSuccessDialog(
+        context,
+        title: 'Рацион успешно\nсгенерирован заново!',
+        message: 'Обновленные данные сохранены.',
+        buttonText: 'Понятно',
+      );
+    } catch (e) {
+      if (!mounted) return;
+      _hideFullScreenLoading();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Ошибка: $e')));
+    } finally {
+      if (mounted) setState(() => _isRegenerating = false);
+    }
+  }
+
+  void _showFullScreenLoading({String text = 'Генерируется рацион...'}) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      useRootNavigator: true, // ✅ перекрывает и AppBar тоже
+      builder: (_) => _FullScreenLoadingDialog(text: text),
+    );
+  }
+
+  void _hideFullScreenLoading() {
+    final nav = Navigator.of(context, rootNavigator: true);
+    if (nav.canPop()) nav.pop();
   }
 
   @override
@@ -167,14 +223,12 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
       children: [
         Column(
           children: [
-            // верхняя часть - скролл
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(top: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // верхняя строка: назад + заголовок
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
@@ -198,13 +252,12 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 48), // симметрия под иконку слева
+                        const SizedBox(width: 48),
                       ],
                     ),
 
                     const SizedBox(height: 12),
 
-                    // ОДНА большая карточка, как в дизайне
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -213,18 +266,17 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                           width: 1,
                           color: AppColors.additional2,
                         ),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Color.fromRGBO(0, 0, 0, 0.04),
                             blurRadius: 8,
-                            offset: const Offset(0, 4),
+                            offset: Offset(0, 4),
                           ),
                         ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // шапка с именем и градиентом
                           Container(
                             height: 90,
                             decoration: BoxDecoration(
@@ -241,12 +293,10 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                               ),
                             ),
                             child: SizedBox(
-                              height:
-                                  32, // чтобы было место и для текста, и для кнопки
+                              height: 32,
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
-                                  // имя строго по центру
                                   Center(
                                     child: Text(
                                       cattle.name,
@@ -258,8 +308,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                       ),
                                     ),
                                   ),
-
-                                  // иконка "три точки" в правом верхнем углу
                                   Positioned(
                                     right: 4,
                                     top: 4,
@@ -306,7 +354,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                             color: AppColors.additional2,
                           ),
 
-                          // "Основная информация"
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
@@ -354,7 +401,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                             ),
                           ),
 
-                          // данные
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
@@ -363,18 +409,12 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _infoRowOptional(
-                                  'Бирка',
-                                  tagText,
-                                ), // всегда есть, но ок
+                                _infoRowOptional('Бирка', tagText),
                                 _infoRowOptional(
                                   'Дата рождения',
                                   birthDateText,
-                                ), // всегда есть
-                                _infoRowOptional(
-                                  'Возраст',
-                                  ageText,
-                                ), // всегда есть
+                                ),
+                                _infoRowOptional('Возраст', ageText),
                                 _infoRowOptional(
                                   'Категория',
                                   _categoryTitle(category),
@@ -389,7 +429,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                   healthText,
                                 ),
 
-                                // ---- для коровы / тёлки (как на макете) ----
                                 if (isCow) ...[
                                   _infoRowMilkOptional(
                                     'Последний надой\n(л/день)',
@@ -423,14 +462,11 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                     'Последнее\nосеменение',
                                     details?.lastInseminationDate,
                                   ),
-
-                                  // эти показываем только если реально есть bool/state
                                   if (details?.isPregnant != null)
                                     _infoRowOptional(
                                       'Беременность',
                                       pregnancyLabel(details?.isPregnant),
                                     ),
-
                                   _infoRowOptional(
                                     'Репродуктивный статус',
                                     (details?.reproductiveState == null)
@@ -458,13 +494,11 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                     'Планируемая дата\nотела',
                                     details?.expectedCalvingDate,
                                   ),
-
                                   if (details?.isPregnant != null)
                                     _infoRowOptional(
                                       'Беременность',
                                       pregnancyLabel(details?.isPregnant),
                                     ),
-
                                   _infoRowOptional(
                                     'Репродуктивный статус',
                                     (details?.reproductiveState == null)
@@ -475,7 +509,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                   ),
                                 ],
 
-                                // ---- для быка ----
                                 if (isBull) ...[
                                   _infoRowOptional(
                                     'Назначение',
@@ -488,7 +521,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
                           const SizedBox(height: 12),
 
-                          // блок с двумя кнопками - внутри той же карточки
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
@@ -498,27 +530,23 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                               children: [
                                 Expanded(
                                   child: SmallActionCard(
-                                    title: 'Действия',
-                                    subtitle: 'Доп. информация',
+                                    title: 'Сгенерировать рацион повторно',
+                                    subtitle: 'Примерно 1 минута',
                                     icon: AppIcons.svg('actions', size: 26),
-                                    onTap: () {
-                                      // TODO
-                                    },
+                                    onTap: _isRegenerating
+                                        ? () {}
+                                        : _regenerateRation,
                                   ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: SmallActionCard(
-                                    title: 'Рацион   ',
+                                    title: 'Посмотреть рацион',
                                     subtitle: 'Выберите рацион',
                                     icon: AppIcons.svg('diet', size: 26),
                                     onTap: () => context.push(
                                       '/rations',
-                                      extra: {
-                                        'category': category,
-                                        'productionState':
-                                            details?.productionState,
-                                      },
+                                      extra: {'cattleId': cattle.id},
                                     ),
                                   ),
                                 ),
@@ -528,7 +556,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
                           const SizedBox(height: 8),
 
-                          // Журнал событий - тоже внутри той же карточки
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
                             child: CattleEventsPreview(
@@ -569,8 +596,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                     ),
                                   ),
                                   const SizedBox(height: 8),
-
-                                  // список (1 или все)
                                   ...(() {
                                     final upcomingAll = details!.upcomingEvents!
                                         .where(
@@ -593,8 +618,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                       final left = e.daysUntil == null
                                           ? ''
                                           : 'через ${e.daysUntil} дн';
-
-                                      final eventId = e.id; // int?
+                                      final eventId = e.id;
 
                                       return Padding(
                                         padding: const EdgeInsets.only(
@@ -632,9 +656,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                               ],
                                             ),
                                           ),
-
                                           confirmDismiss: (_) async {
-                                            // 1) подтверждение (по желанию)
                                             final ok =
                                                 await showDialog<bool>(
                                                   context: context,
@@ -672,7 +694,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
                                             if (!ok) return false;
 
-                                            // 2) PATCH до удаления
                                             try {
                                               final api = ref.read(
                                                 cattleEventsApiProvider,
@@ -681,7 +702,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                                 eventId: eventId,
                                               );
 
-                                              // 3) важно: убрать элемент ЛОКАЛЬНО, чтобы Dismissible не ругался
                                               if (mounted) {
                                                 setState(
                                                   () => _completedUpcomingIds
@@ -689,7 +709,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                                 );
                                               }
 
-                                              // 4) обновим провайдеры (можно тут, можно в onDismissed)
                                               ref.invalidate(
                                                 cattleDetailsProvider(
                                                   cattle.id,
@@ -713,7 +732,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                                 );
                                               }
 
-                                              return true; // теперь можно “dismiss”
+                                              return true;
                                             } catch (err) {
                                               if (context.mounted) {
                                                 ScaffoldMessenger.of(
@@ -726,11 +745,9 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                                   ),
                                                 );
                                               }
-                                              return false; // не dismiss
+                                              return false;
                                             }
                                           },
-
-                                          // можно оставить пустым или только invalidate
                                           onDismissed: (_) {
                                             ref.invalidate(
                                               cattleByIdProvider(cattle.id),
@@ -740,7 +757,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                               cattleStatisticsProvider,
                                             );
                                           },
-
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(
                                               8,
@@ -801,8 +817,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                       );
                                     }).toList();
                                   })(),
-
-                                  // кнопка показать все/скрыть
                                   if (details!.upcomingEvents!.length > 1)
                                     Align(
                                       alignment: Alignment.centerLeft,
@@ -824,7 +838,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                               ),
                             ),
 
-                          // Молочная продуктивность коровы (как журнал событий)
                           if (isCow)
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -841,12 +854,9 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                   );
 
                                   if (res == true) {
-                                    // обновляем лактацию по корове
                                     ref.invalidate(
                                       lactationsByCattleProvider(cattle.id),
                                     );
-
-                                    // если бэк обновляет lastMilkYield/детали - можно тоже дернуть
                                     ref.invalidate(
                                       cattleDetailsProvider(cattle.id),
                                     );
@@ -862,7 +872,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
               ),
             ),
 
-            // нижняя фиксированная кнопка "Закрыть"
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: Container(
@@ -877,17 +886,14 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
             ),
           ],
         ),
+
         if (_isDeleting)
           Positioned.fill(
             child: AbsorbPointer(
               absorbing: true,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 200),
-                opacity: 1,
-                child: Container(
-                  color: Colors.black.withOpacity(0.35),
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
+              child: Container(
+                color: Colors.black.withOpacity(0.35),
+                child: const Center(child: CircularProgressIndicator()),
               ),
             ),
           ),
@@ -968,8 +974,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
   Widget _infoRowMilkOptional(String label, double? v) {
     if (v == null) return const SizedBox.shrink();
-    // если хочешь скрывать нули - раскомментируй:
-    // if (v == 0) return const SizedBox.shrink();
     return _infoRowOptional(label, '${v.toStringAsFixed(0)} л');
   }
 
@@ -1067,6 +1071,31 @@ class _MilkProductivityPreview extends StatelessWidget {
           style: TextStyle(fontSize: 14, color: AppColors.additional3),
         ),
       ],
+    );
+  }
+}
+
+class _FullScreenLoadingDialog extends StatelessWidget {
+  final String text;
+  const _FullScreenLoadingDialog({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.black54,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircularProgressIndicator(),
+            const SizedBox(height: 14),
+            Text(
+              text,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

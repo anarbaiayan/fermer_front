@@ -1,17 +1,19 @@
-import 'package:frontend/features/rations/data/models/generate_ration_template_dto.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import '../data/datasources/rations_api.dart';
 import '../data/models/ration_catalog_item_dto.dart';
 import '../data/models/user_ration_dto.dart';
 import '../data/models/create_user_rations_dto.dart';
-import '../data/models/ration_template_dto.dart';
+import '../data/models/cattle_ration_dto.dart';
 
+// catalog
 final rationCatalogProvider =
     FutureProvider.autoDispose<List<RationCatalogItemDto>>((ref) async {
       final api = ref.read(rationsApiProvider);
       return api.getCatalog();
     });
 
+// user stocks
 final userRationsProvider = FutureProvider.autoDispose<List<UserRationDto>>((
   ref,
 ) async {
@@ -33,7 +35,9 @@ final createUserRationsProvider =
 
         ref.invalidate(userRationsProvider);
         ref.invalidate(userAvailableRationsProvider);
-        ref.invalidate(rationTemplatesProvider);
+
+        // важно: после добавления кормов обновим список рационов тоже
+        ref.invalidate(cattleRationsProvider);
       };
     });
 
@@ -44,7 +48,7 @@ final deleteUserRationProvider = Provider<Future<void> Function(int id)>((ref) {
 
     ref.invalidate(userRationsProvider);
     ref.invalidate(userAvailableRationsProvider);
-    ref.invalidate(rationTemplatesProvider);
+    ref.invalidate(cattleRationsProvider);
   };
 });
 
@@ -55,43 +59,43 @@ final toggleUserRationProvider = Provider<Future<void> Function(int id)>((ref) {
 
     ref.invalidate(userRationsProvider);
     ref.invalidate(userAvailableRationsProvider);
-    ref.invalidate(rationTemplatesProvider);
+    ref.invalidate(cattleRationsProvider);
   };
 });
 
-final rationTemplatesProvider =
-    FutureProvider.autoDispose<List<RationTemplateDto>>((ref) async {
-      final api = ref.read(rationsApiProvider);
-      return api.getTemplates();
-    });
-
-final rationTemplateByIdProvider =
-    FutureProvider.family<RationTemplateDto, int>((ref, id) async {
-      final api = ref.read(rationsApiProvider);
-      return api.getTemplateById(id);
-    });
-
-final deleteRationTemplateProvider = Provider<Future<void> Function(int id)>((
-  ref,
-) {
-  return (id) async {
+// ✅ ВСЕ РАЦИОНЫ
+final cattleRationsProvider = FutureProvider.autoDispose<List<CattleRationDto>>(
+  (ref) async {
     final api = ref.read(rationsApiProvider);
-    await api.deleteTemplate(id);
+    return api.getAllCattleRations();
+  },
+);
 
-    ref.invalidate(rationTemplatesProvider);
-  };
-});
-final generateRationTemplateProvider =
-    Provider<Future<RationTemplateDto> Function(GenerateRationTemplateDto dto)>(
-      (ref) {
-        return (dto) async {
-          final api = ref.read(rationsApiProvider);
-          final created = await api.generate(dto);
+// ✅ РАЦИОН КОНКРЕТНОГО ЖИВОТНОГО
+final cattleRationByCattleProvider = FutureProvider.autoDispose
+    .family<CattleRationDto, int>((ref, cattleId) async {
+      final api = ref.read(rationsApiProvider);
+      return api.getCattleRation(cattleId);
+    });
 
-          // обновим список на основной странице
-          ref.invalidate(rationTemplatesProvider);
+// ✅ REGENERATE
+final regenerateCattleRationProvider =
+    Provider<Future<CattleRationDto> Function(int cattleId)>((ref) {
+      return (cattleId) async {
+        final api = ref.read(rationsApiProvider);
+        final updated = await api.regenerateCattleRation(cattleId);
+        ref.invalidate(cattleRationsProvider);
+        ref.invalidate(cattleRationByCattleProvider(cattleId));
+        return updated;
+      };
+    });
 
-          return created;
-        };
-      },
-    );
+// ✅ DELETE ration
+final deleteCattleRationProvider =
+    Provider<Future<void> Function(int rationId)>((ref) {
+      return (rationId) async {
+        final api = ref.read(rationsApiProvider);
+        await api.deleteCattleRation(rationId);
+        ref.invalidate(cattleRationsProvider);
+      };
+    });
