@@ -1,5 +1,6 @@
 // features/splash/presentation/splash_screen.dart
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -39,12 +40,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.primary1,
       body: Center(
         child: FractionallySizedBox(
           widthFactor: 0.7,
           child: Image.asset(
-            'assets/icons/logo_green.png',
+            'assets/icons/logo_white.png',
             fit: BoxFit.contain,
           ),
         ),

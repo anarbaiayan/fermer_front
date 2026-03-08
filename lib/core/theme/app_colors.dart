@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   static const background = Color(0xFFFBF9F6); // светлый бежевый фон
 
-  static const primary1 = Color(0xFF008542); // основной зелёный
+  static const primary1 = Color(0xFF1E4732); // основной зелёный (новый)
   static const primary2 = Color(0xFFA65F3A); // коричневый для карточки стада
   static const primary3 = Color(0xFF2A2D2C); // ещё один зелёный (кнопки)
 
