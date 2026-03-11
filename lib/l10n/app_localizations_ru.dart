@@ -1015,6 +1015,53 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addUserRationsGoToList => 'Перейти к списку';
 
   @override
+  String get addUserRationsTabFromCatalog => 'Из каталога';
+
+  @override
+  String get addUserRationsTabCustomFeed => 'Свой корм';
+
+  @override
+  String get addUserRationsCustomNameLabel => 'Название (RU)';
+
+  @override
+  String get addUserRationsCustomNameHint => 'Введите название';
+
+  @override
+  String get addUserRationsCustomNameKkLabel => 'Название (KK)';
+
+  @override
+  String get addUserRationsCustomNameKkHint => 'Введите название на казахском';
+
+  @override
+  String get addUserRationsCustomTypeLabel => 'Тип корма';
+
+  @override
+  String get addUserRationsCustomTypeHint => 'Выберите тип';
+
+  @override
+  String get addUserRationsCustomPriceLabel => 'Цена за кг (тг)';
+
+  @override
+  String get addUserRationsCustomPriceHint => 'Введите цену';
+
+  @override
+  String get addUserRationsCustomSave => 'Добавить';
+
+  @override
+  String get addUserRationsCustomNameRequired => 'Введите название корма';
+
+  @override
+  String get addUserRationsCustomNameKkRequired =>
+      'Введите название корма на казахском';
+
+  @override
+  String get addUserRationsCustomPriceInvalid =>
+      'Введите корректную цену (больше 0)';
+
+  @override
+  String get addUserRationsCustomAdded => 'Пользовательский корм добавлен';
+
+  @override
   String get settingsLanguageTitle => 'Язык приложения';
 
   @override

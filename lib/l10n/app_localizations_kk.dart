@@ -1017,6 +1017,53 @@ class AppLocalizationsKk extends AppLocalizations {
   String get addUserRationsGoToList => 'Тізімге өту';
 
   @override
+  String get addUserRationsTabFromCatalog => 'Каталогтан';
+
+  @override
+  String get addUserRationsTabCustomFeed => 'Өз жемім';
+
+  @override
+  String get addUserRationsCustomNameLabel => 'Атауы (RU)';
+
+  @override
+  String get addUserRationsCustomNameHint => 'Атауын енгізіңіз';
+
+  @override
+  String get addUserRationsCustomNameKkLabel => 'Атауы (KK)';
+
+  @override
+  String get addUserRationsCustomNameKkHint => 'Қазақша атауын енгізіңіз';
+
+  @override
+  String get addUserRationsCustomTypeLabel => 'Жем түрі';
+
+  @override
+  String get addUserRationsCustomTypeHint => 'Түрін таңдаңыз';
+
+  @override
+  String get addUserRationsCustomPriceLabel => '1 кг бағасы (тг)';
+
+  @override
+  String get addUserRationsCustomPriceHint => 'Бағасын енгізіңіз';
+
+  @override
+  String get addUserRationsCustomSave => 'Қосу';
+
+  @override
+  String get addUserRationsCustomNameRequired => 'Жем атауын енгізіңіз';
+
+  @override
+  String get addUserRationsCustomNameKkRequired =>
+      'Жемнің қазақша атауын енгізіңіз';
+
+  @override
+  String get addUserRationsCustomPriceInvalid =>
+      'Дұрыс бағаны енгізіңіз (0-ден жоғары)';
+
+  @override
+  String get addUserRationsCustomAdded => 'Пайдаланушы жемі қосылды';
+
+  @override
   String get settingsLanguageTitle => 'Қосымша тілі';
 
   @override

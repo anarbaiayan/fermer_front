@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../models/ration_catalog_item_dto.dart';
 import '../models/user_ration_dto.dart';
 import '../models/create_user_rations_dto.dart';
+import '../models/create_custom_feed_dto.dart';
 import '../models/cattle_ration_dto.dart';
 
 final rationsApiProvider = Provider<RationsApi>((ref) {
@@ -69,6 +70,18 @@ class RationsApi {
       );
     } on DioException catch (e) {
       _fail(e, 'Ошибка при создании запасов');
+    }
+  }
+
+  Future<void> createCustomFeed(CreateCustomFeedDto dto) async {
+    try {
+      await _dio.post(
+        '/user-rations/catalog/custom',
+        data: dto.toJson(),
+        options: Options(responseType: ResponseType.plain),
+      );
+    } on DioException catch (e) {
+      _fail(e, 'Ошибка при добавлении пользовательского корма');
     }
   }
 

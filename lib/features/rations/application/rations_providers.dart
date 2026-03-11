@@ -4,6 +4,7 @@ import '../data/datasources/rations_api.dart';
 import '../data/models/ration_catalog_item_dto.dart';
 import '../data/models/user_ration_dto.dart';
 import '../data/models/create_user_rations_dto.dart';
+import '../data/models/create_custom_feed_dto.dart';
 import '../data/models/cattle_ration_dto.dart';
 
 // catalog
@@ -38,6 +39,16 @@ final createUserRationsProvider =
 
         // важно: после добавления кормов обновим список рационов тоже
         ref.invalidate(cattleRationsProvider);
+      };
+    });
+
+final createCustomFeedProvider =
+    Provider<Future<void> Function(CreateCustomFeedDto dto)>((ref) {
+      return (dto) async {
+        final api = ref.read(rationsApiProvider);
+        await api.createCustomFeed(dto);
+
+        ref.invalidate(rationCatalogProvider);
       };
     });
 

@@ -1982,6 +1982,96 @@ abstract class AppLocalizations {
   /// **'Перейти к списку'**
   String get addUserRationsGoToList;
 
+  /// No description provided for @addUserRationsTabFromCatalog.
+  ///
+  /// In ru, this message translates to:
+  /// **'Из каталога'**
+  String get addUserRationsTabFromCatalog;
+
+  /// No description provided for @addUserRationsTabCustomFeed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свой корм'**
+  String get addUserRationsTabCustomFeed;
+
+  /// No description provided for @addUserRationsCustomNameLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название (RU)'**
+  String get addUserRationsCustomNameLabel;
+
+  /// No description provided for @addUserRationsCustomNameHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите название'**
+  String get addUserRationsCustomNameHint;
+
+  /// No description provided for @addUserRationsCustomNameKkLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название (KK)'**
+  String get addUserRationsCustomNameKkLabel;
+
+  /// No description provided for @addUserRationsCustomNameKkHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите название на казахском'**
+  String get addUserRationsCustomNameKkHint;
+
+  /// No description provided for @addUserRationsCustomTypeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тип корма'**
+  String get addUserRationsCustomTypeLabel;
+
+  /// No description provided for @addUserRationsCustomTypeHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите тип'**
+  String get addUserRationsCustomTypeHint;
+
+  /// No description provided for @addUserRationsCustomPriceLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цена за кг (тг)'**
+  String get addUserRationsCustomPriceLabel;
+
+  /// No description provided for @addUserRationsCustomPriceHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите цену'**
+  String get addUserRationsCustomPriceHint;
+
+  /// No description provided for @addUserRationsCustomSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить'**
+  String get addUserRationsCustomSave;
+
+  /// No description provided for @addUserRationsCustomNameRequired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите название корма'**
+  String get addUserRationsCustomNameRequired;
+
+  /// No description provided for @addUserRationsCustomNameKkRequired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите название корма на казахском'**
+  String get addUserRationsCustomNameKkRequired;
+
+  /// No description provided for @addUserRationsCustomPriceInvalid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите корректную цену (больше 0)'**
+  String get addUserRationsCustomPriceInvalid;
+
+  /// No description provided for @addUserRationsCustomAdded.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пользовательский корм добавлен'**
+  String get addUserRationsCustomAdded;
+
   /// No description provided for @settingsLanguageTitle.
   ///
   /// In ru, this message translates to:
