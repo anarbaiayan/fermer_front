@@ -164,6 +164,30 @@ abstract class AppLocalizations {
   /// **'Служба поддержки'**
   String get drawerSupport;
 
+  /// No description provided for @supportMessageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Есть вопрос или предложение?'**
+  String get supportMessageTitle;
+
+  /// No description provided for @supportMessageSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Напишите нам в WhatsApp.'**
+  String get supportMessageSubtitle;
+
+  /// No description provided for @supportWriteWhatsapp.
+  ///
+  /// In ru, this message translates to:
+  /// **'Написать в WhatsApp'**
+  String get supportWriteWhatsapp;
+
+  /// No description provided for @supportOpenWhatsappError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось открыть WhatsApp'**
+  String get supportOpenWhatsappError;
+
   /// No description provided for @drawerReferral.
   ///
   /// In ru, this message translates to:

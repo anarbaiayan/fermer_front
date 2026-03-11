@@ -42,6 +42,18 @@ class AppLocalizationsKk extends AppLocalizations {
   String get drawerSupport => 'Қолдау қызметі';
 
   @override
+  String get supportMessageTitle => 'Сұрағыңыз немесе ұсынысыңыз бар ма?';
+
+  @override
+  String get supportMessageSubtitle => 'Бізге WhatsApp арқылы жазыңыз.';
+
+  @override
+  String get supportWriteWhatsapp => 'WhatsApp-қа жазу';
+
+  @override
+  String get supportOpenWhatsappError => 'WhatsApp ашылмады';
+
+  @override
   String get drawerReferral => 'Рефералдық\nбағдарлама';
 
   @override

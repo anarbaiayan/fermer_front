@@ -42,6 +42,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get drawerSupport => 'Служба поддержки';
 
   @override
+  String get supportMessageTitle => 'Есть вопрос или предложение?';
+
+  @override
+  String get supportMessageSubtitle => 'Напишите нам в WhatsApp.';
+
+  @override
+  String get supportWriteWhatsapp => 'Написать в WhatsApp';
+
+  @override
+  String get supportOpenWhatsappError => 'Не удалось открыть WhatsApp';
+
+  @override
   String get drawerReferral => 'Реферальная\nпрограмма';
 
   @override

@@ -22,6 +22,7 @@ import 'package:frontend/features/lactation/presentation/pages/add_lactation_scr
 import 'package:frontend/features/lactation/presentation/pages/lactation_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/profile_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/settings_screen.dart';
+import 'package:frontend/features/profile/presentation/pages/support_screen.dart';
 import 'package:frontend/features/rations/presentation/pages/add_user_rations_screen.dart';
 import 'package:frontend/features/rations/presentation/pages/inventory_screen.dart';
 import 'package:frontend/features/rations/presentation/pages/ration_template_details_screen.dart';
@@ -167,6 +168,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/settings',
       builder: (context, state) => const SettingsScreen(),
+    ),
+    GoRoute(
+      path: '/support',
+      builder: (context, state) => const SupportScreen(),
     ),
 
     GoRoute(path: '/events', builder: (context, state) => const EventsScreen()),
