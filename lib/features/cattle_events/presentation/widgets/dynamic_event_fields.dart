@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/cattle_events/presentation/widgets/days_stepper_field.dart';
 
@@ -83,6 +84,7 @@ class DynamicEventFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final t = eventType;
     if (t == null) return const SizedBox.shrink();
 
@@ -90,10 +92,10 @@ class DynamicEventFields extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldTitle('Вакцина'),
+          FieldTitle(l10n.fieldVaccine),
           TextField(
             controller: vaccineNameCtrl,
-            decoration: dec(hint: 'Наименование вакцины'),
+            decoration: dec(hint: l10n.fieldVaccineHint),
           ),
           const SizedBox(height: 24),
         ],
@@ -104,11 +106,11 @@ class DynamicEventFields extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldTitle('Вес (кг)'),
+          FieldTitle(l10n.fieldWeightKg),
           TextField(
             controller: weightCtrl,
             keyboardType: TextInputType.number,
-            decoration: dec(hint: 'Результат взвешивания'),
+            decoration: dec(hint: l10n.fieldWeightHint),
           ),
           const SizedBox(height: 24),
         ],
@@ -119,29 +121,29 @@ class DynamicEventFields extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldTitle('Диагноз'),
+          FieldTitle(l10n.fieldDiagnosis),
           TextField(
             controller: diagnosisCtrl,
-            decoration: dec(hint: 'Название заболевания'),
+            decoration: dec(hint: l10n.fieldDiagnosisHint),
           ),
           const SizedBox(height: 12),
 
-          const FieldTitle('Препарат'),
+          FieldTitle(l10n.fieldDrug),
           TextField(
             controller: drugNameCtrl,
-            decoration: dec(hint: 'Название препарата'),
+            decoration: dec(hint: l10n.fieldDrugHint),
           ),
           const SizedBox(height: 12),
 
-          const FieldTitle('Дозировка'),
+          FieldTitle(l10n.fieldDosage),
           TextField(
             controller: dosageCtrl,
-            decoration: dec(hint: 'Количество'),
+            decoration: dec(hint: l10n.fieldDosageHint),
           ),
           const SizedBox(height: 12),
 
           DaysStepperField(
-            label: 'Длительность лечения (дни)',
+            label: l10n.fieldTreatmentDuration,
             value: treatmentDaysValue,
             onMinus: onMinusTreatmentDays,
             onPlus: onPlusTreatmentDays,
@@ -150,12 +152,15 @@ class DynamicEventFields extends StatelessWidget {
           const SizedBox(height: 24),
 
           // оставляем как было (не labeledRight), потому что у тебя в макете так
-          const FieldTitle('Дата окончания'),
+          FieldTitle(l10n.fieldEndDate),
           TextField(
             controller: endDateCtrl,
             readOnly: true,
             onTap: onPickEndDate,
-            decoration: dec(hint: 'Выберите дату', prefixIcon: calendarIcon),
+            decoration: dec(
+              hint: l10n.fieldSelectDate,
+              prefixIcon: calendarIcon,
+            ),
           ),
           const SizedBox(height: 24),
         ],
@@ -166,17 +171,17 @@ class DynamicEventFields extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldTitle('Препарат'),
+          FieldTitle(l10n.fieldDrug),
           TextField(
             controller: drugNameCtrl,
-            decoration: dec(hint: 'Название препарата'),
+            decoration: dec(hint: l10n.fieldDrugHint),
           ),
           const SizedBox(height: 12),
 
-          const FieldTitle('Дозировка'),
+          FieldTitle(l10n.fieldDosage),
           TextField(
             controller: dosageCtrl,
-            decoration: dec(hint: 'Количество'),
+            decoration: dec(hint: l10n.fieldDosageHint),
           ),
           const SizedBox(height: 24),
         ],
@@ -187,10 +192,10 @@ class DynamicEventFields extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldTitle('Бирка самца'),
+          FieldTitle(l10n.fieldMaleTag),
           TextField(
             controller: bullTagCtrl,
-            decoration: dec(hint: 'Укажите номер бирки'),
+            decoration: dec(hint: l10n.fieldEnterTagNumber),
           ),
           const SizedBox(height: 24),
         ],
@@ -201,19 +206,19 @@ class DynamicEventFields extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldTitle('Бирка самки'),
+          FieldTitle(l10n.fieldFemaleTag),
           TextField(
             controller: bullTagCtrl,
-            decoration: dec(hint: 'Укажите номер бирки'),
+            decoration: dec(hint: l10n.fieldEnterTagNumber),
           ),
           const SizedBox(height: 24),
 
-          const FieldTitle('Успешность'),
+          FieldTitle(l10n.fieldSuccess),
           Row(
             children: [
               Expanded(
                 child: _ChoiceRadioTile(
-                  title: 'Успешно',
+                  title: l10n.fieldSuccessful,
                   value: true,
                   groupValue: matingSuccess,
                   onChanged: (v) => onMatingSuccessChanged(v),
@@ -222,7 +227,7 @@ class DynamicEventFields extends StatelessWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: _ChoiceRadioTile(
-                  title: 'Безуспешно',
+                  title: l10n.fieldUnsuccessful,
                   value: false,
                   groupValue: matingSuccess,
                   onChanged: (v) => onMatingSuccessChanged(v),
@@ -239,12 +244,12 @@ class DynamicEventFields extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldTitle('Сложность'),
+          FieldTitle(l10n.fieldDifficulty),
           Row(
             children: [
               Expanded(
                 child: _ChoiceRadioTile<String>(
-                  title: 'Лёгкий',
+                  title: l10n.fieldEasy,
                   value: 'EASY',
                   groupValue: calvingDifficulty,
                   onChanged: onCalvingDifficultyChanged,
@@ -253,7 +258,7 @@ class DynamicEventFields extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: _ChoiceRadioTile<String>(
-                  title: 'Средний',
+                  title: l10n.fieldMedium,
                   value: 'MEDIUM',
                   groupValue: calvingDifficulty,
                   onChanged: onCalvingDifficultyChanged,
@@ -262,7 +267,7 @@ class DynamicEventFields extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: _ChoiceRadioTile<String>(
-                  title: 'Тяжелый',
+                  title: l10n.fieldHard,
                   value: 'HARD',
                   groupValue: calvingDifficulty,
                   onChanged: onCalvingDifficultyChanged,
@@ -272,37 +277,37 @@ class DynamicEventFields extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          const FieldTitle('Бирка телёнка'),
+          FieldTitle(l10n.fieldCalfTag),
           TextField(
             controller: calfTagCtrl,
-            decoration: dec(hint: 'Введите номер бирки'),
+            decoration: dec(hint: l10n.fieldCalfTagHint),
           ),
           const SizedBox(height: 12),
 
-          const FieldTitle('Имя телёнка'),
+          FieldTitle(l10n.fieldCalfName),
           TextField(
             controller: calfNameCtrl,
-            decoration: dec(hint: 'Введите имя телёнка'),
+            decoration: dec(hint: l10n.fieldCalfNameHint),
           ),
           const SizedBox(height: 12),
 
-          const FieldTitle('Пол телёнка'),
+          FieldTitle(l10n.fieldCalfGender),
           DropdownButtonFormField<String>(
             value: calfGender,
-            decoration: dec(hint: 'Выберите'),
-            items: const [
-              DropdownMenuItem(value: 'MALE', child: Text('Самец')),
-              DropdownMenuItem(value: 'FEMALE', child: Text('Самка')),
+            decoration: dec(hint: l10n.fieldCalfGenderHint),
+            items: [
+              DropdownMenuItem(value: 'MALE', child: Text(l10n.fieldMale)),
+              DropdownMenuItem(value: 'FEMALE', child: Text(l10n.fieldFemale)),
             ],
             onChanged: onCalfGenderChanged,
           ),
           const SizedBox(height: 12),
 
-          const FieldTitle('Вес при рождении (кг)'),
+          FieldTitle(l10n.fieldBirthWeight),
           TextField(
             controller: calfBirthWeightCtrl,
             keyboardType: TextInputType.number,
-            decoration: dec(hint: 'Введите вес'),
+            decoration: dec(hint: l10n.fieldBirthWeightHint),
           ),
 
           const SizedBox(height: 24),
@@ -320,7 +325,7 @@ class DynamicEventFields extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           labeledRightField(
-            label: 'Дата начала',
+            label: l10n.fieldHeatStart,
             field: TextField(
               controller: heatStartCtrl,
               readOnly: true,
@@ -330,7 +335,7 @@ class DynamicEventFields extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           labeledRightField(
-            label: 'Дата конца',
+            label: l10n.fieldHeatEnd,
             field: TextField(
               controller: heatEndCtrl,
               readOnly: true,
@@ -347,17 +352,17 @@ class DynamicEventFields extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldTitle('Препарат'),
+          FieldTitle(l10n.fieldDrug),
           TextField(
             controller: drugNameCtrl,
-            decoration: dec(hint: 'Введите название препарата'),
+            decoration: dec(hint: l10n.fieldDrugNameHint),
           ),
           const SizedBox(height: 12),
 
-          const FieldTitle('Дозировка'),
+          FieldTitle(l10n.fieldDosage),
           TextField(
             controller: dosageCtrl,
-            decoration: dec(hint: 'Введите дозировку'),
+            decoration: dec(hint: l10n.fieldDosageHint2),
           ),
           const SizedBox(height: 24),
         ],
@@ -369,7 +374,7 @@ class DynamicEventFields extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           labeledRightField(
-            label: 'Дата окончания\n(необязательно)',
+            label: l10n.fieldEndDateOptional,
             field: TextField(
               controller: endDateCtrl,
               readOnly: true,
@@ -386,10 +391,10 @@ class DynamicEventFields extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const FieldTitle('Название события'),
+          FieldTitle(l10n.fieldEventName),
           TextField(
             controller: customTypeCtrl,
-            decoration: dec(hint: 'Введите название'),
+            decoration: dec(hint: l10n.addEventEnterName),
           ),
           const SizedBox(height: 24),
         ],

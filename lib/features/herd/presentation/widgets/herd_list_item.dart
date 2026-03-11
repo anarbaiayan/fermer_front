@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category.dart';
@@ -7,6 +8,7 @@ import 'package:frontend/features/herd/domain/entities/animal_category_resolver.
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/health_status.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 class HerdListItem extends ConsumerWidget {
   final Cattle cattle;
@@ -22,6 +24,7 @@ class HerdListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final resolved = AnimalCategoryResolver.resolve(
       gender: cattle.gender,
       dateOfBirth: cattle.dateOfBirth,
@@ -29,10 +32,10 @@ class HerdListItem extends ConsumerWidget {
 
     // Категорию берем с бэкенда, при отсутствии — из локального резолвера.
     final category = cattle.category ?? resolved.category;
-    final ageText = _formatAge(resolved.ageInMonths);
+    final ageText = _formatAge(resolved.ageInMonths, l10n);
     final tagText = '#${cattle.tagNumber}';
     final nameText = (cattle.name).trim().isEmpty
-        ? 'Без имени'
+        ? l10n.animalNoName
         : cattle.name.trim();
 
     final detailsAsync = showHealth
@@ -133,8 +136,8 @@ class HerdListItem extends ConsumerWidget {
                 loading: () => const SizedBox(height: 40),
                 error: (_, _) => const SizedBox(height: 40),
                 data: (details) {
-                  final statusLine = _buildStatusLine(details);
-                  final healthLine = _buildHealthLine(details);
+                  final statusLine = _buildStatusLine(details, l10n);
+                  final healthLine = _buildHealthLine(details, l10n);
 
                   // здоровье должно быть "в самом низу"
                   return SizedBox(
@@ -158,15 +161,15 @@ class HerdListItem extends ConsumerWidget {
   }
 
   // ---- Status line: reproductive + production ----
-  Widget? _buildStatusLine(dynamic details) {
+  Widget? _buildStatusLine(dynamic details, AppLocalizations l10n) {
     // details тип у тебя nullable/модель - оставил dynamic чтобы не упереться в импорт dto
     // Поменяй dynamic на конкретный тип, если хочешь: CattleDetails? details
     final repro = (details?.reproductiveState as String?)?.trim();
     final prod = (details?.productionState as String?)?.trim();
 
     final parts = <String>[];
-    final reproLabel = _reproLabel(repro);
-    final prodLabel = _prodLabel(prod);
+    final reproLabel = _reproLabel(repro, l10n);
+    final prodLabel = _prodLabel(prod, l10n);
 
     if (reproLabel != null && reproLabel.isNotEmpty) parts.add(reproLabel);
     if (prodLabel != null && prodLabel.isNotEmpty) parts.add(prodLabel);
@@ -187,7 +190,7 @@ class HerdListItem extends ConsumerWidget {
   }
 
   // ---- Health line: dot + text ----
-  Widget? _buildHealthLine(dynamic details) {
+  Widget? _buildHealthLine(dynamic details, AppLocalizations l10n) {
     final raw = (details?.healthStatus as String?)?.trim();
     if (raw == null || raw.isEmpty) return null;
 
@@ -212,7 +215,7 @@ class HerdListItem extends ConsumerWidget {
         const SizedBox(width: 8),
         Flexible(
           child: Text(
-            hs.display,
+            _healthLabel(raw, l10n),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 13, color: AppColors.primary3),
@@ -222,60 +225,68 @@ class HerdListItem extends ConsumerWidget {
     );
   }
 
-  String? _reproLabel(String? raw) {
+  String? _reproLabel(String? raw, AppLocalizations l10n) {
     switch (raw) {
       case 'OPEN':
-        return 'Не осеменена';
+        return l10n.reproStatusNotInseminated;
       case 'INSEMINATED':
-        return 'Осеменена';
+        return l10n.reproStatusInseminated;
       case 'PREGNANT':
-        return 'Беременна';
+        return l10n.reproStatusPregnant;
       case 'DRY_PERIOD':
-        return 'Сухостой';
+        return l10n.reproStatusDry;
       case 'CALVING_SOON':
-        return 'Скоро отёл';
+        return l10n.reproStatusNearCalving;
       case 'FRESH_COW':
-        return 'Свежая';
+        return l10n.reproStatusFresh;
       default:
         return null;
     }
   }
 
-  String? _prodLabel(String? raw) {
+  String? _prodLabel(String? raw, AppLocalizations l10n) {
     switch (raw) {
       case 'LACTATING':
-        return 'Лактация';
+        return l10n.prodStateLactation;
       case 'DRY_PHASE_1':
-        return 'Сухостой (ф.1)';
+        return l10n.prodStateDryPhase1;
       case 'DRY_PHASE_2':
-        return 'Сухостой (ф.2)';
+        return l10n.prodStateDryPhase2;
       case 'DRY':
-        return 'Сухостой';
+        return l10n.prodStateDry;
       case 'FATTENING':
-        return 'Откорм';
+        return l10n.prodStateFattening;
       case 'BREEDING':
-        return 'Племенная';
+        return l10n.prodStateBreeding;
       case 'UNKNOWN':
       default:
         return null;
     }
   }
 
-  String _formatAge(int months) {
-    if (months < 12) return '$months месяцев';
+  String _formatAge(int months, AppLocalizations l10n) {
+    if (months < 12) return l10n.ageMonthsCompact(months);
     final years = months ~/ 12;
     final rem = months % 12;
+    if (rem == 0) return l10n.ageYearsCompact(years);
+    return l10n.ageYearsMonthsCompact(years, rem);
+  }
 
-    String yearsPart;
-    if (years == 1) {
-      yearsPart = '1 год';
-    } else if (years >= 2 && years <= 4) {
-      yearsPart = '$years года';
-    } else {
-      yearsPart = '$years лет';
+  String _healthLabel(String raw, AppLocalizations l10n) {
+    switch (raw) {
+      case 'HEALTHY':
+        return l10n.healthHealthy;
+      case 'SICK':
+        return l10n.healthSick;
+      case 'UNDER_TREATMENT':
+        return l10n.healthUnderTreatment;
+      case 'QUARANTINE':
+        return l10n.healthQuarantine;
+      case 'RECOVERING':
+        return l10n.healthRecovering;
+      default:
+        return raw;
     }
-    if (rem == 0) return yearsPart;
-    return '$yearsPart $rem месяцев';
   }
 
   Color _categoryColor(AnimalCategory? category) {

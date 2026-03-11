@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -44,6 +45,7 @@ class _HerdScreenState extends ConsumerState<HerdScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final cattleListAsync = ref.watch(cattleListProvider);
     final statsAsync = ref.watch(cattleStatisticsProvider);
 
@@ -54,7 +56,7 @@ class _HerdScreenState extends ConsumerState<HerdScreen> {
 
     return AppScaffold(
       bottomNavIndex: 1,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       enableDrawer: true,
       showBell: true,
       floatingActionButton: hasCattle
@@ -113,14 +115,14 @@ class _HerdScreenState extends ConsumerState<HerdScreen> {
 
                   // Детали ещё грузятся и список пока пуст
                   if (list.isEmpty && isLoadingDetails) {
-                    return const Center(
+                    return Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           CircularProgressIndicator(),
                           SizedBox(height: 12),
                           Text(
-                            'Загружаем данные для фильтра...',
+                            l10n.herdLoadingFilter,
                             style: TextStyle(color: AppColors.additional3),
                           ),
                         ],
@@ -234,6 +236,7 @@ class _SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Row(
       children: [
         IconButton(
@@ -243,8 +246,8 @@ class _SearchBar extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         if (!isSearchMode) ...[
-          const Text(
-            'Весь скот',
+          Text(
+            l10n.herdAllCattle,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -258,8 +261,8 @@ class _SearchBar extends StatelessWidget {
               controller: controller,
               autofocus: true,
               onChanged: onChanged,
-              decoration: const InputDecoration(
-                hintText: 'Поиск по имени или бирке',
+              decoration: InputDecoration(
+                hintText: l10n.searchByNameOrTag,
                 border: InputBorder.none,
               ),
             ),
@@ -289,12 +292,13 @@ class _ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'Ошибка при загрузке списка',
+          Text(
+            l10n.errorLoadingList,
             style: TextStyle(
               color: AppColors.primary3,
               fontSize: 16,
@@ -308,7 +312,7 @@ class _ErrorView extends StatelessWidget {
             style: const TextStyle(color: AppColors.additional3, fontSize: 13),
           ),
           const SizedBox(height: 16),
-          TextButton(onPressed: onRetry, child: const Text('Повторить')),
+          TextButton(onPressed: onRetry, child: Text(l10n.retry)),
         ],
       ),
     );
@@ -323,6 +327,7 @@ class _QuantityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -350,8 +355,8 @@ class _QuantityCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Количество',
+                      Text(
+                        l10n.quantityTitle,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -360,7 +365,7 @@ class _QuantityCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Всего скота: $total',
+                        l10n.herdTotalCattle(total),
                         style: const TextStyle(
                           fontSize: 14,
                           color: AppColors.primary3,
@@ -387,11 +392,12 @@ class _HeaderWithFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           child: Text(
-            'Список животных',
+            l10n.herdAnimalList,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,

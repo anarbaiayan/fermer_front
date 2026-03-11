@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart' as intl;
 
 class ApiException implements Exception {
   final String message;
@@ -15,7 +16,9 @@ class ApiException implements Exception {
 /// - {"message": "..."}
 /// - plain string
 /// - иначе fallback
-String extractApiMessage(Object error, {String fallback = 'Ошибка запроса'}) {
+String extractApiMessage(Object error, {String? fallback}) {
+  final fb = fallback ?? _defaultApiFallback();
+
   if (error is ApiException) return error.message;
 
   if (error is DioException) {
@@ -38,5 +41,13 @@ String extractApiMessage(Object error, {String fallback = 'Ошибка запр
     if (m != null && m.trim().isNotEmpty) return m.trim();
   }
 
-  return fallback;
+  return fb;
+}
+
+String _defaultApiFallback() {
+  final locale = intl.Intl.getCurrentLocale().toLowerCase();
+  if (locale.startsWith('kk')) {
+    return 'Сұраныс қатесі';
+  }
+  return 'Ошибка запроса';
 }

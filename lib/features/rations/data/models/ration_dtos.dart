@@ -6,6 +6,7 @@ import '../../domain/entities/ration_entities.dart';
 class RationCatalogItemDto {
   final int? id;
   final String? name;
+  final String? nameKk;
   final String? type;
   final String? typeDescription;
   final num? pricePerKg;
@@ -13,6 +14,7 @@ class RationCatalogItemDto {
   RationCatalogItemDto({
     this.id,
     this.name,
+    this.nameKk,
     this.type,
     this.typeDescription,
     this.pricePerKg,
@@ -22,6 +24,7 @@ class RationCatalogItemDto {
     return RationCatalogItemDto(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
+      nameKk: json['nameKk'] as String?,
       type: json['type'] as String?,
       typeDescription: json['typeDescription'] as String?,
       pricePerKg: json['pricePerKg'] as num?,

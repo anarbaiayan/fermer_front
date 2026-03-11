@@ -6,11 +6,7 @@ class HerdPageHeader extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
 
-  const HerdPageHeader({
-    super.key,
-    required this.title,
-    required this.onBack,
-  });
+  const HerdPageHeader({super.key, required this.title, required this.onBack});
 
   @override
   Widget build(BuildContext context) {

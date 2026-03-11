@@ -1,9 +1,4 @@
-enum PregnancyStatus {
-  pregnant,
-  notPregnant,
-  abortion,
-  unconfirmed,
-}
+enum PregnancyStatus { pregnant, notPregnant, abortion, unconfirmed }
 
 extension PregnancyStatusX on PregnancyStatus {
   String get apiValue {

@@ -1,36 +1,26 @@
-String formatAge(int months) {
-  if (months < 12) {
-    return '$months месяцев';
-  }
+import 'package:frontend/l10n/app_localizations.dart';
+
+String formatAge(int months, AppLocalizations l10n) {
+  if (months < 12) return l10n.ageMonthsCompact(months);
   final years = months ~/ 12;
   final remMonths = months % 12;
-
-  String yearsPart;
-  if (years == 1) {
-    yearsPart = '1 год';
-  } else if (years >= 2 && years <= 4) {
-    yearsPart = '$years года';
-  } else {
-    yearsPart = '$years лет';
-  }
-
-  if (remMonths == 0) return yearsPart;
-  return '$yearsPart $remMonths месяцев';
+  if (remMonths == 0) return l10n.ageYearsCompact(years);
+  return l10n.ageYearsMonthsCompact(years, remMonths);
 }
 
-String? mapHealthStatus(String? raw) {
+String? mapHealthStatus(String? raw, AppLocalizations l10n) {
   if (raw == null) return null;
   switch (raw) {
     case 'HEALTHY':
-      return 'Здоров';
+      return l10n.healthHealthy;
     case 'SICK':
-      return 'Болен';
+      return l10n.healthSick;
     case 'UNDER_TREATMENT':
-      return 'На лечении';
+      return l10n.healthUnderTreatment;
     case 'QUARANTINE':
-      return 'Карантин';
+      return l10n.healthQuarantine;
     case 'RECOVERING':
-      return 'Выздоравливает';
+      return l10n.healthRecovering;
     default:
       return null;
   }

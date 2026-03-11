@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_logo.dart';
 import 'package:frontend/core/widgets/app_primary_button.dart';
@@ -78,6 +79,7 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     const dotColor = Color(0xFF6B7280);
 
     return Scaffold(
@@ -91,8 +93,8 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
               const AppLogo(height: 40),
               const SizedBox(height: 28),
 
-              const Text(
-                'Код верификации',
+              Text(
+                l10n.forgotPasswordCodeTitle,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
@@ -100,8 +102,8 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                'Введите 4-значный код верификации для сброса пароля',
+              Text(
+                l10n.forgotPasswordCodeSubtitle,
                 style: TextStyle(
                   fontSize: 13,
                   height: 1.35,
@@ -174,7 +176,7 @@ class _ForgotPasswordCodeScreenState extends State<ForgotPasswordCodeScreen> {
               const SizedBox(height: 32),
 
               AppPrimaryButton(
-                text: 'Сбросить пароль',
+                text: l10n.forgotPasswordResetButton,
                 onPressed: () {
                   context.push(
                     '/forgot-password/new',

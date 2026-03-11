@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
+import '../auth_error_localizer.dart';
 import 'register_flow_models.dart';
 
 class RegisterStep2Screen extends HookConsumerWidget {
@@ -99,9 +100,10 @@ class RegisterStep2Screen extends HookConsumerWidget {
           context.go('/home');
         }
       } else if (newState.error != null && context.mounted) {
+        final message = localizeAuthError(context, newState.error!);
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(newState.error!)));
+        ).showSnackBar(SnackBar(content: Text(message)));
       }
     }
 
@@ -109,7 +111,11 @@ class RegisterStep2Screen extends HookConsumerWidget {
 
     String? passwordFieldErrorText() {
       if (passwordError.value != null) return passwordError.value;
-      if (hasGlobalError) return authState.error ?? l10n.registerErrorGeneric;
+      if (hasGlobalError) {
+        final raw = authState.error;
+        if (raw == null) return l10n.registerErrorGeneric;
+        return localizeAuthError(context, raw);
+      }
       return null;
     }
 

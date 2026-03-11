@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -58,12 +59,13 @@ class _AddBulkLactationScreenState
   }
 
   Future<void> _pickDate() async {
+    final l10n = context.l10n;
     final picked = await showMaskedDatePicker(
       context: context,
       initialDate: _date,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
-      helpText: 'Выберите дату',
+      helpText: l10n.lactationSelectDate,
     );
 
     if (picked == null) return;
@@ -138,20 +140,21 @@ class _AddBulkLactationScreenState
   }
 
   Future<void> _submit() async {
+    final l10n = context.l10n;
     final cows = _parseInt(_cowsCtrl.text);
     final total = _parseDouble(_totalMilkCtrl.text);
 
     if (cows == null || cows <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Укажите количество подоенных коров')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.lactationEnterCowCount)));
       return;
     }
 
     if (total == null || total <= 0) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Укажите всего молока (л)')));
+      ).showSnackBar(SnackBar(content: Text(l10n.lactationEnterTotalMilk)));
       return;
     }
 
@@ -177,8 +180,8 @@ class _AddBulkLactationScreenState
 
       await showAppSuccessDialog(
         context,
-        title: 'Данные надоя по ферме\nуспешно добавлены!',
-        buttonText: 'Перейти к списку',
+        title: l10n.lactationBulkSuccess,
+        buttonText: l10n.lactationGoToList,
         onButtonPressed: () {
           context.go('/lactation');
         },
@@ -190,7 +193,7 @@ class _AddBulkLactationScreenState
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Ошибка: $e')));
+      ).showSnackBar(SnackBar(content: Text(l10n.errorPrefix('$e'))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -225,9 +228,10 @@ class _AddBulkLactationScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AppScaffold(
       bottomNavIndex: null,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       enableDrawer: false,
       showBell: false,
       backgroundColor: AppColors.primary1,
@@ -261,9 +265,9 @@ class _AddBulkLactationScreenState
                                 onPressed: () => context.pop(false),
                               ),
                               const SizedBox(width: 8),
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  'Надой по ферме',
+                                  l10n.lactationFarmMilking,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 20,
@@ -279,7 +283,7 @@ class _AddBulkLactationScreenState
                           const SizedBox(height: 16),
 
                           _LabeledRightField(
-                            label: 'Дата',
+                            label: l10n.lactationDate,
                             field: TextField(
                               controller: _dateCtrl,
                               readOnly: true,
@@ -304,7 +308,7 @@ class _AddBulkLactationScreenState
                           const SizedBox(height: 16),
 
                           _LabeledRightField(
-                            label: 'Время',
+                            label: l10n.lactationTime,
                             field: TextField(
                               controller: _timeCtrl,
                               readOnly: true,
@@ -325,18 +329,18 @@ class _AddBulkLactationScreenState
 
                           const SizedBox(height: 16),
 
-                          const _Label('Время доения'),
+                          _Label(l10n.lactationMilkingTime),
                           const SizedBox(height: 6),
                           _DropdownField(
                             value: _milkingTime,
-                            items: const [
+                            items: [
                               DropdownMenuItem(
                                 value: 'MORNING',
-                                child: Text('Утро'),
+                                child: Text(l10n.lactationMorning),
                               ),
                               DropdownMenuItem(
                                 value: 'EVENING',
-                                child: Text('Вечер'),
+                                child: Text(l10n.lactationEvening),
                               ),
                             ],
                             onChanged: (v) {
@@ -350,7 +354,7 @@ class _AddBulkLactationScreenState
 
                           const SizedBox(height: 16),
 
-                          const _Label('Количество подоенных коров (шт)'),
+                          _Label(l10n.lactationMilkedCows),
                           const SizedBox(height: 6),
                           SizedBox(
                             height: 48,
@@ -358,14 +362,14 @@ class _AddBulkLactationScreenState
                               controller: _cowsCtrl,
                               keyboardType: TextInputType.number,
                               decoration: _inputDecoration(
-                                hint: 'Укажите количество',
+                                hint: l10n.lactationEnterCowCount,
                               ),
                             ),
                           ),
 
                           const SizedBox(height: 16),
 
-                          const _Label('Всего молока (л)'),
+                          _Label(l10n.lactationTotalMilk),
                           const SizedBox(height: 6),
                           SizedBox(
                             height: 48,
@@ -376,14 +380,14 @@ class _AddBulkLactationScreenState
                                     decimal: true,
                                   ),
                               decoration: _inputDecoration(
-                                hint: 'Введите количество молока',
+                                hint: l10n.lactationEnterMilk,
                               ),
                             ),
                           ),
 
                           const SizedBox(height: 16),
 
-                          const _Label('Использованно для телят (л)'),
+                          _Label(l10n.lactationCalfUsed),
                           const SizedBox(height: 6),
                           SizedBox(
                             height: 48,
@@ -394,14 +398,14 @@ class _AddBulkLactationScreenState
                                     decimal: true,
                                   ),
                               decoration: _inputDecoration(
-                                hint: 'Введите количество молока',
+                                hint: l10n.lactationEnterMilk,
                               ),
                             ),
                           ),
 
                           const SizedBox(height: 16),
 
-                          const _Label('Непригодное молоко (л)'),
+                          _Label(l10n.lactationUnfitMilk),
                           const SizedBox(height: 6),
                           SizedBox(
                             height: 48,
@@ -412,7 +416,7 @@ class _AddBulkLactationScreenState
                                     decimal: true,
                                   ),
                               decoration: _inputDecoration(
-                                hint: 'Введите данные',
+                                hint: l10n.lactationEnterInfo,
                               ),
                             ),
                           ),
@@ -441,8 +445,8 @@ class _AddBulkLactationScreenState
                                       onPressed: _saving
                                           ? null
                                           : () => context.pop(false),
-                                      child: const Text(
-                                        'Отменить',
+                                      child: Text(
+                                        l10n.dialogCancel,
                                         style: TextStyle(
                                           color: Colors.red,
                                           fontWeight: FontWeight.w600,
@@ -474,8 +478,8 @@ class _AddBulkLactationScreenState
                                                 color: Colors.white,
                                               ),
                                             )
-                                          : const Text(
-                                              'Добавить',
+                                          : Text(
+                                              l10n.add,
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w600,

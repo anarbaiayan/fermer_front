@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_success_dialog.dart';
@@ -11,7 +12,6 @@ import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:frontend/features/herd/presentation/widgets/cattle_events_preview.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
-import 'package:frontend/features/herd/presentation/utils/cattle_formatters.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_small_action_card.dart';
 import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
 import 'package:frontend/features/lactation/application/lactation_providers.dart';
@@ -19,6 +19,7 @@ import 'package:frontend/features/rations/application/rations_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 class HerdAnimalContent extends ConsumerStatefulWidget {
   final Cattle cattle;
@@ -43,21 +44,22 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
   bool _isRegenerating = false;
 
   Future<void> _confirmDelete(BuildContext context) async {
+    final l10n = context.l10n;
     final ok =
         await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: const Text('Удалить животное?'),
-            content: const Text('Это действие нельзя отменить. Вы уверены?'),
+            title: Text(l10n.animalDeleteTitle),
+            content: Text(l10n.animalDeleteConfirm),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text('Отмена'),
+                child: Text(l10n.dialogCancel),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text('Удалить'),
+                child: Text(l10n.dialogDelete),
               ),
             ],
           ),
@@ -70,6 +72,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
   }
 
   Future<void> _deleteCattle(BuildContext context) async {
+    final l10n = context.l10n;
     final cattle = widget.cattle;
 
     setState(() => _isDeleting = true);
@@ -86,14 +89,14 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Животное удалено')));
+        ).showSnackBar(SnackBar(content: Text(l10n.animalDeleted)));
         context.pop();
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Ошибка удаления: $e')));
+        ).showSnackBar(SnackBar(content: Text(l10n.errorDeletion('$e'))));
       }
     } finally {
       if (mounted) {
@@ -107,7 +110,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
     if (_isRegenerating) return;
 
     setState(() => _isRegenerating = true);
-    _showFullScreenLoading(text: 'Генерируется рацион...');
+    _showFullScreenLoading(text: context.l10n.rationGenerating);
 
     try {
       final cattle = widget.cattle;
@@ -124,22 +127,22 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
       await showAppSuccessDialog(
         context,
-        title: 'Рацион успешно\nсгенерирован заново!',
-        message: 'Обновленные данные сохранены.',
-        buttonText: 'Понятно',
+        title: context.l10n.rationRegeneratedSuccess,
+        message: context.l10n.rationUpdatedSaved,
+        buttonText: context.l10n.dialogUnderstood,
       );
     } catch (e) {
       if (!mounted) return;
       _hideFullScreenLoading();
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Ошибка: $e')));
+      ).showSnackBar(SnackBar(content: Text(context.l10n.errorPrefix('$e'))));
     } finally {
       if (mounted) setState(() => _isRegenerating = false);
     }
   }
 
-  void _showFullScreenLoading({String text = 'Генерируется рацион...'}) {
+  void _showFullScreenLoading({required String text}) {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -155,6 +158,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final cattle = widget.cattle;
     final resolved = AnimalCategoryResolver.resolve(
       gender: cattle.gender,
@@ -169,31 +173,32 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
     final headerColor = _categoryColor(category);
 
     final ageMonths = resolved.ageInMonths;
-    final ageText = formatAge(ageMonths);
+    final ageText = _formatAge(ageMonths, l10n);
     final detailsAsync = ref.watch(cattleDetailsProvider(cattle.id));
     final details = detailsAsync.value; // может быть null пока грузится
-    final healthText = mapHealthStatus(details?.healthStatus);
+    final healthText = _healthLabel(details?.healthStatus, l10n);
 
     final tagText = '#${cattle.tagNumber}';
     final birthDateText = DateFormat('dd.MM.yyyy').format(cattle.dateOfBirth);
 
-    String pregnancyLabel(bool? v) =>
-        v == null ? '—' : (v ? 'Беременна' : 'Не беременна');
+    String pregnancyLabel(bool? v) => v == null
+        ? '—'
+        : (v ? l10n.reproStatusPregnant : l10n.reproStatusNotPregnant);
 
     String reproductiveLabel(String? raw) {
       switch (raw) {
         case 'OPEN':
-          return 'Не осеменена';
+          return l10n.reproStatusNotInseminated;
         case 'INSEMINATED':
-          return 'Осеменена';
+          return l10n.reproStatusInseminated;
         case 'PREGNANT':
-          return 'Беременна';
+          return l10n.reproStatusPregnant;
         case 'DRY_PERIOD':
-          return 'Сухостой';
+          return l10n.reproStatusDry;
         case 'CALVING_SOON':
-          return 'Скоро отёл';
+          return l10n.reproStatusNearCalving;
         case 'FRESH_COW':
-          return 'Свежая корова';
+          return l10n.reproStatusFreshCow;
         default:
           return '—';
       }
@@ -202,19 +207,19 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
     String productionLabel(String? raw) {
       switch (raw) {
         case 'LACTATING':
-          return 'Лактация';
+          return l10n.prodStateLactation;
         case 'DRY_PHASE_1':
-          return 'Сухостой (фаза 1)';
+          return l10n.prodStateDryPhase1;
         case 'DRY_PHASE_2':
-          return 'Сухостой (фаза 2)';
+          return l10n.prodStateDryPhase2;
         case 'DRY':
-          return 'Сухостой';
+          return l10n.prodStateDry;
         case 'FATTENING':
-          return 'На откорме';
+          return l10n.prodStateFatteningFull;
         case 'BREEDING':
-          return 'Племенное использование';
+          return l10n.prodStateBreedingFull;
         case 'UNKNOWN':
-          return 'Неизвестно';
+          return l10n.prodStateUnknown;
         default:
           return '—';
       }
@@ -242,7 +247,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'Информация о животном',
+                            l10n.animalInfo,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
@@ -324,18 +329,18 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                         }
                                       },
                                       itemBuilder: (context) => [
-                                        const PopupMenuItem<String>(
+                                        PopupMenuItem<String>(
                                           value: 'delete',
                                           child: Row(
                                             children: [
-                                              Icon(
+                                              const Icon(
                                                 Icons.delete,
                                                 color: Colors.red,
                                               ),
-                                              SizedBox(width: 8),
+                                              const SizedBox(width: 8),
                                               Text(
-                                                'Удалить',
-                                                style: TextStyle(
+                                                l10n.dialogDelete,
+                                                style: const TextStyle(
                                                   color: Colors.red,
                                                 ),
                                               ),
@@ -380,9 +385,9 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                     child: AppIcons.svg('info', size: 34),
                                   ),
                                   const SizedBox(width: 16),
-                                  const Expanded(
+                                  Expanded(
                                     child: Text(
-                                      'Основная информация',
+                                      l10n.animalMainInfo,
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
@@ -410,66 +415,69 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _infoRowOptional('Бирка', tagText),
+                                _infoRowOptional(l10n.animalTag, tagText),
                                 _infoRowOptional(
-                                  'Дата рождения',
+                                  l10n.animalBirthDate,
                                   birthDateText,
                                 ),
-                                _infoRowOptional('Возраст', ageText),
+                                _infoRowOptional(l10n.animalAge, ageText),
                                 _infoRowOptional(
-                                  'Категория',
-                                  _categoryTitle(category),
+                                  l10n.animalCategory,
+                                  _categoryTitle(category, l10n),
                                 ),
-                                _infoRowOptional('Порода', details?.breed),
                                 _infoRowOptional(
-                                  'Группа',
+                                  l10n.animalBreed,
+                                  details?.breed,
+                                ),
+                                _infoRowOptional(
+                                  l10n.animalGroup,
                                   details?.animalGroup,
                                 ),
                                 _healthInfoRowOptional(
-                                  'Состояние здоровья',
+                                  l10n.animalHealthStatus,
                                   healthText,
                                 ),
 
                                 if (isCow) ...[
                                   _infoRowMilkOptional(
-                                    'Последний надой\n(л/день)',
+                                    l10n.milkLastYield,
                                     details?.lastMilkYield,
                                   ),
                                   _infoRowDateOptional(
-                                    'Дата последнего\nнадоя',
+                                    l10n.milkLastYieldDate,
                                     details?.lastMilkYieldDate,
                                   ),
                                   _infoRowMilkOptional(
-                                    'Средний надой\nза 7 дней',
+                                    l10n.milkAvg7Days,
                                     details?.averageMilkYield7Days,
                                   ),
                                   _infoRowMilkOptional(
-                                    'Средний надой\nза 30 дней',
+                                    l10n.milkAvg30Days,
                                     details?.averageMilkYield30Days,
                                   ),
                                   _infoRowMilkOptional(
-                                    'Пик надоя\n(текущая лактация)',
+                                    l10n.milkPeakCurrent,
                                     details?.peakMilkYieldCurrentLactation,
                                   ),
                                   _infoRowMilkOptional(
-                                    'Всего молока\n(текущая лактация)',
+                                    l10n.milkTotalCurrent,
                                     details?.totalMilkCurrentLactation,
                                   ),
                                   _infoRowDateOptional(
-                                    'Последний отел',
+                                    l10n.lastCalvingDate,
                                     details?.lastCalvingDate,
                                   ),
                                   _infoRowDateOptional(
-                                    'Последнее\nосеменение',
+                                    l10n.lastInseminationDate,
                                     details?.lastInseminationDate,
                                   ),
                                   if (details?.isPregnant != null)
                                     _infoRowOptional(
-                                      'Беременность',
+                                      l10n.pregnancyLabel,
                                       pregnancyLabel(details?.isPregnant),
                                     ),
                                   _infoRowOptional(
-                                    'Репродуктивный статус',
+                                    l10n.reproductiveStatusLabel,
                                     (details?.reproductiveState == null)
                                         ? null
                                         : reproductiveLabel(
@@ -477,7 +485,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                           ),
                                   ),
                                   _infoRowOptional(
-                                    'Производственный статус',
+                                    l10n.productionStatusLabel,
                                     (details?.productionState == null)
                                         ? null
                                         : productionLabel(
@@ -488,20 +496,20 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
                                 if (isHeifer) ...[
                                   _infoRowDateOptional(
-                                    'Первое\nосеменение',
+                                    l10n.firstInseminationDate,
                                     details?.firstInseminationDate,
                                   ),
                                   _infoRowDateOptional(
-                                    'Планируемая дата\nотела',
+                                    l10n.expectedCalvingDate,
                                     details?.expectedCalvingDate,
                                   ),
                                   if (details?.isPregnant != null)
                                     _infoRowOptional(
-                                      'Беременность',
+                                      l10n.pregnancyLabel,
                                       pregnancyLabel(details?.isPregnant),
                                     ),
                                   _infoRowOptional(
-                                    'Репродуктивный статус',
+                                    l10n.reproductiveStatusLabel,
                                     (details?.reproductiveState == null)
                                         ? null
                                         : reproductiveLabel(
@@ -512,8 +520,11 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
                                 if (isBull) ...[
                                   _infoRowOptional(
-                                    'Назначение',
-                                    details?.bullPurpose?.display,
+                                    l10n.bullPurposeLabel,
+                                    _bullPurposeLabel(
+                                      details?.bullPurpose,
+                                      l10n,
+                                    ),
                                   ),
                                 ],
                               ],
@@ -531,8 +542,8 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                               children: [
                                 Expanded(
                                   child: SmallActionCard(
-                                    title: 'Сгенерировать рацион повторно',
-                                    subtitle: 'Примерно 1 минута',
+                                    title: l10n.rationRegenerateTitle,
+                                    subtitle: l10n.rationApproxMinute,
                                     icon: AppIcons.svg('actions', size: 26),
                                     onTap: _isRegenerating
                                         ? () {}
@@ -542,8 +553,8 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: SmallActionCard(
-                                    title: 'Посмотреть рацион',
-                                    subtitle: 'Выберите рацион',
+                                    title: l10n.rationViewTitle,
+                                    subtitle: l10n.rationChooseSubtitle,
                                     icon: AppIcons.svg('diet', size: 26),
                                     onTap: () => context.push(
                                       '/rations',
@@ -588,8 +599,8 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 12),
-                                  const Text(
-                                    'Ближайшие события',
+                                  Text(
+                                    l10n.upcomingEventsTitle,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
@@ -618,7 +629,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
                                       final left = e.daysUntil == null
                                           ? ''
-                                          : 'через ${e.daysUntil} дн';
+                                          : l10n.daysUntilShort(e.daysUntil!);
                                       final eventId = e.id;
 
                                       return Padding(
@@ -640,16 +651,16 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                             ),
-                                            child: const Row(
+                                            child: Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.check_circle,
                                                   color: AppColors.success,
                                                 ),
-                                                SizedBox(width: 8),
+                                                const SizedBox(width: 8),
                                                 Text(
-                                                  'Завершить',
-                                                  style: TextStyle(
+                                                  l10n.eventsCompleteEvent,
+                                                  style: const TextStyle(
                                                     color: AppColors.primary3,
                                                     fontWeight: FontWeight.w600,
                                                   ),
@@ -663,11 +674,13 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                                   context: context,
                                                   barrierDismissible: true,
                                                   builder: (ctx) => AlertDialog(
-                                                    title: const Text(
-                                                      'Завершить событие?',
+                                                    title: Text(
+                                                      l10n.eventsDeleteConfirmComplete,
                                                     ),
                                                     content: Text(
-                                                      'Отметить "${e.title}" как выполненное?',
+                                                      l10n.eventsMarkCompleted(
+                                                        e.title,
+                                                      ),
                                                     ),
                                                     actions: [
                                                       TextButton(
@@ -675,8 +688,8 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                                             Navigator.of(
                                                               ctx,
                                                             ).pop(false),
-                                                        child: const Text(
-                                                          'Отмена',
+                                                        child: Text(
+                                                          l10n.dialogCancel,
                                                         ),
                                                       ),
                                                       ElevatedButton(
@@ -684,8 +697,8 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                                             Navigator.of(
                                                               ctx,
                                                             ).pop(true),
-                                                        child: const Text(
-                                                          'Завершить',
+                                                        child: Text(
+                                                          l10n.eventsCompleteEvent,
                                                         ),
                                                       ),
                                                     ],
@@ -725,9 +738,9 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                                 ScaffoldMessenger.of(
                                                   context,
                                                 ).showSnackBar(
-                                                  const SnackBar(
+                                                  SnackBar(
                                                     content: Text(
-                                                      'Событие завершено',
+                                                      l10n.eventsEventCompleted,
                                                     ),
                                                   ),
                                                 );
@@ -741,7 +754,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                                 ).showSnackBar(
                                                   SnackBar(
                                                     content: Text(
-                                                      'Ошибка: $err',
+                                                      l10n.errorPrefix('$err'),
                                                     ),
                                                   ),
                                                 );
@@ -830,8 +843,12 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                         },
                                         child: Text(
                                           _showAllUpcoming
-                                              ? 'Скрыть'
-                                              : 'Показать все (${details.upcomingEvents!.length})',
+                                              ? l10n.hideText
+                                              : l10n.showAllCount(
+                                                  details
+                                                      .upcomingEvents!
+                                                      .length,
+                                                ),
                                         ),
                                       ),
                                     ),
@@ -878,7 +895,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
               child: Container(
                 padding: const EdgeInsets.only(top: 12),
                 child: FermerPlusBigButton(
-                  text: 'Закрыть',
+                  text: l10n.dialogClose,
                   height: 50,
                   borderRadius: 5,
                   onPressed: () => context.pop(),
@@ -917,16 +934,16 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
     }
   }
 
-  String _categoryTitle(AnimalCategory? category) {
+  String _categoryTitle(AnimalCategory? category, AppLocalizations l10n) {
     switch (category) {
       case AnimalCategory.cow:
-        return 'Корова';
+        return l10n.rationCategoryCow;
       case AnimalCategory.heifer:
-        return 'Тёлка';
+        return l10n.rationCategoryHeifer;
       case AnimalCategory.bull:
-        return 'Бык';
+        return l10n.rationCategoryBull;
       case AnimalCategory.calf:
-        return 'Телёнок';
+        return l10n.rationCategoryCalf;
       default:
         return '—';
     }
@@ -975,7 +992,10 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
 
   Widget _infoRowMilkOptional(String label, double? v) {
     if (v == null) return const SizedBox.shrink();
-    return _infoRowOptional(label, '${v.toStringAsFixed(0)} л');
+    return _infoRowOptional(
+      label,
+      context.l10n.unitLitersValue(v.toStringAsFixed(0)),
+    );
   }
 
   Widget _healthInfoRowOptional(String label, String? text) {
@@ -1017,6 +1037,43 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
       ),
     );
   }
+
+  String _formatAge(int months, AppLocalizations l10n) {
+    if (months < 12) return l10n.ageMonthsCompact(months);
+    final years = months ~/ 12;
+    final rem = months % 12;
+    if (rem == 0) return l10n.ageYearsCompact(years);
+    return l10n.ageYearsMonthsCompact(years, rem);
+  }
+
+  String? _healthLabel(String? raw, AppLocalizations l10n) {
+    if (raw == null || raw.trim().isEmpty) return null;
+    switch (raw.trim()) {
+      case 'HEALTHY':
+        return l10n.healthHealthy;
+      case 'SICK':
+        return l10n.healthSick;
+      case 'UNDER_TREATMENT':
+        return l10n.healthUnderTreatment;
+      case 'QUARANTINE':
+        return l10n.healthQuarantine;
+      case 'RECOVERING':
+        return l10n.healthRecovering;
+      default:
+        return raw;
+    }
+  }
+
+  String? _bullPurposeLabel(BullPurpose? purpose, AppLocalizations l10n) {
+    switch (purpose) {
+      case BullPurpose.breeding:
+        return l10n.bullPurposeBreeding;
+      case BullPurpose.fattening:
+        return l10n.bullPurposeFattening;
+      case null:
+        return null;
+    }
+  }
 }
 
 class _MilkProductivityPreview extends StatelessWidget {
@@ -1032,6 +1089,7 @@ class _MilkProductivityPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1047,9 +1105,9 @@ class _MilkProductivityPreview extends StatelessWidget {
               child: Center(child: AppIcons.svg('lactation_number')),
             ),
             const SizedBox(width: 8),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Молочная продуктивность коровы',
+                l10n.milkProductivityTitle,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -1067,8 +1125,8 @@ class _MilkProductivityPreview extends StatelessWidget {
         const SizedBox(height: 8),
         const Divider(height: 1, color: AppColors.additional2),
         const SizedBox(height: 8),
-        const Text(
-          'Добавьте надой (утро/вечер), чтобы вести лактацию.',
+        Text(
+          l10n.milkProductivityHint,
           style: TextStyle(fontSize: 14, color: AppColors.additional3),
         ),
       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -18,6 +19,7 @@ class LactationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final summaryAsync = ref.watch(lactationDailySummaryProvider);
 
     Future<void> refresh() async {
@@ -39,12 +41,12 @@ class LactationScreen extends ConsumerWidget {
     }
 
     String milkText(LactationDailySummaryDto s) {
-      return 'Молоко за день: ${s.totalLiters.toStringAsFixed(0)} л.';
+      return l10n.lactationMilkPerDay(s.totalLiters.toStringAsFixed(0));
     }
 
     return AppScaffold(
       bottomNavIndex: 4,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       enableDrawer: true,
       showBell: true,
       showAppBar: true,
@@ -84,8 +86,8 @@ class LactationScreen extends ConsumerWidget {
                   },
                 ),
                 const SizedBox(width: 6),
-                const Text(
-                  'Лактация',
+                Text(
+                  l10n.lactationTitle,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -186,6 +188,7 @@ class _LactationQuantityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0),
       child: Row(
@@ -218,8 +221,8 @@ class _LactationQuantityCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Количество',
+                        Text(
+                          l10n.lactationQuantity,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -293,12 +296,13 @@ class _LactationErrorState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'Ошибка при загрузке',
+          Text(
+            l10n.errorLoading,
             style: TextStyle(
               color: AppColors.primary3,
               fontSize: 16,
@@ -312,7 +316,7 @@ class _LactationErrorState extends StatelessWidget {
             style: const TextStyle(color: AppColors.additional3, fontSize: 13),
           ),
           const SizedBox(height: 12),
-          TextButton(onPressed: onRetry, child: const Text('Повторить')),
+          TextButton(onPressed: onRetry, child: Text(l10n.retry)),
         ],
       ),
     );

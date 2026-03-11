@@ -3,11 +3,7 @@ class SimpleCattle {
   final String tagNumber;
   final String? name;
 
-  const SimpleCattle({
-    required this.id,
-    required this.tagNumber,
-    this.name,
-  });
+  const SimpleCattle({required this.id, required this.tagNumber, this.name});
 
   factory SimpleCattle.fromJson(Map<String, dynamic> json) {
     return SimpleCattle(

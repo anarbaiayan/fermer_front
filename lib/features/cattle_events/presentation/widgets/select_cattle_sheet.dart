@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/cattle_events/domain/entities/simple_cattle.dart';
 
@@ -31,6 +32,8 @@ class _SelectCattleSheetState extends State<SelectCattleSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
@@ -39,10 +42,10 @@ class _SelectCattleSheetState extends State<SelectCattleSheet> {
           children: [
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Выбор скота',
-                    style: TextStyle(
+                    l10n.selectCattleTitle,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: AppColors.primary3,
@@ -50,7 +53,7 @@ class _SelectCattleSheetState extends State<SelectCattleSheet> {
                   ),
                 ),
                 Text(
-                  'Выбрано: ${selected.length}',
+                  l10n.selectCattleSelected(selected.length),
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
@@ -59,21 +62,19 @@ class _SelectCattleSheetState extends State<SelectCattleSheet> {
                 ),
               ],
             ),
-
             const SizedBox(height: 10),
-
             Row(
               children: [
                 TextButton(
                   onPressed: widget.items.isEmpty ? null : _selectAll,
-                  child: const Text('Выбрать все'),
+                  child: Text(l10n.selectCattleAll),
                 ),
                 const SizedBox(width: 8),
                 TextButton(
                   onPressed: selected.isEmpty ? null : _clear,
-                  child: const Text(
-                    'Очистить',
-                    style: TextStyle(color: AppColors.error),
+                  child: Text(
+                    l10n.selectCattleClear,
+                    style: const TextStyle(color: AppColors.error),
                   ),
                 ),
                 const Spacer(),
@@ -86,14 +87,12 @@ class _SelectCattleSheetState extends State<SelectCattleSheet> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text('Готово'),
+                  child: Text(l10n.selectCattleDone),
                 ),
               ],
             ),
-            
             const SizedBox(height: 8),
             const Divider(height: 1),
-
             Flexible(
               child: ListView.separated(
                 shrinkWrap: true,
@@ -108,7 +107,9 @@ class _SelectCattleSheetState extends State<SelectCattleSheet> {
                     controlAffinity: ListTileControlAffinity.leading,
                     activeColor: AppColors.primary1,
                     title: Text(
-                      c.tagNumber.isEmpty ? 'Без бирки' : c.tagNumber,
+                      c.tagNumber.isEmpty
+                          ? l10n.selectCattleNoTag
+                          : c.tagNumber,
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         color: AppColors.primary3,

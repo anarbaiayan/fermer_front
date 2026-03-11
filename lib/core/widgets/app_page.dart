@@ -4,11 +4,7 @@ class AppPage extends StatelessWidget {
   final Widget child;
   final bool usePadding;
 
-  const AppPage({
-    super.key,
-    required this.child,
-    this.usePadding = true,
-  });
+  const AppPage({super.key, required this.child, this.usePadding = true});
 
   @override
   Widget build(BuildContext context) {

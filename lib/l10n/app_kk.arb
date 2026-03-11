@@ -1,395 +1,710 @@
 {
-  "@@locale": "kk",
-  "appTitle": "Fermer+",
-
-  "farmName": "Ферма атауы",
-
-  "navHome": "Басты бет",
-  "navHerd": "Табын",
-  "navEvents": "Оқиғалар",
-  "navRation": "Рацион",
-  "navLactation": "Лактация",
-
-  "drawerProfile": "Профиль",
-  "drawerSettings": "Баптаулар",
-  "drawerFaq": "Жиі қойылатын\nсұрақтар",
-  "drawerSupport": "Қолдау қызметі",
-  "drawerReferral": "Рефералдық\nбағдарлама",
-  "drawerLogout": "Аккаунттан шығу",
-  "drawerLogoutConfirm": "Сіз шынымен\nFermer+ жүйесінен шығуды қалайсыз ба?",
-  "drawerLogoutButton": "Шығу",
-
-  "dialogOk": "Жарайды",
-  "dialogCancel": "Бас тарту",
-  "dialogDelete": "Жою",
-  "dialogClose": "Жабу",
-  "dialogUnderstood": "Түсінікті",
-
-  "errorPrefix": "Қате: {error}",
-  "@errorPrefix": { "placeholders": { "error": { "type": "String" } } },
-  "errorLoadingList": "Тізімді жүктеу кезінде қате",
-  "errorLoadingStats": "Статистиканы жүктеу кезінде қате:\n{error}",
-  "@errorLoadingStats": { "placeholders": { "error": { "type": "String" } } },
-  "errorLoadingQuantity": "Сан бойынша деректерді жүктеу кезінде қате:\n{error}",
-  "@errorLoadingQuantity": { "placeholders": { "error": { "type": "String" } } },
-  "errorLoadingData": "Жүктеу кезінде қате: {error}",
-  "@errorLoadingData": { "placeholders": { "error": { "type": "String" } } },
-  "errorLoading": "Жүктеу кезінде қате",
-  "errorDeletion": "Жою қатесі: {error}",
-  "@errorDeletion": { "placeholders": { "error": { "type": "String" } } },
-  "errorAddingEvent": "Оқиғаны қосу кезінде қате: {error}",
-  "@errorAddingEvent": { "placeholders": { "error": { "type": "String" } } },
-  "errorTypes": "Типтер қатесі: {error}",
-  "@errorTypes": { "placeholders": { "error": { "type": "String" } } },
-
-  "retry": "Қайталау",
-  "save": "Сақтау",
-  "saving": "Сақталуда...",
-  "add": "Қосу",
-  "continueText": "Жалғастыру",
-
-  "loginTitle": "КІРУ",
-  "loginSubtitle": "Жеке кабинетке кіру үшін ақпаратты енгізіңіз",
-  "loginButton": "КІРУ",
-  "loginPhoneLabel": "Телефон нөмірі",
-  "loginPhoneHint": "Нөмірді енгізіңіз",
-  "loginPhoneError": "Дұрыс телефон нөмірін енгізіңіз",
-  "loginPasswordLabel": "Құпиясөз",
-  "loginPasswordError": "Қате құпиясөз. Қайта енгізіп көріңіз.",
-  "loginForgotPassword": "Құпиясөзді ұмыттыңыз ба?",
-  "loginNoAccount": "Аккаунтыңыз жоқ па?",
-  "loginRegisterHint": "Fermer+ платформасын пайдалану үшін тіркеліңіз",
-  "loginRegisterButton": "Тіркелу",
-
-  "registerTitle": "Тіркелу",
-  "registerSubtitle": "Тіркелу үшін ақпаратты енгізіңіз",
-  "registerFirstName": "Аты",
-  "registerFirstNameHint": "Атыңызды енгізіңіз",
-  "registerLastName": "Тегі",
-  "registerLastNameHint": "Тегіңізді енгізіңіз",
-  "registerFarmName": "Ферма атауы",
-  "registerFarmNameHint": "Ферма атауын енгізіңіз",
-  "registerFillAll": "Барлық өрістерді толтырыңыз",
-  "registerStep1": "1-қадам",
-  "registerStep2": "2-қадам",
-
-  "forgotPasswordTitle": "Құпиясөзді ұмыттыңыз ба?",
-  "forgotPasswordSubtitle": "Құпиясөзді қалпына келтіру үшін верификация коды келетін телефон нөмірін тексеріңіз",
-  "forgotPasswordGetCode": "Код алу",
-  "forgotPasswordCodeTitle": "Верификация коды",
-  "forgotPasswordCodeSubtitle": "Құпиясөзді қалпына келтіру үшін 4 таңбалы кодты енгізіңіз",
-  "forgotPasswordResetButton": "Құпиясөзді қалпына келтіру",
-  "forgotPasswordNewTitle": "Жаңа құпиясөз енгізіңіз",
-  "forgotPasswordNewSubtitle": "Қосымшаға кіру үшін жаңа құпиясөз орнатыңыз",
-  "forgotPasswordNewLabel": "Жаңа құпиясөз",
-  "forgotPasswordNewHint": "Жаңа құпиясөз енгізіңіз",
-  "forgotPasswordConfirmLabel": "Құпиясөзді растау",
-  "forgotPasswordConfirmHint": "Құпиясөзді қайта енгізіңіз",
-  "forgotPasswordSetButton": "Құпиясөз орнату",
-  "forgotPasswordSuccess": "Жаңа құпиясөз\nсәтті орнатылды!",
-  "forgotPasswordGoLogin": "Fermer+ жүйесіне кіру",
-
-  "homeSummary": "Шолу",
-  "homeHerd": "Табын",
-  "homeAnimalStatuses": "Жануар статустары",
-  "homeHerdHealth": "Табын денсаулығы",
-  "homeHealthy": "Дені сау",
-  "homeSick": "Ауру",
-  "homeDataUpdating": "Деректер жаңартылуда...",
-  "homeTabNotImplemented": "{index} қойындысының мазмұны әлі іске асырылмаған",
-  "@homeTabNotImplemented": { "placeholders": { "index": { "type": "int" } } },
-
-  "searchHint": "Малды іздеу",
-  "searchByNameOrTag": "Аты немесе бирка бойынша іздеу",
-
-  "summaryTabBrief": "Қысқаша",
-  "summaryTabQuantity": "Саны",
-  "summaryTabCondition": "Жағдайы",
-  "summaryTabIncome": "Кіріс/Шығыс",
-  "summaryTabMilk": "Сүт",
-  "summaryTabRation": "Рацион/Қор",
-
-  "herdSummaryTitle": "Табын шолуы",
-  "herdTotalAnimals": "Барлық жануарлар: {count}",
-  "@herdTotalAnimals": { "placeholders": { "count": { "type": "int" } } },
-  "herdUpdated": "Жаңартылды: {time}",
-  "@herdUpdated": { "placeholders": { "time": { "type": "String" } } },
-  "herdDetails": "Толығырақ",
-  "herdTotalCount": "Барлығы: {count}",
-  "@herdTotalCount": { "placeholders": { "count": { "type": "int" } } },
-  "herdTotalCattle": "Барлық мал: {count}",
-  "@herdTotalCattle": { "placeholders": { "count": { "type": "int" } } },
-
-  "statusLactating": "Сауылатын",
-  "statusDryPeriod": "Сухостой",
-  "statusOpen": "Ұрықтанбаған",
-  "statusInseminated": "Ұрықтандырылған",
-
-  "quantityTitle": "Саны",
-  "groupsTitle": "Топтар",
-  "groupsTotalCount": "Барлық топтар: {count}",
-  "@groupsTotalCount": { "placeholders": { "count": { "type": "int" } } },
-  "groupsView": "Қарау",
-  "groupCows": "Сиырлар",
-  "groupHeifers": "Қашарлар",
-  "groupBulls": "Бұқалар",
-  "groupCalves": "Бұзаулар",
-
-  "timeJustNow": "дәл қазір",
-  "timeMinutesAgo": "{minutes} мин бұрын",
-  "@timeMinutesAgo": { "placeholders": { "minutes": { "type": "int" } } },
-  "timeHoursAgo": "{hours} сағ бұрын",
-  "@timeHoursAgo": { "placeholders": { "hours": { "type": "int" } } },
-  "timeDaysAgo": "{days} күн бұрын",
-  "@timeDaysAgo": { "placeholders": { "days": { "type": "int" } } },
-  "timeOneHourAgo": "1 сағат бұрын",
-
-  "herdAllCattle": "Барлық мал",
-  "herdAnimalList": "Жануарлар тізімі",
-  "herdLoadingFilter": "Сүзгі деректері жүктелуде...",
-
-  "emptyHerdTitle": "Сіздің тізіміңіз бос",
-  "emptyHerdSubtitle": "Алғашқы жануар карточкасын қосыңыз",
-  "emptySearchTitle": "Ештеңе табылмады",
-  "emptySearchSubtitle": "Іздеу сұранысын өзгертіп көріңіз",
-  "addAnimal": "Жануар қосу",
-
-  "animalInfo": "Жануар туралы ақпарат",
-  "animalMainInfo": "Негізгі ақпарат",
-  "animalTag": "Бирка",
-  "animalBirthDate": "Туған күні",
-  "animalAge": "Жасы",
-  "animalCategory": "Категория",
-  "animalBreed": "Тұқымы",
-  "animalGroup": "Топ",
-  "animalHealthStatus": "Денсаулық жағдайы",
-  "animalNoName": "Аты жоқ",
-  "animalDeleteTitle": "Жануарды жою?",
-  "animalDeleteConfirm": "Бұл әрекетті кері қайтару мүмкін емес. Сенімдісіз бе?",
-  "animalDeleted": "Жануар жойылды",
-
-  "reproStatusNotInseminated": "Ұрықтанбаған",
-  "reproStatusInseminated": "Ұрықтандырылған",
-  "reproStatusPregnant": "Буаз",
-  "reproStatusDry": "Сухостой",
-  "reproStatusNearCalving": "Жақында бұзаулайды",
-  "reproStatusFresh": "Жаңа бұзаулаған",
-  "reproStatusFreshCow": "Жаңа бұзаулаған сиыр",
-  "reproStatusNotPregnant": "Буаз емес",
-
-  "prodStateLactation": "Лактация",
-  "prodStateDry": "Сухостой",
-  "prodStateFattening": "Бордақылау",
-  "prodStateFatteningFull": "Бордақылауда",
-  "prodStateBreeding": "Асыл тұқымды",
-  "prodStateBreedingFull": "Асыл тұқымдық пайдалану",
-  "prodStateUnknown": "Белгісіз",
-
-  "milkLastYield": "Соңғы сауым\n(л/күн)",
-  "milkLastYieldDate": "Соңғы сауым\nкүні",
-  "milkAvg7Days": "7 күндегі\nорташа сауым",
-  "milkAvg30Days": "30 күндегі\nорташа сауым",
-  "milkPeakCurrent": "Ең жоғары сауым\n(ағымдағы лактация)",
-
-  "eventsTitle": "Оқиғалар",
-  "eventsTasks": "Тапсырмалар",
-  "eventsCompleted": "Аяқталған",
-  "eventsOverdue": "Мерзімі өткен",
-  "eventsNone": "Оқиғалар жоқ",
-  "eventsDateStart": "Басталу күні",
-  "eventsDateEnd": "Аяқталу күні",
+    "@@locale": "kk",
+    "appTitle": "Fermer+",
+    "farmName": "Ферма атауы",
+    "navHome": "Басты бет",
+    "navHerd": "Табын",
+    "navEvents": "Оқиғалар",
+    "navRation": "Рацион",
+    "navLactation": "Лактация",
+    "drawerProfile": "Профиль",
+    "drawerSettings": "Баптаулар",
+    "drawerFaq": "Жиі қойылатын\nсұрақтар",
+    "drawerSupport": "Қолдау қызметі",
+    "drawerReferral": "Рефералдық\nбағдарлама",
+    "drawerLogout": "Аккаунттан шығу",
+    "drawerLogoutConfirm": "Сіз шынымен\nFermer+ жүйесінен шығуды қалайсыз ба?",
+    "drawerLogoutButton": "Шығу",
+    "dialogOk": "Жарайды",
+    "dialogCancel": "Бас тарту",
+    "dialogDelete": "Жою",
+    "dialogClose": "Жабу",
+    "dialogUnderstood": "Түсінікті",
+    "errorPrefix": "Қате: {error}",
+    "@errorPrefix": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "errorLoadingList": "Тізімді жүктеу кезінде қате",
+    "errorLoadingStats": "Статистиканы жүктеу кезінде қате:\n{error}",
+    "@errorLoadingStats": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "errorLoadingQuantity": "Сан бойынша деректерді жүктеу кезінде қате:\n{error}",
+    "@errorLoadingQuantity": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "errorLoadingData": "Жүктеу кезінде қате: {error}",
+    "@errorLoadingData": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "errorLoading": "Жүктеу кезінде қате",
+    "errorDeletion": "Жою қатесі: {error}",
+    "@errorDeletion": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "errorAddingEvent": "Оқиғаны қосу кезінде қате: {error}",
+    "@errorAddingEvent": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "errorTypes": "Типтер қатесі: {error}",
+    "@errorTypes": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "retry": "Қайталау",
+    "save": "Сақтау",
+    "saving": "Сақталуда...",
+    "add": "ТљРѕСЃСѓ",
+    "continueText": "Жалғастыру",
+    "loginTitle": "КІРУ",
+    "loginSubtitle": "Жеке кабинетке кіру үшін ақпаратты енгізіңіз",
+    "loginButton": "КІРУ",
+    "loginPhoneLabel": "Телефон нөмірі",
+    "loginPhoneHint": "Нөмірді енгізіңіз",
+    "loginPhoneError": "Дұрыс телефон нөмірін енгізіңіз",
+    "loginPasswordLabel": "Құпиясөз",
+    "loginPasswordError": "Қате құпиясөз. Қайта енгізіп көріңіз.",
+    "loginForgotPassword": "Құпиясөзді ұмыттыңыз ба?",
+    "loginNoAccount": "Әлі аккаунтыңыз жоқ па?",
+    "loginRegisterHint": "Fermer+ платформасын пайдалану үшін тіркеліңіз",
+    "loginRegisterButton": "Тіркелу",
+    "registerTitle": "Тіркелу",
+    "registerSubtitle": "Тіркелу үшін ақпаратты енгізіңіз",
+    "registerFirstName": "Аты",
+    "registerFirstNameHint": "Атыңызды енгізіңіз",
+    "registerLastName": "Тегі",
+    "registerLastNameHint": "Тегіңізді енгізіңіз",
+    "registerFarmName": "Ферма атауы",
+    "registerFarmNameHint": "Ферма атауын енгізіңіз",
+    "registerFillAll": "Барлық өрістерді толтырыңыз",
+    "registerStep1": "1-қадам",
+    "registerStep2": "2-қадам",
+    "forgotPasswordTitle": "Құпиясөзді ұмыттыңыз ба?",
+    "forgotPasswordSubtitle": "Құпиясөзді қалпына келтіру үшін верификация коды келетін телефон нөмірін тексеріңіз",
+    "forgotPasswordGetCode": "Код алу",
+    "forgotPasswordCodeTitle": "Верификация коды",
+    "forgotPasswordCodeSubtitle": "Құпиясөзді қалпына келтіру үшін 4 таңбалы кодты енгізіңіз",
+    "forgotPasswordResetButton": "Құпиясөзді қалпына келтіру",
+    "forgotPasswordNewTitle": "Жаңа құпиясөз енгізіңіз",
+    "forgotPasswordNewSubtitle": "Қосымшаға кіру үшін жаңа құпиясөз орнатыңыз",
+    "forgotPasswordNewLabel": "Жаңа құпиясөз",
+    "forgotPasswordNewHint": "Жаңа құпиясөз енгізіңіз",
+    "forgotPasswordConfirmLabel": "Құпиясөзді растау",
+    "forgotPasswordConfirmHint": "Құпиясөзді қайта енгізіңіз",
+    "forgotPasswordSetButton": "Құпиясөз орнату",
+    "forgotPasswordSuccess": "Жаңа құпиясөз\nсәтті орнатылды!",
+    "forgotPasswordGoLogin": "Fermer+ жүйесіне кіру",
+    "homeSummary": "Шолу",
+    "homeHerd": "Табын",
+    "homeAnimalStatuses": "Жануар статустары",
+    "homeHerdHealth": "Табын денсаулығы",
+    "homeHealthy": "Дені сау",
+    "homeSick": "Ауру",
+    "homeDataUpdating": "Деректер жаңартылуда...",
+    "homeTabNotImplemented": "{index} қойындысының мазмұны әлі іске асырылмаған",
+    "@homeTabNotImplemented": {
+        "placeholders": {
+            "index": {
+                "type": "int"
+            }
+        }
+    },
+    "searchHint": "Малды іздеу",
+    "searchByNameOrTag": "Аты немесе бирка бойынша іздеу",
+    "summaryTabBrief": "Қысқаша",
+    "summaryTabQuantity": "Саны",
+    "summaryTabCondition": "Жағдайы",
+    "summaryTabIncome": "Кіріс/Шығыс",
+    "summaryTabMilk": "Сүт",
+    "summaryTabRation": "Рацион/Қор",
+    "herdSummaryTitle": "Табын шолуы",
+    "herdTotalAnimals": "Барлық жануарлар: {count}",
+    "@herdTotalAnimals": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "herdUpdated": "Жаңартылды: {time}",
+    "@herdUpdated": {
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "herdDetails": "Толығырақ",
+    "herdTotalCount": "Барлығы: {count}",
+    "@herdTotalCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "herdTotalCattle": "Барлық мал: {count}",
+    "@herdTotalCattle": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "statusLactating": "Сауылатын",
+    "statusDryPeriod": "Сухостой",
+    "statusOpen": "Ұрықтанбаған",
+    "statusInseminated": "Ұрықтандырылған",
+    "quantityTitle": "Саны",
+    "groupsTitle": "Топтар",
+    "groupsTotalCount": "Барлық топтар: {count}",
+    "@groupsTotalCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "groupsView": "Қарау",
+    "groupCows": "Сиырлар",
+    "groupHeifers": "Қашарлар",
+    "groupBulls": "Бұқалар",
+    "groupCalves": "Бұзаулар",
+    "timeJustNow": "дәл қазір",
+    "timeMinutesAgo": "{minutes} мин бұрын",
+    "@timeMinutesAgo": {
+        "placeholders": {
+            "minutes": {
+                "type": "int"
+            }
+        }
+    },
+    "timeHoursAgo": "{hours} сағ бұрын",
+    "@timeHoursAgo": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "timeDaysAgo": "{days} күн бұрын",
+    "@timeDaysAgo": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "timeOneHourAgo": "1 сағат бұрын",
+    "herdAllCattle": "Барлық мал",
+    "herdAnimalList": "Жануарлар тізімі",
+    "herdLoadingFilter": "Сүзгі деректері жүктелуде...",
+    "emptyHerdTitle": "Сіздің тізіміңіз бос",
+    "emptyHerdSubtitle": "Алғашқы жануар карточкасын қосыңыз",
+    "emptySearchTitle": "Ештеңе табылмады",
+    "emptySearchSubtitle": "Іздеу сұранысын өзгертіп көріңіз",
+    "addAnimal": "Жануар қосу",
+    "animalInfo": "Жануар туралы ақпарат",
+    "animalMainInfo": "Негізгі ақпарат",
+    "animalTag": "Бирка",
+    "animalBirthDate": "Туған күні",
+    "animalAge": "Жасы",
+    "animalCategory": "Категория",
+    "animalBreed": "Тұқымы",
+    "animalGroup": "РўРѕРї",
+    "animalHealthStatus": "Денсаулық жағдайы",
+    "animalNoName": "Аты жоқ",
+    "animalDeleteTitle": "Жануарды жою керек пе?",
+    "animalDeleteConfirm": "Бұл әрекетті қайтару мүмкін емес. Сенімдісіз бе?",
+    "animalDeleted": "Жануар жойылды",
+    "reproStatusNotInseminated": "Ұрықтанбаған",
+    "reproStatusInseminated": "Ұрықтандырылған",
+    "reproStatusPregnant": "Буаз",
+    "reproStatusDry": "Сухостой",
+    "reproStatusNearCalving": "Жақында бұзаулайды",
+    "reproStatusFresh": "Жаңа бұзаулаған",
+    "reproStatusFreshCow": "Жаңа бұзаулаған сиыр",
+    "reproStatusNotPregnant": "Буаз емес",
+    "prodStateLactation": "Лактация",
+    "prodStateDry": "Сухостой",
+    "prodStateFattening": "Бордақылау",
+    "prodStateFatteningFull": "Бордақылауда",
+    "prodStateBreeding": "Асыл тұқымды",
+    "prodStateBreedingFull": "Асыл тұқымдық пайдалану",
+    "prodStateUnknown": "Белгісіз",
+    "milkLastYield": "Соңғы сауым\n(л/күн)",
+    "milkLastYieldDate": "Соңғы сауым\nкүні",
+    "milkAvg7Days": "7 күндегі\nорташа сауым",
+    "milkAvg30Days": "30 күндегі\nорташа сауым",
+    "milkPeakCurrent": "Ең жоғары сауым\n(ағымдағы лактация)",
+    "eventsTitle": "Оқиғалар",
+    "eventsTasks": "Тапсырмалар",
+    "eventsCompleted": "Аяқталған",
+    "eventsOverdue": "Мерзімі өткен",
+    "eventsNone": "Оқиғалар жоқ",
+    "eventsDateStart": "Басталу күні",
+    "eventsDateEnd": "Аяқталу күні",
     "eventsAlreadyCompleted": "Қазірдің өзінде аяқталған",
-  "eventsCompleteEvent": "Оқиғаны аяқтау",
-  "eventsEventCompleted": "Оқиға аяқталды",
-  "eventsDeleteEvent": "Оқиғаны жою",
-  "eventsDeleteConfirm": "Оқиғаны жою керек пе?",
-  "eventsCannotUndo": "Бұл әрекетті кері қайтару мүмкін емес",
-  "eventsDeleted": "Оқиға жойылды",
-  "eventsAdded": "Оқиға қосылды",
-
-  "addEventTitle": "Оқиға қосу",
-  "addEventType": "Оқиға",
-  "addEventDropdownHint": "Тізімнен таңдау",
-  "addEventPickDate": "Оқиға күнін таңдаңыз",
-  "addEventComment": "Комментарий (міндетті емес)",
-  "addEventSelectType": "Оқиға түрін таңдаңыз",
-  "addEventSelectDate": "Оқиға күнін таңдаңыз",
-  "addEventEnterName": "Оқиға атауын енгізіңіз",
-  "addEventSelectHeatStart": "Күйлеудің басталу күнін таңдаңыз",
-  "addEventEnterCalfTag": "Бұзаудың биркасын енгізіңіз",
-  "addEventSelectCalfGender": "Бұзаудың жынысын таңдаңыз",
-  "addEventEnterCalfWeight": "Бұзаудың туған кездегі салмағын енгізіңіз",
-
-  "eventDateVaccination": "Вакцинация күні",
-  "eventDateTreatment": "Өңдеу күні",
-  "eventDateIllness": "Ауру күні",
-  "eventDateWeighing": "Өлшеу күні",
-  "eventDateInsemination": "Ұрықтандыру\nкүні",
-  "eventDateCheck": "Тексеру күні",
-  "eventDateHornProcessing": "Мүйіз өңдеу күні",
-  "eventDateCalving": "Бұзаулау күні",
-  "eventDatePregnancy": "Буаздық\nкүні",
-  "eventDateStart": "Басталу күні",
-  "eventDateSync": "Синхронизация күні",
-  "eventDateWeaning": "Айыру күні",
-  "eventDateHoofTrimming": "Тұяқ тазалау күні",
-  "eventDateGeneric": "Оқиға күні",
-
-  "eventActionHeat": "Күйлеуді тексеру",
-  "eventActionPregnancy": "Буаздықты тексеру",
-  "eventActionDryPeriod": "Сухостойға ауыстыру жоспарланған",
-  "eventActionWeighing": "Өлшеу жүргізу ұсынылады",
-  "eventActionVaccination": "Вакцинация жасау ұсынылады",
-  "eventActionIllness": "Емдеу/тексеру жүргізу",
-  "eventActionHoof": "Тұяқ тазалау ұсынылады",
-  "eventActionAntiparasitic": "Паразиттерге қарсы өңдеу ұсынылады",
-  "eventActionCalving": "Бұзаулаудан кейін бақылау",
-  "eventActionInsemination": "Ұрықтандыру жоспарланған",
-  "eventActionWeaning": "Айыру жоспарланған",
-  "eventActionDefault": "Оқиғаны орындау уақыты келді",
-  "eventOverdueHint": "Мүмкіндігінше тезірек орындау ұсынылады",
-
-  "fieldVaccine": "Вакцина",
-  "fieldVaccineHint": "Вакцина атауы",
-  "fieldWeightKg": "Салмақ (кг)",
-  "fieldWeightHint": "Өлшеу нәтижесі",
-  "fieldDiagnosis": "Диагноз",
-  "fieldDiagnosisHint": "Ауру атауы",
-  "fieldDrug": "Препарат",
-  "fieldDrugHint": "Препарат атауы",
-  "fieldDosage": "Дозировка",
-  "fieldDosageHint": "Мөлшері",
-  "fieldTreatmentDuration": "Емдеу ұзақтығы (күн)",
-  "fieldEndDate": "Аяқталу күні",
-  "fieldSelectDate": "Күнді таңдаңыз",
-  "fieldMaleTag": "Аталық биркасы",
-  "fieldFemaleTag": "Аналық биркасы",
-  "fieldEnterTagNumber": "Бирка нөмірін енгізіңіз",
-  "fieldSuccess": "Сәттілігі",
-  "fieldSuccessful": "Сәтті",
-  "fieldUnsuccessful": "Сәтсіз",
-  "fieldDifficulty": "Қиындық",
-  "fieldEasy": "Жеңіл",
-  "fieldMedium": "Орташа",
-  "fieldHard": "Қиын",
-  "fieldCalfTag": "Бұзау биркасы",
-  "fieldCalfTagHint": "Бирка нөмірін енгізіңіз",
-  "fieldCalfName": "Бұзау аты",
-  "fieldCalfNameHint": "Бұзау атын енгізіңіз",
-  "fieldCalfGender": "Бұзау жынысы",
-  "fieldCalfGenderHint": "Таңдаңыз",
-  "fieldMale": "Еркек",
-  "fieldFemale": "Ұрғашы",
-  "fieldBirthWeight": "Туған кездегі салмақ (кг)",
-  "fieldBirthWeightHint": "Салмақты енгізіңіз",
-  "fieldHeatStartDate": "Басталу күні",
-  "fieldHeatEndDate": "Аяқталу күні",
-  "fieldHeatStart": "Күйлеу басталуы",
-  "fieldHeatEnd": "Күйлеу аяқталуы",
-  "fieldDrugNameHint": "Препарат атауын енгізіңіз",
-  "fieldDosageHint2": "Дозировканы енгізіңіз",
-
-  "selectCattleTitle": "Малды таңдау",
-  "selectCattleSelected": "Таңдалды: {count}",
-  "@selectCattleSelected": { "placeholders": { "count": { "type": "int" } } },
-  "selectCattleAll": "Барлығын таңдау",
-  "selectCattleClear": "Тазалау",
-  "selectCattleDone": "Дайын",
-  "selectCattleNoTag": "Бирка жоқ",
-
-  "rationsTitle": "Рациондар/Қорлар",
-  "rationsFeedStock": "Жем қоры",
-  "rationsConcentrates": "Концентраттар",
-  "rationsSucculentFeed": "Шырынды жем",
-  "rationsRoughage": "Ірі жем",
-  "rationsAdditives": "Қоспалар",
-  "rationsListTitle": "Рациондар тізімі",
-  "rationsNotGenerated": "Рациондар әлі жасалмаған",
-  "rationsNoMatch": "Бұл жануарға сәйкес рацион жоқ",
-  "rationsDeleted": "Рацион жойылды",
-  "rationsEmptyTitle": "Сіздің тізіміңіз бос",
-  "rationsEmptySubtitle": "Рациондар тізімін көру үшін\nжем қорын қосыңыз",
-  "rationsAddFeedStock": "Жем қорын қосу",
-
-  "rationStatusActive": "Белсенді",
-  "rationStatusNeedsAttention": "Назар аударуды талап етеді",
-  "rationDeleteTitle": "Рационды жою керек пе?",
-  "rationDeleteConfirm": "Бұл рационды жойғыңыз келетініне сенімдісіз бе? Бұл әрекетті қайтару мүмкін емес.",
-  "rationCategory": "Категория: {category}",
-  "@rationCategory": { "placeholders": { "category": { "type": "String" } } },
-  "rationPeriod": "Кезең: {period}",
-  "@rationPeriod": { "placeholders": { "period": { "type": "String" } } },
-  "rationDailyCost": "Күніне құны: {cost} тг.",
-  "@rationDailyCost": { "placeholders": { "cost": { "type": "String" } } },
-  "rationFeedType": "Жем түрі: {names}",
-  "@rationFeedType": { "placeholders": { "names": { "type": "String" } } },
-  "rationDailyNorm": "Күндік норма: {kg} кг",
-  "@rationDailyNorm": { "placeholders": { "kg": { "type": "String" } } },
-
-  "rationInfoTitle": "Рацион туралы ақпарат",
-  "rationMainInfo": "Рационның негізгі ақпараты",
-  "rationCategoryLabel": "Категория",
-  "rationPeriodLabel": "Кезең",
-  "rationDailyCostLabel": "Күндік құны",
-  "rationDailyCostValue": "{cost} тг.",
-  "@rationDailyCostValue": { "placeholders": { "cost": { "type": "String" } } },
-  "rationStatusLabel": "Статус",
-  "rationDailyNormLabel": "Күндік норма",
-  "rationDailyNormValue": "{kg} кг",
-  "@rationDailyNormValue": { "placeholders": { "kg": { "type": "String" } } },
-  "rationFeedsTitle": "Рацион жемдері",
-  "rationNeedKg": "Қажеттілік (кг)",
-  "rationCostKgTg": "Құны (кг/тг)",
-  "rationDailyExpense": "Күндік шығын (тг)",
-
-  "inventoryTitle": "Қор",
-  "inventoryTotalFeed": "Барлық жем: {kg} кг",
-  "@inventoryTotalFeed": { "placeholders": { "kg": { "type": "String" } } },
-  "inventoryFeedDeleted": "Жем жойылды",
-  "inventoryDeleteTitle": "Жемді жою керек пе?",
-  "inventoryDeleteConfirm": "Бұл жемді жойғыңыз келетініне сенімдісіз бе? Бұл әрекетті қайтару мүмкін емес.",
-
-  "lactationTitle": "Лактация",
-  "lactationMilkPerDay": "Күндік сүт: {liters} л.",
-  "@lactationMilkPerDay": { "placeholders": { "liters": { "type": "String" } } },
-  "lactationQuantity": "Саны",
-  "lactationCowMilking": "Сиыр сауымы",
-  "lactationFarmMilking": "Ферма бойынша сауым",
-  "lactationDate": "Күні",
-  "lactationTime": "Уақыты",
-  "lactationMilkingTime": "Сауын уақыты",
-  "lactationMorning": "Таң",
-  "lactationEvening": "Кеш",
-  "lactationCowTag": "Сиыр биркасы",
-  "lactationEnterInfo": "Ақпарат енгізіңіз",
-  "lactationMilkAmount": "Сүт мөлшері",
-  "lactationEnterMilk": "Сүт мөлшерін енгізіңіз (литр)",
-  "lactationSuccessAdd": "Ақпарат сәтті\nқосылды және\n\"Лактация\" бөлімінде көрсетілді",
-  "lactationGoToList": "Тізімге өту",
-  "lactationAddBulkTitle": "Ферма бойынша сауым қосу",
-  "lactationBulkSuccess": "Ферма бойынша\nсауын деректері сәтті қосылды!",
-  "lactationEnterCowCount": "Сауылған сиыр санын енгізіңіз",
-  "lactationEnterTotalMilk": "Жалпы сүт мөлшерін енгізіңіз (л)",
-  "lactationMilkedCows": "Сауылған сиыр",
-  "lactationTotalMilk": "Жалпы сүт",
-  "lactationCalfUsed": "Бұзауларға\nпайдаланылды",
-  "lactationUnfitMilk": "Жарамсыз\nсүт",
-
-  "lactationAccountingWeek": "Апта бойынша",
-  "lactationAccountingMonth": "Ай бойынша",
-  "lactationAccountingPeriod": "Кезең",
-  "lactationDateStartPeriod": "Кезеңнің басталу күні",
-  "lactationDateEndPeriod": "Кезеңнің аяқталу күні",
-  "lactationSelectDate": "Күнді таңдаңыз",
-
-  "notFoundTitle": "Бет табылмады",
-  "notFoundGoHome": "Басты бетке оралу",
-
-  "registerPasswordMin": "Кемінде 6 таңба",
-  "registerPasswordsMismatch": "Құпиясөздер сәйкес келмейді",
-  "registerErrorGeneric": "Тіркелу қатесі. Қайта көріңіз.",
-  "registerButton": "ТІРКЕЛУ",
-  "registerSuccessTitle": "Сіз Fermer+ жүйесінде\nсәтті тіркелдіңіз!",
-  "registerSuccessMessage": "Қосымшаны қолдануды бастау үшін\n\"Жұмысты бастау\" батырмасын басыңыз",
-  "registerSuccessButton": "Жұмысты бастау"
+    "eventsCompleteEvent": "Оқиғаны аяқтау",
+    "eventsEventCompleted": "Оқиға аяқталды",
+    "eventsDeleteEvent": "Оқиғаны жою",
+    "eventsDeleteConfirm": "Оқиғаны жою керек пе?",
+    "eventsCannotUndo": "Бұл әрекетті кері қайтару мүмкін емес",
+    "eventsDeleted": "Оқиға жойылды",
+    "eventsAdded": "Оқиға қосылды",
+    "addEventTitle": "Оқиға қосу",
+    "addEventType": "Оқиға",
+    "addEventDropdownHint": "Тізімнен таңдау",
+    "addEventPickDate": "Оқиға күнін таңдаңыз",
+    "addEventComment": "Комментарий (міндетті емес)",
+    "addEventSelectType": "Оқиға түрін таңдаңыз",
+    "addEventSelectDate": "Оқиға күнін таңдаңыз",
+    "addEventEnterName": "Оқиға атауын енгізіңіз",
+    "addEventSelectHeatStart": "Күйлеудің басталу күнін таңдаңыз",
+    "addEventEnterCalfTag": "Бұзаудың биркасын енгізіңіз",
+    "addEventSelectCalfGender": "Бұзаудың жынысын таңдаңыз",
+    "addEventEnterCalfWeight": "Бұзаудың туған кездегі салмағын енгізіңіз",
+    "eventDateVaccination": "Вакцинация күні",
+    "eventDateTreatment": "Өңдеу күні",
+    "eventDateIllness": "Ауру күні",
+    "eventDateWeighing": "Өлшеу күні",
+    "eventDateInsemination": "Ұрықтандыру\nкүні",
+    "eventDateCheck": "Тексеру күні",
+    "eventDateHornProcessing": "Мүйіз өңдеу күні",
+    "eventDateCalving": "Бұзаулау күні",
+    "eventDatePregnancy": "Буаздық\nкүні",
+    "eventDateStart": "Басталу күні",
+    "eventDateSync": "Синхронизация күні",
+    "eventDateWeaning": "Айыру күні",
+    "eventDateHoofTrimming": "Тұяқ тазалау күні",
+    "eventDateGeneric": "Оқиға күні",
+    "eventActionHeat": "Күйлеуді тексеру",
+    "eventActionPregnancy": "Буаздықты тексеру",
+    "eventActionDryPeriod": "Сухостойға ауыстыру жоспарланған",
+    "eventActionWeighing": "Өлшеу жүргізу ұсынылады",
+    "eventActionVaccination": "Вакцинация жасау ұсынылады",
+    "eventActionIllness": "Емдеу/тексеру жүргізу",
+    "eventActionHoof": "Тұяқ тазалау ұсынылады",
+    "eventActionAntiparasitic": "Паразиттерге қарсы өңдеу ұсынылады",
+    "eventActionCalving": "Бұзаулаудан кейін бақылау",
+    "eventActionInsemination": "Ұрықтандыру жоспарланған",
+    "eventActionWeaning": "Айыру жоспарланған",
+    "eventActionDefault": "Оқиғаны орындау уақыты келді",
+    "eventOverdueHint": "Мүмкіндігінше тезірек орындау ұсынылады",
+    "fieldVaccine": "Вакцина",
+    "fieldVaccineHint": "Вакцина атауы",
+    "fieldWeightKg": "Салмақ (кг)",
+    "fieldWeightHint": "Өлшеу нәтижесі",
+    "fieldDiagnosis": "Диагноз",
+    "fieldDiagnosisHint": "Ауру атауы",
+    "fieldDrug": "Препарат",
+    "fieldDrugHint": "Препарат атауы",
+    "fieldDosage": "Дозировка",
+    "fieldDosageHint": "Мөлшері",
+    "fieldTreatmentDuration": "Емдеу ұзақтығы (күн)",
+    "fieldEndDate": "Аяқталу күні",
+    "fieldSelectDate": "Күнді таңдаңыз",
+    "fieldMaleTag": "Аталық биркасы",
+    "fieldFemaleTag": "Аналық биркасы",
+    "fieldEnterTagNumber": "Бирка нөмірін енгізіңіз",
+    "fieldSuccess": "Сәттілігі",
+    "fieldSuccessful": "Сәтті",
+    "fieldUnsuccessful": "Сәтсіз",
+    "fieldDifficulty": "Қиындық",
+    "fieldEasy": "Жеңіл",
+    "fieldMedium": "Орташа",
+    "fieldHard": "Қиын",
+    "fieldCalfTag": "Бұзау биркасы",
+    "fieldCalfTagHint": "Бирка нөмірін енгізіңіз",
+    "fieldCalfName": "Бұзау аты",
+    "fieldCalfNameHint": "Бұзау атын енгізіңіз",
+    "fieldCalfGender": "Бұзау жынысы",
+    "fieldCalfGenderHint": "Таңдаңыз",
+    "fieldMale": "Еркек",
+    "fieldFemale": "Ұрғашы",
+    "fieldBirthWeight": "Туған кездегі салмақ (кг)",
+    "fieldBirthWeightHint": "Салмақты енгізіңіз",
+    "fieldHeatStartDate": "Басталу күні",
+    "fieldHeatEndDate": "Аяқталу күні",
+    "fieldHeatStart": "Күйлеу басталуы",
+    "fieldHeatEnd": "Күйлеу аяқталуы",
+    "fieldDrugNameHint": "Препарат атауын енгізіңіз",
+    "fieldDosageHint2": "Дозировканы енгізіңіз",
+    "selectCattleTitle": "Малды таңдау",
+    "selectCattleSelected": "Таңдалды: {count}",
+    "@selectCattleSelected": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "selectCattleAll": "Барлығын таңдау",
+    "selectCattleClear": "Тазалау",
+    "selectCattleDone": "Дайын",
+    "selectCattleNoTag": "Бирка жоқ",
+    "rationsTitle": "Рациондар/Қорлар",
+    "rationsFeedStock": "Жем қоры",
+    "rationsConcentrates": "Концентраттар",
+    "rationsSucculentFeed": "Шырынды жем",
+    "rationsRoughage": "Ірі жем",
+    "rationsAdditives": "Қоспалар",
+    "rationsListTitle": "Рациондар тізімі",
+    "rationsNotGenerated": "Рациондар әлі жасалмаған",
+    "rationsForAnimalTitle": "Мал рационы",
+    "rationsNoMatch": "Бұл жануарға сәйкес рацион жоқ",
+    "rationsDeleted": "Рацион жойылды",
+    "rationsEmptyTitle": "Сіздің тізіміңіз бос",
+    "rationsEmptySubtitle": "Рациондар тізімін көру үшін\nжем қорын қосыңыз",
+    "rationsAddFeedStock": "Жем қорын қосу",
+    "rationStatusActive": "Белсенді",
+    "rationStatusNeedsAttention": "Назар аударуды талап етеді",
+    "rationDeleteTitle": "Рационды жою керек пе?",
+    "rationDeleteConfirm": "Бұл рационды жойғыңыз келетініне сенімдісіз бе? Бұл әрекетті қайтару мүмкін емес.",
+    "rationCategory": "Категория: {category}",
+    "@rationCategory": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "rationPeriod": "Кезең: {period}",
+    "@rationPeriod": {
+        "placeholders": {
+            "period": {
+                "type": "String"
+            }
+        }
+    },
+    "rationDailyCost": "Күніне құны: {cost} тг.",
+    "@rationDailyCost": {
+        "placeholders": {
+            "cost": {
+                "type": "String"
+            }
+        }
+    },
+    "rationFeedType": "Жем түрі: {names}",
+    "@rationFeedType": {
+        "placeholders": {
+            "names": {
+                "type": "String"
+            }
+        }
+    },
+    "rationDailyNorm": "Күндік норма: {kg} кг",
+    "@rationDailyNorm": {
+        "placeholders": {
+            "kg": {
+                "type": "String"
+            }
+        }
+    },
+    "rationInfoTitle": "Рацион туралы ақпарат",
+    "rationMainInfo": "Рационның негізгі ақпараты",
+    "rationCategoryLabel": "Категория",
+    "rationCategoryBull": "Бұқа",
+    "rationCategoryCow": "Сиыр",
+    "rationCategoryHeifer": "Қашар",
+    "rationCategoryCalf": "Бұзау",
+    "rationPeriodLabel": "Кезең",
+    "rationDailyCostLabel": "Күндік құны",
+    "rationDailyCostValue": "{cost} тг.",
+    "@rationDailyCostValue": {
+        "placeholders": {
+            "cost": {
+                "type": "String"
+            }
+        }
+    },
+    "rationStatusLabel": "Статус",
+    "rationRecommendationsLabel": "Ұсыныстар",
+    "rationDailyNormLabel": "Күндік норма",
+    "rationDailyNormValue": "{kg} кг",
+    "@rationDailyNormValue": {
+        "placeholders": {
+            "kg": {
+                "type": "String"
+            }
+        }
+    },
+    "rationFeedsTitle": "Рацион жемдері",
+    "rationNeedKg": "Қажеттілік (кг)",
+    "rationCostKgTg": "Құны (кг/тг)",
+    "rationDailyExpense": "Күндік шығын (тг)",
+    "rationMinKgLabel": "Мин (кг)",
+    "rationMaxKgLabel": "Макс (кг)",
+    "rationPriceKgLabel": "Бағасы (кг/тг)",
+    "rationNoteLabel": "Ескерту",
+    "inventoryTitle": "Қорлар",
+    "inventoryQuantityLabel": "Саны",
+    "inventoryStocksListTitle": "Қорлар тізімі",
+    "inventoryTotalFeed": "Барлық жем: {kg} кг",
+    "@inventoryTotalFeed": {
+        "placeholders": {
+            "kg": {
+                "type": "String"
+            }
+        }
+    },
+    "inventoryTypeLabel": "Жем түрі",
+    "inventoryPriceLabel": "Баға",
+    "inventoryRemainingLabel": "Қалдық",
+    "unitLitersValue": "{value} л",
+    "unitKgValue": "{value} кг",
+    "unitPricePerKgValue": "{value} ₸/кг",
+    "inventoryDeleteFeedButton": "Жемді жою",
+    "inventoryFeedDeleted": "Жем жойылды",
+    "inventoryDeleteTitle": "Жемді жою керек пе?",
+    "inventoryDeleteConfirm": "Бұл жемді жойғыңыз келетініне сенімдісіз бе? Бұл әрекетті қайтару мүмкін емес.",
+    "addUserRationsTitle": "Жем түрін қосу",
+    "addUserRationsSelectAtLeastOne": "Кемінде бір жемді таңдаңыз",
+    "addUserRationsUpdatedSuccess": "Қорлар сәтті\nжаңартылды!",
+    "addUserRationsGoToList": "Тізімге өту",
+    "settingsLanguageTitle": "Қосымша тілі",
+    "settingsLanguageSubtitle": "Интерфейс тілін таңдаңыз",
+    "settingsLanguageRu": "Русский",
+    "settingsLanguageKk": "Қазақша",
+    "lactationTitle": "Лактация",
+    "lactationMilkPerDay": "Күндік сүт: {liters} л.",
+    "@lactationMilkPerDay": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "lactationQuantity": "Саны",
+    "lactationCowMilking": "Сиыр сауымы",
+    "lactationFarmMilking": "Ферма бойынша сауым",
+    "lactationDate": "Күні",
+    "lactationTime": "Уақыты",
+    "lactationMilkingTime": "Сауын уақыты",
+    "lactationMorning": "Таң",
+    "lactationEvening": "Кеш",
+    "lactationCowTag": "Сиыр биркасы",
+    "lactationEnterInfo": "Ақпарат енгізіңіз",
+    "lactationMilkAmount": "Сүт мөлшері",
+    "lactationEnterMilk": "Сүт мөлшерін енгізіңіз (литр)",
+    "lactationSuccessAdd": "Ақпарат сәтті\nқосылды және\n\"Лактация\" бөлімінде көрсетілді",
+    "lactationGoToList": "Тізімге өту",
+    "lactationAddBulkTitle": "Ферма бойынша сауым қосу",
+    "lactationBulkSuccess": "Ферма бойынша\nсауын деректері сәтті қосылды!",
+    "lactationEnterCowCount": "Сауылған сиыр санын енгізіңіз",
+    "lactationEnterTotalMilk": "Жалпы сүт мөлшерін енгізіңіз (л)",
+    "lactationMilkedCows": "Сауылған сиыр",
+    "lactationTotalMilk": "Жалпы сүт",
+    "lactationCalfUsed": "Бұзауларға\nпайдаланылды",
+    "lactationUnfitMilk": "Жарамсыз\nсүт",
+    "lactationAccountingWeek": "Апта бойынша",
+    "lactationAccountingMonth": "Ай бойынша",
+    "lactationAccountingPeriod": "Кезең",
+    "lactationDateStartPeriod": "Кезеңнің басталу күні",
+    "lactationDateEndPeriod": "Кезеңнің аяқталу күні",
+    "lactationSelectDate": "Күнді таңдаңыз",
+    "notFoundTitle": "Бет табылмады",
+    "notFoundGoHome": "Басты бетке оралу",
+    "registerPasswordMin": "Кемінде 6 таңба",
+    "registerPasswordsMismatch": "Құпиясөздер сәйкес келмейді",
+    "registerErrorGeneric": "Тіркелу қатесі. Қайта көріңіз.",
+    "registerButton": "ТІРКЕЛУ",
+    "authUserExists": "Мұндай нөмірмен пайдаланушы бар",
+    "authInvalidCredentials": "Телефон нөмірі немесе құпиясөз қате",
+    "authUserNotFound": "Мұндай нөмірмен пайдаланушы табылмады",
+    "authLoginFailed": "Кіру сәтсіз. Қайта көріңіз",
+    "authRegisterInvalidData": "Тіркеу деректері қате",
+    "authRegisterFailed": "Тіркелу сәтсіз. Қайта көріңіз",
+    "authLoginNetwork": "Кіру сәтсіз. Интернет байланысын тексеріңіз",
+    "authRegisterNetwork": "Тіркелу сәтсіз. Интернетті тексеріңіз",
+    "registerSuccessTitle": "Сіз Fermer+ жүйесінде\nсәтті тіркелдіңіз!",
+    "registerSuccessMessage": "Қосымшаны қолдануды бастау үшін\n\"Жұмысты бастау\" батырмасын басыңыз",
+    "registerSuccessButton": "Жұмысты бастау",
+    "dateSelect": "Күнді таңдаңыз",
+    "dateEnterFull": "Күнді толық енгізіңіз",
+    "dateInvalid": "Жарамсыз күн",
+    "dateRangeError": "Күн {from} - {to} аралығында болуы керек",
+    "dateEnterLabel": "Күнді енгізіңіз",
+    "dateInputHint": "dd.MM.yyyy",
+    "bulkEventSuccessTitle": "Топтық оқиға\\nсәтті жасалды!",
+    "bulkEventSuccessMessage": "Барлық дерек сақталды.\\nКейін өзгерте аласыз.",
+    "addBulkEventTitle": "Топтық оқиға қосу",
+    "selectCategoryHint": "Санатты таңдаңыз",
+    "eventActionMating": "Шағылыстыру",
+    "eventActionSynchronization": "Синхрондау",
+    "eventActionPregnancyNotConfirmed": "Буаздық расталмады",
+    "eventActionHornProcessing": "Мүйіз өңдеу",
+    "daysValue": "{value} күн",
+    "fieldEndDateOptional": "Аяқталу күні\\n(міндетті емес)",
+    "fieldEventName": "Оқиға атауы",
+    "animalDataNotLoaded": "Жануар деректері жүктелмеді",
+    "breedRequiredOnStep1": "Тұқым көрсетілмеген. 1-қадамға оралып, тұқымды толтырыңыз.",
+    "animalCreatedSuccessTitle": "Жануар картасы\\nсәтті жасалды!",
+    "animalCreatedSuccessMessage": "Барлық дерек сақталды.\\nКейін жануар картасында өзгерте аласыз.",
+    "animalAdditionalInfo": "Қосымша ақпарат",
+    "actionsTitle": "Әрекеттер",
+    "skipText": "Өткізіп жіберу",
+    "animalCategoryUnknown": "Санатты анықтау мүмкін емес",
+    "animalCategoryWithAge": "Санат: {category}, {ageMonths} ай",
+    "breedTypeDairy": "Сүтті",
+    "breedTypeMeat": "Етті",
+    "breedTypeMixed": "Аралас",
+    "breedTypeLocal": "Жергілікті",
+    "animalRequiredFields": "Аты, сырға нөмірі және туған күнін толтырыңыз",
+    "animalNoIdReturned": "Сервер жануардың id мәнін қайтармады",
+    "animalCreateError": "Жануарды құру қатесі",
+    "selectGender": "Жынысын таңдаңыз",
+    "genderFemale": "Ұрғашы",
+    "genderMale": "Еркек",
+    "breedHint": "Тұқымды енгізіңіз",
+    "breedTypeLabel": "Тұқым түрі",
+    "breedTypeHint": "Тұқым түрін таңдаңыз",
+    "creating": "Құрылуда...",
+    "dateOutOfRange": "Күн рұқсат етілген аралықтан тыс",
+    "animalUpdatedSuccessTitle": "Жануар картасы\\nсәтті жаңартылды!",
+    "animalInfoEditTitle": "Картаны өңдеу",
+    "showAllCount": "Барлығын көрсету ({count})",
+    "hideText": "Жасыру",
+    "rationGenerating": "Рацион жасалуда...",
+    "rationRegeneratedSuccess": "Рацион сәтті\\nқайта жасалды!",
+    "rationUpdatedSaved": "Жаңартылған деректер сақталды.",
+    "prodStateDryPhase1": "Құрғақ кезең (1-фаза)",
+    "prodStateDryPhase2": "Құрғақ кезең (2-фаза)",
+    "milkTotalCurrent": "Барлық сүт\\n(ағымдағы лактация)",
+    "lastCalvingDate": "Соңғы бұзаулау",
+    "lastInseminationDate": "Соңғы\\nұрықтандыру",
+    "pregnancyLabel": "Буаздық",
+    "reproductiveStatusLabel": "Көбею статусы",
+    "productionStatusLabel": "Өндірістік статус",
+    "firstInseminationDate": "Бірінші\\nұрықтандыру",
+    "expectedCalvingDate": "Болжамды\\nбұзаулау күні",
+    "bullPurposeLabel": "Мақсаты",
+    "rationRegenerateTitle": "Рационды қайта жасау",
+    "rationApproxMinute": "Шамамен 1 минут",
+    "rationViewTitle": "Рационды көру",
+    "rationChooseSubtitle": "Рационды таңдаңыз",
+    "upcomingEventsTitle": "Жақын оқиғалар",
+    "daysUntilShort": "{days} күннен кейін",
+    "eventsDeleteConfirmComplete": "Оқиғаны аяқтау?",
+    "eventsMarkCompleted": "\"{title}\" оқиғасын орындалды деп белгілеу керек пе?",
+    "ageMonthsCompact": "{months} ай",
+    "ageYearsCompact": "{years} ж.",
+    "ageYearsMonthsCompact": "{years} ж. {months} ай",
+    "healthHealthy": "Сау",
+    "healthSick": "Ауру",
+    "healthUnderTreatment": "Емдеуде",
+    "healthQuarantine": "Карантин",
+    "healthRecovering": "Жазылуда",
+    "bullPurposeBreeding": "Асыл тұқымды",
+    "bullPurposeFattening": "Бордақылауда",
+    "milkProductivityTitle": "Сиырдың сүт өнімділігі",
+    "milkProductivityHint": "Лактацияны жүргізу үшін сауын қосыңыз (таңертең/кешке).",
+    "profileMyTitle": "Менің профилім",
+    "profileFarmLabel": "Ферма",
+    "profileResetPasswordTitle": "Құпиясөзді қалпына келтіру",
+    "profileResetPasswordHint": "Қажет болса құпиясөзді өзгертіңіз",
+    "profileEmailTitle": "E-mail address",
+    "profileEmailAddHint": "Электрондық поштаңызды қосыңыз",
+    "eventTaskHeatPeriod": "Күйітті тексеру",
+    "eventTaskPregnancyCheck": "Буаздықты тексеру",
+    "eventTaskDryPeriod": "Құрғақ кезеңге ауыстыру жоспарланған",
+    "eventTaskWeighing": "Өлшеу жүргізу ұсынылады",
+    "eventTaskVaccination": "Вакцинация жүргізу ұсынылады",
+    "eventTaskTreatment": "Емдеу/қарау жүргізу",
+    "eventTaskHoofTrimming": "Тұяқ қырқу ұсынылады",
+    "eventTaskAntiparasitic": "Паразитке қарсы өңдеу ұсынылады",
+    "eventTaskCalvingFollowUp": "Бұзаулаудан кейін бақылау",
+    "eventTaskInsemination": "Ұрықтандыру жоспарланған",
+    "eventTaskWeaning": "Айыру жоспарланған",
+    "eventTaskDefault": "Оқиғаны орындау уақыты келді",
+    "@dateRangeError": {
+        "placeholders": {
+            "from": {},
+            "to": {}
+        }
+    },
+    "@daysValue": {
+        "placeholders": {
+            "value": {}
+        }
+    },
+    "@animalCategoryWithAge": {
+        "placeholders": {
+            "category": {},
+            "ageMonths": {}
+        }
+    },
+    "@showAllCount": {
+        "placeholders": {
+            "count": {}
+        }
+    },
+    "@daysUntilShort": {
+        "placeholders": {
+            "days": {}
+        }
+    },
+    "@eventsMarkCompleted": {
+        "placeholders": {
+            "title": {}
+        }
+    },
+    "@ageMonthsCompact": {
+        "placeholders": {
+            "months": {}
+        }
+    },
+    "@ageYearsCompact": {
+        "placeholders": {
+            "years": {}
+        }
+    },
+    "@ageYearsMonthsCompact": {
+        "placeholders": {
+            "years": {},
+            "months": {}
+        }
+    },
+    "@unitLitersValue": {
+        "placeholders": {
+            "value": {}
+        }
+    },
+    "@unitKgValue": {
+        "placeholders": {
+            "value": {}
+        }
+    },
+    "@unitPricePerKgValue": {
+        "placeholders": {
+            "value": {}
+        }
+    }
 }

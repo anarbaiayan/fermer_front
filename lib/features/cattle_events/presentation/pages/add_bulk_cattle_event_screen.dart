@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -14,17 +15,17 @@ import 'package:frontend/features/cattle_events/presentation/widgets/select_catt
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 enum BulkCattleCategory {
-  cow('COW', 'Коровы'),
-  bull('BULL', 'Быки'),
-  heifer('HEIFER', 'Тёлки'),
-  calf('CALF', 'Телята'),
-  fattening('FATTENING', 'Откорм');
+  cow('COW'),
+  bull('BULL'),
+  heifer('HEIFER'),
+  calf('CALF'),
+  fattening('FATTENING');
 
   final String api;
-  final String title;
-  const BulkCattleCategory(this.api, this.title);
+  const BulkCattleCategory(this.api);
 }
 
 class AddBulkCattleEventScreen extends ConsumerStatefulWidget {
@@ -188,13 +189,14 @@ class _AddBulkCattleEventScreenState
   }
 
   Future<void> _pickEventDate() async {
+    final l10n = context.l10n;
     final now = DateTime.now();
     final picked = await showMaskedDatePicker(
       context: context,
       initialDate: _eventDate ?? now,
       firstDate: DateTime(now.year - 20),
       lastDate: DateTime(now.year + 5),
-      helpText: 'Выберите дату события',
+      helpText: l10n.addEventPickDate,
     );
     if (picked == null) return;
     if (!mounted) return;
@@ -319,38 +321,39 @@ class _AddBulkCattleEventScreenState
   }
 
   Future<void> _submit() async {
+    final l10n = context.l10n;
     if (_selectedIds.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Выберите скот')));
+      ).showSnackBar(SnackBar(content: Text(l10n.selectCattleTitle)));
       return;
     }
 
     if (_eventType == null || _eventType!.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Выберите тип события')));
+      ).showSnackBar(SnackBar(content: Text(l10n.addEventSelectType)));
       return;
     }
 
     if (_eventType != 'HEAT_PERIOD' && _eventDate == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Выберите дату события')));
+      ).showSnackBar(SnackBar(content: Text(l10n.addEventSelectDate)));
       return;
     }
 
     if (_eventType == 'HEAT_PERIOD' && _heatStart == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Выберите дату начала охоты')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.addEventSelectHeatStart)));
       return;
     }
 
     if (_eventType == 'OTHER' && _customTypeCtrl.text.trim().isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Введите название события')));
+      ).showSnackBar(SnackBar(content: Text(l10n.addEventEnterName)));
       return;
     }
 
@@ -378,9 +381,9 @@ class _AddBulkCattleEventScreenState
 
       await showAppSuccessDialog(
         context,
-        title: 'Массовое событие\nуспешно создано!',
-        message: 'Все данные сохранены.\nВы можете изменить их позже.',
-        buttonText: 'Понятно',
+        title: l10n.bulkEventSuccessTitle,
+        message: l10n.bulkEventSuccessMessage,
+        buttonText: l10n.dialogUnderstood,
         // если хочешь стрелку в кнопке:
         // buttonIcon: const Icon(Icons.arrow_forward_ios_rounded),
         // buttonIconAfterText: true,
@@ -392,7 +395,7 @@ class _AddBulkCattleEventScreenState
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Ошибка: $e')));
+      ).showSnackBar(SnackBar(content: Text(l10n.errorPrefix('$e'))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -403,8 +406,24 @@ class _AddBulkCattleEventScreenState
     return sorted.join(',');
   }
 
+  String _categoryTitle(BulkCattleCategory category, AppLocalizations l10n) {
+    switch (category) {
+      case BulkCattleCategory.cow:
+        return l10n.rationCategoryCow;
+      case BulkCattleCategory.bull:
+        return l10n.rationCategoryBull;
+      case BulkCattleCategory.heifer:
+        return l10n.rationCategoryHeifer;
+      case BulkCattleCategory.calf:
+        return l10n.rationCategoryCalf;
+      case BulkCattleCategory.fattening:
+        return l10n.prodStateFattening;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final cattleAsync = ref.watch(
       simpleCattleByCategoryProvider(_category.api),
     );
@@ -419,7 +438,7 @@ class _AddBulkCattleEventScreenState
       enableDrawer: false,
       showAppBar: true,
       showBell: false,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final bottomInset = MediaQuery.of(context).viewInsets.bottom;
@@ -442,9 +461,9 @@ class _AddBulkCattleEventScreenState
                             onPressed: _saving ? null : _safePop,
                           ),
                           const SizedBox(width: 6),
-                          const Expanded(
+                          Expanded(
                             child: Text(
-                              'Добавить массовое событие',
+                              l10n.addBulkEventTitle,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
@@ -457,8 +476,8 @@ class _AddBulkCattleEventScreenState
 
                       const SizedBox(height: 16),
 
-                      const Text(
-                        'Категория',
+                      Text(
+                        l10n.animalCategory,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -469,12 +488,12 @@ class _AddBulkCattleEventScreenState
 
                       DropdownButtonFormField<BulkCattleCategory>(
                         value: _category,
-                        decoration: _dec(hint: 'Выберите категорию'),
+                        decoration: _dec(hint: l10n.selectCategoryHint),
                         items: BulkCattleCategory.values
                             .map(
                               (c) => DropdownMenuItem(
                                 value: c,
-                                child: Text(c.title),
+                                child: Text(_categoryTitle(c, l10n)),
                               ),
                             )
                             .toList(),
@@ -491,8 +510,8 @@ class _AddBulkCattleEventScreenState
 
                       const SizedBox(height: 16),
 
-                      const Text(
-                        'Скот',
+                      Text(
+                        l10n.selectCattleTitle,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -506,11 +525,11 @@ class _AddBulkCattleEventScreenState
                           height: 44,
                           child: Center(child: CircularProgressIndicator()),
                         ),
-                        error: (e, _) => Text('Ошибка загрузки скота: $e'),
+                        error: (e, _) => Text(l10n.errorLoadingData('$e')),
                         data: (list) {
                           final hint = _selectedIds.isEmpty
-                              ? 'Выбрать скот'
-                              : 'Выбрано: ${_selectedIds.length}';
+                              ? l10n.selectCattleTitle
+                              : l10n.selectCattleSelected(_selectedIds.length);
 
                           return SizedBox(
                             height: 48,
@@ -555,8 +574,8 @@ class _AddBulkCattleEventScreenState
 
                       const SizedBox(height: 16),
 
-                      const Text(
-                        'Событие',
+                      Text(
+                        l10n.addEventType,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -570,7 +589,7 @@ class _AddBulkCattleEventScreenState
                           height: 44,
                           child: Center(child: CircularProgressIndicator()),
                         ),
-                        error: (e, _) => Text('Ошибка типов: $e'),
+                        error: (e, _) => Text(l10n.errorTypes('$e')),
                         data: (types) {
                           final allowedBulk = <String>{
                             'VACCINATION',
@@ -604,15 +623,15 @@ class _AddBulkCattleEventScreenState
                                 decoration: _dec(
                                   hint: disabled
                                       ? (_selectedIds.isEmpty
-                                            ? 'Сначала выберите скот'
-                                            : 'Нет доступных событий')
-                                      : 'Выбрать из списка',
+                                            ? l10n.selectCattleTitle
+                                            : l10n.eventsNone)
+                                      : l10n.addEventDropdownHint,
                                 ),
                                 items: filteredTypes
                                     .map(
                                       (t) => DropdownMenuItem(
                                         value: t,
-                                        child: Text(_eventTypeTitle(t)),
+                                        child: Text(_eventTypeTitle(t, l10n)),
                                       ),
                                     )
                                     .toList(),
@@ -632,7 +651,7 @@ class _AddBulkCattleEventScreenState
                               if (_eventType != null &&
                                   _eventType != 'HEAT_PERIOD') ...[
                                 _LabeledRightField(
-                                  label: _dateLabelForType(_eventType),
+                                  label: _dateLabelForType(_eventType, l10n),
                                   field: TextField(
                                     controller: _eventDateCtrl,
                                     readOnly: true,
@@ -676,7 +695,7 @@ class _AddBulkCattleEventScreenState
                                     : () => _pickDateTo(
                                         onPicked: (d) => _endDate = d,
                                         ctrl: _endDateCtrl,
-                                        helpText: 'Дата окончания',
+                                        helpText: l10n.eventsDateEnd,
                                       ),
                                 heatStartCtrl: _heatStartCtrl,
                                 onPickHeatStart: _saving
@@ -684,7 +703,7 @@ class _AddBulkCattleEventScreenState
                                     : () => _pickDateTo(
                                         onPicked: (d) => _heatStart = d,
                                         ctrl: _heatStartCtrl,
-                                        helpText: 'Начало охоты',
+                                        helpText: l10n.fieldHeatStartDate,
                                       ),
                                 heatEndCtrl: _heatEndCtrl,
                                 onPickHeatEnd: _saving
@@ -692,7 +711,7 @@ class _AddBulkCattleEventScreenState
                                     : () => _pickDateTo(
                                         onPicked: (d) => _heatEnd = d,
                                         ctrl: _heatEndCtrl,
-                                        helpText: 'Конец охоты',
+                                        helpText: l10n.fieldHeatEndDate,
                                       ),
                                 treatmentDaysValue: _treatmentDays,
                                 onMinusTreatmentDays: _saving
@@ -742,8 +761,8 @@ class _AddBulkCattleEventScreenState
                         },
                       ),
 
-                      const Text(
-                        'Комментарий (опционально)',
+                      Text(
+                        l10n.addEventComment,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -780,8 +799,8 @@ class _AddBulkCattleEventScreenState
                                     borderRadius: BorderRadius.circular(24),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Отменить',
+                                child: Text(
+                                  l10n.dialogCancel,
                                   style: TextStyle(
                                     color: AppColors.error,
                                     fontWeight: FontWeight.w600,
@@ -803,9 +822,7 @@ class _AddBulkCattleEventScreenState
                                     borderRadius: BorderRadius.circular(24),
                                   ),
                                 ),
-                                child: Text(
-                                  _saving ? 'Сохранение...' : 'Сохранить',
-                                ),
+                                child: Text(_saving ? l10n.saving : l10n.save),
                               ),
                             ),
                           ),
@@ -853,73 +870,73 @@ class _LabeledRightField extends StatelessWidget {
   }
 }
 
-String _dateLabelForType(String? t) {
+String _dateLabelForType(String? t, AppLocalizations l10n) {
   switch (t) {
     case 'VACCINATION':
-      return 'Дата вакцинации';
+      return l10n.eventDateVaccination;
     case 'ANTIPARASITIC_TREATMENT':
-      return 'Дата обработки';
+      return l10n.eventDateTreatment;
     case 'ILLNESS_TREATMENT':
-      return 'Дата заболевания';
+      return l10n.eventDateIllness;
     case 'WEIGHING':
-      return 'Дата взвешивания';
+      return l10n.eventDateWeighing;
     case 'INSEMINATION':
-      return 'Дата\nосеменения';
+      return l10n.eventDateInsemination;
     case 'MATING':
-      return 'Дата покрытия';
+      return l10n.eventDateCheck;
     case 'CALVING':
-      return 'Дата отела';
+      return l10n.eventDateCalving;
     case 'PREGNANCY_CONFIRMATION':
-      return 'Дата\nстельности';
+      return l10n.eventDatePregnancy;
     case 'HEAT_PERIOD':
-      return 'Дата начала';
+      return l10n.eventDateStart;
     case 'SYNCHRONIZATION':
-      return 'Дата синхронизации';
+      return l10n.eventDateSync;
     case 'DRY_PERIOD':
-      return 'Дата начала';
+      return l10n.eventDateStart;
     case 'WEANING':
-      return 'Дата отъема';
+      return l10n.eventDateWeaning;
     case 'HOOF_TRIMMING':
-      return 'Дата расчистки';
+      return l10n.eventDateHoofTrimming;
     case 'OTHER':
-      return 'Дата события';
+      return l10n.eventDateGeneric;
     default:
-      return 'Дата события';
+      return l10n.eventDateGeneric;
   }
 }
 
-String _eventTypeTitle(String t) {
+String _eventTypeTitle(String t, AppLocalizations l10n) {
   switch (t) {
     case 'CALVING':
-      return 'Отёл';
+      return l10n.eventActionCalving;
     case 'INSEMINATION':
-      return 'Осеменение';
+      return l10n.eventActionInsemination;
     case 'MATING':
-      return 'Покрытие';
+      return l10n.eventActionMating;
     case 'SYNCHRONIZATION':
-      return 'Синхронизация';
+      return l10n.eventActionSynchronization;
     case 'PREGNANCY_CONFIRMATION':
-      return 'Подтверждение стельности';
+      return l10n.eventActionPregnancy;
     case 'PREGNANCY_NOT_CONFIRMED':
-      return 'Стельность не подтверждена';
+      return l10n.eventActionPregnancyNotConfirmed;
     case 'DRY_PERIOD':
-      return 'Сухостой';
+      return l10n.eventActionDryPeriod;
     case 'HEAT_PERIOD':
-      return 'Охота';
+      return l10n.eventActionHeat;
     case 'VACCINATION':
-      return 'Вакцинация';
+      return l10n.eventActionVaccination;
     case 'ILLNESS_TREATMENT':
-      return 'Лечение';
+      return l10n.eventActionIllness;
     case 'WEIGHING':
-      return 'Взвешивание';
+      return l10n.eventActionWeighing;
     case 'HOOF_TRIMMING':
-      return 'Расчистка копыт';
+      return l10n.eventActionHoof;
     case 'ANTIPARASITIC_TREATMENT':
-      return 'Обработка от паразитов';
+      return l10n.eventActionAntiparasitic;
     case 'WEANING':
-      return 'Отъём';
+      return l10n.eventActionWeaning;
     case 'OTHER':
-      return 'Другое';
+      return l10n.eventActionDefault;
     default:
       // fallback чтобы не было "CALVING" если вдруг новый тип прилетит
       return t.replaceAll('_', ' ');

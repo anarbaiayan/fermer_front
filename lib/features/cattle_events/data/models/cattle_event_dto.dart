@@ -4,12 +4,12 @@ class CattleEventDto {
   final String? cattleName;
   final String? cattleTagNumber;
 
-  final String eventType;     // "VACCINATION"
-  final String eventDate;     // "2025-12-13"
+  final String eventType; // "VACCINATION"
+  final String eventDate; // "2025-12-13"
   final String? title;
   final String? description;
   final String? notes;
-  final String? createdAt;    // строка с бэка (может быть ISO, может нет)
+  final String? createdAt; // строка с бэка (может быть ISO, может нет)
 
   const CattleEventDto({
     this.id,

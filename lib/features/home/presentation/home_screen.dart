@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
 import 'package:frontend/features/home/presentation/widgets/briefSection/search_field.dart';
 import 'package:frontend/features/home/presentation/widgets/quantitySection/summary_quantity_section.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'widgets/briefSection/herd_summary_card.dart';
 import 'widgets/briefSection/animal_status_card.dart';
+import 'widgets/briefSection/herd_summary_card.dart';
 import 'widgets/briefSection/summary_tabs.dart';
-
-import 'package:frontend/features/herd/application/herd_providers.dart';
 
 final herdLastUpdatedProvider = StateProvider<DateTime?>((ref) => null);
 
@@ -26,20 +26,22 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _summaryTabIndex = 0;
 
-  // форматируем красивую надпись "X мин назад"
   String _formatTimeAgo(DateTime? time) {
+    final l10n = context.l10n;
     if (time == null) return '—';
 
     final diff = DateTime.now().difference(time);
 
-    if (diff.inMinutes < 1) return 'только что';
-    if (diff.inMinutes < 60) return '${diff.inMinutes} мин назад';
-    if (diff.inHours < 24) return '${diff.inHours} ч назад';
-    return '${diff.inDays} д назад';
+    if (diff.inMinutes < 1) return l10n.timeJustNow;
+    if (diff.inMinutes < 60) return l10n.timeMinutesAgo(diff.inMinutes);
+    if (diff.inHours == 1) return l10n.timeOneHourAgo;
+    if (diff.inHours < 24) return l10n.timeHoursAgo(diff.inHours);
+    return l10n.timeDaysAgo(diff.inDays);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final statsAsync = ref.watch(cattleStatisticsProvider);
 
     final lastUpdatedDt = ref.watch(herdLastUpdatedProvider);
@@ -47,13 +49,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return AppScaffold(
       bottomNavIndex: 0,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: AppPage(
         child: statsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, _) => Center(
             child: Text(
-              'Ошибка при загрузке статистики:\n$err',
+              l10n.errorLoadingStats(err.toString()),
               textAlign: TextAlign.center,
             ),
           ),
@@ -63,40 +65,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             return ListView(
               children: [
                 const SizedBox(height: 16),
-
                 const SearchField(),
-
                 const SizedBox(height: 22),
-                const Text(
-                  'Сводка',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                Text(
+                  l10n.homeSummary,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 12),
-
                 SummaryTabs(
                   onTabChanged: (index) {
                     setState(() => _summaryTabIndex = index);
                   },
                 ),
-
                 const SizedBox(height: 16),
-
                 if (_summaryTabIndex == 0) ...[
-                  const Text(
-                    'Стадо',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  Text(
+                    l10n.homeHerd,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   HerdSummaryCard(
                     totalAnimals: totalAnimals,
                     lastUpdated: lastUpdatedDt == null ? '—' : lastUpdatedLabel,
                     onRefresh: () {
                       ref.invalidate(cattleStatisticsProvider);
-
                       ref.read(herdLastUpdatedProvider.notifier).state =
                           DateTime.now();
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Данные обновляются...')),
+                        SnackBar(content: Text(l10n.homeDataUpdating)),
                       );
                     },
                     onDetails: () {
@@ -104,13 +106,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     },
                   ),
                   const SizedBox(height: 24),
-
-                  const Text(
-                    'Статусы животных',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  Text(
+                    l10n.homeAnimalStatuses,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 12),
-
                   AnimalStatusCard(
                     lactating: stats.lactating,
                     dryPeriod: stats.dryPeriod,
@@ -118,20 +121,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     inseminated: stats.inseminated,
                     onTap: (type) => context.push('/herd', extra: type),
                   ),
-
                   const SizedBox(height: 24),
-
-                  const Text(
-                    'Здоровье стада',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  Text(
+                    l10n.homeHerdHealth,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 12),
-
                   Row(
                     children: [
                       Expanded(
                         child: _HealthStatusCard(
-                          title: 'Здоровые',
+                          title: l10n.homeHealthy,
                           value: stats.healthy,
                           color: const Color(0xFF4AAE62),
                           onTap: () => context.push(
@@ -143,7 +146,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: _HealthStatusCard(
-                          title: 'Больные',
+                          title: l10n.homeSick,
                           value: stats.sick,
                           color: const Color(0xFFE10816),
                           onTap: () =>
@@ -153,16 +156,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ],
                   ),
                 ] else if (_summaryTabIndex == 1) ...[
-                  // тут позже подключим остальные поля статистики (cows/heifers/etc)
-                  QuantitySummarySection(),
+                  const QuantitySummarySection(),
                 ] else ...[
                   const SizedBox(height: 24),
                   Text(
-                    'Контент для вкладки ${_summaryTabIndex + 1} ещё не реализован',
+                    l10n.homeTabNotImplemented(_summaryTabIndex + 1),
                     style: const TextStyle(fontSize: 14, color: Colors.black54),
                   ),
                 ],
-
                 const SizedBox(height: 40),
               ],
             );
@@ -188,6 +189,8 @@ class _HealthStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -244,7 +247,7 @@ class _HealthStatusCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Всего: $value',
+                l10n.herdTotalCount(value),
                 style: const TextStyle(fontSize: 12, color: AppColors.primary3),
               ),
             ],

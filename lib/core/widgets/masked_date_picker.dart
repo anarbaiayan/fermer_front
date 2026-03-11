@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/widgets/date_ddmmyyyy_formatter.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +23,7 @@ Future<DateTime?> showMaskedDatePicker({
   required DateTime initialDate,
   required DateTime firstDate,
   required DateTime lastDate,
-  String helpText = 'Выберите дату',
+  String? helpText,
 }) {
   return showDialog<DateTime?>(
     context: context,
@@ -30,7 +31,7 @@ Future<DateTime?> showMaskedDatePicker({
       initialDate: initialDate,
       firstDate: firstDate,
       lastDate: lastDate,
-      helpText: helpText,
+      helpText: helpText ?? context.l10n.dateSelect,
     ),
   );
 }
@@ -98,13 +99,14 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
   }
 
   void _applyTextIfValid({bool showError = false}) {
+    final l10n = context.l10n;
     final text = _ctrl.text.trim();
 
     // если не полный ввод - просто не применяем
     if (text.length != 10) {
       if (showError) {
         setState(() {
-          _errorText = 'Введите дату полностью';
+          _errorText = l10n.dateEnterFull;
           _okEnabled = false;
         });
       }
@@ -115,7 +117,7 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
     if (parsed == null) {
       if (showError) {
         setState(() {
-          _errorText = 'Неверная дата';
+          _errorText = l10n.dateInvalid;
           _okEnabled = false;
         });
       }
@@ -127,7 +129,7 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
         final a = _dmy.format(widget.firstDate);
         final b = _dmy.format(widget.lastDate);
         setState(() {
-          _errorText = 'Дата должна быть в диапазоне $a - $b';
+          _errorText = l10n.dateRangeError(a, b);
           _okEnabled = false;
         });
       }
@@ -142,6 +144,7 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
   }
 
   void _validateText() {
+    final l10n = context.l10n;
     final text = _ctrl.text.trim();
 
     // пока не ввели 10 символов - не ругаемся и не блокируем жестко
@@ -156,7 +159,7 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
     final parsed = tryParseDmy(text);
     if (parsed == null) {
       setState(() {
-        _errorText = 'Неверная дата';
+        _errorText = l10n.dateInvalid;
         _okEnabled = false;
       });
       return;
@@ -166,7 +169,7 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
       final a = _dmy.format(widget.firstDate);
       final b = _dmy.format(widget.lastDate);
       setState(() {
-        _errorText = 'Дата должна быть в диапазоне $a - $b';
+        _errorText = l10n.dateRangeError(a, b);
         _okEnabled = false;
       });
       return;
@@ -180,6 +183,7 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AlertDialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       titlePadding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
@@ -215,8 +219,8 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
                 keyboardType: TextInputType.number,
                 inputFormatters: const [DateDdMmYyyyInputFormatter()],
                 decoration: InputDecoration(
-                  labelText: 'Введите дату',
-                  hintText: 'dd.MM.yyyy',
+                  labelText: l10n.dateEnterLabel,
+                  hintText: l10n.dateInputHint,
                   errorText: _errorText,
                 ),
                 onChanged: (_) {
@@ -246,7 +250,7 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(null),
-          child: const Text('Отмена'),
+          child: Text(l10n.dialogCancel),
         ),
         TextButton(
           onPressed: _okEnabled
@@ -256,7 +260,7 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
                   Navigator.of(context).pop(_selected);
                 }
               : null,
-          child: const Text('OK'),
+          child: Text(l10n.dialogOk),
         ),
       ],
     );

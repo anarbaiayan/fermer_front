@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 
 Future<void> showAppSuccessDialog(
   BuildContext context, {
   required String title,
   String? message,
-
-  String buttonText = 'Понятно',
+  String? buttonText,
 
   // Иконка сверху (как было)
   String iconAsset = 'assets/icons/success.svg',
@@ -26,17 +26,13 @@ Future<void> showAppSuccessDialog(
   VoidCallback? onButtonPressed,
 }) {
   final topIconWidget =
-      icon ??
-      SvgPicture.asset(
-        iconAsset,
-        width: iconWidth,
-        height: iconHeight,
-      );
+      icon ?? SvgPicture.asset(iconAsset, width: iconWidth, height: iconHeight);
+  final resolvedButtonText = buttonText ?? context.l10n.dialogUnderstood;
 
   Widget buildButtonChild() {
     if (buttonIcon == null) {
       return Text(
-        buttonText,
+        resolvedButtonText,
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
@@ -56,7 +52,7 @@ Future<void> showAppSuccessDialog(
     );
 
     final textWidget = Text(
-      buttonText,
+      resolvedButtonText,
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w600,
@@ -67,16 +63,8 @@ Future<void> showAppSuccessDialog(
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: buttonIconAfterText
-          ? [
-              textWidget,
-              SizedBox(width: buttonIconGap),
-              iconSized,
-            ]
-          : [
-              iconSized,
-              SizedBox(width: buttonIconGap),
-              textWidget,
-            ],
+          ? [textWidget, SizedBox(width: buttonIconGap), iconSized]
+          : [iconSized, SizedBox(width: buttonIconGap), textWidget],
     );
   }
 

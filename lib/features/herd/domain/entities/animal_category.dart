@@ -1,8 +1,8 @@
 enum AnimalCategory {
-  bull,     // BULL
-  calf,     // CALF
-  cow,      // COW
-  heifer,   // HEIFER
+  bull, // BULL
+  calf, // CALF
+  cow, // COW
+  heifer, // HEIFER
 }
 
 extension AnimalCategoryX on AnimalCategory {

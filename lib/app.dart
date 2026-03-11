@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:frontend/core/localization/locale_controller.dart';
+import 'package:frontend/core/router/app_router.dart';
+import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/auth/session_events.dart';
 import 'package:frontend/l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:frontend/core/router/app_router.dart';
-import 'package:frontend/core/theme/app_theme.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class FermerPlusApp extends ConsumerWidget {
   const FermerPlusApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(appLocaleProvider);
+
     // 👇 слушаем истечение сессии
     ref.listen<bool>(sessionExpiredProvider, (prev, next) {
       if (next == true) {
@@ -27,11 +30,8 @@ class FermerPlusApp extends ConsumerWidget {
     });
 
     return MaterialApp.router(
-      locale: const Locale('ru', 'RU'),
-      supportedLocales: const [
-        Locale('ru', 'RU'),
-        Locale('kk', 'KZ'),
-      ],
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

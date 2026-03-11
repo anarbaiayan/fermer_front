@@ -1,10 +1,4 @@
-enum HealthStatus {
-  healthy,
-  sick,
-  underTreatment,
-  quarantine,
-  recovering,
-}
+enum HealthStatus { healthy, sick, underTreatment, quarantine, recovering }
 
 extension HealthStatusX on HealthStatus {
   String get apiValue {

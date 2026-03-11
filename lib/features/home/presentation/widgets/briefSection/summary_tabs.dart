@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
+
 import '../../../../../core/theme/app_colors.dart';
 
 class SummaryTabs extends StatefulWidget {
   const SummaryTabs({super.key, this.onTabChanged});
 
-  // наружу отдаём индекс выбранного таба
   final ValueChanged<int>? onTabChanged;
 
   @override
@@ -13,15 +14,6 @@ class SummaryTabs extends StatefulWidget {
 
 class _SummaryTabsState extends State<SummaryTabs> {
   int _currentIndex = 0;
-
-  final List<String> _tabs = const [
-    'Краткая',
-    'Количество',
-    'Состояние',
-    'Доходы/Расходы',
-    'Молоко',
-    'Рацион/Запасы',
-  ];
 
   final List<GlobalKey> _keys = List.generate(6, (_) => GlobalKey());
 
@@ -49,22 +41,30 @@ class _SummaryTabsState extends State<SummaryTabs> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final tabs = [
+      l10n.summaryTabBrief,
+      l10n.summaryTabQuantity,
+      l10n.summaryTabCondition,
+      l10n.summaryTabIncome,
+      l10n.summaryTabMilk,
+      l10n.summaryTabRation,
+    ];
+
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.additional2, width: 1),
         ),
       ),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minHeight: 48, // не меньше, но можно чуть выше
-        ),
+        constraints: const BoxConstraints(minHeight: 48),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
           child: Row(
-            children: List.generate(_tabs.length, (index) {
-              final bool isActive = index == _currentIndex;
+            children: List.generate(tabs.length, (index) {
+              final isActive = index == _currentIndex;
 
               return InkWell(
                 onTap: () {
@@ -83,7 +83,7 @@ class _SummaryTabsState extends State<SummaryTabs> {
                           key: _keys[index],
                           alignment: Alignment.center,
                           child: Text(
-                            _tabs[index],
+                            tabs[index],
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: isActive

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -11,7 +12,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const farmName = 'Название фермы';
+    final l10n = context.l10n;
+    final farmName = l10n.farmName;
     const phone = '+7 709 851 31 21';
     const String? email = null;
 
@@ -40,9 +42,9 @@ class ProfileScreen extends StatelessWidget {
                               onPressed: () => context.pop(),
                             ),
                             const SizedBox(width: 8),
-                            const Expanded(
+                            Expanded(
                               child: Text(
-                                'Мой профиль',
+                                l10n.profileMyTitle,
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -127,9 +129,9 @@ class ProfileScreen extends StatelessWidget {
                                         child: AppIcons.svg('info', size: 34),
                                       ),
                                       const SizedBox(width: 16),
-                                      const Expanded(
+                                      Expanded(
                                         child: Text(
-                                          'Основная информация',
+                                          l10n.animalMainInfo,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w700,
@@ -155,12 +157,12 @@ class ProfileScreen extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     _InfoRow(
-                                      label: 'Номер телефона',
+                                      label: l10n.loginPhoneLabel,
                                       value: phone,
                                     ),
                                     const SizedBox(height: 8),
                                     _InfoRow(
-                                      label: 'Ферма',
+                                      label: l10n.profileFarmLabel,
                                       value: '"$farmName"',
                                     ),
                                   ],
@@ -178,9 +180,8 @@ class ProfileScreen extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: SmallActionCard(
-                                        title: 'Сбросить пароль',
-                                        subtitle:
-                                            'При необходимости измените пароль',
+                                        title: l10n.profileResetPasswordTitle,
+                                        subtitle: l10n.profileResetPasswordHint,
                                         icon: AppIcons.svg(
                                           'reset_password',
                                           size: 26,
@@ -191,9 +192,9 @@ class ProfileScreen extends StatelessWidget {
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: SmallActionCard(
-                                        title: 'E-mail address',
+                                        title: l10n.profileEmailTitle,
                                         subtitle: email == null
-                                            ? 'Добавьте адрес своей электронной почты'
+                                            ? l10n.profileEmailAddHint
                                             : email,
                                         icon: AppIcons.svg('email', size: 26),
                                         onTap: () {},
@@ -229,8 +230,8 @@ class ProfileScreen extends StatelessWidget {
                                     onPressed: () {
                                       // TODO: logout flow (позже подключим authController)
                                     },
-                                    child: const Text(
-                                      'Выйти с аккаунта',
+                                    child: Text(
+                                      l10n.drawerLogout,
                                       style: TextStyle(
                                         color: Color(0xFFD74B4B),
                                         fontWeight: FontWeight.w700,
@@ -251,7 +252,7 @@ class ProfileScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   child: FermerPlusBigButton(
-                    text: 'Закрыть',
+                    text: l10n.dialogClose,
                     height: 50,
                     borderRadius: 5,
                     onPressed: () => context.pop(),

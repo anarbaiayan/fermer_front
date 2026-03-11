@@ -10,7 +10,8 @@ class AnimalCategoryResolver {
     final today = now ?? DateTime.now();
 
     int months =
-        (today.year - dateOfBirth.year) * 12 + (today.month - dateOfBirth.month);
+        (today.year - dateOfBirth.year) * 12 +
+        (today.month - dateOfBirth.month);
 
     if (months < 0) months = 0;
 

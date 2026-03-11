@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +10,7 @@ class HerdEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return SingleChildScrollView(
       physics: const ClampingScrollPhysics(),
       child: Padding(
@@ -25,7 +27,7 @@ class HerdEmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 25),
             Text(
-              isSearchResult ? 'Ничего не найдено' : 'Ваш список пустует',
+              isSearchResult ? l10n.emptySearchTitle : l10n.emptyHerdTitle,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -36,8 +38,8 @@ class HerdEmptyState extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               isSearchResult
-                  ? 'Попробуйте изменить запрос'
-                  : 'Добавьте первую карточку своего животного',
+                  ? l10n.emptySearchSubtitle
+                  : l10n.emptyHerdSubtitle,
               style: const TextStyle(fontSize: 14, color: AppColors.primary3),
               textAlign: TextAlign.center,
             ),
@@ -46,7 +48,7 @@ class HerdEmptyState extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: FermerPlusBigButton(
-                  text: 'Добавить животное',
+                  text: l10n.addAnimal,
                   onPressed: () => context.push('/herd/add'),
                   height: 50,
                 ),

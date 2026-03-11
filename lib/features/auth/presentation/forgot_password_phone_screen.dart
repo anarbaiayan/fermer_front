@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_logo.dart';
 import 'package:frontend/core/widgets/app_text_field.dart';
@@ -25,6 +26,7 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -38,8 +40,8 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
 
               const SizedBox(height: 28),
 
-              const Text(
-                'Забыли пароль?',
+              Text(
+                l10n.forgotPasswordTitle,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
@@ -47,8 +49,8 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                'Проверьте номер телефона, на который придет код верификации для сброса пароля',
+              Text(
+                l10n.forgotPasswordSubtitle,
                 style: TextStyle(
                   fontSize: 13,
                   height: 1.35,
@@ -59,8 +61,8 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
               const SizedBox(height: 20),
 
               AppTextField(
-                label: 'Номер телефона',
-                hintText: '+7 7xx xxx xx xx',
+                label: l10n.loginPhoneLabel,
+                hintText: l10n.loginPhoneHint,
                 controller: _phoneCtrl,
                 keyboardType: TextInputType.phone,
               ),
@@ -68,7 +70,7 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
               const SizedBox(height: 16),
 
               AppPrimaryButton(
-                text: 'Получить код',
+                text: l10n.forgotPasswordGetCode,
                 onPressed: () {
                   context.push(
                     '/forgot-password/code',

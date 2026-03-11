@@ -31,9 +31,7 @@ class FermerPlusSmallButton extends StatelessWidget {
         backgroundColor: backgroundColor,
         minimumSize: Size(0, height),
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
       onPressed: onPressed,
       child: Text(
@@ -48,10 +46,7 @@ class FermerPlusSmallButton extends StatelessWidget {
 
     if (width == null) return button;
 
-    return SizedBox(
-      width: width,
-      child: button,
-    );
+    return SizedBox(width: width, child: button);
   }
 }
 

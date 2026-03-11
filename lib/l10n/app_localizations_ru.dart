@@ -55,7 +55,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get drawerLogoutButton => 'Выйти';
 
   @override
-  String get dialogOk => 'Ок';
+  String get dialogOk => 'РћРє';
 
   @override
   String get dialogCancel => 'Отменить';
@@ -825,6 +825,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get rationsNotGenerated => 'Рационы пока не сгенерированы';
 
   @override
+  String get rationsForAnimalTitle => 'Рацион животного';
+
+  @override
   String get rationsNoMatch => 'Нет рационов, подходящих для этого животного';
 
   @override
@@ -888,6 +891,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get rationCategoryLabel => 'Категория';
 
   @override
+  String get rationCategoryBull => 'Бык';
+
+  @override
+  String get rationCategoryCow => 'Корова';
+
+  @override
+  String get rationCategoryHeifer => 'Тёлка';
+
+  @override
+  String get rationCategoryCalf => 'Теленок';
+
+  @override
   String get rationPeriodLabel => 'Период';
 
   @override
@@ -900,6 +915,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get rationStatusLabel => 'Статус';
+
+  @override
+  String get rationRecommendationsLabel => 'Рекомендации';
 
   @override
   String get rationDailyNormLabel => 'Норма в день';
@@ -922,12 +940,57 @@ class AppLocalizationsRu extends AppLocalizations {
   String get rationDailyExpense => 'Суточный расход (тг)';
 
   @override
+  String get rationMinKgLabel => 'Мин (кг)';
+
+  @override
+  String get rationMaxKgLabel => 'Макс (кг)';
+
+  @override
+  String get rationPriceKgLabel => 'Цена (кг/тг)';
+
+  @override
+  String get rationNoteLabel => 'Заметка';
+
+  @override
   String get inventoryTitle => 'Запасы';
+
+  @override
+  String get inventoryQuantityLabel => 'Количество';
+
+  @override
+  String get inventoryStocksListTitle => 'Список запасов';
 
   @override
   String inventoryTotalFeed(String kg) {
     return 'Всего корма: $kg кг';
   }
+
+  @override
+  String get inventoryTypeLabel => 'Тип корма';
+
+  @override
+  String get inventoryPriceLabel => 'Цена';
+
+  @override
+  String get inventoryRemainingLabel => 'Остаток';
+
+  @override
+  String unitLitersValue(Object value) {
+    return '$value л';
+  }
+
+  @override
+  String unitKgValue(Object value) {
+    return '$value кг';
+  }
+
+  @override
+  String unitPricePerKgValue(Object value) {
+    return '$value ₸/кг';
+  }
+
+  @override
+  String get inventoryDeleteFeedButton => 'Удалить корм';
 
   @override
   String get inventoryFeedDeleted => 'Корм удалён';
@@ -938,6 +1001,30 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get inventoryDeleteConfirm =>
       'Вы уверены, что хотите удалить этот корм? Это действие нельзя отменить.';
+
+  @override
+  String get addUserRationsTitle => 'Добавление вида корма';
+
+  @override
+  String get addUserRationsSelectAtLeastOne => 'Выберите хотя бы один корм';
+
+  @override
+  String get addUserRationsUpdatedSuccess => 'Запасы успешно\nобновлены!';
+
+  @override
+  String get addUserRationsGoToList => 'Перейти к списку';
+
+  @override
+  String get settingsLanguageTitle => 'Язык приложения';
+
+  @override
+  String get settingsLanguageSubtitle => 'Выберите язык интерфейса';
+
+  @override
+  String get settingsLanguageRu => 'Русский';
+
+  @override
+  String get settingsLanguageKk => 'Қазақша';
 
   @override
   String get lactationTitle => 'Лактация';
@@ -1052,6 +1139,33 @@ class AppLocalizationsRu extends AppLocalizations {
   String get registerButton => 'ЗАРЕГИСТРИРОВАТЬСЯ';
 
   @override
+  String get authUserExists => 'Пользователь с таким номером уже существует';
+
+  @override
+  String get authInvalidCredentials => 'Неверный номер телефона или пароль';
+
+  @override
+  String get authUserNotFound => 'Пользователь с таким номером не найден';
+
+  @override
+  String get authLoginFailed => 'Не удалось войти. Попробуйте ещё раз';
+
+  @override
+  String get authRegisterInvalidData => 'Некорректные данные регистрации';
+
+  @override
+  String get authRegisterFailed =>
+      'Не удалось зарегистрироваться. Попробуйте ещё раз';
+
+  @override
+  String get authLoginNetwork =>
+      'Не удалось войти. Проверьте подключение к интернету';
+
+  @override
+  String get authRegisterNetwork =>
+      'Не удалось зарегистрироваться. Проверьте интернет';
+
+  @override
   String get registerSuccessTitle =>
       'Вы успешно\nзарегистрировались\nв Fermer+!';
 
@@ -1061,4 +1175,320 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get registerSuccessButton => 'Начать работу';
+
+  @override
+  String get dateSelect => 'Выберите дату';
+
+  @override
+  String get dateEnterFull => 'Введите дату полностью';
+
+  @override
+  String get dateInvalid => 'Неверная дата';
+
+  @override
+  String dateRangeError(Object from, Object to) {
+    return 'Дата должна быть в диапазоне $from - $to';
+  }
+
+  @override
+  String get dateEnterLabel => 'Введите дату';
+
+  @override
+  String get dateInputHint => 'dd.MM.yyyy';
+
+  @override
+  String get bulkEventSuccessTitle => 'Массовое событие\\nуспешно создано!';
+
+  @override
+  String get bulkEventSuccessMessage =>
+      'Все данные сохранены.\\nВы можете изменить их позже.';
+
+  @override
+  String get addBulkEventTitle => 'Добавить массовое событие';
+
+  @override
+  String get selectCategoryHint => 'Выберите категорию';
+
+  @override
+  String get eventActionMating => 'Покрытие';
+
+  @override
+  String get eventActionSynchronization => 'Синхронизация';
+
+  @override
+  String get eventActionPregnancyNotConfirmed => 'Стельность не подтверждена';
+
+  @override
+  String get eventActionHornProcessing => 'Обработка рогов';
+
+  @override
+  String daysValue(Object value) {
+    return '$value дней';
+  }
+
+  @override
+  String get fieldEndDateOptional => 'Дата окончания\\n(необязательно)';
+
+  @override
+  String get fieldEventName => 'Название события';
+
+  @override
+  String get animalDataNotLoaded => 'Данные животного не загружены';
+
+  @override
+  String get breedRequiredOnStep1 =>
+      'Порода не указана. Вернитесь на шаг 1 и заполните породу.';
+
+  @override
+  String get animalCreatedSuccessTitle =>
+      'Карточка животного\\nуспешно создана!';
+
+  @override
+  String get animalCreatedSuccessMessage =>
+      'Все данные сохранены.\\nВы можете изменить их позже в карточке животного.';
+
+  @override
+  String get animalAdditionalInfo => 'Дополнительная информация';
+
+  @override
+  String get actionsTitle => 'Действия';
+
+  @override
+  String get skipText => 'Пропустить';
+
+  @override
+  String get animalCategoryUnknown => 'Невозможно определить категорию';
+
+  @override
+  String animalCategoryWithAge(Object category, Object ageMonths) {
+    return 'Категория: $category, $ageMonths мес.';
+  }
+
+  @override
+  String get breedTypeDairy => 'Молочная';
+
+  @override
+  String get breedTypeMeat => 'Мясная';
+
+  @override
+  String get breedTypeMixed => 'Комбинированная';
+
+  @override
+  String get breedTypeLocal => 'Местная';
+
+  @override
+  String get animalRequiredFields => 'Заполните имя, бирку и дату рождения';
+
+  @override
+  String get animalNoIdReturned => 'Сервер не вернул id животного';
+
+  @override
+  String get animalCreateError => 'Ошибка при создании животного';
+
+  @override
+  String get selectGender => 'Выберите пол';
+
+  @override
+  String get genderFemale => 'Женский';
+
+  @override
+  String get genderMale => 'Мужской';
+
+  @override
+  String get breedHint => 'Введите породу';
+
+  @override
+  String get breedTypeLabel => 'Тип породы';
+
+  @override
+  String get breedTypeHint => 'Выберите тип породы';
+
+  @override
+  String get creating => 'Создание...';
+
+  @override
+  String get dateOutOfRange => 'Дата вне допустимого диапазона';
+
+  @override
+  String get animalUpdatedSuccessTitle =>
+      'Карточка животного\\nуспешно обновлена!';
+
+  @override
+  String get animalInfoEditTitle => 'Редактирование карточки';
+
+  @override
+  String showAllCount(Object count) {
+    return 'Показать все ($count)';
+  }
+
+  @override
+  String get hideText => 'Скрыть';
+
+  @override
+  String get rationGenerating => 'Генерируется рацион...';
+
+  @override
+  String get rationRegeneratedSuccess =>
+      'Рацион успешно\\nсгенерирован заново!';
+
+  @override
+  String get rationUpdatedSaved => 'Обновленные данные сохранены.';
+
+  @override
+  String get prodStateDryPhase1 => 'Сухостой (фаза 1)';
+
+  @override
+  String get prodStateDryPhase2 => 'Сухостой (фаза 2)';
+
+  @override
+  String get milkTotalCurrent => 'Всего молока\\n(текущая лактация)';
+
+  @override
+  String get lastCalvingDate => 'Последний отел';
+
+  @override
+  String get lastInseminationDate => 'Последнее\\nосеменение';
+
+  @override
+  String get pregnancyLabel => 'Беременность';
+
+  @override
+  String get reproductiveStatusLabel => 'Репродуктивный статус';
+
+  @override
+  String get productionStatusLabel => 'Производственный статус';
+
+  @override
+  String get firstInseminationDate => 'Первое\\nосеменение';
+
+  @override
+  String get expectedCalvingDate => 'Планируемая дата\\nотела';
+
+  @override
+  String get bullPurposeLabel => 'Назначение';
+
+  @override
+  String get rationRegenerateTitle => 'Сгенерировать рацион повторно';
+
+  @override
+  String get rationApproxMinute => 'Примерно 1 минута';
+
+  @override
+  String get rationViewTitle => 'Посмотреть рацион';
+
+  @override
+  String get rationChooseSubtitle => 'Выберите рацион';
+
+  @override
+  String get upcomingEventsTitle => 'Ближайшие события';
+
+  @override
+  String daysUntilShort(Object days) {
+    return 'через $days дн';
+  }
+
+  @override
+  String get eventsDeleteConfirmComplete => 'Завершить событие?';
+
+  @override
+  String eventsMarkCompleted(Object title) {
+    return 'Отметить \"$title\" как выполненное?';
+  }
+
+  @override
+  String ageMonthsCompact(Object months) {
+    return '$months мес.';
+  }
+
+  @override
+  String ageYearsCompact(Object years) {
+    return '$years г.';
+  }
+
+  @override
+  String ageYearsMonthsCompact(Object years, Object months) {
+    return '$years г. $months мес.';
+  }
+
+  @override
+  String get healthHealthy => 'Здоров';
+
+  @override
+  String get healthSick => 'Болен';
+
+  @override
+  String get healthUnderTreatment => 'На лечении';
+
+  @override
+  String get healthQuarantine => 'Карантин';
+
+  @override
+  String get healthRecovering => 'Выздоравливает';
+
+  @override
+  String get bullPurposeBreeding => 'Племенной';
+
+  @override
+  String get bullPurposeFattening => 'На откорме';
+
+  @override
+  String get milkProductivityTitle => 'Молочная продуктивность коровы';
+
+  @override
+  String get milkProductivityHint =>
+      'Добавьте надой (утро/вечер), чтобы вести лактацию.';
+
+  @override
+  String get profileMyTitle => 'Мой профиль';
+
+  @override
+  String get profileFarmLabel => 'Ферма';
+
+  @override
+  String get profileResetPasswordTitle => 'Сбросить пароль';
+
+  @override
+  String get profileResetPasswordHint => 'При необходимости измените пароль';
+
+  @override
+  String get profileEmailTitle => 'E-mail address';
+
+  @override
+  String get profileEmailAddHint => 'Добавьте адрес своей электронной почты';
+
+  @override
+  String get eventTaskHeatPeriod => 'Проверка на охоту';
+
+  @override
+  String get eventTaskPregnancyCheck => 'Провести проверку на стельность';
+
+  @override
+  String get eventTaskDryPeriod => 'Запланирован перевод в сухостой';
+
+  @override
+  String get eventTaskWeighing => 'Рекомендуется провести взвешивание';
+
+  @override
+  String get eventTaskVaccination => 'Рекомендуется провести вакцинацию';
+
+  @override
+  String get eventTaskTreatment => 'Провести лечение/осмотр';
+
+  @override
+  String get eventTaskHoofTrimming => 'Рекомендуется расчистка копыт';
+
+  @override
+  String get eventTaskAntiparasitic => 'Рекомендуется обработка от паразитов';
+
+  @override
+  String get eventTaskCalvingFollowUp => 'Контроль после отела';
+
+  @override
+  String get eventTaskInsemination => 'Запланировано осеменение';
+
+  @override
+  String get eventTaskWeaning => 'Запланирован отъём';
+
+  @override
+  String get eventTaskDefault => 'Пришло время выполнить событие';
 }

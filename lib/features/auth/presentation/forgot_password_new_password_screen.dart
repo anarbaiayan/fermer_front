@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_logo.dart';
 import 'package:frontend/core/widgets/app_text_field.dart';
@@ -39,6 +40,7 @@ class _ForgotPasswordNewPasswordScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -51,8 +53,8 @@ class _ForgotPasswordNewPasswordScreenState
 
               const SizedBox(height: 28),
 
-              const Text(
-                'Введите новый пароль',
+              Text(
+                l10n.forgotPasswordNewTitle,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
@@ -60,8 +62,8 @@ class _ForgotPasswordNewPasswordScreenState
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                'Установите новый пароль для входа в приложение',
+              Text(
+                l10n.forgotPasswordNewSubtitle,
                 style: TextStyle(
                   fontSize: 13,
                   height: 1.35,
@@ -72,8 +74,8 @@ class _ForgotPasswordNewPasswordScreenState
               const SizedBox(height: 32),
 
               AppTextField(
-                label: 'Новый пароль',
-                hintText: 'Введите новый пароль',
+                label: l10n.forgotPasswordNewLabel,
+                hintText: l10n.forgotPasswordNewHint,
                 controller: _pass1,
                 obscureText: !_show1,
                 suffixIcon: IconButton(
@@ -86,8 +88,8 @@ class _ForgotPasswordNewPasswordScreenState
               const SizedBox(height: 14),
 
               AppTextField(
-                label: 'Подтверждение пароля',
-                hintText: 'Введите пароль повторно',
+                label: l10n.forgotPasswordConfirmLabel,
+                hintText: l10n.forgotPasswordConfirmHint,
                 controller: _pass2,
                 obscureText: !_show2,
                 suffixIcon: IconButton(
@@ -100,13 +102,13 @@ class _ForgotPasswordNewPasswordScreenState
               const SizedBox(height: 18),
 
               AppPrimaryButton(
-                text: 'Установить пароль',
+                text: l10n.forgotPasswordSetButton,
                 onPressed: () async {
                   await showAppSuccessDialog(
                     context,
-                    title: 'Новый пароль успешно\nустановлен!',
+                    title: l10n.forgotPasswordSuccess,
                     iconAsset: 'assets/icons/user-success.svg',
-                    buttonText: 'Войти в Fermer +',
+                    buttonText: l10n.forgotPasswordGoLogin,
                     iconHeight: 111,
                     iconWidth: 111,
                   );

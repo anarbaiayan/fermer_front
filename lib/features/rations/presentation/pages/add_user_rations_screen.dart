@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
+import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -23,9 +25,7 @@ class AddUserRationsScreen extends ConsumerStatefulWidget {
 class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
   final Map<int, bool> _selected = {};
 
-  // что было выбрано при открытии (нужно для diff)
   Set<int> _initialSelectedIds = {};
-  // feedId -> userRationId (нужно для delete)
   Map<int, int> _feedIdToUserRationId = {};
 
   bool _saving = false;
@@ -38,16 +38,18 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
     'VITAMINS_SUPPLEMENTS': true,
   };
 
-  String _typeTitle(String type) {
+  String _typeTitle(BuildContext context, String type) {
+    final l10n = context.l10n;
+
     switch (type) {
       case 'COARSE':
-        return 'Грубые корма';
+        return l10n.rationsRoughage;
       case 'JUICY':
-        return 'Сочные корма';
+        return l10n.rationsSucculentFeed;
       case 'CONCENTRATED':
-        return 'Концентрированные корма';
+        return l10n.rationsConcentrates;
       case 'VITAMINS_SUPPLEMENTS':
-        return 'Витамины, минералы и специальные добавки';
+        return l10n.rationsAdditives;
       default:
         return type;
     }
@@ -67,7 +69,6 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
     _initialSelectedIds = selectedIds;
     _feedIdToUserRationId = map;
 
-    // проставляем чекбоксы
     for (final id in selectedIds) {
       _selected[id] = true;
     }
@@ -75,8 +76,14 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
     _prefilled = true;
   }
 
+  String _errorText(Object error) {
+    if (error is ApiException) return error.message;
+    return error.toString();
+  }
+
   Future<void> _submit() async {
-    // итоговый выбранный сет
+    final l10n = context.l10n;
+
     final currentSelectedIds = _selected.entries
         .where((e) => e.value == true)
         .map((e) => e.key)
@@ -84,19 +91,17 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
 
     if (currentSelectedIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Выберите хотя бы один корм')),
+        SnackBar(content: Text(l10n.addUserRationsSelectAtLeastOne)),
       );
       return;
     }
 
-    // diff
     final toRemove = _initialSelectedIds.difference(currentSelectedIds);
     final toAdd = currentSelectedIds.difference(_initialSelectedIds);
 
     setState(() => _saving = true);
 
     try {
-      // 1) удаляем снятые галочки
       if (toRemove.isNotEmpty) {
         final del = ref.read(deleteUserRationProvider);
 
@@ -107,7 +112,6 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
         }
       }
 
-      // 2) добавляем новые (kg всегда 0)
       if (toAdd.isNotEmpty) {
         final create = ref.read(createUserRationsProvider);
 
@@ -119,17 +123,14 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
         await create(
           CreateUserRationsDto(rationQuantity: payload, isAvailable: true),
         );
-      } else {
-        // если ничего не добавляли, но удаляли - провайдеры уже инвалидируются внутри deleteUserRationProvider
-        // если ни add ни remove - просто закрываем
       }
 
       if (!mounted) return;
 
       await showAppSuccessDialog(
         context,
-        title: 'Запасы успешно\nобновлены!',
-        buttonText: 'Перейти к списку',
+        title: l10n.addUserRationsUpdatedSuccess,
+        buttonText: l10n.addUserRationsGoToList,
         onButtonPressed: () => context.go('/rations'),
       );
 
@@ -138,7 +139,7 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Ошибка: $e')));
+      ).showSnackBar(SnackBar(content: Text(l10n.errorPrefix(_errorText(e)))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -146,6 +147,9 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final languageCode = Localizations.localeOf(context).languageCode;
+
     final catalogAsync = ref.watch(rationCatalogProvider);
     final userRationsAsync = ref.watch(userRationsProvider);
 
@@ -154,7 +158,7 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
       enableDrawer: false,
       showBell: false,
       showAppBar: true,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: AppPage(
         child: Column(
           children: [
@@ -167,12 +171,14 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
                   onPressed: () => context.pop(false),
                 ),
                 const SizedBox(width: 6),
-                const Text(
-                  'Добавление вида корма',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary3,
+                Expanded(
+                  child: Text(
+                    l10n.addUserRationsTitle,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primary3,
+                    ),
                   ),
                 ),
               ],
@@ -182,15 +188,24 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
             Expanded(
               child: userRationsAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('Ошибка: $e')),
+                error: (e, _) => Center(
+                  child: Text(
+                    l10n.errorPrefix(_errorText(e)),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 data: (userRations) {
-                  // ✅ один раз предзаполняем чекбоксы
                   _prefillFromUserRations(userRations);
 
                   return catalogAsync.when(
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
-                    error: (e, _) => Center(child: Text('Ошибка: $e')),
+                    error: (e, _) => Center(
+                      child: Text(
+                        l10n.errorPrefix(_errorText(e)),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     data: (catalog) {
                       final Map<String, List<RationCatalogItemDto>> byType = {};
                       for (final x in catalog) {
@@ -230,7 +245,7 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              _typeTitle(type),
+                                              _typeTitle(context, type),
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
@@ -275,7 +290,7 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
                                                   },
                                           ),
                                           title: Text(
-                                            x.name,
+                                            x.localizedName(languageCode),
                                             style: const TextStyle(
                                               fontSize: 14,
                                               color: AppColors.primary3,
@@ -313,9 +328,9 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
                           ),
                         ),
                         onPressed: _saving ? null : () => context.pop(false),
-                        child: const Text(
-                          'Отменить',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.dialogCancel,
+                          style: const TextStyle(
                             color: Colors.red,
                             fontWeight: FontWeight.w600,
                           ),
@@ -344,9 +359,9 @@ class _AddUserRationsScreenState extends ConsumerState<AddUserRationsScreen> {
                                   color: Colors.white,
                                 ),
                               )
-                            : const Text(
-                                'Сохранить',
-                                style: TextStyle(
+                            : Text(
+                                l10n.save,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                 ),

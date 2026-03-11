@@ -19,7 +19,7 @@ ThemeData buildTheme() {
       surface: AppColors.surface1,
     ),
     cardTheme: const CardThemeData(
-      elevation: 0,          // тень дадим вручную в AppCard
+      elevation: 0, // тень дадим вручную в AppCard
       margin: EdgeInsets.zero,
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
-import '../../../../../core/widgets/app_card.dart';
+
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/widgets/app_card.dart';
 
 class AnimalStatusCard extends StatelessWidget {
   final int lactating;
@@ -21,13 +23,15 @@ class AnimalStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Column(
       children: [
         Row(
           children: [
             Expanded(
               child: _StatusItemCard(
-                title: 'Дойные',
+                title: l10n.statusLactating,
                 badgeColor: Colors.red,
                 badgeValue: lactating,
                 onTap: () => onTap?.call(HerdFilterType.lactating),
@@ -36,7 +40,7 @@ class AnimalStatusCard extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _StatusItemCard(
-                title: 'Сухостой',
+                title: l10n.statusDryPeriod,
                 badgeColor: const Color(0xFF3E5BD8),
                 badgeValue: dryPeriod,
                 onTap: () => onTap?.call(HerdFilterType.dryPeriod),
@@ -49,7 +53,7 @@ class AnimalStatusCard extends StatelessWidget {
           children: [
             Expanded(
               child: _StatusItemCard(
-                title: 'Открытые',
+                title: l10n.statusOpen,
                 badgeColor: AppColors.success,
                 badgeValue: open,
                 onTap: () => onTap?.call(HerdFilterType.open),
@@ -58,7 +62,7 @@ class AnimalStatusCard extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _StatusItemCard(
-                title: 'Осемененные',
+                title: l10n.statusInseminated,
                 badgeColor: Colors.teal,
                 badgeValue: inseminated,
                 onTap: () => onTap?.call(HerdFilterType.inseminated),
@@ -86,6 +90,8 @@ class _StatusItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return InkWell(
       borderRadius: BorderRadius.circular(12),
       onTap: onTap,
@@ -131,7 +137,7 @@ class _StatusItemCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Всего: $badgeValue',
+              l10n.herdTotalCount(badgeValue),
               style: const TextStyle(fontSize: 12, color: AppColors.primary3),
             ),
           ],

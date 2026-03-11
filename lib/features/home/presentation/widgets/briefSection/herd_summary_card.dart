@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
+import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
-import '../../../../../core/widgets/app_card.dart';
-import '../../../../../core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/app_card.dart';
 
 class HerdSummaryCard extends StatelessWidget {
   final int totalAnimals;
@@ -12,58 +13,64 @@ class HerdSummaryCard extends StatelessWidget {
 
   const HerdSummaryCard({
     super.key,
-    this.totalAnimals = 128,
-    this.lastUpdated = '1 час назад',
+    this.totalAnimals = 0,
+    this.lastUpdated = '—',
     this.onRefresh,
     this.onDetails,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return AppCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // левая колонка - SVG иконка коровы
           Container(
             width: 44,
             height: 44,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.primary2, // коричневый фон
+              color: AppColors.primary2,
               borderRadius: BorderRadius.circular(8),
             ),
             child: AppIcons.svg('cow', size: 30),
           ),
-
           const SizedBox(width: 20),
-
-          // центр - контент
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Сводка стада',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                Text(
+                  l10n.herdSummaryTitle,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Всего животных: $totalAnimals',
-                  style: TextStyle(fontSize: 14, color: AppColors.primary3),
+                  l10n.herdTotalAnimals(totalAnimals),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.primary3,
+                  ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Обновлено: $lastUpdated',
-                  style: TextStyle(fontSize: 14, color: AppColors.primary3),
+                  l10n.herdUpdated(lastUpdated),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.primary3,
+                  ),
                 ),
                 const SizedBox(height: 8),
-
                 SizedBox(
                   width: 140,
                   height: 36,
                   child: FermerPlusSmallButton(
-                    text: 'Подробнее',
+                    text: l10n.herdDetails,
                     onPressed: onDetails ?? () {},
                     height: 30,
                     width: 123,
@@ -73,12 +80,10 @@ class HerdSummaryCard extends StatelessWidget {
               ],
             ),
           ),
-
-          // правая колонка — обновление
           IconButton(
             padding: EdgeInsets.zero,
             onPressed: onRefresh ?? () {},
-            icon: AppIcons.svg('refresh', size: 19)
+            icon: AppIcons.svg('refresh', size: 19),
           ),
         ],
       ),

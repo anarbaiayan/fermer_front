@@ -2,11 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AppIcons {
-  static SvgPicture svg(
-    String path, {
-    double size = 24,
-    dynamic color,
-  }) {
+  static SvgPicture svg(String path, {double size = 24, dynamic color}) {
     return SvgPicture.asset(
       'assets/icons/$path.svg',
       width: size,

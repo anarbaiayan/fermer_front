@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/cattle_events/domain/entities/cattle_event_type.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -29,6 +29,7 @@ class _CattleEventsPreviewState extends ConsumerState<CattleEventsPreview> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final async = ref.watch(cattleEventsPreviewProvider(widget.cattleId));
 
     return Column(
@@ -41,9 +42,9 @@ class _CattleEventsPreviewState extends ConsumerState<CattleEventsPreview> {
               child: AppIcons.svg('clock', size: 34),
             ),
             const SizedBox(width: 8),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Журнал событий',
+                l10n.eventsTitle,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -71,7 +72,7 @@ class _CattleEventsPreviewState extends ConsumerState<CattleEventsPreview> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Ошибка загрузки событий: $e',
+                l10n.errorLoadingData('$e'),
                 style: const TextStyle(fontSize: 12, color: AppColors.error),
               ),
               const SizedBox(height: 6),
@@ -79,7 +80,7 @@ class _CattleEventsPreviewState extends ConsumerState<CattleEventsPreview> {
                 onPressed: () => ref.invalidate(
                   cattleEventsPreviewProvider(widget.cattleId),
                 ),
-                child: const Text('Повторить'),
+                child: Text(l10n.retry),
               ),
             ],
           ),
@@ -89,8 +90,8 @@ class _CattleEventsPreviewState extends ConsumerState<CattleEventsPreview> {
                 .toList();
 
             if (visible.isEmpty) {
-              return const Text(
-                'Пока нет событий',
+              return Text(
+                l10n.eventsNone,
                 style: TextStyle(fontSize: 14, color: AppColors.additional3),
               );
             }
@@ -114,8 +115,8 @@ class _CattleEventsPreviewState extends ConsumerState<CattleEventsPreview> {
                       onPressed: () => setState(() => _collapsed = !_collapsed),
                       child: Text(
                         _collapsed
-                            ? 'Показать все (${visible.length})'
-                            : 'Скрыть',
+                            ? l10n.showAllCount(visible.length)
+                            : l10n.hideText,
                       ),
                     ),
                   ),
@@ -134,7 +135,7 @@ class _EventRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = CattleEventTypeX.fromApi(e.eventType)?.display ?? e.eventType;
+    final title = _eventTitle(e.eventType, context.l10n);
     final dateText = DateFormat('dd.MM.yyyy').format(e.eventDate);
     final info = _buildInfoText(e);
 
@@ -194,6 +195,44 @@ class _EventRow extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _eventTitle(String eventType, dynamic l10n) {
+    switch (eventType) {
+      case 'CALVING':
+        return l10n.eventActionCalving;
+      case 'INSEMINATION':
+        return l10n.eventActionInsemination;
+      case 'MATING':
+        return l10n.eventActionMating;
+      case 'SYNCHRONIZATION':
+        return l10n.eventActionSynchronization;
+      case 'PREGNANCY_CONFIRMATION':
+        return l10n.eventActionPregnancy;
+      case 'PREGNANCY_NOT_CONFIRMED':
+        return l10n.eventActionPregnancyNotConfirmed;
+      case 'DRY_PERIOD':
+        return l10n.eventActionDryPeriod;
+      case 'HEAT_PERIOD':
+        return l10n.eventActionHeat;
+      case 'VACCINATION':
+        return l10n.eventActionVaccination;
+      case 'ILLNESS_TREATMENT':
+        return l10n.eventActionIllness;
+      case 'WEIGHING':
+        return l10n.eventActionWeighing;
+      case 'HOOF_TRIMMING':
+        return l10n.eventActionHoof;
+      case 'HORN_PROCESSING':
+        return l10n.eventActionHornProcessing;
+      case 'ANTIPARASITIC_TREATMENT':
+        return l10n.eventActionAntiparasitic;
+      case 'WEANING':
+        return l10n.eventActionWeaning;
+      case 'OTHER':
+      default:
+        return l10n.eventActionDefault;
+    }
   }
 
   String _buildInfoText(CattleEvent e) {

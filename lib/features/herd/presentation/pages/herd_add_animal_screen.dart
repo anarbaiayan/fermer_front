@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
@@ -20,6 +21,7 @@ import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 import 'package:frontend/features/herd/domain/entities/cattle_gender.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category_resolver.dart';
@@ -85,6 +87,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
   }
 
   void _recalculateCategory() {
+    final l10n = context.l10n;
     if (_birthDate == null) {
       setState(() {
         _categoryText = null;
@@ -102,21 +105,51 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
 
     setState(() {
       if (category == null) {
-        _categoryText = 'Невозможно определить категорию';
+        _categoryText = l10n.animalCategoryUnknown;
       } else {
-        _categoryText = 'Категория: ${category.display}, $ageMonths мес.';
+        _categoryText = l10n.animalCategoryWithAge(
+          _categoryLabel(category, l10n),
+          ageMonths,
+        );
       }
     });
   }
 
+  String _categoryLabel(AnimalCategory category, AppLocalizations l10n) {
+    switch (category) {
+      case AnimalCategory.cow:
+        return l10n.rationCategoryCow;
+      case AnimalCategory.heifer:
+        return l10n.rationCategoryHeifer;
+      case AnimalCategory.bull:
+        return l10n.rationCategoryBull;
+      case AnimalCategory.calf:
+        return l10n.rationCategoryCalf;
+    }
+  }
+
+  String _breedTypeLabel(BreedType type, AppLocalizations l10n) {
+    switch (type) {
+      case BreedType.DAIRY:
+        return l10n.breedTypeDairy;
+      case BreedType.MEAT:
+        return l10n.breedTypeMeat;
+      case BreedType.MIXED:
+        return l10n.breedTypeMixed;
+      case BreedType.LOCAL:
+        return l10n.breedTypeLocal;
+    }
+  }
+
   Future<void> _onNext() async {
+    final l10n = context.l10n;
     final name = _nameController.text.trim();
     final tag = _tagController.text.trim();
 
     if (name.isEmpty || tag.isEmpty || _birthDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Заполните имя, бирку и дату рождения')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.animalRequiredFields)));
       return;
     }
 
@@ -157,7 +190,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
       final created = await herdApi.createCattle(dto);
 
       final id = created.id;
-      if (id == null) throw Exception('Сервер не вернул id животного');
+      if (id == null) throw Exception(l10n.animalNoIdReturned);
 
       ref.invalidate(cattleListProvider);
       ref.invalidate(cattleStatisticsProvider); // чтобы “open”/total обновились
@@ -165,7 +198,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
       if (!mounted) return;
       context.push('/herd/add/details', extra: id);
     } catch (e) {
-      String message = 'Ошибка при создании животного';
+      String message = l10n.animalCreateError;
 
       if (e is ApiException) {
         message = e.message;
@@ -186,13 +219,14 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AppScaffold(
       bottomNavIndex: null,
       enableDrawer: false,
       showBell: false,
       showAppBar: true,
       backgroundColor: AppColors.primary1,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: Column(
         children: [
           Expanded(
@@ -209,7 +243,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         HerdPageHeader(
-                          title: 'Добавление животного',
+                          title: l10n.addAnimal,
                           onBack: () => context.pop(),
                         ),
 
@@ -217,12 +251,12 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                         const HerdStepsIndicator(currentStep: 1),
                         const SizedBox(height: 20),
 
-                        const HerdSectionTitle(text: 'Основная информация'),
+                        HerdSectionTitle(text: l10n.animalMainInfo),
 
                         const SizedBox(height: 24),
 
-                        const Text(
-                          'Имя',
+                        Text(
+                          l10n.registerFirstName,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -234,8 +268,8 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
 
                         const SizedBox(height: 24),
 
-                        const Text(
-                          'Бирка',
+                        Text(
+                          l10n.animalTag,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -250,8 +284,8 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
 
                         const SizedBox(height: 24),
 
-                        const Text(
-                          'Выберите пол',
+                        Text(
+                          l10n.selectGender,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -263,7 +297,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                           children: [
                             Expanded(
                               child: HerdGenderChip(
-                                label: 'Женский',
+                                label: l10n.genderFemale,
                                 isActive: _gender == AnimalGender.female,
                                 onTap: () =>
                                     _onGenderChanged(AnimalGender.female),
@@ -272,7 +306,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                             const SizedBox(width: 18),
                             Expanded(
                               child: HerdGenderChip(
-                                label: 'Мужской',
+                                label: l10n.genderMale,
                                 isActive: _gender == AnimalGender.male,
                                 onTap: () =>
                                     _onGenderChanged(AnimalGender.male),
@@ -285,9 +319,9 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
 
                         Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: Text(
-                                'Дата рождения',
+                                l10n.animalBirthDate,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -321,8 +355,8 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
 
                         const SizedBox(height: 24),
 
-                        const Text(
-                          'Порода',
+                        Text(
+                          l10n.animalBreed,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -332,13 +366,13 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                         const SizedBox(height: 8),
                         HerdTextField(
                           controller: _breedController,
-                          hint: 'Введите породу',
+                          hint: l10n.breedHint,
                         ),
 
                         const SizedBox(height: 24),
 
-                        const Text(
-                          'Тип породы',
+                        Text(
+                          l10n.breedTypeLabel,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -349,7 +383,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                         DropdownButtonFormField<BreedType>(
                           value: _selectedBreedType,
                           decoration: InputDecoration(
-                            hintText: 'Выберите тип породы',
+                            hintText: l10n.breedTypeHint,
                             hintStyle: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF9E9E9E),
@@ -372,7 +406,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                           items: BreedType.values.map((type) {
                             return DropdownMenuItem(
                               value: type,
-                              child: Text(type.displayName),
+                              child: Text(_breedTypeLabel(type, l10n)),
                             );
                           }).toList(),
                           onChanged: (v) {
@@ -415,8 +449,8 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                                     0.6,
                                   ),
                                 ),
-                                child: const Text(
-                                  'Отменить',
+                                child: Text(
+                                  l10n.dialogCancel,
                                   style: TextStyle(
                                     color: AppColors.error,
                                     fontSize: 14,
@@ -431,7 +465,9 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                                 fontSize: 14,
                                 height: 50,
                                 borderRadius: 24,
-                                text: _isLoading ? 'Создание...' : 'Далее',
+                                text: _isLoading
+                                    ? l10n.creating
+                                    : l10n.continueText,
                                 onPressed: _isLoading ? () {} : _onNext,
                               ),
                             ),
@@ -500,6 +536,7 @@ class _BirthDateDialogState extends State<_BirthDateDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 20, now.month, now.day);
     final lastDate = DateTime(now.year, now.month, now.day);
@@ -510,9 +547,8 @@ class _BirthDateDialogState extends State<_BirthDateDialog> {
       actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       title: Row(
         children: [
-          const Expanded(child: Text('Дата рождения')),
+          Expanded(child: Text(l10n.animalBirthDate)),
           IconButton(
-            tooltip: inputMode ? 'Календарь' : 'Ввод',
             icon: Icon(inputMode ? Icons.calendar_today : Icons.edit),
             onPressed: () => setState(() => inputMode = !inputMode),
           ),
@@ -525,7 +561,7 @@ class _BirthDateDialogState extends State<_BirthDateDialog> {
                 controller: controller,
                 keyboardType: TextInputType.number,
                 inputFormatters: [mask],
-                decoration: const InputDecoration(hintText: 'ДД.ММ.ГГГГ'),
+                decoration: InputDecoration(hintText: l10n.dateInputHint),
                 onChanged: (v) {
                   if (mask.getUnmaskedText().length == 8) {
                     final parsed = _parse(v);
@@ -548,7 +584,7 @@ class _BirthDateDialogState extends State<_BirthDateDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Отмена'),
+          child: Text(l10n.dialogCancel),
         ),
         TextButton(
           onPressed: () {
@@ -557,22 +593,20 @@ class _BirthDateDialogState extends State<_BirthDateDialog> {
               if (parsed == null) {
                 ScaffoldMessenger.of(
                   context,
-                ).showSnackBar(const SnackBar(content: Text('Неверная дата')));
+                ).showSnackBar(SnackBar(content: Text(l10n.dateInvalid)));
                 return;
               }
               if (!_inRange(parsed)) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Дата вне допустимого диапазона'),
-                  ),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(l10n.dateOutOfRange)));
                 return;
               }
               selectedDate = parsed;
             }
             Navigator.pop(context, selectedDate);
           },
-          child: const Text('OK'),
+          child: Text(l10n.dialogOk),
         ),
       ],
     );

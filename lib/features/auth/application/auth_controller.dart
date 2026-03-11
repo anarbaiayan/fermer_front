@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:frontend/core/network/token_repository.dart';
+import 'package:frontend/features/auth/domain/entities/auth_error_code.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../data/datasources/auth_api.dart';
 import '../data/models/login_request_dto.dart';
@@ -52,9 +53,7 @@ class AuthController extends StateNotifier<AuthState> {
 
     // если это именно наш кейс 409 с телефоном
     if (!isLogin && status == 409) {
-      // если хочешь, можно использовать backendMessage в тултипах/логах,
-      // но пользователю лучше показать короткий текст:
-      return 'Пользователь с таким номером уже существует';
+      return AuthErrorCode.userExists;
     }
 
     // если бэк прислал какое-то сообщение - покажем его
@@ -65,17 +64,17 @@ class AuthController extends StateNotifier<AuthState> {
     // fallback по статусам
     if (isLogin) {
       if (status == 401 || status == 403) {
-        return 'Неверный номер телефона или пароль';
+        return AuthErrorCode.invalidCredentials;
       }
       if (status == 404) {
-        return 'Пользователь с таким номером не найден';
+        return AuthErrorCode.userNotFound;
       }
-      return 'Не удалось войти. Попробуйте ещё раз';
+      return AuthErrorCode.loginFailed;
     } else {
       if (status == 400) {
-        return 'Некорректные данные регистрации';
+        return AuthErrorCode.registerInvalidData;
       }
-      return 'Не удалось зарегистрироваться. Попробуйте ещё раз';
+      return AuthErrorCode.registerFailed;
     }
   }
 
@@ -121,7 +120,7 @@ class AuthController extends StateNotifier<AuthState> {
     } catch (_) {
       state = state.copyWith(
         isLoading: false,
-        error: 'Не удалось войти. Проверьте подключение к интернету',
+        error: AuthErrorCode.loginNetwork,
       );
     }
   }
@@ -177,7 +176,7 @@ class AuthController extends StateNotifier<AuthState> {
     } catch (_) {
       state = state.copyWith(
         isLoading: false,
-        error: 'Не удалось зарегистрироваться. Проверьте интернет',
+        error: AuthErrorCode.registerNetwork,
       );
     }
   }

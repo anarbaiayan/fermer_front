@@ -14,10 +14,10 @@ class RegisterRequestDto {
   });
 
   Map<String, dynamic> toJson() => {
-        'phoneNumber': phoneNumber,
-        'password': password,
-        'firstName': firstName,
-        'lastName': lastName,
-        'farmName': farmName,
-      };
+    'phoneNumber': phoneNumber,
+    'password': password,
+    'firstName': firstName,
+    'lastName': lastName,
+    'farmName': farmName,
+  };
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/core/widgets/masked_date_picker.dart';
@@ -8,6 +9,7 @@ import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 import '../../application/cattle_events_providers.dart';
 import '../../data/models/create_cattle_event_dto.dart';
@@ -51,55 +53,55 @@ class _LabeledRightField extends StatelessWidget {
   }
 }
 
-String _dateLabelForType(String? t) {
+String _dateLabelForType(String? t, AppLocalizations l10n) {
   switch (t) {
     case 'VACCINATION':
-      return 'Дата вакцинации';
+      return l10n.eventDateVaccination;
 
     case 'ANTIPARASITIC_TREATMENT':
-      return 'Дата обработки';
+      return l10n.eventDateTreatment;
 
     case 'ILLNESS_TREATMENT':
-      return 'Дата заболевания';
+      return l10n.eventDateIllness;
 
     case 'WEIGHING':
-      return 'Дата взвешивания';
+      return l10n.eventDateWeighing;
 
     case 'INSEMINATION':
-      return 'Дата\nосеменения';
+      return l10n.eventDateInsemination;
 
     case 'PREGNANCY_NOT_CONFIRMED':
-      return 'Дата проверки';
+      return l10n.eventDateCheck;
 
     case 'HORN_PROCESSING':
-      return 'Дата обработки';
+      return l10n.eventDateHornProcessing;
 
     case 'CALVING':
-      return 'Дата отела';
+      return l10n.eventDateCalving;
 
     case 'PREGNANCY_CONFIRMATION':
-      return 'Дата\nстельности';
+      return l10n.eventDatePregnancy;
 
     case 'HEAT_PERIOD':
-      return 'Дата начала';
+      return l10n.eventDateStart;
 
     case 'SYNCHRONIZATION':
-      return 'Дата синхронизации';
+      return l10n.eventDateSync;
 
     case 'DRY_PERIOD':
-      return 'Дата начала';
+      return l10n.eventDateStart;
 
     case 'WEANING':
-      return 'Дата отъема';
+      return l10n.eventDateWeaning;
 
     case 'HOOF_TRIMMING':
-      return 'Дата расчистки';
+      return l10n.eventDateHoofTrimming;
 
     case 'OTHER':
-      return 'Дата события';
+      return l10n.eventDateGeneric;
 
     default:
-      return 'Дата события';
+      return l10n.eventDateGeneric;
   }
 }
 
@@ -206,13 +208,14 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
   }
 
   Future<void> _pickEventDate() async {
+    final l10n = context.l10n;
     final now = DateTime.now();
     final picked = await showMaskedDatePicker(
       context: context,
       initialDate: _eventDate ?? now,
       firstDate: DateTime(now.year - 20),
       lastDate: DateTime(now.year + 5),
-      helpText: 'Выберите дату события',
+      helpText: l10n.addEventPickDate,
     );
     if (picked == null) return;
     setState(() {
@@ -343,29 +346,30 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
   }
 
   Future<void> _submit() async {
+    final l10n = context.l10n;
     if (_eventType == null || _eventType!.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Выберите тип события')));
+      ).showSnackBar(SnackBar(content: Text(l10n.addEventSelectType)));
       return;
     }
     if (_eventType != 'HEAT_PERIOD' && _eventDate == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Выберите дату события')));
+      ).showSnackBar(SnackBar(content: Text(l10n.addEventSelectDate)));
       return;
     }
 
     if (_eventType == 'OTHER' && _customTypeCtrl.text.trim().isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Введите название события')));
+      ).showSnackBar(SnackBar(content: Text(l10n.addEventEnterName)));
       return;
     }
     if (_eventType == 'HEAT_PERIOD' && _heatStart == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Выберите дату начала охоты')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.addEventSelectHeatStart)));
       return;
     }
 
@@ -373,22 +377,22 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
       if (_calfTagCtrl.text.trim().isEmpty) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Введите бирку телёнка')));
+        ).showSnackBar(SnackBar(content: Text(l10n.addEventEnterCalfTag)));
         return;
       }
       if (_calfGender == null) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Выберите пол телёнка')));
+        ).showSnackBar(SnackBar(content: Text(l10n.addEventSelectCalfGender)));
         return;
       }
       if (double.tryParse(
             _calfBirthWeightCtrl.text.trim().replaceAll(',', '.'),
           ) ==
           null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Введите вес телёнка при рождении')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.addEventEnterCalfWeight)));
         return;
       }
     }
@@ -421,19 +425,58 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
       Navigator.of(context).pop(true);
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Событие добавлено')));
+      ).showSnackBar(SnackBar(content: Text(l10n.eventsAdded)));
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка при добавлении события: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.errorAddingEvent('$e'))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
   }
 
+  String _eventTypeLabel(String raw, AppLocalizations l10n) {
+    switch (raw) {
+      case 'CALVING':
+        return l10n.eventActionCalving;
+      case 'INSEMINATION':
+        return l10n.eventActionInsemination;
+      case 'MATING':
+        return l10n.eventActionMating;
+      case 'SYNCHRONIZATION':
+        return l10n.eventActionSynchronization;
+      case 'PREGNANCY_CONFIRMATION':
+        return l10n.eventActionPregnancy;
+      case 'PREGNANCY_NOT_CONFIRMED':
+        return l10n.eventActionPregnancyNotConfirmed;
+      case 'DRY_PERIOD':
+        return l10n.eventActionDryPeriod;
+      case 'HEAT_PERIOD':
+        return l10n.eventActionHeat;
+      case 'VACCINATION':
+        return l10n.eventActionVaccination;
+      case 'ILLNESS_TREATMENT':
+        return l10n.eventActionIllness;
+      case 'WEIGHING':
+        return l10n.eventActionWeighing;
+      case 'HOOF_TRIMMING':
+        return l10n.eventActionHoof;
+      case 'HORN_PROCESSING':
+        return l10n.eventActionHornProcessing;
+      case 'ANTIPARASITIC_TREATMENT':
+        return l10n.eventActionAntiparasitic;
+      case 'WEANING':
+        return l10n.eventActionWeaning;
+      case 'OTHER':
+      default:
+        return l10n.eventActionDefault;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final typesAsync = ref.watch(
       cattleAvailableEventTypesProvider(widget.cattleId),
     );
@@ -442,7 +485,7 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
       bottomNavIndex: null,
       enableDrawer: false,
       backgroundColor: AppColors.primary1,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         child: Container(
@@ -469,7 +512,7 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 16),
                             child: HerdPageHeader(
-                              title: 'Добавить событие',
+                              title: l10n.addEventTitle,
                               onBack: () => context.pop(),
                             ),
                           ),
@@ -483,7 +526,7 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                 loading: () => const Center(
                                   child: CircularProgressIndicator(),
                                 ),
-                                error: (e, _) => Text('Ошибка типов: $e'),
+                                error: (e, _) => Text(l10n.errorTypes('$e')),
                                 data: (types) {
                                   // твой текущий Column с полями - без изменений
                                   // просто верни его отсюда
@@ -528,8 +571,8 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        'Событие',
+                                      Text(
+                                        l10n.addEventType,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -540,13 +583,18 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                       DropdownButtonFormField<String>(
                                         initialValue: dropdownValue,
                                         decoration: _dec(
-                                          hint: 'Выбрать из списка',
+                                          hint: l10n.addEventDropdownHint,
                                         ),
                                         items: [
                                           ...parsed.map(
                                             (t) => DropdownMenuItem(
                                               value: t.apiValue,
-                                              child: Text(t.display),
+                                              child: Text(
+                                                _eventTypeLabel(
+                                                  t.apiValue,
+                                                  l10n,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                           ...fallbackRaw.map(
@@ -569,7 +617,10 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
 
                                       if (_eventType != 'HEAT_PERIOD') ...[
                                         _LabeledRightField(
-                                          label: _dateLabelForType(_eventType),
+                                          label: _dateLabelForType(
+                                            _eventType,
+                                            l10n,
+                                          ),
                                           field: TextField(
                                             controller: _eventDateCtrl,
                                             readOnly: true,
@@ -624,7 +675,7 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                             : () => _pickDateTo(
                                                 onPicked: (d) => _endDate = d,
                                                 ctrl: _endDateCtrl,
-                                                helpText: 'Дата окончания',
+                                                helpText: l10n.eventsDateEnd,
                                               ),
                                         heatStartCtrl: _heatStartCtrl,
                                         onPickHeatStart: _saving
@@ -632,7 +683,8 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                             : () => _pickDateTo(
                                                 onPicked: (d) => _heatStart = d,
                                                 ctrl: _heatStartCtrl,
-                                                helpText: 'Начало охоты',
+                                                helpText:
+                                                    l10n.fieldHeatStartDate,
                                               ),
                                         heatEndCtrl: _heatEndCtrl,
                                         onPickHeatEnd: _saving
@@ -640,7 +692,7 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                             : () => _pickDateTo(
                                                 onPicked: (d) => _heatEnd = d,
                                                 ctrl: _heatEndCtrl,
-                                                helpText: 'Конец охоты',
+                                                helpText: l10n.fieldHeatEndDate,
                                               ),
                                         treatmentDaysValue: _treatmentDays,
                                         onMinusTreatmentDays: _saving
@@ -689,8 +741,8 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                         ),
                                       ),
 
-                                      const Text(
-                                        'Комментарий (опционально)',
+                                      Text(
+                                        l10n.addEventComment,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -737,8 +789,8 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                           ),
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Отменить',
+                                      child: Text(
+                                        l10n.dialogCancel,
                                         style: TextStyle(
                                           color: AppColors.error,
                                           fontWeight: FontWeight.w600,
@@ -763,7 +815,7 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                         ),
                                       ),
                                       child: Text(
-                                        _saving ? 'Сохранение...' : 'Сохранить',
+                                        _saving ? l10n.saving : l10n.save,
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,

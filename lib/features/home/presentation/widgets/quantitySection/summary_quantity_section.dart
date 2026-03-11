@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,6 +10,7 @@ class QuantitySummarySection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final statsAsync = ref.watch(cattleStatisticsProvider);
 
     return statsAsync.when(
@@ -16,7 +18,7 @@ class QuantitySummarySection extends ConsumerWidget {
       error: (err, _) => Padding(
         padding: const EdgeInsets.only(top: 8),
         child: Text(
-          'Ошибка при загрузке данных по количеству:\n$err',
+          l10n.errorLoadingQuantity(err.toString()),
           style: const TextStyle(fontSize: 13, color: AppColors.additional3),
         ),
       ),
@@ -38,7 +40,6 @@ class QuantitySummarySection extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ----- Карточка "Количество" -----
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0),
               child: Row(
@@ -51,7 +52,7 @@ class QuantitySummarySection extends ConsumerWidget {
                       color: AppColors.primary2,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Center(child: AppIcons.svg("reverse-cow", size: 30)),
+                    child: Center(child: AppIcons.svg('reverse-cow', size: 30)),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -71,9 +72,9 @@ class QuantitySummarySection extends ConsumerWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Количество',
-                                  style: TextStyle(
+                                Text(
+                                  l10n.quantityTitle,
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                     color: AppColors.primary3,
@@ -81,7 +82,7 @@ class QuantitySummarySection extends ConsumerWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Всего скота: $total',
+                                  l10n.herdTotalCattle(total),
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: AppColors.primary3,
@@ -93,7 +94,7 @@ class QuantitySummarySection extends ConsumerWidget {
                           InkWell(
                             onTap: () =>
                                 ref.invalidate(cattleStatisticsProvider),
-                            child: AppIcons.svg("refresh", size: 13),
+                            child: AppIcons.svg('refresh', size: 13),
                           ),
                         ],
                       ),
@@ -102,10 +103,7 @@ class QuantitySummarySection extends ConsumerWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: 28),
-
-            // ----- Заголовок "Группы" -----
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -117,7 +115,7 @@ class QuantitySummarySection extends ConsumerWidget {
                   ),
                   clipBehavior: Clip.hardEdge,
                   child: Image.asset(
-                    "assets/image/group-img.png",
+                    'assets/image/group-img.png',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -128,9 +126,9 @@ class QuantitySummarySection extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Группы',
-                          style: TextStyle(
+                        Text(
+                          l10n.groupsTitle,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primary3,
@@ -138,7 +136,7 @@ class QuantitySummarySection extends ConsumerWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Всего групп: $groupsCount',
+                          l10n.groupsTotalCount(groupsCount),
                           style: const TextStyle(
                             fontSize: 14,
                             color: AppColors.primary3,
@@ -152,14 +150,12 @@ class QuantitySummarySection extends ConsumerWidget {
                   height: 54,
                   child: Center(
                     child: InkWell(
-                      onTap: () {
-                        // TODO: переход на экран групп
-                      },
+                      onTap: () {},
                       child: Row(
                         children: [
-                          const Text(
-                            'Посмотреть',
-                            style: TextStyle(
+                          Text(
+                            l10n.groupsView,
+                            style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.additional1,
                               fontWeight: FontWeight.w500,
@@ -167,7 +163,7 @@ class QuantitySummarySection extends ConsumerWidget {
                           ),
                           const SizedBox(width: 4),
                           AppIcons.svg(
-                            "arrow2",
+                            'arrow2',
                             size: 12,
                             color: AppColors.additional1,
                           ),
@@ -178,20 +174,18 @@ class QuantitySummarySection extends ConsumerWidget {
                 ),
               ],
             ),
-
             const SizedBox(height: 8),
-
             Column(
               children: [
                 const SizedBox(height: 8),
                 _GroupPair(
                   left: _GroupCell(
-                    title: 'Коровы',
+                    title: l10n.groupCows,
                     value: cows,
                     valueColor: const Color.fromRGBO(47, 108, 168, 1),
                   ),
                   right: _GroupCell(
-                    title: 'Тёлки',
+                    title: l10n.groupHeifers,
                     value: heifers,
                     valueColor: const Color.fromRGBO(238, 102, 31, 1),
                   ),
@@ -199,12 +193,12 @@ class QuantitySummarySection extends ConsumerWidget {
                 const SizedBox(height: 4),
                 _GroupPair(
                   left: _GroupCell(
-                    title: 'Быки',
+                    title: l10n.groupBulls,
                     value: bulls,
                     valueColor: const Color.fromRGBO(166, 95, 58, 1),
                   ),
                   right: _GroupCell(
-                    title: 'Телята',
+                    title: l10n.groupCalves,
                     value: calves,
                     valueColor: const Color.fromRGBO(19, 186, 186, 1),
                   ),
@@ -236,7 +230,7 @@ class _GroupCell extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(0), // как в макете
+        borderRadius: BorderRadius.circular(0),
         boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(213, 215, 218, 0.22),
@@ -298,7 +292,7 @@ class _GroupCell extends StatelessWidget {
                   ),
                 ),
                 child: Center(
-                  child: AppIcons.svg("arrow2", size: 22, color: valueColor),
+                  child: AppIcons.svg('arrow2', size: 22, color: valueColor),
                 ),
               ),
             ],

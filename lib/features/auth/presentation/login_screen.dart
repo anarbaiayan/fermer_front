@@ -9,6 +9,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_primary_button.dart';
 import '../application/auth_providers.dart';
+import 'auth_error_localizer.dart';
 import 'widgets/login_header.dart';
 import 'widgets/login_phone_field.dart';
 import 'widgets/login_password_field.dart';
@@ -75,9 +76,10 @@ class LoginScreen extends HookConsumerWidget {
         ref.invalidate(plannedEventsProvider('COMPLETED'));
         context.go('/home');
       } else if (newState.error != null && context.mounted) {
+        final message = localizeAuthError(context, newState.error!);
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(newState.error!)));
+        ).showSnackBar(SnackBar(content: Text(message)));
       }
     }
 
@@ -113,7 +115,9 @@ class LoginScreen extends HookConsumerWidget {
                   onToggleVisibility: () =>
                       passwordVisible.value = !passwordVisible.value,
                   hasError: hasPasswordError,
-                  errorText: authState.error,
+                  errorText: authState.error == null
+                      ? null
+                      : localizeAuthError(context, authState.error!),
                 ),
 
                 const SizedBox(height: 10),

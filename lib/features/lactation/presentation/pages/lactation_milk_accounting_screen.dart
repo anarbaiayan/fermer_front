@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/features/lactation/application/lactation_providers.dart';
@@ -11,6 +12,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final range = ref.watch(lactationRangeProvider);
     final bulkAsync = ref.watch(lactationBulkListProvider);
     final summary = ref.watch(lactationBulkSummaryProvider);
@@ -27,7 +29,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
         initialDate: range.from,
         firstDate: DateTime(2020),
         lastDate: DateTime(2100),
-        helpText: 'Дата начала периода',
+        helpText: l10n.lactationDateStartPeriod,
       );
 
       if (picked != null) {
@@ -43,7 +45,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
         initialDate: range.to,
         firstDate: DateTime(2020),
         lastDate: DateTime(2100),
-        helpText: 'Дата конца периода',
+        helpText: l10n.lactationDateEndPeriod,
       );
 
       if (picked != null) {
@@ -61,7 +63,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
           children: [
             Expanded(
               child: _FilterButton(
-                text: 'За неделю',
+                text: l10n.lactationAccountingWeek,
                 active: range.mode == LactationRangeMode.week,
                 onTap: () => ref
                     .read(lactationRangeProvider.notifier)
@@ -71,7 +73,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _FilterButton(
-                text: 'За месяц',
+                text: l10n.lactationAccountingMonth,
                 active: range.mode == LactationRangeMode.month,
                 onTap: () => ref
                     .read(lactationRangeProvider.notifier)
@@ -81,7 +83,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _FilterButton(
-                text: 'Период',
+                text: l10n.lactationAccountingPeriod,
                 active: range.mode == LactationRangeMode.period,
                 onTap: () => ref
                     .read(lactationRangeProvider.notifier)
@@ -122,7 +124,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (e, _) => Center(
               child: Text(
-                'Ошибка при загрузке: $e',
+                l10n.errorLoadingData('$e'),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: AppColors.additional3),
               ),
@@ -241,19 +243,20 @@ class _MilkSummaryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       children: [
         const SizedBox(height: 8),
         _Pair(
           left: _Cell(
-            title: 'Подоено коров',
+            title: l10n.lactationMilkedCows,
             valueText: cows.toString(),
             valueColor: const Color.fromRGBO(47, 108, 168, 1),
             showArrow: true,
           ),
           right: _Cell(
-            title: 'Всего молока',
-            valueText: '${totalLiters.toStringAsFixed(0)} л',
+            title: l10n.lactationTotalMilk,
+            valueText: l10n.unitLitersValue(totalLiters.toStringAsFixed(0)),
             valueColor: const Color.fromRGBO(238, 102, 31, 1),
             showArrow: true,
           ),
@@ -261,13 +264,15 @@ class _MilkSummaryGrid extends StatelessWidget {
         const SizedBox(height: 4),
         _Pair(
           left: _Cell(
-            title: 'Использовано для\nтелят',
-            valueText: '${calvesLiters.toStringAsFixed(1)} л',
+            title: l10n.lactationCalfUsed,
+            valueText: l10n.unitLitersValue(calvesLiters.toStringAsFixed(1)),
             valueColor: const Color.fromRGBO(166, 95, 58, 1),
           ),
           right: _Cell(
-            title: 'Непригодное\nмолоко',
-            valueText: '${unsuitableLiters.toStringAsFixed(0)} л',
+            title: l10n.lactationUnfitMilk,
+            valueText: l10n.unitLitersValue(
+              unsuitableLiters.toStringAsFixed(0),
+            ),
             valueColor: const Color.fromRGBO(19, 186, 186, 1),
           ),
         ),

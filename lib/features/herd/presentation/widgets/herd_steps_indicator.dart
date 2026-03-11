@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 
 class HerdStepsIndicator extends StatelessWidget {
@@ -16,6 +17,7 @@ class HerdStepsIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final isStep1 = currentStep == 1;
     final isStep2 = currentStep == 2;
 
@@ -46,8 +48,8 @@ class HerdStepsIndicator extends StatelessWidget {
               children: [
                 _StepCircle(size: circleSize, state: step1State),
                 const SizedBox(height: labelGap),
-                const Text(
-                  'Шаг 1',
+                Text(
+                  l10n.registerStep1,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12,
@@ -96,8 +98,8 @@ class HerdStepsIndicator extends StatelessWidget {
               children: [
                 _StepCircle(size: circleSize, state: step2State),
                 const SizedBox(height: labelGap),
-                const Text(
-                  'Шаг 2',
+                Text(
+                  l10n.registerStep2,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12,

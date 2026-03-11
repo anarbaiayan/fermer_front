@@ -1,7 +1,4 @@
-enum BullPurpose {
-  breeding,
-  fattening,
-}
+enum BullPurpose { breeding, fattening }
 
 extension BullPurposeX on BullPurpose {
   String get apiValue {

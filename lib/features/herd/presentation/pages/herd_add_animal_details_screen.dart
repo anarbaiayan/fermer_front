@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
@@ -53,11 +54,12 @@ class _HerdAddAnimalDetailsScreenState
   }
 
   Future<void> _save() async {
+    final l10n = context.l10n;
     setState(() => _saving = true);
 
     try {
       final cattle = ref.read(cattleByIdProvider(widget.cattleId)).value;
-      if (cattle == null) throw Exception('Данные животного не загружены');
+      if (cattle == null) throw Exception(l10n.animalDataNotLoaded);
 
       final resolved = AnimalCategoryResolver.resolve(
         gender: cattle.gender,
@@ -74,9 +76,7 @@ class _HerdAddAnimalDetailsScreenState
         final breed = cattle.details?.breed?.trim();
 
         if (breed == null || breed.isEmpty) {
-          throw Exception(
-            'Порода не указана - вернитесь на шаг 1 и заполните породу',
-          );
+          throw Exception(l10n.breedRequiredOnStep1);
         }
 
         await api.patchDetailsNoResponse(
@@ -94,11 +94,10 @@ class _HerdAddAnimalDetailsScreenState
       if (!mounted) return;
       await showAppSuccessDialog(
         context,
-        title: 'Карточка животного\nуспешно создана!',
-        message:
-            'Все данные сохранены.\nВы можете изменить их позже в карточке животного.',
+        title: l10n.animalCreatedSuccessTitle,
+        message: l10n.animalCreatedSuccessMessage,
         iconAsset: 'assets/icons/success.svg',
-        buttonText: 'Понятно',
+        buttonText: l10n.dialogUnderstood,
       );
 
       if (!mounted) return;
@@ -107,7 +106,7 @@ class _HerdAddAnimalDetailsScreenState
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Ошибка сохранения: $e')));
+      ).showSnackBar(SnackBar(content: Text(l10n.errorPrefix('$e'))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -127,6 +126,7 @@ class _HerdAddAnimalDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final cattleAsync = ref.watch(cattleByIdProvider(widget.cattleId));
 
     return AppScaffold(
@@ -135,7 +135,7 @@ class _HerdAddAnimalDetailsScreenState
       showBell: false,
       showAppBar: true,
       backgroundColor: AppColors.primary1,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         child: Container(
@@ -143,7 +143,7 @@ class _HerdAddAnimalDetailsScreenState
           height: double.infinity,
           child: cattleAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text('Ошибка: $e')),
+            error: (e, _) => Center(child: Text(l10n.errorPrefix('$e'))),
             data: (cattle) {
               // final resolved = AnimalCategoryResolver.resolve(
               //   gender: cattle.gender,
@@ -160,13 +160,13 @@ class _HerdAddAnimalDetailsScreenState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       HerdPageHeader(
-                        title: 'Добавление животного',
+                        title: l10n.addAnimal,
                         onBack: () => context.pop(),
                       ),
                       const SizedBox(height: 12),
                       const HerdStepsIndicator(currentStep: 2),
                       const SizedBox(height: 20),
-                      const HerdSectionTitle(text: 'Дополнительная информация'),
+                      HerdSectionTitle(text: l10n.animalAdditionalInfo),
                       const SizedBox(height: 24),
 
                       // Row(
@@ -227,8 +227,8 @@ class _HerdAddAnimalDetailsScreenState
                       // const SizedBox(height: 24),
 
                       // Действия
-                      const Text(
-                        'Действия',
+                      Text(
+                        l10n.actionsTitle,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -237,8 +237,8 @@ class _HerdAddAnimalDetailsScreenState
                       ),
                       const SizedBox(height: 8),
 
-                      const Text(
-                        'Событие',
+                      Text(
+                        l10n.addEventType,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -249,7 +249,7 @@ class _HerdAddAnimalDetailsScreenState
                       HerdTextField(
                         controller: _eventCtrl,
                         readOnly: true,
-                        hint: 'Добавить событие',
+                        hint: l10n.addEventTitle,
                         onTap: _saving ? null : _openAddEvent,
                         suffixIcon: IconButton(
                           icon: const Icon(
@@ -285,8 +285,8 @@ class _HerdAddAnimalDetailsScreenState
                                   borderRadius: BorderRadius.circular(24),
                                 ),
                               ),
-                              child: const Text(
-                                'Пропустить',
+                              child: Text(
+                                l10n.skipText,
                                 style: TextStyle(
                                   color: AppColors.additional3,
                                   fontSize: 14,
@@ -301,7 +301,7 @@ class _HerdAddAnimalDetailsScreenState
                               height: 50,
                               borderRadius: 24,
                               fontSize: 14,
-                              text: _saving ? 'Сохранение...' : 'Сохранить',
+                              text: _saving ? l10n.saving : l10n.save,
                               onPressed: _saving ? () {} : _save,
                             ),
                           ),

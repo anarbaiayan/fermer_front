@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
-import '../../data/models/cattle_ration_dto.dart';
 import 'package:frontend/features/herd/domain/entities/animal_category.dart';
 import 'package:frontend/features/herd/domain/entities/production_state.dart';
+
+import '../../data/models/cattle_ration_dto.dart';
 
 enum CattleRationCardVariant { overview, fromCattle }
 
@@ -23,10 +25,15 @@ class CattleRationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cat = AnimalCategoryX.fromApi(ration.animalCategory ?? '').display;
-    final prod = ProductionStateX.fromApi(ration.productionState ?? '').display;
+    final l10n = context.l10n;
+    final category = AnimalCategoryX.fromApi(ration.animalCategory ?? '');
+    final production = ProductionStateX.fromApi(ration.productionState ?? '');
+    final cat = _categoryText(context, category);
+    final prod = _productionText(context, production);
 
-    final statusText = ration.isOptimal ? 'Активный' : 'Требует внимания';
+    final statusText = ration.isOptimal
+        ? l10n.rationStatusActive
+        : l10n.rationStatusNeedsAttention;
     final statusColor = ration.isOptimal
         ? AppColors.success
         : AppColors.warning;
@@ -77,8 +84,6 @@ class CattleRationCard extends StatelessWidget {
             ),
     );
 
-    // В overview карточка НЕ кликается (у тебя onTap: null),
-    // но оставим InkWell чтобы в fromCattle работало как раньше.
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -116,11 +121,8 @@ class _OverviewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Дизайн "как на скрине":
-    // - без заголовка/имени
-    // - без верхнего Divider
-    // - иконка слева сверху, корзина справа сверху
-    // - текст сразу блоком
+    final l10n = context.l10n;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -139,7 +141,7 @@ class _OverviewBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Категория: $cat',
+                  l10n.rationCategory(cat),
                   style: const TextStyle(
                     fontSize: 15,
                     color: AppColors.primary3,
@@ -148,7 +150,7 @@ class _OverviewBody extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Период: $prod',
+                  l10n.rationPeriod(prod),
                   style: const TextStyle(
                     fontSize: 15,
                     color: AppColors.primary3,
@@ -179,7 +181,7 @@ class _OverviewBody extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  'Вид корма: $feedNames',
+                  l10n.rationFeedType(feedNames),
                   style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.additional3,
@@ -188,7 +190,7 @@ class _OverviewBody extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Норма в день: $dailyKg кг',
+                  l10n.rationDailyNorm(dailyKg),
                   style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.additional3,
@@ -207,21 +209,21 @@ class _OverviewBody extends StatelessWidget {
                     context: context,
                     barrierDismissible: true,
                     builder: (ctx) => AlertDialog(
-                      title: const Text(
-                        'Удалить рацион?',
-                        style: TextStyle(
+                      title: Text(
+                        l10n.rationDeleteTitle,
+                        style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           color: AppColors.primary3,
                         ),
                       ),
-                      content: const Text(
-                        'Вы уверены, что хотите удалить этот рацион? Это действие нельзя отменить.',
-                        style: TextStyle(color: AppColors.primary3),
+                      content: Text(
+                        l10n.rationDeleteConfirm,
+                        style: const TextStyle(color: AppColors.primary3),
                       ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(ctx).pop(false),
-                          child: const Text('Отмена'),
+                          child: Text(l10n.dialogCancel),
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -229,7 +231,7 @@ class _OverviewBody extends StatelessWidget {
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () => Navigator.of(ctx).pop(true),
-                          child: const Text('Удалить'),
+                          child: Text(l10n.dialogDelete),
                         ),
                       ],
                     ),
@@ -274,7 +276,8 @@ class _FromCattleBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ этот режим НЕ меняем (как у тебя было раньше)
+    final l10n = context.l10n;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -310,21 +313,21 @@ class _FromCattleBody extends StatelessWidget {
                     context: context,
                     barrierDismissible: true,
                     builder: (ctx) => AlertDialog(
-                      title: const Text(
-                        'Удалить рацион?',
-                        style: TextStyle(
+                      title: Text(
+                        l10n.rationDeleteTitle,
+                        style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           color: AppColors.primary3,
                         ),
                       ),
-                      content: const Text(
-                        'Вы уверены, что хотите удалить этот рацион? Это действие нельзя отменить.',
-                        style: TextStyle(color: AppColors.primary3),
+                      content: Text(
+                        l10n.rationDeleteConfirm,
+                        style: const TextStyle(color: AppColors.primary3),
                       ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(ctx).pop(false),
-                          child: const Text('Отмена'),
+                          child: Text(l10n.dialogCancel),
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -332,7 +335,7 @@ class _FromCattleBody extends StatelessWidget {
                             foregroundColor: Colors.white,
                           ),
                           onPressed: () => Navigator.of(ctx).pop(true),
-                          child: const Text('Удалить'),
+                          child: Text(l10n.dialogDelete),
                         ),
                       ],
                     ),
@@ -356,12 +359,12 @@ class _FromCattleBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Категория: $cat',
+                l10n.rationCategory(cat),
                 style: const TextStyle(fontSize: 13, color: AppColors.primary3),
               ),
               const SizedBox(height: 4),
               Text(
-                'Период: $prod',
+                l10n.rationPeriod(prod),
                 style: const TextStyle(fontSize: 13, color: AppColors.primary3),
               ),
               const SizedBox(height: 8),
@@ -387,7 +390,7 @@ class _FromCattleBody extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Вид корма: $feedNames',
+                l10n.rationFeedType(feedNames),
                 style: const TextStyle(
                   fontSize: 13,
                   color: AppColors.additional3,
@@ -395,7 +398,7 @@ class _FromCattleBody extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Норма в день: $dailyKg кг',
+                l10n.rationDailyNorm(dailyKg),
                 style: const TextStyle(
                   fontSize: 13,
                   color: AppColors.additional3,
@@ -446,5 +449,38 @@ String _categoryIconFromApi(String? category) {
     case 'CALF':
     default:
       return 'calf_list';
+  }
+}
+
+String _categoryText(BuildContext context, AnimalCategory category) {
+  final l10n = context.l10n;
+
+  switch (category) {
+    case AnimalCategory.bull:
+      return l10n.rationCategoryBull;
+    case AnimalCategory.cow:
+      return l10n.rationCategoryCow;
+    case AnimalCategory.heifer:
+      return l10n.rationCategoryHeifer;
+    case AnimalCategory.calf:
+      return l10n.rationCategoryCalf;
+  }
+}
+
+String _productionText(BuildContext context, ProductionState productionState) {
+  final l10n = context.l10n;
+
+  switch (productionState) {
+    case ProductionState.lactating:
+      return l10n.prodStateLactation;
+    case ProductionState.dryPhase1:
+    case ProductionState.dryPhase2:
+      return l10n.prodStateDry;
+    case ProductionState.fattening:
+      return l10n.prodStateFatteningFull;
+    case ProductionState.breeding:
+      return l10n.prodStateBreedingFull;
+    case ProductionState.unknown:
+      return l10n.prodStateUnknown;
   }
 }

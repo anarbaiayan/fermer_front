@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// No description provided for @dialogOk.
   ///
   /// In ru, this message translates to:
-  /// **'Ок'**
+  /// **'РћРє'**
   String get dialogOk;
 
   /// No description provided for @dialogCancel.
@@ -1652,6 +1652,12 @@ abstract class AppLocalizations {
   /// **'Рационы пока не сгенерированы'**
   String get rationsNotGenerated;
 
+  /// No description provided for @rationsForAnimalTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рацион животного'**
+  String get rationsForAnimalTitle;
+
   /// No description provided for @rationsNoMatch.
   ///
   /// In ru, this message translates to:
@@ -1754,6 +1760,30 @@ abstract class AppLocalizations {
   /// **'Категория'**
   String get rationCategoryLabel;
 
+  /// No description provided for @rationCategoryBull.
+  ///
+  /// In ru, this message translates to:
+  /// **'Бык'**
+  String get rationCategoryBull;
+
+  /// No description provided for @rationCategoryCow.
+  ///
+  /// In ru, this message translates to:
+  /// **'Корова'**
+  String get rationCategoryCow;
+
+  /// No description provided for @rationCategoryHeifer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тёлка'**
+  String get rationCategoryHeifer;
+
+  /// No description provided for @rationCategoryCalf.
+  ///
+  /// In ru, this message translates to:
+  /// **'Теленок'**
+  String get rationCategoryCalf;
+
   /// No description provided for @rationPeriodLabel.
   ///
   /// In ru, this message translates to:
@@ -1777,6 +1807,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Статус'**
   String get rationStatusLabel;
+
+  /// No description provided for @rationRecommendationsLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендации'**
+  String get rationRecommendationsLabel;
 
   /// No description provided for @rationDailyNormLabel.
   ///
@@ -1814,17 +1850,95 @@ abstract class AppLocalizations {
   /// **'Суточный расход (тг)'**
   String get rationDailyExpense;
 
+  /// No description provided for @rationMinKgLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мин (кг)'**
+  String get rationMinKgLabel;
+
+  /// No description provided for @rationMaxKgLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Макс (кг)'**
+  String get rationMaxKgLabel;
+
+  /// No description provided for @rationPriceKgLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цена (кг/тг)'**
+  String get rationPriceKgLabel;
+
+  /// No description provided for @rationNoteLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заметка'**
+  String get rationNoteLabel;
+
   /// No description provided for @inventoryTitle.
   ///
   /// In ru, this message translates to:
   /// **'Запасы'**
   String get inventoryTitle;
 
+  /// No description provided for @inventoryQuantityLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество'**
+  String get inventoryQuantityLabel;
+
+  /// No description provided for @inventoryStocksListTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Список запасов'**
+  String get inventoryStocksListTitle;
+
   /// No description provided for @inventoryTotalFeed.
   ///
   /// In ru, this message translates to:
   /// **'Всего корма: {kg} кг'**
   String inventoryTotalFeed(String kg);
+
+  /// No description provided for @inventoryTypeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тип корма'**
+  String get inventoryTypeLabel;
+
+  /// No description provided for @inventoryPriceLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цена'**
+  String get inventoryPriceLabel;
+
+  /// No description provided for @inventoryRemainingLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Остаток'**
+  String get inventoryRemainingLabel;
+
+  /// No description provided for @unitLitersValue.
+  ///
+  /// In ru, this message translates to:
+  /// **'{value} л'**
+  String unitLitersValue(Object value);
+
+  /// No description provided for @unitKgValue.
+  ///
+  /// In ru, this message translates to:
+  /// **'{value} кг'**
+  String unitKgValue(Object value);
+
+  /// No description provided for @unitPricePerKgValue.
+  ///
+  /// In ru, this message translates to:
+  /// **'{value} ₸/кг'**
+  String unitPricePerKgValue(Object value);
+
+  /// No description provided for @inventoryDeleteFeedButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить корм'**
+  String get inventoryDeleteFeedButton;
 
   /// No description provided for @inventoryFeedDeleted.
   ///
@@ -1843,6 +1957,54 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Вы уверены, что хотите удалить этот корм? Это действие нельзя отменить.'**
   String get inventoryDeleteConfirm;
+
+  /// No description provided for @addUserRationsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавление вида корма'**
+  String get addUserRationsTitle;
+
+  /// No description provided for @addUserRationsSelectAtLeastOne.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите хотя бы один корм'**
+  String get addUserRationsSelectAtLeastOne;
+
+  /// No description provided for @addUserRationsUpdatedSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Запасы успешно\nобновлены!'**
+  String get addUserRationsUpdatedSuccess;
+
+  /// No description provided for @addUserRationsGoToList.
+  ///
+  /// In ru, this message translates to:
+  /// **'Перейти к списку'**
+  String get addUserRationsGoToList;
+
+  /// No description provided for @settingsLanguageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Язык приложения'**
+  String get settingsLanguageTitle;
+
+  /// No description provided for @settingsLanguageSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите язык интерфейса'**
+  String get settingsLanguageSubtitle;
+
+  /// No description provided for @settingsLanguageRu.
+  ///
+  /// In ru, this message translates to:
+  /// **'Русский'**
+  String get settingsLanguageRu;
+
+  /// No description provided for @settingsLanguageKk.
+  ///
+  /// In ru, this message translates to:
+  /// **'Қазақша'**
+  String get settingsLanguageKk;
 
   /// No description provided for @lactationTitle.
   ///
@@ -2060,6 +2222,54 @@ abstract class AppLocalizations {
   /// **'ЗАРЕГИСТРИРОВАТЬСЯ'**
   String get registerButton;
 
+  /// No description provided for @authUserExists.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пользователь с таким номером уже существует'**
+  String get authUserExists;
+
+  /// No description provided for @authInvalidCredentials.
+  ///
+  /// In ru, this message translates to:
+  /// **'Неверный номер телефона или пароль'**
+  String get authInvalidCredentials;
+
+  /// No description provided for @authUserNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пользователь с таким номером не найден'**
+  String get authUserNotFound;
+
+  /// No description provided for @authLoginFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось войти. Попробуйте ещё раз'**
+  String get authLoginFailed;
+
+  /// No description provided for @authRegisterInvalidData.
+  ///
+  /// In ru, this message translates to:
+  /// **'Некорректные данные регистрации'**
+  String get authRegisterInvalidData;
+
+  /// No description provided for @authRegisterFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось зарегистрироваться. Попробуйте ещё раз'**
+  String get authRegisterFailed;
+
+  /// No description provided for @authLoginNetwork.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось войти. Проверьте подключение к интернету'**
+  String get authLoginNetwork;
+
+  /// No description provided for @authRegisterNetwork.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось зарегистрироваться. Проверьте интернет'**
+  String get authRegisterNetwork;
+
   /// No description provided for @registerSuccessTitle.
   ///
   /// In ru, this message translates to:
@@ -2077,6 +2287,588 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Начать работу'**
   String get registerSuccessButton;
+
+  /// No description provided for @dateSelect.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите дату'**
+  String get dateSelect;
+
+  /// No description provided for @dateEnterFull.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите дату полностью'**
+  String get dateEnterFull;
+
+  /// No description provided for @dateInvalid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Неверная дата'**
+  String get dateInvalid;
+
+  /// No description provided for @dateRangeError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата должна быть в диапазоне {from} - {to}'**
+  String dateRangeError(Object from, Object to);
+
+  /// No description provided for @dateEnterLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите дату'**
+  String get dateEnterLabel;
+
+  /// No description provided for @dateInputHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'dd.MM.yyyy'**
+  String get dateInputHint;
+
+  /// No description provided for @bulkEventSuccessTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Массовое событие\\nуспешно создано!'**
+  String get bulkEventSuccessTitle;
+
+  /// No description provided for @bulkEventSuccessMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все данные сохранены.\\nВы можете изменить их позже.'**
+  String get bulkEventSuccessMessage;
+
+  /// No description provided for @addBulkEventTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить массовое событие'**
+  String get addBulkEventTitle;
+
+  /// No description provided for @selectCategoryHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите категорию'**
+  String get selectCategoryHint;
+
+  /// No description provided for @eventActionMating.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покрытие'**
+  String get eventActionMating;
+
+  /// No description provided for @eventActionSynchronization.
+  ///
+  /// In ru, this message translates to:
+  /// **'Синхронизация'**
+  String get eventActionSynchronization;
+
+  /// No description provided for @eventActionPregnancyNotConfirmed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Стельность не подтверждена'**
+  String get eventActionPregnancyNotConfirmed;
+
+  /// No description provided for @eventActionHornProcessing.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обработка рогов'**
+  String get eventActionHornProcessing;
+
+  /// No description provided for @daysValue.
+  ///
+  /// In ru, this message translates to:
+  /// **'{value} дней'**
+  String daysValue(Object value);
+
+  /// No description provided for @fieldEndDateOptional.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата окончания\\n(необязательно)'**
+  String get fieldEndDateOptional;
+
+  /// No description provided for @fieldEventName.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название события'**
+  String get fieldEventName;
+
+  /// No description provided for @animalDataNotLoaded.
+  ///
+  /// In ru, this message translates to:
+  /// **'Данные животного не загружены'**
+  String get animalDataNotLoaded;
+
+  /// No description provided for @breedRequiredOnStep1.
+  ///
+  /// In ru, this message translates to:
+  /// **'Порода не указана. Вернитесь на шаг 1 и заполните породу.'**
+  String get breedRequiredOnStep1;
+
+  /// No description provided for @animalCreatedSuccessTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Карточка животного\\nуспешно создана!'**
+  String get animalCreatedSuccessTitle;
+
+  /// No description provided for @animalCreatedSuccessMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все данные сохранены.\\nВы можете изменить их позже в карточке животного.'**
+  String get animalCreatedSuccessMessage;
+
+  /// No description provided for @animalAdditionalInfo.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дополнительная информация'**
+  String get animalAdditionalInfo;
+
+  /// No description provided for @actionsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Действия'**
+  String get actionsTitle;
+
+  /// No description provided for @skipText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пропустить'**
+  String get skipText;
+
+  /// No description provided for @animalCategoryUnknown.
+  ///
+  /// In ru, this message translates to:
+  /// **'Невозможно определить категорию'**
+  String get animalCategoryUnknown;
+
+  /// No description provided for @animalCategoryWithAge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория: {category}, {ageMonths} мес.'**
+  String animalCategoryWithAge(Object category, Object ageMonths);
+
+  /// No description provided for @breedTypeDairy.
+  ///
+  /// In ru, this message translates to:
+  /// **'Молочная'**
+  String get breedTypeDairy;
+
+  /// No description provided for @breedTypeMeat.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мясная'**
+  String get breedTypeMeat;
+
+  /// No description provided for @breedTypeMixed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Комбинированная'**
+  String get breedTypeMixed;
+
+  /// No description provided for @breedTypeLocal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Местная'**
+  String get breedTypeLocal;
+
+  /// No description provided for @animalRequiredFields.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заполните имя, бирку и дату рождения'**
+  String get animalRequiredFields;
+
+  /// No description provided for @animalNoIdReturned.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервер не вернул id животного'**
+  String get animalNoIdReturned;
+
+  /// No description provided for @animalCreateError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка при создании животного'**
+  String get animalCreateError;
+
+  /// No description provided for @selectGender.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите пол'**
+  String get selectGender;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In ru, this message translates to:
+  /// **'Женский'**
+  String get genderFemale;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мужской'**
+  String get genderMale;
+
+  /// No description provided for @breedHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите породу'**
+  String get breedHint;
+
+  /// No description provided for @breedTypeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тип породы'**
+  String get breedTypeLabel;
+
+  /// No description provided for @breedTypeHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите тип породы'**
+  String get breedTypeHint;
+
+  /// No description provided for @creating.
+  ///
+  /// In ru, this message translates to:
+  /// **'Создание...'**
+  String get creating;
+
+  /// No description provided for @dateOutOfRange.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата вне допустимого диапазона'**
+  String get dateOutOfRange;
+
+  /// No description provided for @animalUpdatedSuccessTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Карточка животного\\nуспешно обновлена!'**
+  String get animalUpdatedSuccessTitle;
+
+  /// No description provided for @animalInfoEditTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактирование карточки'**
+  String get animalInfoEditTitle;
+
+  /// No description provided for @showAllCount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Показать все ({count})'**
+  String showAllCount(Object count);
+
+  /// No description provided for @hideText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть'**
+  String get hideText;
+
+  /// No description provided for @rationGenerating.
+  ///
+  /// In ru, this message translates to:
+  /// **'Генерируется рацион...'**
+  String get rationGenerating;
+
+  /// No description provided for @rationRegeneratedSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рацион успешно\\nсгенерирован заново!'**
+  String get rationRegeneratedSuccess;
+
+  /// No description provided for @rationUpdatedSaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обновленные данные сохранены.'**
+  String get rationUpdatedSaved;
+
+  /// No description provided for @prodStateDryPhase1.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сухостой (фаза 1)'**
+  String get prodStateDryPhase1;
+
+  /// No description provided for @prodStateDryPhase2.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сухостой (фаза 2)'**
+  String get prodStateDryPhase2;
+
+  /// No description provided for @milkTotalCurrent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Всего молока\\n(текущая лактация)'**
+  String get milkTotalCurrent;
+
+  /// No description provided for @lastCalvingDate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Последний отел'**
+  String get lastCalvingDate;
+
+  /// No description provided for @lastInseminationDate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Последнее\\nосеменение'**
+  String get lastInseminationDate;
+
+  /// No description provided for @pregnancyLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Беременность'**
+  String get pregnancyLabel;
+
+  /// No description provided for @reproductiveStatusLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Репродуктивный статус'**
+  String get reproductiveStatusLabel;
+
+  /// No description provided for @productionStatusLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Производственный статус'**
+  String get productionStatusLabel;
+
+  /// No description provided for @firstInseminationDate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Первое\\nосеменение'**
+  String get firstInseminationDate;
+
+  /// No description provided for @expectedCalvingDate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Планируемая дата\\nотела'**
+  String get expectedCalvingDate;
+
+  /// No description provided for @bullPurposeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Назначение'**
+  String get bullPurposeLabel;
+
+  /// No description provided for @rationRegenerateTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сгенерировать рацион повторно'**
+  String get rationRegenerateTitle;
+
+  /// No description provided for @rationApproxMinute.
+  ///
+  /// In ru, this message translates to:
+  /// **'Примерно 1 минута'**
+  String get rationApproxMinute;
+
+  /// No description provided for @rationViewTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Посмотреть рацион'**
+  String get rationViewTitle;
+
+  /// No description provided for @rationChooseSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите рацион'**
+  String get rationChooseSubtitle;
+
+  /// No description provided for @upcomingEventsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ближайшие события'**
+  String get upcomingEventsTitle;
+
+  /// No description provided for @daysUntilShort.
+  ///
+  /// In ru, this message translates to:
+  /// **'через {days} дн'**
+  String daysUntilShort(Object days);
+
+  /// No description provided for @eventsDeleteConfirmComplete.
+  ///
+  /// In ru, this message translates to:
+  /// **'Завершить событие?'**
+  String get eventsDeleteConfirmComplete;
+
+  /// No description provided for @eventsMarkCompleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отметить \"{title}\" как выполненное?'**
+  String eventsMarkCompleted(Object title);
+
+  /// No description provided for @ageMonthsCompact.
+  ///
+  /// In ru, this message translates to:
+  /// **'{months} мес.'**
+  String ageMonthsCompact(Object months);
+
+  /// No description provided for @ageYearsCompact.
+  ///
+  /// In ru, this message translates to:
+  /// **'{years} г.'**
+  String ageYearsCompact(Object years);
+
+  /// No description provided for @ageYearsMonthsCompact.
+  ///
+  /// In ru, this message translates to:
+  /// **'{years} г. {months} мес.'**
+  String ageYearsMonthsCompact(Object years, Object months);
+
+  /// No description provided for @healthHealthy.
+  ///
+  /// In ru, this message translates to:
+  /// **'Здоров'**
+  String get healthHealthy;
+
+  /// No description provided for @healthSick.
+  ///
+  /// In ru, this message translates to:
+  /// **'Болен'**
+  String get healthSick;
+
+  /// No description provided for @healthUnderTreatment.
+  ///
+  /// In ru, this message translates to:
+  /// **'На лечении'**
+  String get healthUnderTreatment;
+
+  /// No description provided for @healthQuarantine.
+  ///
+  /// In ru, this message translates to:
+  /// **'Карантин'**
+  String get healthQuarantine;
+
+  /// No description provided for @healthRecovering.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выздоравливает'**
+  String get healthRecovering;
+
+  /// No description provided for @bullPurposeBreeding.
+  ///
+  /// In ru, this message translates to:
+  /// **'Племенной'**
+  String get bullPurposeBreeding;
+
+  /// No description provided for @bullPurposeFattening.
+  ///
+  /// In ru, this message translates to:
+  /// **'На откорме'**
+  String get bullPurposeFattening;
+
+  /// No description provided for @milkProductivityTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Молочная продуктивность коровы'**
+  String get milkProductivityTitle;
+
+  /// No description provided for @milkProductivityHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте надой (утро/вечер), чтобы вести лактацию.'**
+  String get milkProductivityHint;
+
+  /// No description provided for @profileMyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мой профиль'**
+  String get profileMyTitle;
+
+  /// No description provided for @profileFarmLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ферма'**
+  String get profileFarmLabel;
+
+  /// No description provided for @profileResetPasswordTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сбросить пароль'**
+  String get profileResetPasswordTitle;
+
+  /// No description provided for @profileResetPasswordHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'При необходимости измените пароль'**
+  String get profileResetPasswordHint;
+
+  /// No description provided for @profileEmailTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'E-mail address'**
+  String get profileEmailTitle;
+
+  /// No description provided for @profileEmailAddHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте адрес своей электронной почты'**
+  String get profileEmailAddHint;
+
+  /// No description provided for @eventTaskHeatPeriod.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверка на охоту'**
+  String get eventTaskHeatPeriod;
+
+  /// No description provided for @eventTaskPregnancyCheck.
+  ///
+  /// In ru, this message translates to:
+  /// **'Провести проверку на стельность'**
+  String get eventTaskPregnancyCheck;
+
+  /// No description provided for @eventTaskDryPeriod.
+  ///
+  /// In ru, this message translates to:
+  /// **'Запланирован перевод в сухостой'**
+  String get eventTaskDryPeriod;
+
+  /// No description provided for @eventTaskWeighing.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендуется провести взвешивание'**
+  String get eventTaskWeighing;
+
+  /// No description provided for @eventTaskVaccination.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендуется провести вакцинацию'**
+  String get eventTaskVaccination;
+
+  /// No description provided for @eventTaskTreatment.
+  ///
+  /// In ru, this message translates to:
+  /// **'Провести лечение/осмотр'**
+  String get eventTaskTreatment;
+
+  /// No description provided for @eventTaskHoofTrimming.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендуется расчистка копыт'**
+  String get eventTaskHoofTrimming;
+
+  /// No description provided for @eventTaskAntiparasitic.
+  ///
+  /// In ru, this message translates to:
+  /// **'Рекомендуется обработка от паразитов'**
+  String get eventTaskAntiparasitic;
+
+  /// No description provided for @eventTaskCalvingFollowUp.
+  ///
+  /// In ru, this message translates to:
+  /// **'Контроль после отела'**
+  String get eventTaskCalvingFollowUp;
+
+  /// No description provided for @eventTaskInsemination.
+  ///
+  /// In ru, this message translates to:
+  /// **'Запланировано осеменение'**
+  String get eventTaskInsemination;
+
+  /// No description provided for @eventTaskWeaning.
+  ///
+  /// In ru, this message translates to:
+  /// **'Запланирован отъём'**
+  String get eventTaskWeaning;
+
+  /// No description provided for @eventTaskDefault.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пришло время выполнить событие'**
+  String get eventTaskDefault;
 }
 
 class _AppLocalizationsDelegate

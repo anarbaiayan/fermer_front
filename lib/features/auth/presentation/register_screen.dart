@@ -26,9 +26,9 @@ class RegisterStep1Screen extends HookWidget {
       final farm = farmNameController.text.trim();
 
       if (first.isEmpty || last.isEmpty || farm.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.registerFillAll)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.registerFillAll)));
         return;
       }
 

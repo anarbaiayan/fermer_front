@@ -38,10 +38,7 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: enableDrawer
-          ? FermerPlusDrawer(
-              farmName: farmName,
-              avatarUrl: avatarUrl,
-            )
+          ? FermerPlusDrawer(farmName: farmName, avatarUrl: avatarUrl)
           : null,
 
       appBar: showAppBar
@@ -61,7 +58,7 @@ class AppScaffold extends StatelessWidget {
       bottomNavigationBar: bottomNavIndex == null
           ? null
           : AppBottomNavBar(currentIndex: bottomNavIndex!),
-          
+
       floatingActionButton: floatingActionButton,
       floatingActionButtonLocation: floatingActionButtonLocation,
 

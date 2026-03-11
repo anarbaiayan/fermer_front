@@ -47,12 +47,10 @@ class UserDto {
     return UserDto(
       id: json['id'] as int,
       phoneNumber: json['phoneNumber'] as String,
-      email: json['email'] as String?,              // может быть null
+      email: json['email'] as String?, // может быть null
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
-      roles: (json['roles'] as List<dynamic>)
-          .map((e) => e.toString())
-          .toList(),
+      roles: (json['roles'] as List<dynamic>).map((e) => e.toString()).toList(),
       phoneVerified: json['phoneVerified'] as bool,
     );
   }

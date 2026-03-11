@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -14,13 +15,14 @@ class HerdAnimalScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final cattleAsync = ref.watch(cattleByIdProvider(id));
 
     return AppScaffold(
       bottomNavIndex: null,
       enableDrawer: true,
       showBell: true,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         child: Container(
@@ -32,8 +34,8 @@ class HerdAnimalScreen extends ConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'Ошибка при загрузке карточки',
+                    Text(
+                      l10n.errorLoading,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -52,7 +54,7 @@ class HerdAnimalScreen extends ConsumerWidget {
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () => ref.invalidate(cattleByIdProvider(id)),
-                      child: const Text('Повторить'),
+                      child: Text(l10n.retry),
                     ),
                   ],
                 ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:go_router/go_router.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -10,6 +11,8 @@ class AppBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BottomNavigationBar(
       currentIndex: currentIndex,
       selectedItemColor: AppColors.primary1,
@@ -39,27 +42,27 @@ class AppBottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: AppIcons.svg('home', color: AppColors.additional3),
           activeIcon: AppIcons.svg('home', color: AppColors.primary1),
-          label: 'Главная',
+          label: l10n.navHome,
         ),
         BottomNavigationBarItem(
           icon: AppIcons.svg('cow-bottom', color: AppColors.additional3),
           activeIcon: AppIcons.svg('cow-bottom', color: AppColors.primary1),
-          label: 'Стадо',
+          label: l10n.navHerd,
         ),
         BottomNavigationBarItem(
           icon: AppIcons.svg('events', color: AppColors.additional3),
           activeIcon: AppIcons.svg('events', color: AppColors.primary1),
-          label: 'События',
+          label: l10n.navEvents,
         ),
         BottomNavigationBarItem(
           icon: AppIcons.svg('diet1', color: AppColors.additional3),
           activeIcon: AppIcons.svg('diet1', color: AppColors.primary1),
-          label: 'Рацион',
+          label: l10n.navRation,
         ),
         BottomNavigationBarItem(
           icon: AppIcons.svg('lactation', color: AppColors.additional3),
           activeIcon: AppIcons.svg('lactation', color: AppColors.primary1),
-          label: 'Лактация',
+          label: l10n.navLactation,
         ),
       ],
     );

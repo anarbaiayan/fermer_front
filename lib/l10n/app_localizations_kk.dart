@@ -120,7 +120,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get saving => 'Сақталуда...';
 
   @override
-  String get add => 'Қосу';
+  String get add => 'ТљРѕСЃСѓ';
 
   @override
   String get continueText => 'Жалғастыру';
@@ -153,7 +153,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get loginForgotPassword => 'Құпиясөзді ұмыттыңыз ба?';
 
   @override
-  String get loginNoAccount => 'Аккаунтыңыз жоқ па?';
+  String get loginNoAccount => 'Әлі аккаунтыңыз жоқ па?';
 
   @override
   String get loginRegisterHint =>
@@ -424,7 +424,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get animalBreed => 'Тұқымы';
 
   @override
-  String get animalGroup => 'Топ';
+  String get animalGroup => 'РўРѕРї';
 
   @override
   String get animalHealthStatus => 'Денсаулық жағдайы';
@@ -433,11 +433,11 @@ class AppLocalizationsKk extends AppLocalizations {
   String get animalNoName => 'Аты жоқ';
 
   @override
-  String get animalDeleteTitle => 'Жануарды жою?';
+  String get animalDeleteTitle => 'Жануарды жою керек пе?';
 
   @override
   String get animalDeleteConfirm =>
-      'Бұл әрекетті кері қайтару мүмкін емес. Сенімдісіз бе?';
+      'Бұл әрекетті қайтару мүмкін емес. Сенімдісіз бе?';
 
   @override
   String get animalDeleted => 'Жануар жойылды';
@@ -827,6 +827,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get rationsNotGenerated => 'Рациондар әлі жасалмаған';
 
   @override
+  String get rationsForAnimalTitle => 'Мал рационы';
+
+  @override
   String get rationsNoMatch => 'Бұл жануарға сәйкес рацион жоқ';
 
   @override
@@ -890,6 +893,18 @@ class AppLocalizationsKk extends AppLocalizations {
   String get rationCategoryLabel => 'Категория';
 
   @override
+  String get rationCategoryBull => 'Бұқа';
+
+  @override
+  String get rationCategoryCow => 'Сиыр';
+
+  @override
+  String get rationCategoryHeifer => 'Қашар';
+
+  @override
+  String get rationCategoryCalf => 'Бұзау';
+
+  @override
   String get rationPeriodLabel => 'Кезең';
 
   @override
@@ -902,6 +917,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get rationStatusLabel => 'Статус';
+
+  @override
+  String get rationRecommendationsLabel => 'Ұсыныстар';
 
   @override
   String get rationDailyNormLabel => 'Күндік норма';
@@ -924,12 +942,57 @@ class AppLocalizationsKk extends AppLocalizations {
   String get rationDailyExpense => 'Күндік шығын (тг)';
 
   @override
-  String get inventoryTitle => 'Қор';
+  String get rationMinKgLabel => 'Мин (кг)';
+
+  @override
+  String get rationMaxKgLabel => 'Макс (кг)';
+
+  @override
+  String get rationPriceKgLabel => 'Бағасы (кг/тг)';
+
+  @override
+  String get rationNoteLabel => 'Ескерту';
+
+  @override
+  String get inventoryTitle => 'Қорлар';
+
+  @override
+  String get inventoryQuantityLabel => 'Саны';
+
+  @override
+  String get inventoryStocksListTitle => 'Қорлар тізімі';
 
   @override
   String inventoryTotalFeed(String kg) {
     return 'Барлық жем: $kg кг';
   }
+
+  @override
+  String get inventoryTypeLabel => 'Жем түрі';
+
+  @override
+  String get inventoryPriceLabel => 'Баға';
+
+  @override
+  String get inventoryRemainingLabel => 'Қалдық';
+
+  @override
+  String unitLitersValue(Object value) {
+    return '$value л';
+  }
+
+  @override
+  String unitKgValue(Object value) {
+    return '$value кг';
+  }
+
+  @override
+  String unitPricePerKgValue(Object value) {
+    return '$value ₸/кг';
+  }
+
+  @override
+  String get inventoryDeleteFeedButton => 'Жемді жою';
 
   @override
   String get inventoryFeedDeleted => 'Жем жойылды';
@@ -940,6 +1003,30 @@ class AppLocalizationsKk extends AppLocalizations {
   @override
   String get inventoryDeleteConfirm =>
       'Бұл жемді жойғыңыз келетініне сенімдісіз бе? Бұл әрекетті қайтару мүмкін емес.';
+
+  @override
+  String get addUserRationsTitle => 'Жем түрін қосу';
+
+  @override
+  String get addUserRationsSelectAtLeastOne => 'Кемінде бір жемді таңдаңыз';
+
+  @override
+  String get addUserRationsUpdatedSuccess => 'Қорлар сәтті\nжаңартылды!';
+
+  @override
+  String get addUserRationsGoToList => 'Тізімге өту';
+
+  @override
+  String get settingsLanguageTitle => 'Қосымша тілі';
+
+  @override
+  String get settingsLanguageSubtitle => 'Интерфейс тілін таңдаңыз';
+
+  @override
+  String get settingsLanguageRu => 'Русский';
+
+  @override
+  String get settingsLanguageKk => 'Қазақша';
 
   @override
   String get lactationTitle => 'Лактация';
@@ -1054,6 +1141,30 @@ class AppLocalizationsKk extends AppLocalizations {
   String get registerButton => 'ТІРКЕЛУ';
 
   @override
+  String get authUserExists => 'Мұндай нөмірмен пайдаланушы бар';
+
+  @override
+  String get authInvalidCredentials => 'Телефон нөмірі немесе құпиясөз қате';
+
+  @override
+  String get authUserNotFound => 'Мұндай нөмірмен пайдаланушы табылмады';
+
+  @override
+  String get authLoginFailed => 'Кіру сәтсіз. Қайта көріңіз';
+
+  @override
+  String get authRegisterInvalidData => 'Тіркеу деректері қате';
+
+  @override
+  String get authRegisterFailed => 'Тіркелу сәтсіз. Қайта көріңіз';
+
+  @override
+  String get authLoginNetwork => 'Кіру сәтсіз. Интернет байланысын тексеріңіз';
+
+  @override
+  String get authRegisterNetwork => 'Тіркелу сәтсіз. Интернетті тексеріңіз';
+
+  @override
   String get registerSuccessTitle =>
       'Сіз Fermer+ жүйесінде\nсәтті тіркелдіңіз!';
 
@@ -1063,4 +1174,318 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get registerSuccessButton => 'Жұмысты бастау';
+
+  @override
+  String get dateSelect => 'Күнді таңдаңыз';
+
+  @override
+  String get dateEnterFull => 'Күнді толық енгізіңіз';
+
+  @override
+  String get dateInvalid => 'Жарамсыз күн';
+
+  @override
+  String dateRangeError(Object from, Object to) {
+    return 'Күн $from - $to аралығында болуы керек';
+  }
+
+  @override
+  String get dateEnterLabel => 'Күнді енгізіңіз';
+
+  @override
+  String get dateInputHint => 'dd.MM.yyyy';
+
+  @override
+  String get bulkEventSuccessTitle => 'Топтық оқиға\\nсәтті жасалды!';
+
+  @override
+  String get bulkEventSuccessMessage =>
+      'Барлық дерек сақталды.\\nКейін өзгерте аласыз.';
+
+  @override
+  String get addBulkEventTitle => 'Топтық оқиға қосу';
+
+  @override
+  String get selectCategoryHint => 'Санатты таңдаңыз';
+
+  @override
+  String get eventActionMating => 'Шағылыстыру';
+
+  @override
+  String get eventActionSynchronization => 'Синхрондау';
+
+  @override
+  String get eventActionPregnancyNotConfirmed => 'Буаздық расталмады';
+
+  @override
+  String get eventActionHornProcessing => 'Мүйіз өңдеу';
+
+  @override
+  String daysValue(Object value) {
+    return '$value күн';
+  }
+
+  @override
+  String get fieldEndDateOptional => 'Аяқталу күні\\n(міндетті емес)';
+
+  @override
+  String get fieldEventName => 'Оқиға атауы';
+
+  @override
+  String get animalDataNotLoaded => 'Жануар деректері жүктелмеді';
+
+  @override
+  String get breedRequiredOnStep1 =>
+      'Тұқым көрсетілмеген. 1-қадамға оралып, тұқымды толтырыңыз.';
+
+  @override
+  String get animalCreatedSuccessTitle => 'Жануар картасы\\nсәтті жасалды!';
+
+  @override
+  String get animalCreatedSuccessMessage =>
+      'Барлық дерек сақталды.\\nКейін жануар картасында өзгерте аласыз.';
+
+  @override
+  String get animalAdditionalInfo => 'Қосымша ақпарат';
+
+  @override
+  String get actionsTitle => 'Әрекеттер';
+
+  @override
+  String get skipText => 'Өткізіп жіберу';
+
+  @override
+  String get animalCategoryUnknown => 'Санатты анықтау мүмкін емес';
+
+  @override
+  String animalCategoryWithAge(Object category, Object ageMonths) {
+    return 'Санат: $category, $ageMonths ай';
+  }
+
+  @override
+  String get breedTypeDairy => 'Сүтті';
+
+  @override
+  String get breedTypeMeat => 'Етті';
+
+  @override
+  String get breedTypeMixed => 'Аралас';
+
+  @override
+  String get breedTypeLocal => 'Жергілікті';
+
+  @override
+  String get animalRequiredFields =>
+      'Аты, сырға нөмірі және туған күнін толтырыңыз';
+
+  @override
+  String get animalNoIdReturned => 'Сервер жануардың id мәнін қайтармады';
+
+  @override
+  String get animalCreateError => 'Жануарды құру қатесі';
+
+  @override
+  String get selectGender => 'Жынысын таңдаңыз';
+
+  @override
+  String get genderFemale => 'Ұрғашы';
+
+  @override
+  String get genderMale => 'Еркек';
+
+  @override
+  String get breedHint => 'Тұқымды енгізіңіз';
+
+  @override
+  String get breedTypeLabel => 'Тұқым түрі';
+
+  @override
+  String get breedTypeHint => 'Тұқым түрін таңдаңыз';
+
+  @override
+  String get creating => 'Құрылуда...';
+
+  @override
+  String get dateOutOfRange => 'Күн рұқсат етілген аралықтан тыс';
+
+  @override
+  String get animalUpdatedSuccessTitle => 'Жануар картасы\\nсәтті жаңартылды!';
+
+  @override
+  String get animalInfoEditTitle => 'Картаны өңдеу';
+
+  @override
+  String showAllCount(Object count) {
+    return 'Барлығын көрсету ($count)';
+  }
+
+  @override
+  String get hideText => 'Жасыру';
+
+  @override
+  String get rationGenerating => 'Рацион жасалуда...';
+
+  @override
+  String get rationRegeneratedSuccess => 'Рацион сәтті\\nқайта жасалды!';
+
+  @override
+  String get rationUpdatedSaved => 'Жаңартылған деректер сақталды.';
+
+  @override
+  String get prodStateDryPhase1 => 'Құрғақ кезең (1-фаза)';
+
+  @override
+  String get prodStateDryPhase2 => 'Құрғақ кезең (2-фаза)';
+
+  @override
+  String get milkTotalCurrent => 'Барлық сүт\\n(ағымдағы лактация)';
+
+  @override
+  String get lastCalvingDate => 'Соңғы бұзаулау';
+
+  @override
+  String get lastInseminationDate => 'Соңғы\\nұрықтандыру';
+
+  @override
+  String get pregnancyLabel => 'Буаздық';
+
+  @override
+  String get reproductiveStatusLabel => 'Көбею статусы';
+
+  @override
+  String get productionStatusLabel => 'Өндірістік статус';
+
+  @override
+  String get firstInseminationDate => 'Бірінші\\nұрықтандыру';
+
+  @override
+  String get expectedCalvingDate => 'Болжамды\\nбұзаулау күні';
+
+  @override
+  String get bullPurposeLabel => 'Мақсаты';
+
+  @override
+  String get rationRegenerateTitle => 'Рационды қайта жасау';
+
+  @override
+  String get rationApproxMinute => 'Шамамен 1 минут';
+
+  @override
+  String get rationViewTitle => 'Рационды көру';
+
+  @override
+  String get rationChooseSubtitle => 'Рационды таңдаңыз';
+
+  @override
+  String get upcomingEventsTitle => 'Жақын оқиғалар';
+
+  @override
+  String daysUntilShort(Object days) {
+    return '$days күннен кейін';
+  }
+
+  @override
+  String get eventsDeleteConfirmComplete => 'Оқиғаны аяқтау?';
+
+  @override
+  String eventsMarkCompleted(Object title) {
+    return '\"$title\" оқиғасын орындалды деп белгілеу керек пе?';
+  }
+
+  @override
+  String ageMonthsCompact(Object months) {
+    return '$months ай';
+  }
+
+  @override
+  String ageYearsCompact(Object years) {
+    return '$years ж.';
+  }
+
+  @override
+  String ageYearsMonthsCompact(Object years, Object months) {
+    return '$years ж. $months ай';
+  }
+
+  @override
+  String get healthHealthy => 'Сау';
+
+  @override
+  String get healthSick => 'Ауру';
+
+  @override
+  String get healthUnderTreatment => 'Емдеуде';
+
+  @override
+  String get healthQuarantine => 'Карантин';
+
+  @override
+  String get healthRecovering => 'Жазылуда';
+
+  @override
+  String get bullPurposeBreeding => 'Асыл тұқымды';
+
+  @override
+  String get bullPurposeFattening => 'Бордақылауда';
+
+  @override
+  String get milkProductivityTitle => 'Сиырдың сүт өнімділігі';
+
+  @override
+  String get milkProductivityHint =>
+      'Лактацияны жүргізу үшін сауын қосыңыз (таңертең/кешке).';
+
+  @override
+  String get profileMyTitle => 'Менің профилім';
+
+  @override
+  String get profileFarmLabel => 'Ферма';
+
+  @override
+  String get profileResetPasswordTitle => 'Құпиясөзді қалпына келтіру';
+
+  @override
+  String get profileResetPasswordHint => 'Қажет болса құпиясөзді өзгертіңіз';
+
+  @override
+  String get profileEmailTitle => 'E-mail address';
+
+  @override
+  String get profileEmailAddHint => 'Электрондық поштаңызды қосыңыз';
+
+  @override
+  String get eventTaskHeatPeriod => 'Күйітті тексеру';
+
+  @override
+  String get eventTaskPregnancyCheck => 'Буаздықты тексеру';
+
+  @override
+  String get eventTaskDryPeriod => 'Құрғақ кезеңге ауыстыру жоспарланған';
+
+  @override
+  String get eventTaskWeighing => 'Өлшеу жүргізу ұсынылады';
+
+  @override
+  String get eventTaskVaccination => 'Вакцинация жүргізу ұсынылады';
+
+  @override
+  String get eventTaskTreatment => 'Емдеу/қарау жүргізу';
+
+  @override
+  String get eventTaskHoofTrimming => 'Тұяқ қырқу ұсынылады';
+
+  @override
+  String get eventTaskAntiparasitic => 'Паразитке қарсы өңдеу ұсынылады';
+
+  @override
+  String get eventTaskCalvingFollowUp => 'Бұзаулаудан кейін бақылау';
+
+  @override
+  String get eventTaskInsemination => 'Ұрықтандыру жоспарланған';
+
+  @override
+  String get eventTaskWeaning => 'Айыру жоспарланған';
+
+  @override
+  String get eventTaskDefault => 'Оқиғаны орындау уақыты келді';
 }

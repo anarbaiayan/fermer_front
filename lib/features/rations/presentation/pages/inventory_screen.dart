@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
+import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -15,15 +18,18 @@ class UserRationsStocksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final stocksAsync = ref.watch(userRationsProvider);
-    final title = filterType == null ? 'Запасы' : _typeTitle(filterType!);
+    final title = filterType == null
+        ? l10n.inventoryTitle
+        : _typeTitle(l10n, filterType!);
 
     return AppScaffold(
       bottomNavIndex: 3,
       enableDrawer: true,
       showBell: true,
       showAppBar: true,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(12),
         child: FloatingActionButton(
@@ -46,8 +52,6 @@ class UserRationsStocksScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 9),
-
-            // верхняя строка
             Row(
               children: [
                 IconButton(
@@ -58,7 +62,7 @@ class UserRationsStocksScreen extends ConsumerWidget {
                 const SizedBox(width: 4),
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary3,
@@ -67,33 +71,31 @@ class UserRationsStocksScreen extends ConsumerWidget {
                 const Spacer(),
                 IconButton(
                   padding: EdgeInsets.zero,
-                  icon: AppIcons.svg("search2", size: 20),
-                  onPressed: () {
-                    // TODO: поиск
-                  },
+                  icon: AppIcons.svg('search2', size: 20),
+                  onPressed: () {},
                 ),
                 IconButton(
                   padding: EdgeInsets.zero,
-                  icon: AppIcons.svg("dots", size: 20),
-                  onPressed: () {
-                    // TODO: меню
-                  },
+                  icon: AppIcons.svg('dots', size: 20),
+                  onPressed: () {},
                 ),
               ],
             ),
-
             const SizedBox(height: 12),
-
             Expanded(
               child: stocksAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (e, _) => Center(
-                  child: Text('Ошибка: $e', textAlign: TextAlign.center),
+                  child: Text(
+                    l10n.errorPrefix(_errorText(e)),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 data: (stocks) {
-                  // если у тебя есть totalKg/totalT - подставь
                   final filtered = _applyFilter(stocks, filterType);
-                  final totalText = 'Всего корма: ${_calcTotalKg(filtered)} кг';
+                  final totalText = l10n.inventoryTotalFeed(
+                    _calcTotalKg(filtered),
+                  );
 
                   return Stack(
                     children: [
@@ -115,7 +117,6 @@ class UserRationsStocksScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
-
                           SliverPadding(
                             padding: const EdgeInsets.only(bottom: 90),
                             sliver: SliverList(
@@ -132,15 +133,17 @@ class UserRationsStocksScreen extends ConsumerWidget {
                                       final del = ref.read(
                                         deleteUserRationProvider,
                                       );
-                                      await del(item.id); // <- поле id
+                                      await del(item.id);
                                       ref.invalidate(userRationsProvider);
 
                                       if (context.mounted) {
                                         ScaffoldMessenger.of(
                                           context,
                                         ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Корм удалён'),
+                                          SnackBar(
+                                            content: Text(
+                                              l10n.inventoryFeedDeleted,
+                                            ),
                                           ),
                                         );
                                       }
@@ -152,29 +155,6 @@ class UserRationsStocksScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
-
-                      // FAB "+"
-                      // Positioned(
-                      //   right: 14,
-                      //   bottom: 24,
-                      //   child: SizedBox(
-                      //     width: 56,
-                      //     height: 56,
-                      //     child: FloatingActionButton(
-                      //       backgroundColor: AppColors.primary1,
-                      //       shape: const CircleBorder(),
-                      //       onPressed: () =>
-                      //           context.push('/rations/stocks/add'),
-                      //       child: Center(
-                      //         child: AppIcons.svg(
-                      //           'plus',
-                      //           size: 24,
-                      //           color: Colors.white,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   );
                 },
@@ -192,30 +172,32 @@ class UserRationsStocksScreen extends ConsumerWidget {
     return stocks.where((x) => (x.ration.type).toUpperCase() == t).toList();
   }
 
-  String _typeTitle(String type) {
+  String _typeTitle(AppLocalizations l10n, String type) {
     switch (type.toUpperCase()) {
       case 'CONCENTRATED':
-        return 'Концентраты';
+        return l10n.rationsConcentrates;
       case 'JUICY':
-        return 'Сочный корм';
+        return l10n.rationsSucculentFeed;
       case 'COARSE':
-        return 'Грубые корма';
+        return l10n.rationsRoughage;
       case 'VITAMINS_SUPPLEMENTS':
-        return 'Добавки';
+        return l10n.rationsAdditives;
       default:
         return type;
     }
   }
 
   String _calcTotalKg(List<UserRationDto> items) {
-    // подстрой под твои поля количества
-    // например: item.quantityKg / item.remainingKg / item.amountKg
     double sum = 0;
     for (final x in items) {
-      final v = (x.quantityKg); // <- ВАЖНО: поменяй на своё поле
-      sum += v;
+      sum += x.quantityKg;
     }
     return sum.toStringAsFixed(0);
+  }
+
+  String _errorText(Object error) {
+    if (error is ApiException) return error.message;
+    return error.toString();
   }
 }
 
@@ -227,26 +209,25 @@ class _QuantityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // иконка слева - как на макете (коричневый квадрат)
           Container(
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: const Color(0xFFA55B2A), // коричневый как в макете
+              color: const Color(0xFFA55B2A),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(
-              child: AppIcons.svg("health", size: 28, color: Colors.white),
+              child: AppIcons.svg('health', size: 28, color: Colors.white),
             ),
           ),
-
           const SizedBox(width: 16),
-
           Expanded(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -261,9 +242,9 @@ class _QuantityCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Количество',
-                          style: TextStyle(
+                        Text(
+                          l10n.inventoryQuantityLabel,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: AppColors.primary3,
@@ -282,7 +263,7 @@ class _QuantityCard extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: onRefresh,
-                    child: AppIcons.svg("refresh", size: 13),
+                    child: AppIcons.svg('refresh', size: 13),
                   ),
                 ],
               ),
@@ -299,12 +280,14 @@ class _HeaderWithFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           child: Text(
-            'Список запасов',
-            style: TextStyle(
+            l10n.inventoryStocksListTitle,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: AppColors.primary3,
@@ -313,10 +296,8 @@ class _HeaderWithFilter extends StatelessWidget {
         ),
         IconButton(
           padding: EdgeInsets.zero,
-          icon: AppIcons.svg("filter", size: 32),
-          onPressed: () {
-            // TODO: фильтры
-          },
+          icon: AppIcons.svg('filter', size: 32),
+          onPressed: () {},
         ),
       ],
     );
@@ -340,16 +321,18 @@ class _StockListItemState extends State<StockListItem> {
   static const double _iconSize = 34;
   static const double _gap = 12;
 
-  double get _contentLeft => _cardPad + _iconSize + _gap; // 58
+  double get _contentLeft => _cardPad + _iconSize + _gap;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final languageCode = Localizations.localeOf(context).languageCode;
     final item = widget.item;
 
     final type = item.ration.type;
     final color = _typeColor(type);
 
-    final title = item.ration.name;
+    final title = item.ration.localizedName(languageCode);
     final typeText = item.ration.typeDescription;
     final price = item.ration.pricePerKg;
     final qty = item.quantityKg;
@@ -375,7 +358,6 @@ class _StockListItemState extends State<StockListItem> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- top row (icon + title + edit) ---
             Row(
               children: [
                 Container(
@@ -393,21 +375,18 @@ class _StockListItemState extends State<StockListItem> {
                   ),
                 ),
                 const SizedBox(width: 20),
-
                 Expanded(
                   child: Text(
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 18, // как на фото чуть крупнее
+                      fontSize: 18,
                       fontWeight: FontWeight.w700,
                       color: AppColors.primary3,
                     ),
                   ),
                 ),
-
-                // круглая серая кнопка справа
                 InkWell(
                   borderRadius: BorderRadius.circular(999),
                   onTap: toggle,
@@ -420,25 +399,19 @@ class _StockListItemState extends State<StockListItem> {
                 ),
               ],
             ),
-
             const SizedBox(height: 10),
-
-            // --- divider starts after inventory icon ---
             Padding(
               padding: EdgeInsets.only(left: _contentLeft),
               child: const Divider(height: 1, color: AppColors.additional2),
             ),
-
             const SizedBox(height: 10),
-
-            // --- all text block aligned after icon ---
             Padding(
               padding: EdgeInsets.only(left: _contentLeft),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Тип корма: $typeText',
+                    '${l10n.inventoryTypeLabel}: $typeText',
                     style: const TextStyle(
                       fontSize: 16,
                       color: AppColors.primary3,
@@ -446,14 +419,13 @@ class _StockListItemState extends State<StockListItem> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Цена: ${price.toStringAsFixed(0)} ₸/кг',
+                    '${l10n.inventoryPriceLabel}: ${l10n.unitPricePerKgValue(price.toStringAsFixed(0))}',
                     style: const TextStyle(
                       fontSize: 16,
                       color: AppColors.primary3,
                     ),
                   ),
                   const SizedBox(height: 10),
-
                   Row(
                     children: [
                       Container(
@@ -467,7 +439,7 @@ class _StockListItemState extends State<StockListItem> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Остаток: ${qty.toStringAsFixed(0)} кг',
+                          '${l10n.inventoryRemainingLabel}: ${l10n.unitKgValue(qty.toStringAsFixed(0))}',
                           style: const TextStyle(
                             fontSize: 16,
                             color: AppColors.primary3,
@@ -497,16 +469,16 @@ class _StockListItemState extends State<StockListItem> {
                       barrierDismissible: true,
                       builder: (ctx) {
                         return AlertDialog(
-                          title: const Text(
-                            'Удалить корм?',
-                            style: TextStyle(
+                          title: Text(
+                            l10n.inventoryDeleteTitle,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               color: AppColors.primary3,
                             ),
                           ),
-                          content: const Text(
-                            'Вы уверены, что хотите удалить этот корм? Это действие нельзя отменить.',
-                            style: TextStyle(color: AppColors.primary3),
+                          content: Text(
+                            l10n.inventoryDeleteConfirm,
+                            style: const TextStyle(color: AppColors.primary3),
                           ),
                           actionsPadding: const EdgeInsets.fromLTRB(
                             16,
@@ -517,9 +489,11 @@ class _StockListItemState extends State<StockListItem> {
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(ctx).pop(false),
-                              child: const Text(
-                                'Отмена',
-                                style: TextStyle(color: AppColors.primary3),
+                              child: Text(
+                                l10n.dialogCancel,
+                                style: const TextStyle(
+                                  color: AppColors.primary3,
+                                ),
                               ),
                             ),
                             ElevatedButton(
@@ -531,7 +505,7 @@ class _StockListItemState extends State<StockListItem> {
                                 ),
                               ),
                               onPressed: () => Navigator.of(ctx).pop(true),
-                              child: const Text('Удалить'),
+                              child: Text(l10n.dialogDelete),
                             ),
                           ],
                         );
@@ -543,9 +517,9 @@ class _StockListItemState extends State<StockListItem> {
                       if (mounted) setState(() => _showDelete = false);
                     }
                   },
-                  child: const Text(
-                    'Удалить корм',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.inventoryDeleteFeedButton,
+                    style: const TextStyle(
                       color: AppColors.error,
                       fontWeight: FontWeight.w600,
                     ),
@@ -563,14 +537,14 @@ class _StockListItemState extends State<StockListItem> {
     switch ((raw ?? '').toUpperCase()) {
       case 'CONCENTRATED':
       case 'CONCENTRATE':
-        return const Color(0xFFB7E4C7); // cow green
+        return const Color(0xFFB7E4C7);
       case 'JUICY':
-        return const Color(0xFFF4C2C2); // heifer pink
+        return const Color(0xFFF4C2C2);
       case 'COARSE':
-        return const Color(0xFFF7DFA3); // calf yellow
+        return const Color(0xFFF7DFA3);
       case 'VITAMINS_SUPPLEMENTS':
       default:
-        return const Color(0xFF4A78C1); // bull blue
+        return const Color(0xFF4A78C1);
     }
   }
 }

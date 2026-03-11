@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -63,12 +64,13 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
   }
 
   Future<void> _pickDate() async {
+    final l10n = context.l10n;
     final picked = await showMaskedDatePicker(
       context: context,
       initialDate: _date,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
-      helpText: 'Выберите дату',
+      helpText: l10n.lactationSelectDate,
     );
 
     if (picked == null) return;
@@ -122,12 +124,13 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
   }
 
   Future<void> _submit() async {
+    final l10n = context.l10n;
     final liters = _parseLiters(_milkCtrl.text);
     final milkingDt = _buildMilkingDateTime(_date, _time);
     if (liters == null || liters <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Введите количество молока (литры)')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.lactationEnterMilk)));
       return;
     }
 
@@ -151,9 +154,8 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
       // попап как на дизайне, пока ведет в стадо
       await showAppSuccessDialog(
         context,
-        title:
-            'Информация успешно\nдобавлена и отображена\nв разделе “Лактация”',
-        buttonText: 'Перейти к списку',
+        title: l10n.lactationSuccessAdd,
+        buttonText: l10n.lactationGoToList,
         onButtonPressed: () {
           context.go('/herd');
         },
@@ -165,7 +167,7 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Ошибка: $e')));
+      ).showSnackBar(SnackBar(content: Text(l10n.errorPrefix('$e'))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -185,9 +187,10 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AppScaffold(
       bottomNavIndex: null,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       enableDrawer: false,
       showBell: false,
       backgroundColor: AppColors.primary1,
@@ -223,9 +226,9 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                                 onPressed: () => context.pop(false),
                               ),
                               const SizedBox(width: 8),
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  'Надой коровы',
+                                  l10n.lactationCowMilking,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 20,
@@ -241,7 +244,7 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                           const SizedBox(height: 16),
 
                           _LabeledRightField(
-                            label: 'Дата',
+                            label: l10n.lactationDate,
                             field: TextField(
                               controller: _dateCtrl,
                               readOnly: true,
@@ -297,7 +300,7 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                           const SizedBox(height: 16),
 
                           _LabeledRightField(
-                            label: 'Время',
+                            label: l10n.lactationTime,
                             field: TextField(
                               controller: _timeCtrl,
                               readOnly: true,
@@ -349,18 +352,18 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
 
                           const SizedBox(height: 16),
 
-                          _Label('Время доения'),
+                          _Label(l10n.lactationMilkingTime),
                           const SizedBox(height: 6),
                           _DropdownField(
                             value: _milkingTime,
-                            items: const [
+                            items: [
                               DropdownMenuItem(
                                 value: 'MORNING',
-                                child: Text('Утро'),
+                                child: Text(l10n.lactationMorning),
                               ),
                               DropdownMenuItem(
                                 value: 'EVENING',
-                                child: Text('Вечер'),
+                                child: Text(l10n.lactationEvening),
                               ),
                             ],
                             onChanged: (v) {
@@ -376,17 +379,17 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
 
                           const SizedBox(height: 16),
 
-                          _Label('Бирка коровы'),
+                          _Label(l10n.lactationCowTag),
                           const SizedBox(height: 6),
                           _TextField(
                             controller: _tagCtrl,
-                            hint: 'Введите информацию',
+                            hint: l10n.lactationEnterInfo,
                             enabled: false,
                           ),
 
                           const SizedBox(height: 16),
 
-                          _Label('Количество молока'),
+                          _Label(l10n.lactationMilkAmount),
                           const SizedBox(height: 6),
                           _TextField(
                             controller: _milkCtrl,
@@ -420,8 +423,8 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                                       onPressed: _saving
                                           ? null
                                           : () => context.pop(false),
-                                      child: const Text(
-                                        'Отменить',
+                                      child: Text(
+                                        l10n.dialogCancel,
                                         style: TextStyle(
                                           color: Colors.red,
                                           fontWeight: FontWeight.w600,
@@ -453,8 +456,8 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
                                                 color: Colors.white,
                                               ),
                                             )
-                                          : const Text(
-                                              'Добавить',
+                                          : Text(
+                                              l10n.add,
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w600,

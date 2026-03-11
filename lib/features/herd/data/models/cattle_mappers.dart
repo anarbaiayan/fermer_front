@@ -53,8 +53,9 @@ Cattle cattleFromDto(CattleDto dto) {
     gender: CattleGenderX.fromApi(dto.gender),
     dateOfBirth: _dateFmt.parse(dto.dateOfBirth),
     details: hasAny ? cattleDetailsFromDto(detailsDto) : null,
-    category:
-        dto.category == null ? null : AnimalCategoryX.fromApi(dto.category!),
+    category: dto.category == null
+        ? null
+        : AnimalCategoryX.fromApi(dto.category!),
     ageInMonths: dto.ageInMonths,
     ageDisplay: dto.ageDisplay,
   );

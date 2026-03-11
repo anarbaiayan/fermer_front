@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
+import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
@@ -18,6 +20,7 @@ class CattleRationDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final async = ref.watch(cattleRationByCattleProvider(cattleId));
 
     return AppScaffold(
@@ -25,7 +28,7 @@ class CattleRationDetailsScreen extends ConsumerWidget {
       enableDrawer: true,
       showBell: false,
       showAppBar: true,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       backgroundColor: AppColors.primary1,
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
@@ -35,15 +38,20 @@ class CattleRationDetailsScreen extends ConsumerWidget {
             child: async.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, _) => Center(
-                child: Text('Ошибка: $e', textAlign: TextAlign.center),
+                child: Text(
+                  l10n.errorPrefix(_errorText(e)),
+                  textAlign: TextAlign.center,
+                ),
               ),
               data: (r) {
                 final cat = AnimalCategoryX.fromApi(r.animalCategory ?? '');
                 final prod = ProductionStateX.fromApi(r.productionState ?? '');
+                final categoryText = _categoryText(context, cat);
+                final productionText = _productionText(context, prod);
 
                 final statusText = r.isOptimal
-                    ? 'Активный'
-                    : 'Требует внимания';
+                    ? l10n.rationStatusActive
+                    : l10n.rationStatusNeedsAttention;
                 final dailyKg = r.totalDailyKg.toStringAsFixed(0);
 
                 final headerColor = _categoryColor(cat);
@@ -64,13 +72,13 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                   onPressed: () => context.pop(),
                                 ),
                                 const SizedBox(width: 8),
-                                const Expanded(
+                                Expanded(
                                   child: Text(
-                                    'Информация о рационе',
+                                    l10n.rationInfoTitle,
                                     textAlign: TextAlign.center,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
                                       color: AppColors.primary3,
@@ -80,9 +88,7 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                 const SizedBox(width: 48),
                               ],
                             ),
-
                             const SizedBox(height: 12),
-
                             Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -128,12 +134,10 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                       ),
                                     ),
                                   ),
-
                                   const Divider(
                                     height: 0.5,
                                     color: AppColors.additional2,
                                   ),
-
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
@@ -155,10 +159,10 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                         children: [
                                           AppIcons.svg('info', size: 34),
                                           const SizedBox(width: 16),
-                                          const Expanded(
+                                          Expanded(
                                             child: Text(
-                                              'Основная информация рациона',
-                                              style: TextStyle(
+                                              l10n.rationMainInfo,
+                                              style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w700,
                                                 color: AppColors.primary3,
@@ -169,7 +173,6 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                       ),
                                     ),
                                   ),
-
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
@@ -177,21 +180,32 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                     ),
                                     child: Column(
                                       children: [
-                                        _infoRow('Категория', cat.display),
-                                        _infoRow('Период', prod.display),
-                                        _infoRow('Статус', statusText),
-                                        _infoRow('Норма в день', '$dailyKg кг'),
+                                        _infoRow(
+                                          l10n.rationCategoryLabel,
+                                          categoryText,
+                                        ),
+                                        _infoRow(
+                                          l10n.rationPeriodLabel,
+                                          productionText,
+                                        ),
+                                        _infoRow(
+                                          l10n.rationStatusLabel,
+                                          statusText,
+                                        ),
+                                        _infoRow(
+                                          l10n.rationDailyNormLabel,
+                                          l10n.rationDailyNormValue(dailyKg),
+                                        ),
                                         if ((r.recommendations ?? '')
                                             .trim()
                                             .isNotEmpty)
                                           _infoRow(
-                                            'Рекомендации',
+                                            l10n.rationRecommendationsLabel,
                                             r.recommendations!.trim(),
                                           ),
                                       ],
                                     ),
                                   ),
-
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
@@ -216,10 +230,10 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                             size: 34,
                                           ),
                                           const SizedBox(width: 12),
-                                          const Expanded(
+                                          Expanded(
                                             child: Text(
-                                              'Кормы рациона',
-                                              style: TextStyle(
+                                              l10n.rationFeedsTitle,
+                                              style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w700,
                                                 color: AppColors.primary3,
@@ -230,7 +244,6 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                       ),
                                     ),
                                   ),
-
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(
                                       12,
@@ -247,7 +260,6 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                           .toList(),
                                     ),
                                   ),
-
                                   if ((r.warnings ?? '').trim().isNotEmpty)
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
@@ -272,13 +284,11 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 12),
-
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: FermerPlusBigButton(
-                        text: 'Закрыть',
+                        text: l10n.dialogClose,
                         height: 50,
                         borderRadius: 5,
                         onPressed: () => context.pop(),
@@ -304,6 +314,42 @@ class CattleRationDetailsScreen extends ConsumerWidget {
         return const Color(0xFFB7E4C7);
       case AnimalCategory.heifer:
         return const Color(0xFFF4C2C2);
+    }
+  }
+
+  String _categoryText(BuildContext context, AnimalCategory category) {
+    final l10n = context.l10n;
+
+    switch (category) {
+      case AnimalCategory.bull:
+        return l10n.rationCategoryBull;
+      case AnimalCategory.cow:
+        return l10n.rationCategoryCow;
+      case AnimalCategory.heifer:
+        return l10n.rationCategoryHeifer;
+      case AnimalCategory.calf:
+        return l10n.rationCategoryCalf;
+    }
+  }
+
+  String _productionText(
+    BuildContext context,
+    ProductionState productionState,
+  ) {
+    final l10n = context.l10n;
+
+    switch (productionState) {
+      case ProductionState.lactating:
+        return l10n.prodStateLactation;
+      case ProductionState.dryPhase1:
+      case ProductionState.dryPhase2:
+        return l10n.prodStateDry;
+      case ProductionState.fattening:
+        return l10n.prodStateFatteningFull;
+      case ProductionState.breeding:
+        return l10n.prodStateBreedingFull;
+      case ProductionState.unknown:
+        return l10n.prodStateUnknown;
     }
   }
 
@@ -338,6 +384,11 @@ class CattleRationDetailsScreen extends ConsumerWidget {
       ),
     );
   }
+
+  String _errorText(Object error) {
+    if (error is ApiException) return error.message;
+    return error.toString();
+  }
 }
 
 class _CattleRationFeedTile extends StatefulWidget {
@@ -353,6 +404,7 @@ class _CattleRationFeedTileState extends State<_CattleRationFeedTile> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final it = widget.item;
 
     final minKg = it.minKg.toStringAsFixed(2);
@@ -401,25 +453,25 @@ class _CattleRationFeedTileState extends State<_CattleRationFeedTile> {
           if (_open) ...[
             _FeedDetailRow(
               icon: AppIcons.svg('weight', size: 18),
-              label: 'Мин (кг)',
+              label: l10n.rationMinKgLabel,
               value: minKg,
             ),
             _FeedDetailRow(
               shaded: true,
               icon: AppIcons.svg('weight', size: 18),
-              label: 'Макс (кг)',
+              label: l10n.rationMaxKgLabel,
               value: maxKg,
             ),
             _FeedDetailRow(
               icon: AppIcons.svg('money', size: 18),
-              label: 'Цена (кг/тг)',
+              label: l10n.rationPriceKgLabel,
               value: price,
             ),
             if ((it.note ?? '').trim().isNotEmpty)
               _FeedDetailRow(
                 shaded: true,
                 icon: AppIcons.svg('info', size: 18),
-                label: 'Заметка',
+                label: l10n.rationNoteLabel,
                 value: it.note!.trim(),
               ),
           ],

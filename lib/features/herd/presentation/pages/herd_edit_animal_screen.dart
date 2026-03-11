@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
@@ -22,6 +23,7 @@ import 'package:frontend/features/herd/presentation/widgets/herd_text_field.dart
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 enum AnimalGender { female, male }
 
@@ -84,7 +86,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
       initialDate: _birthDate ?? now,
       firstDate: DateTime(now.year - 20),
       lastDate: now,
-      helpText: 'Выберите дату рождения',
+      helpText: context.l10n.animalBirthDate,
     );
 
     if (picked != null) {
@@ -102,6 +104,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
   }
 
   void _recalculateCategory() {
+    final l10n = context.l10n;
     if (_birthDate == null) {
       setState(() => _categoryText = null);
       return;
@@ -117,11 +120,40 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
 
     setState(() {
       if (category == null) {
-        _categoryText = 'Невозможно определить категорию';
+        _categoryText = l10n.animalCategoryUnknown;
       } else {
-        _categoryText = 'Категория: ${category.display}, $ageMonths мес.';
+        _categoryText = l10n.animalCategoryWithAge(
+          _categoryLabel(category, l10n),
+          ageMonths,
+        );
       }
     });
+  }
+
+  String _categoryLabel(AnimalCategory category, AppLocalizations l10n) {
+    switch (category) {
+      case AnimalCategory.cow:
+        return l10n.rationCategoryCow;
+      case AnimalCategory.heifer:
+        return l10n.rationCategoryHeifer;
+      case AnimalCategory.bull:
+        return l10n.rationCategoryBull;
+      case AnimalCategory.calf:
+        return l10n.rationCategoryCalf;
+    }
+  }
+
+  String _breedTypeLabel(BreedType type, AppLocalizations l10n) {
+    switch (type) {
+      case BreedType.DAIRY:
+        return l10n.breedTypeDairy;
+      case BreedType.MEAT:
+        return l10n.breedTypeMeat;
+      case BreedType.MIXED:
+        return l10n.breedTypeMixed;
+      case BreedType.LOCAL:
+        return l10n.breedTypeLocal;
+    }
   }
 
   HealthStatus? _mapHealthEnum(String? raw) {
@@ -133,15 +165,16 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
   }
 
   Future<void> _onNext() async {
+    final l10n = context.l10n;
     final herdApi = ref.read(herdApiProvider);
 
     final name = _nameController.text.trim();
     final tag = _tagController.text.trim();
 
     if (name.isEmpty || tag.isEmpty || _birthDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Заполните имя, бирку и дату рождения')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.animalRequiredFields)));
       return;
     }
 
@@ -191,7 +224,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Ошибка при сохранении: $e')));
+      ).showSnackBar(SnackBar(content: Text(l10n.errorPrefix('$e'))));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -199,11 +232,12 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AppScaffold(
       bottomNavIndex: null,
       enableDrawer: false,
       showBell: false,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: Column(
         children: [
           Expanded(
@@ -220,15 +254,15 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         HerdPageHeader(
-                          title: 'Редактирование карточки',
+                          title: l10n.animalInfoEditTitle,
                           onBack: () => context.pop(),
                         ),
                         const SizedBox(height: 12),
-                        const HerdSectionTitle(text: 'Основная информация'),
+                        HerdSectionTitle(text: l10n.animalMainInfo),
                         const SizedBox(height: 24),
 
-                        const Text(
-                          'Имя',
+                        Text(
+                          l10n.registerFirstName,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -240,8 +274,8 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
 
                         const SizedBox(height: 24),
 
-                        const Text(
-                          'Бирка',
+                        Text(
+                          l10n.animalTag,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -256,8 +290,8 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
 
                         const SizedBox(height: 24),
 
-                        const Text(
-                          'Выберите пол',
+                        Text(
+                          l10n.selectGender,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -269,7 +303,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                           children: [
                             Expanded(
                               child: HerdGenderChip(
-                                label: 'Женский',
+                                label: l10n.genderFemale,
                                 isActive: _gender == AnimalGender.female,
                                 onTap: () =>
                                     _onGenderChanged(AnimalGender.female),
@@ -278,7 +312,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                             const SizedBox(width: 18),
                             Expanded(
                               child: HerdGenderChip(
-                                label: 'Мужской',
+                                label: l10n.genderMale,
                                 isActive: _gender == AnimalGender.male,
                                 onTap: () =>
                                     _onGenderChanged(AnimalGender.male),
@@ -291,9 +325,9 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
 
                         Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: Text(
-                                'Дата рождения',
+                                l10n.animalBirthDate,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -338,8 +372,8 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
 
                         const SizedBox(height: 24),
 
-                        const Text(
-                          'Тип породы',
+                        Text(
+                          l10n.breedTypeLabel,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -350,7 +384,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                         DropdownButtonFormField<BreedType>(
                           value: _selectedBreedType,
                           decoration: InputDecoration(
-                            hintText: 'Выберите тип породы',
+                            hintText: l10n.breedTypeHint,
                             hintStyle: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF9E9E9E),
@@ -373,7 +407,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                           items: BreedType.values.map((type) {
                             return DropdownMenuItem(
                               value: type,
-                              child: Text(type.displayName),
+                              child: Text(_breedTypeLabel(type, l10n)),
                             );
                           }).toList(),
                           onChanged: (v) {
@@ -405,8 +439,8 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                                     0.6,
                                   ),
                                 ),
-                                child: const Text(
-                                  'Отменить',
+                                child: Text(
+                                  l10n.dialogCancel,
                                   style: TextStyle(
                                     color: AppColors.error,
                                     fontSize: 14,
@@ -421,7 +455,9 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                                 fontSize: 14,
                                 height: 50,
                                 borderRadius: 24,
-                                text: _isLoading ? 'Сохранение...' : 'Далее',
+                                text: _isLoading
+                                    ? l10n.saving
+                                    : l10n.continueText,
                                 onPressed: _isLoading ? () {} : _onNext,
                               ),
                             ),

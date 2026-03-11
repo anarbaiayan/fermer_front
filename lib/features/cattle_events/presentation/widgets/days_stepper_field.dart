@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 
 class DaysStepperField extends StatelessWidget {
@@ -17,6 +18,7 @@ class DaysStepperField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -47,7 +49,7 @@ class DaysStepperField extends StatelessWidget {
                 border: Border.all(color: AppColors.additional2),
               ),
               child: Text(
-                '$value дней',
+                l10n.daysValue(value),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,

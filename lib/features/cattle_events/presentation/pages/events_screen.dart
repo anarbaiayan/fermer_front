@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -55,7 +56,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
       initialDate: _dateFrom,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
-      helpText: 'Дата начала',
+      helpText: context.l10n.eventsDateStart,
     );
     if (picked == null) return;
 
@@ -72,7 +73,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
       initialDate: _dateTo,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
-      helpText: 'Дата окончания',
+      helpText: context.l10n.eventsDateEnd,
     );
     if (picked == null) return;
 
@@ -84,6 +85,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
   }
 
   Future<void> _showEventActionsSheet(PlannedEvent e) async {
+    final l10n = context.l10n;
     await showModalBottomSheet(
       context: context,
       showDragHandle: true,
@@ -103,7 +105,9 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 ListTile(
                   leading: const Icon(Icons.check_circle_outline),
                   title: Text(
-                    isCompleted ? 'Уже завершено' : 'Завершить событие',
+                    isCompleted
+                        ? l10n.eventsAlreadyCompleted
+                        : l10n.eventsCompleteEvent,
                   ),
                   subtitle: Text('${e.title} - ${e.cattleName}'),
                   enabled: !isCompleted,
@@ -120,15 +124,17 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
 
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Событие завершено'),
+                                SnackBar(
+                                  content: Text(l10n.eventsEventCompleted),
                                 ),
                               );
                             }
                           } catch (err) {
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Ошибка: $err')),
+                                SnackBar(
+                                  content: Text(l10n.errorPrefix('$err')),
+                                ),
                               );
                             }
                           }
@@ -142,30 +148,30 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                     Icons.delete_outline,
                     color: AppColors.error,
                   ),
-                  title: const Text(
-                    'Удалить событие',
+                  title: Text(
+                    l10n.eventsDeleteEvent,
                     style: TextStyle(color: AppColors.error),
                   ),
-                  subtitle: const Text('Действие нельзя отменить'),
+                  subtitle: Text(l10n.eventsCannotUndo),
                   onTap: () async {
                     Navigator.of(ctx).pop();
 
                     final confirmed = await showDialog<bool>(
                       context: context,
                       builder: (dctx) => AlertDialog(
-                        title: const Text('Удалить событие?'),
+                        title: Text(l10n.eventsDeleteConfirm),
                         content: Text(
                           '${e.title}\n${e.cattleName} ${e.cattleTagNumber}',
                         ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(dctx).pop(false),
-                            child: const Text('Отмена'),
+                            child: Text(l10n.dialogCancel),
                           ),
                           TextButton(
                             onPressed: () => Navigator.of(dctx).pop(true),
-                            child: const Text(
-                              'Удалить',
+                            child: Text(
+                              l10n.dialogDelete,
                               style: TextStyle(color: AppColors.error),
                             ),
                           ),
@@ -188,14 +194,14 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
 
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Событие удалено')),
+                          SnackBar(content: Text(l10n.eventsDeleted)),
                         );
                       }
                     } catch (err) {
                       if (mounted) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text('Ошибка: $err')));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(l10n.errorPrefix('$err'))),
+                        );
                       }
                     }
                   },
@@ -258,6 +264,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     // какой статус дергать с бэка
     final status = _mode == EventsFilterMode.completed
         ? 'COMPLETED'
@@ -269,7 +276,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
       enableDrawer: true,
       showBell: true,
       showAppBar: true,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: AppPage(
         child: Stack(
           children: [
@@ -293,8 +300,8 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                       },
                     ),
                     const SizedBox(width: 6),
-                    const Text(
-                      'События',
+                    Text(
+                      l10n.eventsTitle,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -308,9 +315,9 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 const SizedBox(height: 12),
 
                 // "Задачи"
-                const Center(
+                Center(
                   child: Text(
-                    'Задачи',
+                    l10n.eventsTasks,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -356,7 +363,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 Row(
                   children: [
                     _CircleOption(
-                      label: 'Завершенные',
+                      label: l10n.eventsCompleted,
                       circleSize: 24,
                       borderWidth: 2,
                       innerDotSize: 11,
@@ -372,7 +379,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                     ),
                     const SizedBox(width: 40),
                     _CircleOption(
-                      label: 'Просроченные',
+                      label: l10n.eventsOverdue,
                       circleSize: 24,
                       borderWidth: 2,
                       innerDotSize: 11,
@@ -397,7 +404,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                         const Center(child: CircularProgressIndicator()),
                     error: (e, _) => Center(
                       child: Text(
-                        'Ошибка: $e',
+                        l10n.errorPrefix('$e'),
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: AppColors.additional3),
                       ),
@@ -409,9 +416,9 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                           .toList();
 
                       if (filtered.isEmpty) {
-                        return const Center(
+                        return Center(
                           child: Text(
-                            'Нет событий',
+                            l10n.eventsNone,
                             style: TextStyle(
                               color: AppColors.additional3,
                               fontSize: 14,
@@ -437,9 +444,13 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
 
                           final rangeText = _formatRangeText(e.plannedDate);
 
-                          final primaryHint = _eventActionText(e.eventType);
+                          final primaryHint = _eventActionText(
+                            e.eventType,
+                            l10n,
+                          );
                           final secondary = _eventSecondaryHintIfOverdue(
                             e.daysUntil,
+                            l10n,
                           );
 
                           return _EventCard(
@@ -789,37 +800,37 @@ String _categoryIconFromApi(String? category) {
   }
 }
 
-String _eventActionText(String eventType) {
+String _eventActionText(String eventType, dynamic l10n) {
   switch (eventType) {
     case 'HEAT_PERIOD':
-      return 'Проверка на охоту';
+      return l10n.eventTaskHeatPeriod;
     case 'PREGNANCY_CONFIRMATION':
-      return 'Провести проверку на стельность';
+      return l10n.eventTaskPregnancyCheck;
     case 'DRY_PERIOD':
-      return 'Запланирован перевод в сухостой';
+      return l10n.eventTaskDryPeriod;
     case 'WEIGHING':
-      return 'Рекомендуется провести взвешивание';
+      return l10n.eventTaskWeighing;
     case 'VACCINATION':
-      return 'Рекомендуется провести вакцинацию';
+      return l10n.eventTaskVaccination;
     case 'ILLNESS_TREATMENT':
-      return 'Провести лечение/осмотр';
+      return l10n.eventTaskTreatment;
     case 'HOOF_TRIMMING':
-      return 'Рекомендуется расчистка копыт';
+      return l10n.eventTaskHoofTrimming;
     case 'ANTIPARASITIC_TREATMENT':
-      return 'Рекомендуется обработка от паразитов';
+      return l10n.eventTaskAntiparasitic;
     case 'CALVING':
-      return 'Контроль после отела';
+      return l10n.eventTaskCalvingFollowUp;
     case 'INSEMINATION':
-      return 'Запланировано осеменение';
+      return l10n.eventTaskInsemination;
     case 'WEANING':
-      return 'Запланирован отъем';
+      return l10n.eventTaskWeaning;
     case 'OTHER':
     default:
-      return 'Пришло время выполнить событие';
+      return l10n.eventTaskDefault;
   }
 }
 
-String _eventSecondaryHintIfOverdue(int daysUntil) {
-  if (daysUntil < -5) return 'Рекомендуется выполнить как можно скорее';
+String _eventSecondaryHintIfOverdue(int daysUntil, dynamic l10n) {
+  if (daysUntil < -5) return l10n.eventOverdueHint;
   return '';
 }

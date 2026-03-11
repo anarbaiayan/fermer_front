@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
+import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
@@ -11,19 +13,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../application/rations_providers.dart';
 
 class RationsScreen extends ConsumerWidget {
-  /// если передали cattleId - режим "из карточки животного"
   final int? cattleId;
 
   const RationsScreen({super.key, this.cattleId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final availableAsync = ref.watch(userAvailableRationsProvider);
-
-    // общий список
     final rationsAsync = ref.watch(cattleRationsProvider);
 
-    // рацион конкретного животного
     final cattleRationAsync = (cattleId == null)
         ? const AsyncValue.data(null)
         : ref.watch(cattleRationByCattleProvider(cattleId!));
@@ -35,12 +34,22 @@ class RationsScreen extends ConsumerWidget {
       enableDrawer: true,
       showBell: true,
       showAppBar: true,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: AppPage(
         child: availableAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) =>
-              Center(child: Text('Ошибка: $e', textAlign: TextAlign.center)),
+          error: (e, _) {
+            final msg = _errorText(e);
+            if (_isNoAvailableFeedsError(e)) {
+              return _EmptyRationsState(
+                onAdd: () => context.push('/rations/stocks/add'),
+              );
+            }
+
+            return Center(
+              child: Text(l10n.errorPrefix(msg), textAlign: TextAlign.center),
+            );
+          },
           data: (available) {
             if (available.isEmpty) {
               return _EmptyRationsState(
@@ -52,12 +61,10 @@ class RationsScreen extends ConsumerWidget {
               padding: const EdgeInsets.only(bottom: 24),
               children: [
                 const SizedBox(height: 10),
-
-                // Заголовок разный:
-                // - общий режим: "Список рационов" (как на скрине)
-                // - из карточки: "Рацион животного"
                 _Header(
-                  title: isFromCattle ? 'Рацион животного' : 'Список рационов',
+                  title: isFromCattle
+                      ? l10n.rationsForAnimalTitle
+                      : l10n.rationsListTitle,
                   onBack: () {
                     if (context.canPop()) {
                       context.pop();
@@ -65,26 +72,20 @@ class RationsScreen extends ConsumerWidget {
                       context.go('/home');
                     }
                   },
-                  // фильтр только в общем режиме
                   trailing: isFromCattle
                       ? null
                       : IconButton(
                           padding: EdgeInsets.zero,
-                          icon: AppIcons.svg("filter", size: 32),
-                          onPressed: () {
-                            // TODO: фильтры
-                          },
+                          icon: AppIcons.svg('filter', size: 32),
+                          onPressed: () {},
                         ),
                 ),
-
                 const SizedBox(height: 18),
-
-                // Запасы корма (оставляем как было)
                 Row(
                   children: [
-                    const Text(
-                      'Запасы корма',
-                      style: TextStyle(
+                    Text(
+                      l10n.rationsFeedStock,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: AppColors.primary3,
@@ -98,30 +99,29 @@ class RationsScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-
                 SizedBox(
-                  height: 92,
+                  height: 116,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
                       _StockTypeChip(
-                        title: 'Концентраты',
+                        title: l10n.rationsConcentrates,
                         color: const Color(0xFF4A78C1),
                         onTap: () =>
                             context.push('/rations/stocks/CONCENTRATED'),
                       ),
                       _StockTypeChip(
-                        title: 'Сочный корм',
+                        title: l10n.rationsSucculentFeed,
                         color: const Color(0xFFF7DFA3),
                         onTap: () => context.push('/rations/stocks/JUICY'),
                       ),
                       _StockTypeChip(
-                        title: 'Грубые корма',
+                        title: l10n.rationsRoughage,
                         color: const Color(0xFFB7E4C7),
                         onTap: () => context.push('/rations/stocks/COARSE'),
                       ),
                       _StockTypeChip(
-                        title: 'Добавки',
+                        title: l10n.rationsAdditives,
                         color: const Color(0xFFF4C2C2),
                         onTap: () => context.push(
                           '/rations/stocks/VITAMINS_SUPPLEMENTS',
@@ -130,12 +130,8 @@ class RationsScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 22),
-
-                // ===== Секция рационов =====
                 if (isFromCattle) ...[
-                  // режим из карточки - показываем 1 рацион, кликабелен
                   cattleRationAsync.when(
                     loading: () => const Padding(
                       padding: EdgeInsets.only(top: 24),
@@ -143,16 +139,21 @@ class RationsScreen extends ConsumerWidget {
                     ),
                     error: (e, _) => Padding(
                       padding: const EdgeInsets.only(top: 24),
-                      child: Text('Ошибка: $e', textAlign: TextAlign.center),
+                      child: Text(
+                        l10n.errorPrefix(_errorText(e)),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     data: (ration) {
                       if (ration == null) {
-                        return const Padding(
-                          padding: EdgeInsets.only(top: 30),
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 30),
                           child: Center(
                             child: Text(
-                              'Рацион ещё не сгенерирован',
-                              style: TextStyle(color: AppColors.additional3),
+                              l10n.rationsNotGenerated,
+                              style: const TextStyle(
+                                color: AppColors.additional3,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -163,7 +164,7 @@ class RationsScreen extends ConsumerWidget {
                         padding: const EdgeInsets.only(bottom: 12),
                         child: CattleRationCard(
                           ration: ration,
-                          variant: CattleRationCardVariant.fromCattle, // ✅
+                          variant: CattleRationCardVariant.fromCattle,
                           onTap: () =>
                               context.push('/rations/cattle/${cattleId!}'),
                         ),
@@ -171,7 +172,6 @@ class RationsScreen extends ConsumerWidget {
                     },
                   ),
                 ] else ...[
-                  // общий режим - список всех рационов, НЕ кликаются
                   rationsAsync.when(
                     loading: () => const Padding(
                       padding: EdgeInsets.only(top: 24),
@@ -179,16 +179,21 @@ class RationsScreen extends ConsumerWidget {
                     ),
                     error: (e, _) => Padding(
                       padding: const EdgeInsets.only(top: 24),
-                      child: Text('Ошибка: $e', textAlign: TextAlign.center),
+                      child: Text(
+                        l10n.errorPrefix(_errorText(e)),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     data: (rations) {
                       if (rations.isEmpty) {
-                        return const Padding(
-                          padding: EdgeInsets.only(top: 30),
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 30),
                           child: Center(
                             child: Text(
-                              'Рационы пока не сгенерированы',
-                              style: TextStyle(color: AppColors.additional3),
+                              l10n.rationsNotGenerated,
+                              style: const TextStyle(
+                                color: AppColors.additional3,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -203,8 +208,8 @@ class RationsScreen extends ConsumerWidget {
                               padding: const EdgeInsets.only(bottom: 12),
                               child: CattleRationCard(
                                 ration: r,
-                                variant: CattleRationCardVariant.overview, // ✅
-                                onTap: null, // ✅ запрет деталей в общем режиме
+                                variant: CattleRationCardVariant.overview,
+                                onTap: null,
                                 onDelete: () async {
                                   final del = ref.read(
                                     deleteCattleRationProvider,
@@ -213,8 +218,8 @@ class RationsScreen extends ConsumerWidget {
 
                                   if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Рацион удалён'),
+                                      SnackBar(
+                                        content: Text(l10n.rationsDeleted),
                                       ),
                                     );
                                   }
@@ -234,6 +239,31 @@ class RationsScreen extends ConsumerWidget {
       ),
     );
   }
+
+  String _errorText(Object error) {
+    if (error is ApiException) return error.message;
+    return error.toString();
+  }
+
+  bool _isNoAvailableFeedsError(Object error) {
+    if (error is! ApiException) return false;
+
+    const ruNoFeeds =
+        '\u043d\u0435\u0442 \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u0445 \u043a\u043e\u0440\u043c\u043e\u0432';
+    const ruAddFeeds =
+        '\u0434\u043e\u0431\u0430\u0432\u044c\u0442\u0435 \u043a\u043e\u0440\u043c\u0430';
+    const kkFeedWord = '\u0436\u0435\u043c';
+
+    final lower = error.message.toLowerCase();
+
+    return lower.contains(ruNoFeeds) ||
+        lower.contains(ruAddFeeds) ||
+        lower.contains('no available feeds') ||
+        (lower.contains(kkFeedWord) && lower.contains('available')) ||
+        (error.statusCode == 500 &&
+            lower.contains('unexpected error occurred') &&
+            (lower.contains(ruAddFeeds) || lower.contains(kkFeedWord)));
+  }
 }
 
 class _EmptyRationsState extends StatelessWidget {
@@ -242,6 +272,8 @@ class _EmptyRationsState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Center(
       child: AppPage(
         child: Column(
@@ -249,9 +281,9 @@ class _EmptyRationsState extends StatelessWidget {
           children: [
             Image.asset('assets/image/noResult.png', width: 260),
             const SizedBox(height: 24),
-            const Text(
-              'Ваш список пустует',
-              style: TextStyle(
+            Text(
+              l10n.rationsEmptyTitle,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: AppColors.primary3,
@@ -259,16 +291,16 @@ class _EmptyRationsState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
-            const Text(
-              'Для отображения списка рационов,\nдобавьте Ваш запас корма',
-              style: TextStyle(fontSize: 14, color: AppColors.primary3),
+            Text(
+              l10n.rationsEmptySubtitle,
+              style: const TextStyle(fontSize: 14, color: AppColors.primary3),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 55),
             SizedBox(
               width: double.infinity,
               child: FermerPlusBigButton(
-                text: 'Добавить запасы корма',
+                text: l10n.rationsAddFeedStock,
                 onPressed: onAdd,
                 height: 50,
                 borderRadius: 4,
@@ -327,7 +359,7 @@ class _StockTypeChip extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       onTap: onTap,
       child: Container(
-        width: 138,
+        width: 146,
         margin: const EdgeInsets.only(right: 12),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
@@ -336,7 +368,6 @@ class _StockTypeChip extends StatelessWidget {
           border: Border.all(color: AppColors.additional2),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               width: 36,
@@ -346,15 +377,21 @@ class _StockTypeChip extends StatelessWidget {
               child: AppIcons.svg('inventory', size: 18, color: Colors.white),
             ),
             const SizedBox(height: 10),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.primary3,
+            Expanded(
+              child: Center(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    height: 1.15,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary3,
+                  ),
+                ),
               ),
             ),
           ],

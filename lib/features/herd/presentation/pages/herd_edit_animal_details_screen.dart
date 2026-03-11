@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_page.dart';
@@ -81,6 +82,7 @@ class _HerdEditAnimalDetailsScreenState
   }
 
   Future<void> _onSave() async {
+    final l10n = context.l10n;
     setState(() => _isSaving = true);
     try {
       ref.invalidate(cattleListProvider);
@@ -90,9 +92,9 @@ class _HerdEditAnimalDetailsScreenState
 
       await showAppSuccessDialog(
         context,
-        title: 'Карточка животного\nуспешно обновлена!',
+        title: l10n.animalUpdatedSuccessTitle,
         iconAsset: 'assets/icons/success.svg',
-        buttonText: 'Понятно',
+        buttonText: l10n.dialogUnderstood,
         iconHeight: 50,
         iconWidth: 50,
       );
@@ -125,11 +127,12 @@ class _HerdEditAnimalDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AppScaffold(
       bottomNavIndex: null,
       enableDrawer: false,
       showBell: false,
-      farmName: 'Название фермы',
+      farmName: l10n.farmName,
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
         child: Column(
@@ -144,16 +147,14 @@ class _HerdEditAnimalDetailsScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         HerdPageHeader(
-                          title: 'Редактирование карточки',
+                          title: l10n.animalInfoEditTitle,
                           onBack: () => context.pop(),
                         ),
                         const SizedBox(height: 12),
-                        const HerdSectionTitle(
-                          text: 'Дополнительная информация',
-                        ),
+                        HerdSectionTitle(text: l10n.animalAdditionalInfo),
                         const SizedBox(height: 24),
-                        const Text(
-                          'Событие',
+                        Text(
+                          l10n.addEventType,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -164,7 +165,7 @@ class _HerdEditAnimalDetailsScreenState
                         HerdTextField(
                           controller: _eventController,
                           readOnly: true,
-                          hint: 'Добавить событие',
+                          hint: l10n.addEventTitle,
                           onTap: _isSaving ? null : _openAddEventSheet,
                           suffixIcon: IconButton(
                             icon: const Icon(
@@ -200,8 +201,8 @@ class _HerdEditAnimalDetailsScreenState
                                     borderRadius: BorderRadius.circular(24),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Пропустить',
+                                child: Text(
+                                  l10n.skipText,
                                   style: TextStyle(
                                     color: AppColors.additional3,
                                     fontSize: 14,
@@ -216,7 +217,7 @@ class _HerdEditAnimalDetailsScreenState
                                 height: 50,
                                 borderRadius: 24,
                                 fontSize: 14,
-                                text: _isSaving ? 'Сохранение...' : 'Сохранить',
+                                text: _isSaving ? l10n.saving : l10n.save,
                                 onPressed: _isSaving ? () {} : _onSave,
                               ),
                             ),
