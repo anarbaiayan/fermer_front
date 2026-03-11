@@ -55,7 +55,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get drawerLogoutButton => 'Выйти';
 
   @override
-  String get dialogOk => 'РћРє';
+  String get dialogOk => 'ОК';
 
   @override
   String get dialogCancel => 'Отменить';
@@ -1197,11 +1197,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dateInputHint => 'dd.MM.yyyy';
 
   @override
-  String get bulkEventSuccessTitle => 'Массовое событие\\nуспешно создано!';
+  String get bulkEventSuccessTitle => 'Массовое событие\nуспешно создано!';
 
   @override
   String get bulkEventSuccessMessage =>
-      'Все данные сохранены.\\nВы можете изменить их позже.';
+      'Все данные сохранены.\nВы можете изменить их позже.';
 
   @override
   String get addBulkEventTitle => 'Добавить массовое событие';
@@ -1222,12 +1222,61 @@ class AppLocalizationsRu extends AppLocalizations {
   String get eventActionHornProcessing => 'Обработка рогов';
 
   @override
+  String get eventTypeNameVaccination => 'Вакцинация';
+
+  @override
+  String get eventTypeNameIllnessTreatment => 'Болезнь/Лечение';
+
+  @override
+  String get eventTypeNameWeighing => 'Взвешивание';
+
+  @override
+  String get eventTypeNameHoofTrimming => 'Расчистка копыт';
+
+  @override
+  String get eventTypeNameAntiparasiticTreatment => 'Противопаразитное лечение';
+
+  @override
+  String get eventTypeNameOther => 'Другое';
+
+  @override
+  String get eventTypeNameCalving => 'Отёл';
+
+  @override
+  String get eventTypeNameInsemination => 'Осеменение/ИО';
+
+  @override
+  String get eventTypeNameDryPeriod => 'Сухостой';
+
+  @override
+  String get eventTypeNameHeatPeriod => 'Период охоты';
+
+  @override
+  String get eventTypeNameSynchronization => 'Синхронизация';
+
+  @override
+  String get eventTypeNameMating => 'Покрытие';
+
+  @override
+  String get eventTypeNamePregnancyConfirmation => 'Подтверждение стельности';
+
+  @override
+  String get eventTypeNamePregnancyNotConfirmed =>
+      'Беременность не подтверждена';
+
+  @override
+  String get eventTypeNameHornProcessing => 'Обработка рога';
+
+  @override
+  String get eventTypeNameWeaning => 'Отъём';
+
+  @override
   String daysValue(Object value) {
     return '$value дней';
   }
 
   @override
-  String get fieldEndDateOptional => 'Дата окончания\\n(необязательно)';
+  String get fieldEndDateOptional => 'Дата окончания\n(необязательно)';
 
   @override
   String get fieldEventName => 'Название события';
@@ -1241,11 +1290,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get animalCreatedSuccessTitle =>
-      'Карточка животного\\nуспешно создана!';
+      'Карточка животного\nуспешно создана!';
 
   @override
   String get animalCreatedSuccessMessage =>
-      'Все данные сохранены.\\nВы можете изменить их позже в карточке животного.';
+      'Все данные сохранены.\nВы можете изменить их позже в карточке животного.';
 
   @override
   String get animalAdditionalInfo => 'Дополнительная информация';
@@ -1311,7 +1360,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get animalUpdatedSuccessTitle =>
-      'Карточка животного\\nуспешно обновлена!';
+      'Карточка животного\nуспешно обновлена!';
 
   @override
   String get animalInfoEditTitle => 'Редактирование карточки';
@@ -1328,8 +1377,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get rationGenerating => 'Генерируется рацион...';
 
   @override
-  String get rationRegeneratedSuccess =>
-      'Рацион успешно\\nсгенерирован заново!';
+  String get rationRegeneratedSuccess => 'Рацион успешно\nсгенерирован заново!';
 
   @override
   String get rationUpdatedSaved => 'Обновленные данные сохранены.';
@@ -1341,13 +1389,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get prodStateDryPhase2 => 'Сухостой (фаза 2)';
 
   @override
-  String get milkTotalCurrent => 'Всего молока\\n(текущая лактация)';
+  String get milkTotalCurrent => 'Всего молока\n(текущая лактация)';
 
   @override
   String get lastCalvingDate => 'Последний отел';
 
   @override
-  String get lastInseminationDate => 'Последнее\\nосеменение';
+  String get lastInseminationDate => 'Последнее\nосеменение';
 
   @override
   String get pregnancyLabel => 'Беременность';
@@ -1359,10 +1407,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get productionStatusLabel => 'Производственный статус';
 
   @override
-  String get firstInseminationDate => 'Первое\\nосеменение';
+  String get firstInseminationDate => 'Первое\nосеменение';
 
   @override
-  String get expectedCalvingDate => 'Планируемая дата\\nотела';
+  String get expectedCalvingDate => 'Планируемая дата\nотела';
 
   @override
   String get bullPurposeLabel => 'Назначение';

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
@@ -333,7 +333,7 @@ class _StockListItemState extends State<StockListItem> {
     final color = _typeColor(type);
 
     final title = item.ration.localizedName(languageCode);
-    final typeText = item.ration.typeDescription;
+    final typeText = _typeText(l10n, type, item.ration.typeDescription);
     final price = item.ration.pricePerKg;
     final qty = item.quantityKg;
 
@@ -545,6 +545,27 @@ class _StockListItemState extends State<StockListItem> {
       case 'VITAMINS_SUPPLEMENTS':
       default:
         return const Color(0xFF4A78C1);
+    }
+  }
+
+  String _typeText(AppLocalizations l10n, String rawType, String fallback) {
+    switch (rawType.toUpperCase()) {
+      case 'CONCENTRATED':
+      case 'CONCENTRATE':
+        return l10n.rationsConcentrates;
+      case 'JUICY':
+      case 'SUCCULENT':
+        return l10n.rationsSucculentFeed;
+      case 'COARSE':
+        return l10n.rationsRoughage;
+      case 'VITAMINS_SUPPLEMENTS':
+      case 'ADDITIVE':
+      case 'ADDITIVES':
+        return l10n.rationsAdditives;
+      default:
+        final text = fallback.trim();
+        if (text.isNotEmpty) return text;
+        return rawType;
     }
   }
 }

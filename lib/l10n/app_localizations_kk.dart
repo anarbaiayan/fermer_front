@@ -323,7 +323,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get statusLactating => 'Сауылатын';
 
   @override
-  String get statusDryPeriod => 'Сухостой';
+  String get statusDryPeriod => 'Құрғақ кезең';
 
   @override
   String get statusOpen => 'Ұрықтанбаған';
@@ -385,7 +385,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get herdAnimalList => 'Жануарлар тізімі';
 
   @override
-  String get herdLoadingFilter => 'Сүзгі деректері жүктелуде...';
+  String get herdLoadingFilter => 'Фильтр деректері жүктелуде...';
 
   @override
   String get emptyHerdTitle => 'Сіздің тізіміңіз бос';
@@ -424,7 +424,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get animalBreed => 'Тұқымы';
 
   @override
-  String get animalGroup => 'РўРѕРї';
+  String get animalGroup => 'Тобы';
 
   @override
   String get animalHealthStatus => 'Денсаулық жағдайы';
@@ -452,7 +452,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get reproStatusPregnant => 'Буаз';
 
   @override
-  String get reproStatusDry => 'Сухостой';
+  String get reproStatusDry => 'Құрғақ кезең';
 
   @override
   String get reproStatusNearCalving => 'Жақында бұзаулайды';
@@ -470,7 +470,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get prodStateLactation => 'Лактация';
 
   @override
-  String get prodStateDry => 'Сухостой';
+  String get prodStateDry => 'Құрғақ кезең';
 
   @override
   String get prodStateFattening => 'Бордақылау';
@@ -633,7 +633,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get eventActionPregnancy => 'Буаздықты тексеру';
 
   @override
-  String get eventActionDryPeriod => 'Сухостойға ауыстыру жоспарланған';
+  String get eventActionDryPeriod => 'Құрғақ кезеңге ауыстыру жоспарланған';
 
   @override
   String get eventActionWeighing => 'Өлшеу жүргізу ұсынылады';
@@ -1196,11 +1196,11 @@ class AppLocalizationsKk extends AppLocalizations {
   String get dateInputHint => 'dd.MM.yyyy';
 
   @override
-  String get bulkEventSuccessTitle => 'Топтық оқиға\\nсәтті жасалды!';
+  String get bulkEventSuccessTitle => 'Топтық оқиға\nсәтті жасалды!';
 
   @override
   String get bulkEventSuccessMessage =>
-      'Барлық дерек сақталды.\\nКейін өзгерте аласыз.';
+      'Барлық дерек сақталды.\nКейін өзгерте аласыз.';
 
   @override
   String get addBulkEventTitle => 'Топтық оқиға қосу';
@@ -1221,12 +1221,60 @@ class AppLocalizationsKk extends AppLocalizations {
   String get eventActionHornProcessing => 'Мүйіз өңдеу';
 
   @override
+  String get eventTypeNameVaccination => 'Вакцинация';
+
+  @override
+  String get eventTypeNameIllnessTreatment => 'Ауру/Емдеу';
+
+  @override
+  String get eventTypeNameWeighing => 'Өлшеу';
+
+  @override
+  String get eventTypeNameHoofTrimming => 'Тұяқ тазалау';
+
+  @override
+  String get eventTypeNameAntiparasiticTreatment => 'Паразиттерге қарсы ем';
+
+  @override
+  String get eventTypeNameOther => 'Басқа';
+
+  @override
+  String get eventTypeNameCalving => 'Бұзаулау';
+
+  @override
+  String get eventTypeNameInsemination => 'Ұрықтандыру/ИО';
+
+  @override
+  String get eventTypeNameDryPeriod => 'Сауымсыз кезең';
+
+  @override
+  String get eventTypeNameHeatPeriod => 'Күйлеу кезеңі';
+
+  @override
+  String get eventTypeNameSynchronization => 'Синхрондау';
+
+  @override
+  String get eventTypeNameMating => 'Шағылыстыру';
+
+  @override
+  String get eventTypeNamePregnancyConfirmation => 'Буаздықты растау';
+
+  @override
+  String get eventTypeNamePregnancyNotConfirmed => 'Буаздық расталмады';
+
+  @override
+  String get eventTypeNameHornProcessing => 'Мүйіз өңдеу';
+
+  @override
+  String get eventTypeNameWeaning => 'Айыру';
+
+  @override
   String daysValue(Object value) {
     return '$value күн';
   }
 
   @override
-  String get fieldEndDateOptional => 'Аяқталу күні\\n(міндетті емес)';
+  String get fieldEndDateOptional => 'Аяқталу күні\n(міндетті емес)';
 
   @override
   String get fieldEventName => 'Оқиға атауы';
@@ -1239,11 +1287,11 @@ class AppLocalizationsKk extends AppLocalizations {
       'Тұқым көрсетілмеген. 1-қадамға оралып, тұқымды толтырыңыз.';
 
   @override
-  String get animalCreatedSuccessTitle => 'Жануар картасы\\nсәтті жасалды!';
+  String get animalCreatedSuccessTitle => 'Жануар картасы\nсәтті жасалды!';
 
   @override
   String get animalCreatedSuccessMessage =>
-      'Барлық дерек сақталды.\\nКейін жануар картасында өзгерте аласыз.';
+      'Барлық дерек сақталды.\nКейін жануар картасында өзгерте аласыз.';
 
   @override
   String get animalAdditionalInfo => 'Қосымша ақпарат';
@@ -1309,7 +1357,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get dateOutOfRange => 'Күн рұқсат етілген аралықтан тыс';
 
   @override
-  String get animalUpdatedSuccessTitle => 'Жануар картасы\\nсәтті жаңартылды!';
+  String get animalUpdatedSuccessTitle => 'Жануар картасы\nсәтті жаңартылды!';
 
   @override
   String get animalInfoEditTitle => 'Картаны өңдеу';
@@ -1326,7 +1374,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get rationGenerating => 'Рацион жасалуда...';
 
   @override
-  String get rationRegeneratedSuccess => 'Рацион сәтті\\nқайта жасалды!';
+  String get rationRegeneratedSuccess => 'Рацион сәтті\nқайта жасалды!';
 
   @override
   String get rationUpdatedSaved => 'Жаңартылған деректер сақталды.';
@@ -1338,13 +1386,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get prodStateDryPhase2 => 'Құрғақ кезең (2-фаза)';
 
   @override
-  String get milkTotalCurrent => 'Барлық сүт\\n(ағымдағы лактация)';
+  String get milkTotalCurrent => 'Барлық сүт\n(ағымдағы лактация)';
 
   @override
   String get lastCalvingDate => 'Соңғы бұзаулау';
 
   @override
-  String get lastInseminationDate => 'Соңғы\\nұрықтандыру';
+  String get lastInseminationDate => 'Соңғы\nұрықтандыру';
 
   @override
   String get pregnancyLabel => 'Буаздық';
@@ -1356,10 +1404,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get productionStatusLabel => 'Өндірістік статус';
 
   @override
-  String get firstInseminationDate => 'Бірінші\\nұрықтандыру';
+  String get firstInseminationDate => 'Бірінші\nұрықтандыру';
 
   @override
-  String get expectedCalvingDate => 'Болжамды\\nбұзаулау күні';
+  String get expectedCalvingDate => 'Болжамды\nбұзаулау күні';
 
   @override
   String get bullPurposeLabel => 'Мақсаты';

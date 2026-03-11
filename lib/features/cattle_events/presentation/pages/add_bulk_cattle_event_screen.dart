@@ -10,6 +10,7 @@ import 'package:frontend/features/cattle_events/application/bulk_event_providers
 import 'package:frontend/features/cattle_events/application/cattle_events_providers.dart';
 import 'package:frontend/features/cattle_events/application/simple_cattle_providers.dart';
 import 'package:frontend/features/cattle_events/data/models/create_bulk_event_dto.dart';
+import 'package:frontend/features/cattle_events/domain/entities/cattle_event_type.dart';
 import 'package:frontend/features/cattle_events/presentation/widgets/dynamic_event_fields.dart';
 import 'package:frontend/features/cattle_events/presentation/widgets/select_cattle_sheet.dart';
 import 'package:go_router/go_router.dart';
@@ -631,7 +632,13 @@ class _AddBulkCattleEventScreenState
                                     .map(
                                       (t) => DropdownMenuItem(
                                         value: t,
-                                        child: Text(_eventTypeTitle(t, l10n)),
+                                        child: Text(
+                                          CattleEventTypeX.labelFromApi(
+                                            t,
+                                            l10n,
+                                            unknownAsRaw: true,
+                                          ),
+                                        ),
                                       ),
                                     )
                                     .toList(),
@@ -902,43 +909,5 @@ String _dateLabelForType(String? t, AppLocalizations l10n) {
       return l10n.eventDateGeneric;
     default:
       return l10n.eventDateGeneric;
-  }
-}
-
-String _eventTypeTitle(String t, AppLocalizations l10n) {
-  switch (t) {
-    case 'CALVING':
-      return l10n.eventActionCalving;
-    case 'INSEMINATION':
-      return l10n.eventActionInsemination;
-    case 'MATING':
-      return l10n.eventActionMating;
-    case 'SYNCHRONIZATION':
-      return l10n.eventActionSynchronization;
-    case 'PREGNANCY_CONFIRMATION':
-      return l10n.eventActionPregnancy;
-    case 'PREGNANCY_NOT_CONFIRMED':
-      return l10n.eventActionPregnancyNotConfirmed;
-    case 'DRY_PERIOD':
-      return l10n.eventActionDryPeriod;
-    case 'HEAT_PERIOD':
-      return l10n.eventActionHeat;
-    case 'VACCINATION':
-      return l10n.eventActionVaccination;
-    case 'ILLNESS_TREATMENT':
-      return l10n.eventActionIllness;
-    case 'WEIGHING':
-      return l10n.eventActionWeighing;
-    case 'HOOF_TRIMMING':
-      return l10n.eventActionHoof;
-    case 'ANTIPARASITIC_TREATMENT':
-      return l10n.eventActionAntiparasitic;
-    case 'WEANING':
-      return l10n.eventActionWeaning;
-    case 'OTHER':
-      return l10n.eventActionDefault;
-    default:
-      // fallback чтобы не было "CALVING" если вдруг новый тип прилетит
-      return t.replaceAll('_', ' ');
   }
 }

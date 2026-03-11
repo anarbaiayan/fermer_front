@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// No description provided for @dialogOk.
   ///
   /// In ru, this message translates to:
-  /// **'РћРє'**
+  /// **'ОК'**
   String get dialogOk;
 
   /// No description provided for @dialogCancel.
@@ -2327,13 +2327,13 @@ abstract class AppLocalizations {
   /// No description provided for @bulkEventSuccessTitle.
   ///
   /// In ru, this message translates to:
-  /// **'Массовое событие\\nуспешно создано!'**
+  /// **'Массовое событие\nуспешно создано!'**
   String get bulkEventSuccessTitle;
 
   /// No description provided for @bulkEventSuccessMessage.
   ///
   /// In ru, this message translates to:
-  /// **'Все данные сохранены.\\nВы можете изменить их позже.'**
+  /// **'Все данные сохранены.\nВы можете изменить их позже.'**
   String get bulkEventSuccessMessage;
 
   /// No description provided for @addBulkEventTitle.
@@ -2372,6 +2372,102 @@ abstract class AppLocalizations {
   /// **'Обработка рогов'**
   String get eventActionHornProcessing;
 
+  /// No description provided for @eventTypeNameVaccination.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вакцинация'**
+  String get eventTypeNameVaccination;
+
+  /// No description provided for @eventTypeNameIllnessTreatment.
+  ///
+  /// In ru, this message translates to:
+  /// **'Болезнь/Лечение'**
+  String get eventTypeNameIllnessTreatment;
+
+  /// No description provided for @eventTypeNameWeighing.
+  ///
+  /// In ru, this message translates to:
+  /// **'Взвешивание'**
+  String get eventTypeNameWeighing;
+
+  /// No description provided for @eventTypeNameHoofTrimming.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расчистка копыт'**
+  String get eventTypeNameHoofTrimming;
+
+  /// No description provided for @eventTypeNameAntiparasiticTreatment.
+  ///
+  /// In ru, this message translates to:
+  /// **'Противопаразитное лечение'**
+  String get eventTypeNameAntiparasiticTreatment;
+
+  /// No description provided for @eventTypeNameOther.
+  ///
+  /// In ru, this message translates to:
+  /// **'Другое'**
+  String get eventTypeNameOther;
+
+  /// No description provided for @eventTypeNameCalving.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отёл'**
+  String get eventTypeNameCalving;
+
+  /// No description provided for @eventTypeNameInsemination.
+  ///
+  /// In ru, this message translates to:
+  /// **'Осеменение/ИО'**
+  String get eventTypeNameInsemination;
+
+  /// No description provided for @eventTypeNameDryPeriod.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сухостой'**
+  String get eventTypeNameDryPeriod;
+
+  /// No description provided for @eventTypeNameHeatPeriod.
+  ///
+  /// In ru, this message translates to:
+  /// **'Период охоты'**
+  String get eventTypeNameHeatPeriod;
+
+  /// No description provided for @eventTypeNameSynchronization.
+  ///
+  /// In ru, this message translates to:
+  /// **'Синхронизация'**
+  String get eventTypeNameSynchronization;
+
+  /// No description provided for @eventTypeNameMating.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покрытие'**
+  String get eventTypeNameMating;
+
+  /// No description provided for @eventTypeNamePregnancyConfirmation.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтверждение стельности'**
+  String get eventTypeNamePregnancyConfirmation;
+
+  /// No description provided for @eventTypeNamePregnancyNotConfirmed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Беременность не подтверждена'**
+  String get eventTypeNamePregnancyNotConfirmed;
+
+  /// No description provided for @eventTypeNameHornProcessing.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обработка рога'**
+  String get eventTypeNameHornProcessing;
+
+  /// No description provided for @eventTypeNameWeaning.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отъём'**
+  String get eventTypeNameWeaning;
+
   /// No description provided for @daysValue.
   ///
   /// In ru, this message translates to:
@@ -2381,7 +2477,7 @@ abstract class AppLocalizations {
   /// No description provided for @fieldEndDateOptional.
   ///
   /// In ru, this message translates to:
-  /// **'Дата окончания\\n(необязательно)'**
+  /// **'Дата окончания\n(необязательно)'**
   String get fieldEndDateOptional;
 
   /// No description provided for @fieldEventName.
@@ -2405,13 +2501,13 @@ abstract class AppLocalizations {
   /// No description provided for @animalCreatedSuccessTitle.
   ///
   /// In ru, this message translates to:
-  /// **'Карточка животного\\nуспешно создана!'**
+  /// **'Карточка животного\nуспешно создана!'**
   String get animalCreatedSuccessTitle;
 
   /// No description provided for @animalCreatedSuccessMessage.
   ///
   /// In ru, this message translates to:
-  /// **'Все данные сохранены.\\nВы можете изменить их позже в карточке животного.'**
+  /// **'Все данные сохранены.\nВы можете изменить их позже в карточке животного.'**
   String get animalCreatedSuccessMessage;
 
   /// No description provided for @animalAdditionalInfo.
@@ -2537,7 +2633,7 @@ abstract class AppLocalizations {
   /// No description provided for @animalUpdatedSuccessTitle.
   ///
   /// In ru, this message translates to:
-  /// **'Карточка животного\\nуспешно обновлена!'**
+  /// **'Карточка животного\nуспешно обновлена!'**
   String get animalUpdatedSuccessTitle;
 
   /// No description provided for @animalInfoEditTitle.
@@ -2567,7 +2663,7 @@ abstract class AppLocalizations {
   /// No description provided for @rationRegeneratedSuccess.
   ///
   /// In ru, this message translates to:
-  /// **'Рацион успешно\\nсгенерирован заново!'**
+  /// **'Рацион успешно\nсгенерирован заново!'**
   String get rationRegeneratedSuccess;
 
   /// No description provided for @rationUpdatedSaved.
@@ -2591,7 +2687,7 @@ abstract class AppLocalizations {
   /// No description provided for @milkTotalCurrent.
   ///
   /// In ru, this message translates to:
-  /// **'Всего молока\\n(текущая лактация)'**
+  /// **'Всего молока\n(текущая лактация)'**
   String get milkTotalCurrent;
 
   /// No description provided for @lastCalvingDate.
@@ -2603,7 +2699,7 @@ abstract class AppLocalizations {
   /// No description provided for @lastInseminationDate.
   ///
   /// In ru, this message translates to:
-  /// **'Последнее\\nосеменение'**
+  /// **'Последнее\nосеменение'**
   String get lastInseminationDate;
 
   /// No description provided for @pregnancyLabel.
@@ -2627,13 +2723,13 @@ abstract class AppLocalizations {
   /// No description provided for @firstInseminationDate.
   ///
   /// In ru, this message translates to:
-  /// **'Первое\\nосеменение'**
+  /// **'Первое\nосеменение'**
   String get firstInseminationDate;
 
   /// No description provided for @expectedCalvingDate.
   ///
   /// In ru, this message translates to:
-  /// **'Планируемая дата\\nотела'**
+  /// **'Планируемая дата\nотела'**
   String get expectedCalvingDate;
 
   /// No description provided for @bullPurposeLabel.

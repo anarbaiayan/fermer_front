@@ -126,15 +126,17 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
 
   Future<void> _pickEventDate() async {
     final l10n = context.l10n;
+    final now = DateTime.now();
     final picked = await showMaskedDatePicker(
       context: context,
-      initialDate: _eventDate ?? DateTime.now(),
-      firstDate: DateTime(DateTime.now().year - 20),
-      lastDate: DateTime(DateTime.now().year + 5),
+      initialDate: _eventDate ?? now,
+      firstDate: DateTime(now.year - 20),
+      lastDate: DateTime(now.year + 5),
       helpText: l10n.addEventPickDate,
     );
 
     if (picked == null) return;
+    if (!mounted) return;
 
     setState(() {
       _eventDate = picked;
@@ -157,6 +159,7 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
     );
 
     if (picked == null) return;
+    if (!mounted) return;
 
     onPicked(picked);
     ctrl.text = _dmy.format(picked);
@@ -352,44 +355,6 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
     }
   }
 
-  String _eventTypeLabel(String raw, AppLocalizations l10n) {
-    switch (raw) {
-      case 'CALVING':
-        return l10n.eventActionCalving;
-      case 'INSEMINATION':
-        return l10n.eventActionInsemination;
-      case 'MATING':
-        return l10n.eventActionMating;
-      case 'SYNCHRONIZATION':
-        return l10n.eventActionSynchronization;
-      case 'PREGNANCY_CONFIRMATION':
-        return l10n.eventActionPregnancy;
-      case 'PREGNANCY_NOT_CONFIRMED':
-        return l10n.eventActionPregnancyNotConfirmed;
-      case 'DRY_PERIOD':
-        return l10n.eventActionDryPeriod;
-      case 'HEAT_PERIOD':
-        return l10n.eventActionHeat;
-      case 'VACCINATION':
-        return l10n.eventActionVaccination;
-      case 'ILLNESS_TREATMENT':
-        return l10n.eventActionIllness;
-      case 'WEIGHING':
-        return l10n.eventActionWeighing;
-      case 'HOOF_TRIMMING':
-        return l10n.eventActionHoof;
-      case 'HORN_PROCESSING':
-        return l10n.eventActionHornProcessing;
-      case 'ANTIPARASITIC_TREATMENT':
-        return l10n.eventActionAntiparasitic;
-      case 'WEANING':
-        return l10n.eventActionWeaning;
-      case 'OTHER':
-      default:
-        return l10n.eventActionDefault;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -459,7 +424,7 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
                       ...parsed.map(
                         (t) => DropdownMenuItem(
                           value: t.apiValue,
-                          child: Text(_eventTypeLabel(t.apiValue, l10n)),
+                          child: Text(t.localizedLabel(l10n)),
                         ),
                       ),
                       ...fallbackRaw.map(

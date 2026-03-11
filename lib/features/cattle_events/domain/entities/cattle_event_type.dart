@@ -1,3 +1,5 @@
+import 'package:frontend/l10n/app_localizations.dart';
+
 enum CattleEventType {
   vaccination,
   illnessTreatment,
@@ -138,6 +140,67 @@ extension CattleEventTypeX on CattleEventType {
       case CattleEventType.systemAutoCalfCreation:
         return 'Создание телёнка';
     }
+  }
+
+  String localizedLabel(AppLocalizations l10n) {
+    switch (this) {
+      case CattleEventType.vaccination:
+        return l10n.eventTypeNameVaccination;
+      case CattleEventType.illnessTreatment:
+        return l10n.eventTypeNameIllnessTreatment;
+      case CattleEventType.weighing:
+        return l10n.eventTypeNameWeighing;
+      case CattleEventType.hoofTrimming:
+        return l10n.eventTypeNameHoofTrimming;
+      case CattleEventType.antiparasiticTreatment:
+        return l10n.eventTypeNameAntiparasiticTreatment;
+      case CattleEventType.other:
+        return l10n.eventTypeNameOther;
+
+      case CattleEventType.calving:
+        return l10n.eventTypeNameCalving;
+      case CattleEventType.insemination:
+        return l10n.eventTypeNameInsemination;
+      case CattleEventType.dryPeriod:
+        return l10n.eventTypeNameDryPeriod;
+      case CattleEventType.heatPeriod:
+        return l10n.eventTypeNameHeatPeriod;
+      case CattleEventType.synchronization:
+        return l10n.eventTypeNameSynchronization;
+      case CattleEventType.mating:
+        return l10n.eventTypeNameMating;
+
+      case CattleEventType.pregnancyConfirmation:
+        return l10n.eventTypeNamePregnancyConfirmation;
+      case CattleEventType.pregnancyNotConfirmed:
+        return l10n.eventTypeNamePregnancyNotConfirmed;
+
+      case CattleEventType.hornProcessing:
+        return l10n.eventTypeNameHornProcessing;
+      case CattleEventType.weaning:
+        return l10n.eventTypeNameWeaning;
+
+      case CattleEventType.systemExpectedCalving:
+      case CattleEventType.systemRecommendedDryPeriod:
+      case CattleEventType.systemVaccinationReminder:
+      case CattleEventType.systemWeighingReminder:
+      case CattleEventType.systemWeaningReminder:
+      case CattleEventType.systemStatusChange:
+      case CattleEventType.systemAutoCalfCreation:
+        return l10n.eventActionDefault;
+    }
+  }
+
+  static String labelFromApi(
+    String raw,
+    AppLocalizations l10n, {
+    bool unknownAsRaw = false,
+  }) {
+    final parsed = fromApi(raw);
+    if (parsed == null) {
+      return unknownAsRaw ? raw.replaceAll('_', ' ') : l10n.eventActionDefault;
+    }
+    return parsed.localizedLabel(l10n);
   }
 
   bool get isSystem => apiValue.startsWith('SYSTEM_');

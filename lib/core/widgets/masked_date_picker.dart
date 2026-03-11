@@ -3,6 +3,18 @@ import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/widgets/date_ddmmyyyy_formatter.dart';
 import 'package:intl/intl.dart';
 
+DateTime _normalizeDate(DateTime d) => DateTime(d.year, d.month, d.day);
+
+DateTime _clampDate(DateTime d, DateTime firstDate, DateTime lastDate) {
+  final x = _normalizeDate(d);
+  final a = _normalizeDate(firstDate);
+  final b = _normalizeDate(lastDate);
+
+  if (x.isBefore(a)) return a;
+  if (x.isAfter(b)) return b;
+  return x;
+}
+
 DateTime? tryParseDmy(String input) {
   if (input.length != 10) return null;
   final parts = input.split('.');
@@ -25,12 +37,21 @@ Future<DateTime?> showMaskedDatePicker({
   required DateTime lastDate,
   String? helpText,
 }) {
+  var safeFirst = _normalizeDate(firstDate);
+  var safeLast = _normalizeDate(lastDate);
+  if (safeLast.isBefore(safeFirst)) {
+    final tmp = safeFirst;
+    safeFirst = safeLast;
+    safeLast = tmp;
+  }
+  final safeInitial = _clampDate(initialDate, safeFirst, safeLast);
+
   return showDialog<DateTime?>(
     context: context,
     builder: (_) => _MaskedDatePickerDialog(
-      initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
+      initialDate: safeInitial,
+      firstDate: safeFirst,
+      lastDate: safeLast,
       helpText: helpText ?? context.l10n.dateSelect,
     ),
   );
@@ -68,13 +89,8 @@ class _MaskedDatePickerDialogState extends State<_MaskedDatePickerDialog> {
   @override
   void initState() {
     super.initState();
-    _selected = DateTime(
-      widget.initialDate.year,
-      widget.initialDate.month,
-      widget.initialDate.day,
-    );
+    _selected = _clampDate(widget.initialDate, widget.firstDate, widget.lastDate);
     _ctrl = TextEditingController(text: _dmy.format(_selected));
-    _validateText();
   }
 
   @override

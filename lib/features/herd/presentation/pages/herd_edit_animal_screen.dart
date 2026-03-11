@@ -46,6 +46,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
   DateTime? _birthDate;
   String? _categoryText;
   BreedType? _selectedBreedType;
+  bool _didInitLocalizedCategory = false;
 
   bool _isLoading = false;
 
@@ -64,8 +65,14 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
         : AnimalGender.female;
 
     _selectedBreedType = BreedTypeX.tryParse(c.details?.breedType);
+  }
 
-    _recalculateCategory();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didInitLocalizedCategory) return;
+    _didInitLocalizedCategory = true;
+    _recalculateCategory(l10n: context.l10n, notify: false);
   }
 
   @override
@@ -89,13 +96,13 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
       helpText: context.l10n.animalBirthDate,
     );
 
-    if (picked != null) {
-      setState(() {
-        _birthDate = picked;
-        _birthDateController.text = DateFormat('dd.MM.yyyy').format(picked);
-      });
-      _recalculateCategory();
-    }
+    if (picked == null) return;
+    if (!mounted) return;
+    setState(() {
+      _birthDate = picked;
+      _birthDateController.text = DateFormat('dd.MM.yyyy').format(picked);
+    });
+    _recalculateCategory();
   }
 
   void _onGenderChanged(AnimalGender gender) {
@@ -103,31 +110,35 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
     _recalculateCategory();
   }
 
-  void _recalculateCategory() {
-    final l10n = context.l10n;
+  void _recalculateCategory({AppLocalizations? l10n, bool notify = true}) {
+    final tr = l10n ?? context.l10n;
+    String? nextText;
     if (_birthDate == null) {
-      setState(() => _categoryText = null);
-      return;
-    }
+      nextText = null;
+    } else {
+      final result = AnimalCategoryResolver.resolve(
+        gender: _cattleGender,
+        dateOfBirth: _birthDate!,
+      );
 
-    final result = AnimalCategoryResolver.resolve(
-      gender: _cattleGender,
-      dateOfBirth: _birthDate!,
-    );
+      final category = result.category;
+      final ageMonths = result.ageInMonths;
 
-    final category = result.category;
-    final ageMonths = result.ageInMonths;
-
-    setState(() {
       if (category == null) {
-        _categoryText = l10n.animalCategoryUnknown;
+        nextText = tr.animalCategoryUnknown;
       } else {
-        _categoryText = l10n.animalCategoryWithAge(
-          _categoryLabel(category, l10n),
+        nextText = tr.animalCategoryWithAge(
+          _categoryLabel(category, tr),
           ageMonths,
         );
       }
-    });
+    }
+
+    if (notify) {
+      setState(() => _categoryText = nextText);
+    } else {
+      _categoryText = nextText;
+    }
   }
 
   String _categoryLabel(AnimalCategory category, AppLocalizations l10n) {
