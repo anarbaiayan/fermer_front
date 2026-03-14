@@ -503,7 +503,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get prodStateLactation => 'Лактация';
 
   @override
-  String get prodStateDry => 'Құрғақ кезең';
+  String get prodStateDry => 'Су алған кезең';
 
   @override
   String get prodStateFattening => 'Бордақылау';
@@ -666,7 +666,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get eventActionPregnancy => 'Буаздықты тексеру';
 
   @override
-  String get eventActionDryPeriod => 'Құрғақ кезеңге ауыстыру жоспарланған';
+  String get eventActionDryPeriod => 'Су алған кезеңге ауыстыру жоспарланған';
 
   @override
   String get eventActionWeighing => 'Өлшеу жүргізу ұсынылады';
@@ -1460,10 +1460,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get rationUpdatedSaved => 'Жаңартылған деректер сақталды.';
 
   @override
-  String get prodStateDryPhase1 => 'Құрғақ кезең (1-фаза)';
+  String get prodStateDryPhase1 => 'Су алған кезең (1-фаза)';
 
   @override
-  String get prodStateDryPhase2 => 'Құрғақ кезең (2-фаза)';
+  String get prodStateDryPhase2 => 'Су алған кезең (2-фаза)';
 
   @override
   String get milkTotalCurrent => 'Барлық сүт\n(ағымдағы лактация)';
@@ -1588,7 +1588,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get eventTaskPregnancyCheck => 'Буаздықты тексеру';
 
   @override
-  String get eventTaskDryPeriod => 'Құрғақ кезеңге ауыстыру жоспарланған';
+  String get eventTaskDryPeriod => 'Су алған кезеңге ауыстыру жоспарланған';
 
   @override
   String get eventTaskWeighing => 'Өлшеу жүргізу ұсынылады';
