@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SupportScreen extends StatelessWidget {
   const SupportScreen({super.key});
 
-  static const _phoneRaw = '87064078385';
+  static const _phoneRaw = '77064078385';
   static const _phoneDisplay = '+7 706 407 83 85';
 
   Future<void> _openWhatsApp(BuildContext context) async {

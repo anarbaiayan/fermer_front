@@ -42,6 +42,27 @@ class AppLocalizationsKk extends AppLocalizations {
   String get drawerSupport => 'Қолдау қызметі';
 
   @override
+  String get notificationsTitle => 'Хабарламалар';
+
+  @override
+  String get notificationsViewArchived => 'Мұрағатты көру';
+
+  @override
+  String get notificationsArchivedTitle => 'Хабарламалар мұрағаты';
+
+  @override
+  String get notificationsEmpty => 'Әзірге хабарламалар жоқ';
+
+  @override
+  String get notificationsArchivedEmpty => 'Хабарламалар мұрағаты бос';
+
+  @override
+  String get notificationsTagLabel => 'Сырға';
+
+  @override
+  String get notificationsArchiveAction => 'Мұрағатқа';
+
+  @override
   String get supportMessageTitle => 'Сұрағыңыз немесе ұсынысыңыз бар ма?';
 
   @override
@@ -132,7 +153,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get saving => 'Сақталуда...';
 
   @override
-  String get add => 'ТљРѕСЃСѓ';
+  String get add => 'Қосу';
 
   @override
   String get continueText => 'Жалғастыру';
@@ -335,7 +356,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get statusLactating => 'Сауылатын';
 
   @override
-  String get statusDryPeriod => 'Құрғақ кезең';
+  String get statusDryPeriod => 'Су алған кезең';
 
   @override
   String get statusOpen => 'Ұрықтанбаған';
@@ -464,7 +485,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get reproStatusPregnant => 'Буаз';
 
   @override
-  String get reproStatusDry => 'Құрғақ кезең';
+  String get reproStatusDry => 'Су алған кезең';
 
   @override
   String get reproStatusNearCalving => 'Жақында бұзаулайды';
@@ -861,7 +882,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get rationStatusActive => 'Белсенді';
 
   @override
-  String get rationStatusNeedsAttention => 'Назар аударуды талап етеді';
+  String get rationStatusNeedsAttention => 'Назар аудару керек';
 
   @override
   String get rationDeleteTitle => 'Рационды жою керек пе?';

@@ -164,6 +164,48 @@ abstract class AppLocalizations {
   /// **'Служба поддержки'**
   String get drawerSupport;
 
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уведомления'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsViewArchived.
+  ///
+  /// In ru, this message translates to:
+  /// **'Посмотреть архив'**
+  String get notificationsViewArchived;
+
+  /// No description provided for @notificationsArchivedTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Архив уведомлений'**
+  String get notificationsArchivedTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уведомлений пока нет'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsArchivedEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Архив уведомлений пуст'**
+  String get notificationsArchivedEmpty;
+
+  /// No description provided for @notificationsTagLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Бирка'**
+  String get notificationsTagLabel;
+
+  /// No description provided for @notificationsArchiveAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'В архив'**
+  String get notificationsArchiveAction;
+
   /// No description provided for @supportMessageTitle.
   ///
   /// In ru, this message translates to:

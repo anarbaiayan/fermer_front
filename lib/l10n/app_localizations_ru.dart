@@ -42,6 +42,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get drawerSupport => 'Служба поддержки';
 
   @override
+  String get notificationsTitle => 'Уведомления';
+
+  @override
+  String get notificationsViewArchived => 'Посмотреть архив';
+
+  @override
+  String get notificationsArchivedTitle => 'Архив уведомлений';
+
+  @override
+  String get notificationsEmpty => 'Уведомлений пока нет';
+
+  @override
+  String get notificationsArchivedEmpty => 'Архив уведомлений пуст';
+
+  @override
+  String get notificationsTagLabel => 'Бирка';
+
+  @override
+  String get notificationsArchiveAction => 'В архив';
+
+  @override
   String get supportMessageTitle => 'Есть вопрос или предложение?';
 
   @override

@@ -20,6 +20,8 @@ import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_scree
 import 'package:frontend/features/lactation/presentation/pages/add_bulk_lactation_screen.dart';
 import 'package:frontend/features/lactation/presentation/pages/add_lactation_screen.dart';
 import 'package:frontend/features/lactation/presentation/pages/lactation_screen.dart';
+import 'package:frontend/features/notifications/presentation/pages/archived_notifications_screen.dart';
+import 'package:frontend/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/profile_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/settings_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/support_screen.dart';
@@ -172,6 +174,14 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/support',
       builder: (context, state) => const SupportScreen(),
+    ),
+    GoRoute(
+      path: '/notifications',
+      builder: (context, state) => const NotificationsScreen(),
+    ),
+    GoRoute(
+      path: '/notifications/archived',
+      builder: (context, state) => const ArchivedNotificationsScreen(),
     ),
 
     GoRoute(path: '/events', builder: (context, state) => const EventsScreen()),
