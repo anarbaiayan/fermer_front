@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
+import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/network/token_repository.dart';
 import 'package:frontend/features/auth/domain/entities/auth_error_code.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import '../data/datasources/auth_api.dart';
 import '../data/models/login_request_dto.dart';
-import '../data/models/register_request_dto.dart';
 import '../data/models/refresh_request_dto.dart';
-import '../domain/entities/user.dart';
+import '../data/models/register_request_dto.dart';
+import '../data/models/restore_account_request_dto.dart';
 import '../domain/entities/tokens.dart';
+import '../domain/entities/user.dart';
 
 class AuthState {
   final bool isLoading;
@@ -27,7 +30,6 @@ class AuthState {
       isLoading: isLoading ?? this.isLoading,
       user: user ?? this.user,
       tokens: tokens ?? this.tokens,
-      // важно: если передаём error, он перезаписывает старый (в том числе в null)
       error: error,
     );
   }
@@ -39,29 +41,24 @@ class AuthController extends StateNotifier<AuthState> {
 
   AuthController(this._api, this._tokens) : super(const AuthState());
 
-  // ---------- helper для извлечения сообщения с бэка ----------
   String _mapDioError(DioException e, {required bool isLogin}) {
     final status = e.response?.statusCode;
     final data = e.response?.data;
 
     String? backendMessage;
     if (data is Map<String, dynamic>) {
-      // сначала message, если нет - error
       backendMessage = data['message'] as String?;
       backendMessage ??= data['error'] as String?;
     }
 
-    // если это именно наш кейс 409 с телефоном
     if (!isLogin && status == 409) {
       return AuthErrorCode.userExists;
     }
 
-    // если бэк прислал какое-то сообщение - покажем его
     if (backendMessage != null && backendMessage.isNotEmpty) {
       return backendMessage;
     }
 
-    // fallback по статусам
     if (isLogin) {
       if (status == 401 || status == 403) {
         return AuthErrorCode.invalidCredentials;
@@ -70,15 +67,14 @@ class AuthController extends StateNotifier<AuthState> {
         return AuthErrorCode.userNotFound;
       }
       return AuthErrorCode.loginFailed;
-    } else {
-      if (status == 400) {
-        return AuthErrorCode.registerInvalidData;
-      }
-      return AuthErrorCode.registerFailed;
     }
+
+    if (status == 400) {
+      return AuthErrorCode.registerInvalidData;
+    }
+    return AuthErrorCode.registerFailed;
   }
 
-  // ---------- ВХОД ----------
   Future<void> login({
     required String phoneNumber,
     required String password,
@@ -115,8 +111,10 @@ class AuthController extends StateNotifier<AuthState> {
         type: tokens.tokenType,
       );
     } on DioException catch (e) {
-      final message = _mapDioError(e, isLogin: true);
-      state = state.copyWith(isLoading: false, error: message);
+      state = state.copyWith(
+        isLoading: false,
+        error: _mapDioError(e, isLogin: true),
+      );
     } catch (_) {
       state = state.copyWith(
         isLoading: false,
@@ -125,7 +123,6 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  // ---------- РЕГИСТРАЦИЯ ----------
   Future<void> register({
     required String phoneNumber,
     required String password,
@@ -171,8 +168,10 @@ class AuthController extends StateNotifier<AuthState> {
         type: tokens.tokenType,
       );
     } on DioException catch (e) {
-      final message = _mapDioError(e, isLogin: false);
-      state = state.copyWith(isLoading: false, error: message);
+      state = state.copyWith(
+        isLoading: false,
+        error: _mapDioError(e, isLogin: false),
+      );
     } catch (_) {
       state = state.copyWith(
         isLoading: false,
@@ -181,7 +180,6 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  // ---------- REFRESH ----------
   Future<void> refreshToken() async {
     final access = await _tokens.accessToken;
     final refresh = await _tokens.refreshToken;
@@ -216,12 +214,59 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
+    } catch (_) {}
+  }
+
+  Future<void> deleteAccount() async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      await _api.deleteAccount();
+      await _tokens.clear();
+      state = const AuthState();
+    } on DioException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: extractApiMessage(
+          e,
+          fallback: AuthErrorCode.deleteAccountFailed,
+        ),
+      );
     } catch (_) {
-      // можно добавить: state = state.copyWith(error: 'Сессия истекла');
+      state = state.copyWith(
+        isLoading: false,
+        error: AuthErrorCode.deleteAccountFailed,
+      );
     }
   }
 
-  // ---------- LOGOUT ----------
+  Future<void> restoreAccount({
+    required String phoneNumber,
+    required String password,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      await _api.restoreAccount(
+        RestoreAccountRequestDto(phoneNumber: phoneNumber, password: password),
+      );
+      state = state.copyWith(isLoading: false, error: null);
+    } on DioException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: extractApiMessage(
+          e,
+          fallback: AuthErrorCode.restoreAccountFailed,
+        ),
+      );
+    } catch (_) {
+      state = state.copyWith(
+        isLoading: false,
+        error: AuthErrorCode.restoreAccountFailed,
+      );
+    }
+  }
+
   Future<void> logout() async {
     await _tokens.clear();
     state = const AuthState();

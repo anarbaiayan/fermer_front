@@ -7,6 +7,8 @@ abstract final class AuthErrorCode {
   static const registerFailed = 'auth.register_failed';
   static const loginNetwork = 'auth.login_network';
   static const registerNetwork = 'auth.register_network';
+  static const deleteAccountFailed = 'auth.delete_account_failed';
+  static const restoreAccountFailed = 'auth.restore_account_failed';
 
   static bool isKnown(String value) =>
       value == userExists ||
@@ -16,5 +18,7 @@ abstract final class AuthErrorCode {
       value == registerInvalidData ||
       value == registerFailed ||
       value == loginNetwork ||
-      value == registerNetwork;
+      value == registerNetwork ||
+      value == deleteAccountFailed ||
+      value == restoreAccountFailed;
 }

@@ -186,6 +186,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get loginForgotPassword => 'Забыли пароль?';
 
   @override
+  String get loginRestoreAccount => 'Восстановить аккаунт';
+
+  @override
   String get loginNoAccount => 'Ещё нет аккаунта?';
 
   @override
@@ -275,6 +278,29 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get forgotPasswordGoLogin => 'Войти в Fermer +';
+
+  @override
+  String get restoreAccountTitle => 'Восстановить аккаунт';
+
+  @override
+  String get restoreAccountSubtitle =>
+      'Введите номер телефона и пароль от удалённого аккаунта, чтобы снова получить доступ к профилю.';
+
+  @override
+  String get restoreAccountButton => 'Восстановить аккаунт';
+
+  @override
+  String get restoreAccountPasswordRequired => 'Введите пароль';
+
+  @override
+  String get restoreAccountSuccessTitle => 'Аккаунт успешно\nвосстановлен!';
+
+  @override
+  String get restoreAccountSuccessMessage =>
+      'Теперь вы можете снова войти в Fermer+.';
+
+  @override
+  String get restoreAccountGoLogin => 'Перейти ко входу';
 
   @override
   String get homeSummary => 'Сводка';
@@ -1246,6 +1272,14 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не удалось зарегистрироваться. Проверьте интернет';
 
   @override
+  String get authDeleteAccountFailed =>
+      'Не удалось удалить аккаунт. Попробуйте ещё раз.';
+
+  @override
+  String get authRestoreAccountFailed =>
+      'Не удалось восстановить аккаунт. Попробуйте ещё раз.';
+
+  @override
   String get registerSuccessTitle =>
       'Вы успешно\nзарегистрировались\nв Fermer+!';
 
@@ -1583,6 +1617,20 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileEmailAddHint => 'Добавьте адрес своей электронной почты';
+
+  @override
+  String get profileDeleteAccountButton => 'Удалить';
+
+  @override
+  String get profileDeleteAccountConfirm =>
+      'Удалить аккаунт?\nПозже вы сможете восстановить его на экране входа.';
+
+  @override
+  String get profileDeleteAccountSuccessTitle => 'Аккаунт удалён';
+
+  @override
+  String get profileDeleteAccountSuccessMessage =>
+      'Вы сможете восстановить его позже на экране входа.';
 
   @override
   String get eventTaskHeatPeriod => 'Проверка на охоту';

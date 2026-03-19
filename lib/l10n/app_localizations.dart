@@ -422,6 +422,12 @@ abstract class AppLocalizations {
   /// **'Забыли пароль?'**
   String get loginForgotPassword;
 
+  /// No description provided for @loginRestoreAccount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Восстановить аккаунт'**
+  String get loginRestoreAccount;
+
   /// No description provided for @loginNoAccount.
   ///
   /// In ru, this message translates to:
@@ -595,6 +601,48 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Войти в Fermer +'**
   String get forgotPasswordGoLogin;
+
+  /// No description provided for @restoreAccountTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Восстановить аккаунт'**
+  String get restoreAccountTitle;
+
+  /// No description provided for @restoreAccountSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите номер телефона и пароль от удалённого аккаунта, чтобы снова получить доступ к профилю.'**
+  String get restoreAccountSubtitle;
+
+  /// No description provided for @restoreAccountButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Восстановить аккаунт'**
+  String get restoreAccountButton;
+
+  /// No description provided for @restoreAccountPasswordRequired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите пароль'**
+  String get restoreAccountPasswordRequired;
+
+  /// No description provided for @restoreAccountSuccessTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аккаунт успешно\nвосстановлен!'**
+  String get restoreAccountSuccessTitle;
+
+  /// No description provided for @restoreAccountSuccessMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Теперь вы можете снова войти в Fermer+.'**
+  String get restoreAccountSuccessMessage;
+
+  /// No description provided for @restoreAccountGoLogin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Перейти ко входу'**
+  String get restoreAccountGoLogin;
 
   /// No description provided for @homeSummary.
   ///
@@ -2426,6 +2474,18 @@ abstract class AppLocalizations {
   /// **'Не удалось зарегистрироваться. Проверьте интернет'**
   String get authRegisterNetwork;
 
+  /// No description provided for @authDeleteAccountFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось удалить аккаунт. Попробуйте ещё раз.'**
+  String get authDeleteAccountFailed;
+
+  /// No description provided for @authRestoreAccountFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось восстановить аккаунт. Попробуйте ещё раз.'**
+  String get authRestoreAccountFailed;
+
   /// No description provided for @registerSuccessTitle.
   ///
   /// In ru, this message translates to:
@@ -3049,6 +3109,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Добавьте адрес своей электронной почты'**
   String get profileEmailAddHint;
+
+  /// No description provided for @profileDeleteAccountButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get profileDeleteAccountButton;
+
+  /// No description provided for @profileDeleteAccountConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить аккаунт?\nПозже вы сможете восстановить его на экране входа.'**
+  String get profileDeleteAccountConfirm;
+
+  /// No description provided for @profileDeleteAccountSuccessTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аккаунт удалён'**
+  String get profileDeleteAccountSuccessTitle;
+
+  /// No description provided for @profileDeleteAccountSuccessMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы сможете восстановить его позже на экране входа.'**
+  String get profileDeleteAccountSuccessMessage;
 
   /// No description provided for @eventTaskHeatPeriod.
   ///

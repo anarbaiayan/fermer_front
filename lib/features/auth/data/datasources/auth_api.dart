@@ -4,6 +4,7 @@ import '../models/login_request_dto.dart';
 import '../models/register_request_dto.dart';
 import '../models/refresh_request_dto.dart';
 import '../models/logout_request_dto.dart';
+import '../models/restore_account_request_dto.dart';
 import '../models/auth_response_dto.dart';
 
 class AuthApi {
@@ -43,6 +44,21 @@ class AuthApi {
       '/auth/logout',
       data: body.toJson(),
       options: Options(extra: {'skipAuth': true}),
+    );
+  }
+
+  Future<void> deleteAccount() async {
+    await _client.delete('/auth/delete-account');
+  }
+
+  Future<void> restoreAccount(RestoreAccountRequestDto body) async {
+    await _client.post(
+      '/auth/restore-account',
+      data: body.toJson(),
+      options: Options(
+        extra: {'skipAuth': true},
+        responseType: ResponseType.plain,
+      ),
     );
   }
 }

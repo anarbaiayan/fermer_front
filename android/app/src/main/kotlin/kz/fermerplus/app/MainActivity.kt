@@ -1,4 +1,4 @@
-package com.example.frontend
+package kz.fermerplus.app
 
 import io.flutter.embedding.android.FlutterActivity
 

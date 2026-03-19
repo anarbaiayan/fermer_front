@@ -186,6 +186,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get loginForgotPassword => 'Құпиясөзді ұмыттыңыз ба?';
 
   @override
+  String get loginRestoreAccount => 'Аккаунтты қалпына келтіру';
+
+  @override
   String get loginNoAccount => 'Әлі аккаунтыңыз жоқ па?';
 
   @override
@@ -275,6 +278,29 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get forgotPasswordGoLogin => 'Fermer+ жүйесіне кіру';
+
+  @override
+  String get restoreAccountTitle => 'Аккаунтты қалпына келтіру';
+
+  @override
+  String get restoreAccountSubtitle =>
+      'Профильге қайта кіру үшін өшірілген аккаунттың телефон нөмірі мен құпиясөзін енгізіңіз.';
+
+  @override
+  String get restoreAccountButton => 'Аккаунтты қалпына келтіру';
+
+  @override
+  String get restoreAccountPasswordRequired => 'Құпиясөзді енгізіңіз';
+
+  @override
+  String get restoreAccountSuccessTitle => 'Аккаунт сәтті\nқалпына келтірілді!';
+
+  @override
+  String get restoreAccountSuccessMessage =>
+      'Енді сіз Fermer+ жүйесіне қайта кіре аласыз.';
+
+  @override
+  String get restoreAccountGoLogin => 'Кіру бетіне өту';
 
   @override
   String get homeSummary => 'Шолу';
@@ -1245,6 +1271,14 @@ class AppLocalizationsKk extends AppLocalizations {
   String get authRegisterNetwork => 'Тіркелу сәтсіз. Интернетті тексеріңіз';
 
   @override
+  String get authDeleteAccountFailed =>
+      'Аккаунтты жою мүмкін болмады. Қайта көріңіз.';
+
+  @override
+  String get authRestoreAccountFailed =>
+      'Аккаунтты қалпына келтіру мүмкін болмады. Қайта көріңіз.';
+
+  @override
   String get registerSuccessTitle =>
       'Сіз Fermer+ жүйесінде\nсәтті тіркелдіңіз!';
 
@@ -1580,6 +1614,20 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get profileEmailAddHint => 'Электрондық поштаңызды қосыңыз';
+
+  @override
+  String get profileDeleteAccountButton => 'Жою';
+
+  @override
+  String get profileDeleteAccountConfirm =>
+      'Аккаунтты жою керек пе?\nКейін оны кіру экранында қайта қалпына келтіре аласыз.';
+
+  @override
+  String get profileDeleteAccountSuccessTitle => 'Аккаунт жойылды';
+
+  @override
+  String get profileDeleteAccountSuccessMessage =>
+      'Кейін оны кіру экранында қайта қалпына келтіре аласыз.';
 
   @override
   String get eventTaskHeatPeriod => 'Күйітті тексеру';

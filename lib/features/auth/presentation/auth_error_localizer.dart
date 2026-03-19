@@ -23,6 +23,10 @@ String localizeAuthError(BuildContext context, String rawError) {
       return l10n.authLoginNetwork;
     case AuthErrorCode.registerNetwork:
       return l10n.authRegisterNetwork;
+    case AuthErrorCode.deleteAccountFailed:
+      return l10n.authDeleteAccountFailed;
+    case AuthErrorCode.restoreAccountFailed:
+      return l10n.authRestoreAccountFailed;
     default:
       return rawError;
   }

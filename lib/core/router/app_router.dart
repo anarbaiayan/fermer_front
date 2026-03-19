@@ -3,6 +3,7 @@ import 'package:frontend/features/auth/presentation/forgot_password_code_screen.
 import 'package:frontend/features/auth/presentation/forgot_password_new_password_screen.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_phone_screen.dart';
 import 'package:frontend/features/auth/presentation/login_screen.dart';
+import 'package:frontend/features/auth/presentation/restore_account_screen.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_flow_models.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_password_screen.dart';
 import 'package:frontend/features/auth/presentation/register_screen.dart';
@@ -139,6 +140,10 @@ final GoRouter appRouter = GoRouter(
         // fallback если вдруг пришли без extra
         return const ForgotPasswordNewPasswordScreen();
       },
+    ),
+    GoRoute(
+      path: '/restore-account',
+      builder: (context, state) => const RestoreAccountScreen(),
     ),
 
     GoRoute(

@@ -4,14 +4,70 @@ import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_button.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
+import 'package:frontend/core/widgets/app_success_dialog.dart';
+import 'package:frontend/core/widgets/confirm_dialog.dart';
+import 'package:frontend/features/auth/application/auth_providers.dart';
+import 'package:frontend/features/auth/presentation/auth_error_localizer.dart';
+import 'package:frontend/features/cattle_events/application/planned_events_providers.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_small_action_card.dart';
+import 'package:frontend/features/notifications/application/notifications_providers.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
+  Future<void> _handleDeleteAccount(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+
+    final ok = await showConfirmDialog(
+      context: context,
+      title: l10n.profileDeleteAccountConfirm,
+      iconName: 'power_off',
+      iconColor: AppColors.primary1,
+      confirmText: l10n.profileDeleteAccountButton,
+      cancelText: l10n.dialogCancel,
+    );
+
+    if (!ok || !context.mounted) return;
+
+    await ref.read(authControllerProvider.notifier).deleteAccount();
+
+    if (!context.mounted) return;
+
+    final state = ref.read(authControllerProvider);
+    if (state.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(localizeAuthError(context, state.error!))),
+      );
+      return;
+    }
+
+    ref.invalidate(plannedEventsProvider('PENDING'));
+    ref.invalidate(plannedEventsProvider('COMPLETED'));
+    ref.invalidate(cattleListProvider);
+    ref.invalidate(cattleStatisticsProvider);
+    ref.invalidate(unreadNotificationsCountProvider);
+    ref.invalidate(notificationsFeedProvider(false));
+    ref.invalidate(notificationsFeedProvider(true));
+
+    await showAppSuccessDialog(
+      context,
+      title: l10n.profileDeleteAccountSuccessTitle,
+      message: l10n.profileDeleteAccountSuccessMessage,
+      buttonText: l10n.restoreAccountGoLogin,
+      iconAsset: 'assets/icons/user-success.svg',
+      iconWidth: 111,
+      iconHeight: 111,
+    );
+
+    if (!context.mounted) return;
+    context.go('/login');
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final farmName = l10n.farmName;
     const phone = '+7 709 851 31 21';
@@ -25,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
         child: ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
           child: Container(
-            color: const Color(0xFFF7F5EF), // как в дизайне
+            color: const Color(0xFFF7F5EF),
             child: Column(
               children: [
                 Expanded(
@@ -48,7 +104,7 @@ class ProfileScreen extends StatelessWidget {
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,
                                   color: AppColors.primary3,
@@ -59,7 +115,6 @@ class ProfileScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-
                         Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -88,7 +143,7 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                   gradient: LinearGradient(
                                     colors: [
-                                      headerColor.withOpacity(0.35),
+                                      headerColor.withValues(alpha: 0.35),
                                       Colors.white,
                                     ],
                                     begin: Alignment.topCenter,
@@ -96,12 +151,10 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-
                               const Divider(
                                 height: 0.5,
                                 color: AppColors.additional2,
                               ),
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
@@ -132,7 +185,7 @@ class ProfileScreen extends StatelessWidget {
                                       Expanded(
                                         child: Text(
                                           l10n.animalMainInfo,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w700,
                                             color: AppColors.primary3,
@@ -148,7 +201,6 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
@@ -168,9 +220,7 @@ class ProfileScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-
                               const SizedBox(height: 12),
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
@@ -193,9 +243,8 @@ class ProfileScreen extends StatelessWidget {
                                     Expanded(
                                       child: SmallActionCard(
                                         title: l10n.profileEmailTitle,
-                                        subtitle: email == null
-                                            ? l10n.profileEmailAddHint
-                                            : email,
+                                        subtitle:
+                                            email ?? l10n.profileEmailAddHint,
                                         icon: AppIcons.svg('email', size: 26),
                                         onTap: () {},
                                       ),
@@ -203,9 +252,7 @@ class ProfileScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-
                               const SizedBox(height: 12),
-
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(
                                   12,
@@ -227,12 +274,11 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                       backgroundColor: Colors.transparent,
                                     ),
-                                    onPressed: () {
-                                      // TODO: logout flow (позже подключим authController)
-                                    },
+                                    onPressed: () =>
+                                        _handleDeleteAccount(context, ref),
                                     child: Text(
-                                      l10n.drawerLogout,
-                                      style: TextStyle(
+                                      l10n.profileDeleteAccountButton,
+                                      style: const TextStyle(
                                         color: Color(0xFFD74B4B),
                                         fontWeight: FontWeight.w700,
                                         fontSize: 15,
@@ -248,7 +294,6 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   child: FermerPlusBigButton(

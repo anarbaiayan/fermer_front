@@ -16,6 +16,7 @@ import 'widgets/login_password_field.dart';
 import 'widgets/login_divider.dart';
 import 'widgets/login_register_block.dart';
 import 'widgets/login_forgot_password_button.dart';
+import 'widgets/login_restore_account_button.dart';
 
 class LoginScreen extends HookConsumerWidget {
   const LoginScreen({super.key});
@@ -124,7 +125,11 @@ class LoginScreen extends HookConsumerWidget {
 
                 const LoginForgotPasswordButton(),
 
-                const SizedBox(height: 46),
+                const SizedBox(height: 6),
+
+                const LoginRestoreAccountButton(),
+
+                const SizedBox(height: 40),
 
                 AppPrimaryButton(
                   text: l10n.loginButton,
