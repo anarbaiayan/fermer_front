@@ -1664,4 +1664,143 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get eventTaskDefault => 'Оқиғаны орындау уақыты келді';
+
+  @override
+  String get drawerPharmacy => 'Дәріхана';
+
+  @override
+  String get pharmacyTitle => 'Дәріхана';
+
+  @override
+  String get pharmacySearchHint => 'Препаратты іздеу';
+
+  @override
+  String get pharmacyFilterAllProducers => 'Барлық өндірушілер';
+
+  @override
+  String get pharmacyFilterAllActions => 'Барлық әрекеттер';
+
+  @override
+  String get pharmacyFilterAll => 'Барлығы';
+
+  @override
+  String get pharmacyMyRequests => 'Менің өтінімдерім';
+
+  @override
+  String get pharmacyRetry => 'Қайталау';
+
+  @override
+  String get pharmacyEmptyCatalogTitle => 'Ештеңе табылмады';
+
+  @override
+  String get pharmacyEmptyCatalogSubtitle =>
+      'Сұранысты өзгертіп немесе сүзгілерді тазалап көріңіз';
+
+  @override
+  String pharmacyOffers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ұсыныс',
+      one: '$count ұсыныс',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pharmacyPriceFrom(String price) {
+    return '$price бастап';
+  }
+
+  @override
+  String get pharmacyActiveIngredient => 'Әсер етуші зат';
+
+  @override
+  String get pharmacyPricesByProducer => 'Өндірушілер бағасы';
+
+  @override
+  String get pharmacyBestPrice => 'Тиімді';
+
+  @override
+  String get pharmacyQuantity => 'Саны';
+
+  @override
+  String get pharmacyTotal => 'Барлығы';
+
+  @override
+  String get pharmacyOrder => 'Тапсырыс беру';
+
+  @override
+  String get pharmacyNoOffers => 'Қолжетімді ұсыныстар жоқ';
+
+  @override
+  String get pharmacyOrderTitle => 'Тапсырысты рәсімдеу';
+
+  @override
+  String get pharmacyOrderAddressLabel => 'Жеткізу мекенжайы / шаруашылық';
+
+  @override
+  String get pharmacyOrderAddressHint => 'Мысалы: Ақмола обл., «Дала» ШҚ';
+
+  @override
+  String get pharmacyOrderPhoneLabel => 'Байланыс телефоны';
+
+  @override
+  String get pharmacyOrderPhoneHint => '+7 (___) ___-__-__';
+
+  @override
+  String get pharmacyOrderConfirm => 'Тапсырысты растау';
+
+  @override
+  String get pharmacyOrderSuccessTitle => 'Тапсырыс жіберілді!';
+
+  @override
+  String get pharmacyOrderSuccessMessage =>
+      'Менеджер растау және төлем үшін сізбен хабарласады';
+
+  @override
+  String get pharmacyOrderBackToCatalog => 'Каталогқа оралу';
+
+  @override
+  String get pharmacyRequestsTitle => 'Менің өтінімдерім';
+
+  @override
+  String get pharmacyRequestsEmptyTitle => 'Сізде әзірге өтінімдер жоқ';
+
+  @override
+  String get pharmacyRequestsEmptySubtitle =>
+      'Дәріхана каталогынан өтінім рәсімдеңіз';
+
+  @override
+  String get pharmacyRequestComment => 'Пікір';
+
+  @override
+  String get pharmacyRequestPhone => 'Телефон';
+
+  @override
+  String pharmacyQuantityShort(int value) {
+    return '$value дана';
+  }
+
+  @override
+  String get pharmacyStatusNew => 'Жаңа';
+
+  @override
+  String get pharmacyStatusInProgress => 'Өңделуде';
+
+  @override
+  String get pharmacyStatusDone => 'Орындалды';
+
+  @override
+  String get pharmacyStatusCancelled => 'Бас тартылды';
+
+  @override
+  String get pharmacyStatusUnknown => '—';
+
+  @override
+  String get pharmacyHomeCardTitle => 'Дәріхана';
+
+  @override
+  String get pharmacyHomeCardSubtitle =>
+      'Ветпрепараттар мен тапсырыс өтінімдері';
 }

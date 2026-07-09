@@ -7,6 +7,7 @@ import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
 import 'package:frontend/features/home/presentation/widgets/briefSection/search_field.dart';
 import 'package:frontend/features/home/presentation/widgets/quantitySection/summary_quantity_section.dart';
+import 'package:frontend/features/pharmacy/presentation/widgets/pharmacy_home_card.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -66,6 +67,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               children: [
                 const SizedBox(height: 16),
                 const SearchField(),
+                const SizedBox(height: 16),
+                const PharmacyHomeCard(),
                 const SizedBox(height: 22),
                 Text(
                   l10n.homeSummary,

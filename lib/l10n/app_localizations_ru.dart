@@ -1667,4 +1667,145 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get eventTaskDefault => 'Пришло время выполнить событие';
+
+  @override
+  String get drawerPharmacy => 'Аптека';
+
+  @override
+  String get pharmacyTitle => 'Аптека';
+
+  @override
+  String get pharmacySearchHint => 'Поиск препарата';
+
+  @override
+  String get pharmacyFilterAllProducers => 'Все производители';
+
+  @override
+  String get pharmacyFilterAllActions => 'Все действия';
+
+  @override
+  String get pharmacyFilterAll => 'Все';
+
+  @override
+  String get pharmacyMyRequests => 'Мои заявки';
+
+  @override
+  String get pharmacyRetry => 'Повторить';
+
+  @override
+  String get pharmacyEmptyCatalogTitle => 'Ничего не найдено';
+
+  @override
+  String get pharmacyEmptyCatalogSubtitle =>
+      'Попробуйте изменить запрос или сбросить фильтры';
+
+  @override
+  String pharmacyOffers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count предложений',
+      many: '$count предложений',
+      few: '$count предложения',
+      one: '$count предложение',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pharmacyPriceFrom(String price) {
+    return 'от $price';
+  }
+
+  @override
+  String get pharmacyActiveIngredient => 'Действующее вещество';
+
+  @override
+  String get pharmacyPricesByProducer => 'Цены производителей';
+
+  @override
+  String get pharmacyBestPrice => 'Выгодно';
+
+  @override
+  String get pharmacyQuantity => 'Количество';
+
+  @override
+  String get pharmacyTotal => 'Итого';
+
+  @override
+  String get pharmacyOrder => 'Заказать';
+
+  @override
+  String get pharmacyNoOffers => 'Нет доступных предложений';
+
+  @override
+  String get pharmacyOrderTitle => 'Оформление заказа';
+
+  @override
+  String get pharmacyOrderAddressLabel => 'Адрес доставки / хозяйство';
+
+  @override
+  String get pharmacyOrderAddressHint =>
+      'Например: Акмолинская обл., КХ «Дала»';
+
+  @override
+  String get pharmacyOrderPhoneLabel => 'Телефон для связи';
+
+  @override
+  String get pharmacyOrderPhoneHint => '+7 (___) ___-__-__';
+
+  @override
+  String get pharmacyOrderConfirm => 'Подтвердить заказ';
+
+  @override
+  String get pharmacyOrderSuccessTitle => 'Заказ отправлен!';
+
+  @override
+  String get pharmacyOrderSuccessMessage =>
+      'Менеджер свяжется с вами для подтверждения и оплаты';
+
+  @override
+  String get pharmacyOrderBackToCatalog => 'Вернуться в каталог';
+
+  @override
+  String get pharmacyRequestsTitle => 'Мои заявки';
+
+  @override
+  String get pharmacyRequestsEmptyTitle => 'У вас пока нет заявок';
+
+  @override
+  String get pharmacyRequestsEmptySubtitle =>
+      'Оформите заявку в каталоге аптеки';
+
+  @override
+  String get pharmacyRequestComment => 'Комментарий';
+
+  @override
+  String get pharmacyRequestPhone => 'Телефон';
+
+  @override
+  String pharmacyQuantityShort(int value) {
+    return '$value шт.';
+  }
+
+  @override
+  String get pharmacyStatusNew => 'Новая';
+
+  @override
+  String get pharmacyStatusInProgress => 'В обработке';
+
+  @override
+  String get pharmacyStatusDone => 'Выполнена';
+
+  @override
+  String get pharmacyStatusCancelled => 'Отменена';
+
+  @override
+  String get pharmacyStatusUnknown => '—';
+
+  @override
+  String get pharmacyHomeCardTitle => 'Аптека';
+
+  @override
+  String get pharmacyHomeCardSubtitle => 'Ветпрепараты и заявки на заказ';
 }

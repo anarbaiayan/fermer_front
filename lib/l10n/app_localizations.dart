@@ -3205,6 +3205,252 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Пришло время выполнить событие'**
   String get eventTaskDefault;
+
+  /// No description provided for @drawerPharmacy.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аптека'**
+  String get drawerPharmacy;
+
+  /// No description provided for @pharmacyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аптека'**
+  String get pharmacyTitle;
+
+  /// No description provided for @pharmacySearchHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск препарата'**
+  String get pharmacySearchHint;
+
+  /// No description provided for @pharmacyFilterAllProducers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все производители'**
+  String get pharmacyFilterAllProducers;
+
+  /// No description provided for @pharmacyFilterAllActions.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все действия'**
+  String get pharmacyFilterAllActions;
+
+  /// No description provided for @pharmacyFilterAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get pharmacyFilterAll;
+
+  /// No description provided for @pharmacyMyRequests.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мои заявки'**
+  String get pharmacyMyRequests;
+
+  /// No description provided for @pharmacyRetry.
+  ///
+  /// In ru, this message translates to:
+  /// **'Повторить'**
+  String get pharmacyRetry;
+
+  /// No description provided for @pharmacyEmptyCatalogTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ничего не найдено'**
+  String get pharmacyEmptyCatalogTitle;
+
+  /// No description provided for @pharmacyEmptyCatalogSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Попробуйте изменить запрос или сбросить фильтры'**
+  String get pharmacyEmptyCatalogSubtitle;
+
+  /// No description provided for @pharmacyOffers.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count, plural, one{{count} предложение} few{{count} предложения} many{{count} предложений} other{{count} предложений}}'**
+  String pharmacyOffers(int count);
+
+  /// No description provided for @pharmacyPriceFrom.
+  ///
+  /// In ru, this message translates to:
+  /// **'от {price}'**
+  String pharmacyPriceFrom(String price);
+
+  /// No description provided for @pharmacyActiveIngredient.
+  ///
+  /// In ru, this message translates to:
+  /// **'Действующее вещество'**
+  String get pharmacyActiveIngredient;
+
+  /// No description provided for @pharmacyPricesByProducer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цены производителей'**
+  String get pharmacyPricesByProducer;
+
+  /// No description provided for @pharmacyBestPrice.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выгодно'**
+  String get pharmacyBestPrice;
+
+  /// No description provided for @pharmacyQuantity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество'**
+  String get pharmacyQuantity;
+
+  /// No description provided for @pharmacyTotal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Итого'**
+  String get pharmacyTotal;
+
+  /// No description provided for @pharmacyOrder.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заказать'**
+  String get pharmacyOrder;
+
+  /// No description provided for @pharmacyNoOffers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет доступных предложений'**
+  String get pharmacyNoOffers;
+
+  /// No description provided for @pharmacyOrderTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оформление заказа'**
+  String get pharmacyOrderTitle;
+
+  /// No description provided for @pharmacyOrderAddressLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Адрес доставки / хозяйство'**
+  String get pharmacyOrderAddressLabel;
+
+  /// No description provided for @pharmacyOrderAddressHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например: Акмолинская обл., КХ «Дала»'**
+  String get pharmacyOrderAddressHint;
+
+  /// No description provided for @pharmacyOrderPhoneLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Телефон для связи'**
+  String get pharmacyOrderPhoneLabel;
+
+  /// No description provided for @pharmacyOrderPhoneHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'+7 (___) ___-__-__'**
+  String get pharmacyOrderPhoneHint;
+
+  /// No description provided for @pharmacyOrderConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтвердить заказ'**
+  String get pharmacyOrderConfirm;
+
+  /// No description provided for @pharmacyOrderSuccessTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заказ отправлен!'**
+  String get pharmacyOrderSuccessTitle;
+
+  /// No description provided for @pharmacyOrderSuccessMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Менеджер свяжется с вами для подтверждения и оплаты'**
+  String get pharmacyOrderSuccessMessage;
+
+  /// No description provided for @pharmacyOrderBackToCatalog.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вернуться в каталог'**
+  String get pharmacyOrderBackToCatalog;
+
+  /// No description provided for @pharmacyRequestsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Мои заявки'**
+  String get pharmacyRequestsTitle;
+
+  /// No description provided for @pharmacyRequestsEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'У вас пока нет заявок'**
+  String get pharmacyRequestsEmptyTitle;
+
+  /// No description provided for @pharmacyRequestsEmptySubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оформите заявку в каталоге аптеки'**
+  String get pharmacyRequestsEmptySubtitle;
+
+  /// No description provided for @pharmacyRequestComment.
+  ///
+  /// In ru, this message translates to:
+  /// **'Комментарий'**
+  String get pharmacyRequestComment;
+
+  /// No description provided for @pharmacyRequestPhone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Телефон'**
+  String get pharmacyRequestPhone;
+
+  /// No description provided for @pharmacyQuantityShort.
+  ///
+  /// In ru, this message translates to:
+  /// **'{value} шт.'**
+  String pharmacyQuantityShort(int value);
+
+  /// No description provided for @pharmacyStatusNew.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новая'**
+  String get pharmacyStatusNew;
+
+  /// No description provided for @pharmacyStatusInProgress.
+  ///
+  /// In ru, this message translates to:
+  /// **'В обработке'**
+  String get pharmacyStatusInProgress;
+
+  /// No description provided for @pharmacyStatusDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выполнена'**
+  String get pharmacyStatusDone;
+
+  /// No description provided for @pharmacyStatusCancelled.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отменена'**
+  String get pharmacyStatusCancelled;
+
+  /// No description provided for @pharmacyStatusUnknown.
+  ///
+  /// In ru, this message translates to:
+  /// **'—'**
+  String get pharmacyStatusUnknown;
+
+  /// No description provided for @pharmacyHomeCardTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аптека'**
+  String get pharmacyHomeCardTitle;
+
+  /// No description provided for @pharmacyHomeCardSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ветпрепараты и заявки на заказ'**
+  String get pharmacyHomeCardSubtitle;
 }
 
 class _AppLocalizationsDelegate

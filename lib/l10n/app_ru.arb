@@ -762,5 +762,67 @@
         "placeholders": {
             "value": {}
         }
-    }
+    },
+    "drawerPharmacy": "Аптека",
+    "pharmacyTitle": "Аптека",
+    "pharmacySearchHint": "Поиск препарата",
+    "pharmacyFilterAllProducers": "Все производители",
+    "pharmacyFilterAllActions": "Все действия",
+    "pharmacyFilterAll": "Все",
+    "pharmacyMyRequests": "Мои заявки",
+    "pharmacyRetry": "Повторить",
+    "pharmacyEmptyCatalogTitle": "Ничего не найдено",
+    "pharmacyEmptyCatalogSubtitle": "Попробуйте изменить запрос или сбросить фильтры",
+    "pharmacyOffers": "{count, plural, one{{count} предложение} few{{count} предложения} many{{count} предложений} other{{count} предложений}}",
+    "@pharmacyOffers": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "pharmacyPriceFrom": "от {price}",
+    "@pharmacyPriceFrom": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "pharmacyActiveIngredient": "Действующее вещество",
+    "pharmacyPricesByProducer": "Цены производителей",
+    "pharmacyBestPrice": "Выгодно",
+    "pharmacyQuantity": "Количество",
+    "pharmacyTotal": "Итого",
+    "pharmacyOrder": "Заказать",
+    "pharmacyNoOffers": "Нет доступных предложений",
+    "pharmacyOrderTitle": "Оформление заказа",
+    "pharmacyOrderAddressLabel": "Адрес доставки / хозяйство",
+    "pharmacyOrderAddressHint": "Например: Акмолинская обл., КХ «Дала»",
+    "pharmacyOrderPhoneLabel": "Телефон для связи",
+    "pharmacyOrderPhoneHint": "+7 (___) ___-__-__",
+    "pharmacyOrderConfirm": "Подтвердить заказ",
+    "pharmacyOrderSuccessTitle": "Заказ отправлен!",
+    "pharmacyOrderSuccessMessage": "Менеджер свяжется с вами для подтверждения и оплаты",
+    "pharmacyOrderBackToCatalog": "Вернуться в каталог",
+    "pharmacyRequestsTitle": "Мои заявки",
+    "pharmacyRequestsEmptyTitle": "У вас пока нет заявок",
+    "pharmacyRequestsEmptySubtitle": "Оформите заявку в каталоге аптеки",
+    "pharmacyRequestComment": "Комментарий",
+    "pharmacyRequestPhone": "Телефон",
+    "pharmacyQuantityShort": "{value} шт.",
+    "@pharmacyQuantityShort": {
+        "placeholders": {
+            "value": {
+                "type": "int"
+            }
+        }
+    },
+    "pharmacyStatusNew": "Новая",
+    "pharmacyStatusInProgress": "В обработке",
+    "pharmacyStatusDone": "Выполнена",
+    "pharmacyStatusCancelled": "Отменена",
+    "pharmacyStatusUnknown": "—",
+    "pharmacyHomeCardTitle": "Аптека",
+    "pharmacyHomeCardSubtitle": "Ветпрепараты и заявки на заказ"
 }

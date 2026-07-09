@@ -23,6 +23,10 @@ import 'package:frontend/features/lactation/presentation/pages/add_lactation_scr
 import 'package:frontend/features/lactation/presentation/pages/lactation_screen.dart';
 import 'package:frontend/features/notifications/presentation/pages/archived_notifications_screen.dart';
 import 'package:frontend/features/notifications/presentation/pages/notifications_screen.dart';
+import 'package:frontend/features/pharmacy/data/models/drug_group_dto.dart';
+import 'package:frontend/features/pharmacy/presentation/pages/drug_group_details_screen.dart';
+import 'package:frontend/features/pharmacy/presentation/pages/pharmacy_requests_screen.dart';
+import 'package:frontend/features/pharmacy/presentation/pages/pharmacy_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/profile_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/settings_screen.dart';
 import 'package:frontend/features/profile/presentation/pages/support_screen.dart';
@@ -229,6 +233,22 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final type = state.pathParameters['type'];
         return UserRationsStocksScreen(filterType: type);
+      },
+    ),
+
+    GoRoute(
+      path: '/pharmacy',
+      builder: (context, state) => const PharmacyScreen(),
+    ),
+    GoRoute(
+      path: '/pharmacy/requests',
+      builder: (context, state) => const PharmacyRequestsScreen(),
+    ),
+    GoRoute(
+      path: '/pharmacy/group',
+      builder: (context, state) {
+        final group = state.extra as DrugGroupDto;
+        return DrugGroupDetailsScreen(group: group);
       },
     ),
   ],
