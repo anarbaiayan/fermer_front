@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:frontend/core/localization/locale_controller.dart';
 import 'package:frontend/core/router/app_router.dart';
@@ -7,6 +8,19 @@ import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/auth/session_events.dart';
 import 'package:frontend/l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+/// Стиль системных баров по умолчанию (edge-to-edge): прозрачные бары с
+/// тёмными иконками для светлых экранов без app bar. Экраны с зелёным app bar
+/// переопределяют это через `appBarTheme.systemOverlayStyle`.
+const _defaultSystemOverlay = SystemUiOverlayStyle(
+  statusBarColor: Colors.transparent,
+  statusBarIconBrightness: Brightness.dark,
+  statusBarBrightness: Brightness.light,
+  systemNavigationBarColor: Colors.transparent,
+  systemNavigationBarDividerColor: Colors.transparent,
+  systemNavigationBarIconBrightness: Brightness.dark,
+  systemNavigationBarContrastEnforced: false,
+);
 
 class FermerPlusApp extends ConsumerWidget {
   const FermerPlusApp({super.key});
@@ -42,6 +56,14 @@ class FermerPlusApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
       routerConfig: appRouter,
+      builder: (context, child) {
+        // Тёмные иконки баров по умолчанию на всех светлых экранах без app bar
+        // (login/register/splash и т.п.). Зелёный app bar сам ставит светлые.
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: _defaultSystemOverlay,
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

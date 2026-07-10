@@ -660,8 +660,9 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
                                             ? () {}
                                             : () {
                                                 setState(() {
-                                                  if (_treatmentDays > 1)
+                                                  if (_treatmentDays > 1) {
                                                     _treatmentDays--;
+                                                  }
                                                   _syncTreatmentDaysCtrl();
                                                 });
                                               },

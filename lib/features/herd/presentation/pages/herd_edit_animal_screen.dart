@@ -393,7 +393,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
                         ),
                         const SizedBox(height: 8),
                         DropdownButtonFormField<BreedType>(
-                          value: _selectedBreedType,
+                          initialValue: _selectedBreedType,
                           decoration: InputDecoration(
                             hintText: l10n.breedTypeHint,
                             hintStyle: const TextStyle(

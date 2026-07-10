@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
@@ -15,6 +16,17 @@ import 'package:frontend/features/pharmacy/presentation/pharmacy_format.dart';
 import 'package:frontend/features/pharmacy/presentation/widgets/drug_placeholder_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+/// Тёмные иконки статус-бара на светлом экране без app bar (edge-to-edge).
+const _lightScreenOverlay = SystemUiOverlayStyle(
+  statusBarColor: Colors.transparent,
+  statusBarIconBrightness: Brightness.dark,
+  statusBarBrightness: Brightness.light,
+  systemNavigationBarColor: Colors.transparent,
+  systemNavigationBarDividerColor: Colors.transparent,
+  systemNavigationBarIconBrightness: Brightness.dark,
+  systemNavigationBarContrastEnforced: false,
+);
 
 class DrugGroupDetailsScreen extends ConsumerStatefulWidget {
   final DrugGroupDto group;
@@ -42,98 +54,101 @@ class _DrugGroupDetailsScreenState
     final offer = _offer;
     final total = offer?.price == null ? null : offer!.price! * _quantity;
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _Header(title: group.title, onBack: () => context.pop()),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-                children: [
-                  DrugPlaceholderImage(
-                    imageUrl: offer?.imageUrl,
-                    height: 210,
-                    borderRadius: 16,
-                    iconSize: 76,
-                  ),
-                  const SizedBox(height: 16),
-                  _TagsRow(group: group),
-                  const SizedBox(height: 10),
-                  Text(
-                    group.title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary3,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: _lightScreenOverlay,
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: Column(
+            children: [
+              _Header(title: group.title, onBack: () => context.pop()),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                  children: [
+                    DrugPlaceholderImage(
+                      imageUrl: offer?.imageUrl,
+                      height: 210,
+                      borderRadius: 16,
+                      iconSize: 76,
                     ),
-                  ),
-                  if (offer != null && offer.name != group.title) ...[
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 16),
+                    _TagsRow(group: group),
+                    const SizedBox(height: 10),
                     Text(
-                      offer.name,
+                      group.title,
                       style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.additional3,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary3,
                       ),
                     ),
-                  ],
-                  const SizedBox(height: 22),
-                  if (group.offers.isEmpty)
-                    Text(
-                      l10n.pharmacyNoOffers,
-                      style: const TextStyle(color: AppColors.additional3),
-                    )
-                  else ...[
-                    Text(
-                      l10n.pharmacyPricesByProducer.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        letterSpacing: 0.6,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.additional3,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    for (var i = 0; i < group.offers.length; i++)
-                      _OfferRow(
-                        offer: group.offers[i],
-                        selected: i == _selectedOffer,
-                        isCheapest: i == 0 && group.hasComparison,
-                        selectable: group.offers.length > 1,
-                        onTap: () => setState(() => _selectedOffer = i),
-                      ),
-                  ],
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
+                    if (offer != null && offer.name != group.title) ...[
+                      const SizedBox(height: 6),
                       Text(
-                        l10n.pharmacyQuantity,
+                        offer.name,
                         style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primary3,
+                          fontSize: 14,
+                          color: AppColors.additional3,
                         ),
                       ),
-                      const Spacer(),
-                      _QuantityStepper(
-                        value: _quantity,
-                        onChanged: (v) => setState(() => _quantity = v),
-                      ),
                     ],
-                  ),
-                ],
+                    const SizedBox(height: 22),
+                    if (group.offers.isEmpty)
+                      Text(
+                        l10n.pharmacyNoOffers,
+                        style: const TextStyle(color: AppColors.additional3),
+                      )
+                    else ...[
+                      Text(
+                        l10n.pharmacyPricesByProducer.toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          letterSpacing: 0.6,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.additional3,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      for (var i = 0; i < group.offers.length; i++)
+                        _OfferRow(
+                          offer: group.offers[i],
+                          selected: i == _selectedOffer,
+                          isCheapest: i == 0 && group.hasComparison,
+                          selectable: group.offers.length > 1,
+                          onTap: () => setState(() => _selectedOffer = i),
+                        ),
+                    ],
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Text(
+                          l10n.pharmacyQuantity,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primary3,
+                          ),
+                        ),
+                        const Spacer(),
+                        _QuantityStepper(
+                          value: _quantity,
+                          onChanged: (v) => setState(() => _quantity = v),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            _BottomBar(
-              totalLabel: l10n.pharmacyTotal,
-              totalText: formatTenge(total),
-              buttonText: l10n.pharmacyOrder,
-              enabled: offer != null,
-              onOrder: () => _openOrderSheet(offer!),
-            ),
-          ],
+              _BottomBar(
+                totalLabel: l10n.pharmacyTotal,
+                totalText: formatTenge(total),
+                buttonText: l10n.pharmacyOrder,
+                enabled: offer != null,
+                onOrder: () => _openOrderSheet(offer!),
+              ),
+            ],
+          ),
         ),
       ),
     );

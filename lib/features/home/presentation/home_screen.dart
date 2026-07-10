@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
+import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
@@ -56,7 +57,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, _) => Center(
             child: Text(
-              l10n.errorLoadingStats(err.toString()),
+              l10n.errorLoadingStats(extractApiMessage(err)),
               textAlign: TextAlign.center,
             ),
           ),

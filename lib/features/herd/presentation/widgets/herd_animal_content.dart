@@ -67,6 +67,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
         false;
 
     if (!ok) return;
+    if (!context.mounted) return;
 
     await _deleteCattle(context);
   }
@@ -291,7 +292,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                               ),
                               gradient: LinearGradient(
                                 colors: [
-                                  headerColor.withOpacity(0.35),
+                                  headerColor.withValues(alpha: 0.35),
                                   Colors.white,
                                 ],
                                 begin: Alignment.topCenter,
@@ -647,7 +648,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                             ),
                                             decoration: BoxDecoration(
                                               color: AppColors.success
-                                                  .withOpacity(0.15),
+                                                  .withValues(alpha: 0.15),
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                             ),
@@ -910,7 +911,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
             child: AbsorbPointer(
               absorbing: true,
               child: Container(
-                color: Colors.black.withOpacity(0.35),
+                color: Colors.black.withValues(alpha: 0.35),
                 child: const Center(child: CircularProgressIndicator()),
               ),
             ),

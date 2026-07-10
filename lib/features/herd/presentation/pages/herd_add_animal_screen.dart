@@ -212,8 +212,9 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
     } finally {
-      if (!mounted) return;
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -381,7 +382,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
                         ),
                         const SizedBox(height: 8),
                         DropdownButtonFormField<BreedType>(
-                          value: _selectedBreedType,
+                          initialValue: _selectedBreedType,
                           decoration: InputDecoration(
                             hintText: l10n.breedTypeHint,
                             hintStyle: const TextStyle(

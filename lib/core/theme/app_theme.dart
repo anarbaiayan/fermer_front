@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'app_colors.dart';
 
 ThemeData buildTheme() {
@@ -11,6 +12,17 @@ ThemeData buildTheme() {
       backgroundColor: AppColors.primary1,
       foregroundColor: Colors.white,
       centerTitle: true,
+      // Прозрачный статус-бар со светлыми иконками поверх зелёного app bar
+      // (edge-to-edge, без непрозрачного цвета бара).
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarContrastEnforced: false,
+      ),
     ),
     colorScheme: base.colorScheme.copyWith(
       primary: AppColors.primary1,

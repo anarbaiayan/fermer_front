@@ -5,8 +5,13 @@ import 'dio_client.dart';
 import 'auth_interceptor.dart';
 import 'token_repository.dart';
 
+/// Базовый URL API. По умолчанию — прод; можно переопределить на этапе сборки
+/// без хардкода под окружения:
+/// `flutter build appbundle --dart-define=API_BASE_URL=https://dev.example/api`.
+/// Пустое значение из окружения игнорируется.
 final baseUrlProvider = Provider<String>((ref) {
-  return 'https://fer-mer-plus.ru/api';
+  const fromEnv = String.fromEnvironment('API_BASE_URL');
+  return fromEnv.isEmpty ? 'https://fer-mer-plus.ru/api' : fromEnv;
 });
 
 BaseOptions _baseOptions(String baseUrl) => BaseOptions(

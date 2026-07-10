@@ -116,7 +116,7 @@ class CattleRationDetailsScreen extends ConsumerWidget {
                                       ),
                                       gradient: LinearGradient(
                                         colors: [
-                                          headerColor.withOpacity(0.35),
+                                          headerColor.withValues(alpha: 0.35),
                                           Colors.white,
                                         ],
                                         begin: Alignment.topCenter,

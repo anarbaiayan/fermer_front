@@ -488,7 +488,7 @@ class _AddBulkCattleEventScreenState
                       const SizedBox(height: 6),
 
                       DropdownButtonFormField<BulkCattleCategory>(
-                        value: _category,
+                        initialValue: _category,
                         decoration: _dec(hint: l10n.selectCategoryHint),
                         items: BulkCattleCategory.values
                             .map(
@@ -725,8 +725,9 @@ class _AddBulkCattleEventScreenState
                                     ? () {}
                                     : () {
                                         setState(() {
-                                          if (_treatmentDays > 1)
+                                          if (_treatmentDays > 1) {
                                             _treatmentDays--;
+                                          }
                                           _syncTreatmentDaysCtrl();
                                         });
                                       },
