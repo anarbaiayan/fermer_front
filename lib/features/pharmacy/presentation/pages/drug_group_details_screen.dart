@@ -3,7 +3,9 @@ import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/widgets/app_primary_button.dart';
 import 'package:frontend/core/widgets/app_success_dialog.dart';
+import 'package:frontend/core/widgets/app_text_field.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/pharmacy/application/pharmacy_providers.dart';
 import 'package:frontend/features/pharmacy/data/models/create_vet_drug_request_dto.dart';
@@ -54,7 +56,7 @@ class _DrugGroupDetailsScreenState
                     imageUrl: offer?.imageUrl,
                     height: 210,
                     borderRadius: 16,
-                    label: 'фото препарата',
+                    iconSize: 76,
                   ),
                   const SizedBox(height: 16),
                   _TagsRow(group: group),
@@ -446,26 +448,10 @@ class _BottomBar extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: SizedBox(
-                height: 52,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.primary1,
-                    disabledBackgroundColor: AppColors.additional2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: enabled ? onOrder : null,
-                  child: Text(
-                    buttonText,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+              child: AppPrimaryButton(
+                text: buttonText,
+                onPressed: enabled ? onOrder : null,
+                height: 50,
               ),
             ),
           ],
@@ -557,15 +543,15 @@ class _OrderSheetState extends ConsumerState<_OrderSheet> {
             ),
           ),
           const SizedBox(height: 18),
-          _SheetField(
+          AppTextField(
             label: l10n.pharmacyOrderAddressLabel,
-            hint: l10n.pharmacyOrderAddressHint,
+            hintText: l10n.pharmacyOrderAddressHint,
             controller: _addressController,
           ),
           const SizedBox(height: 16),
-          _SheetField(
+          AppTextField(
             label: l10n.pharmacyOrderPhoneLabel,
-            hint: l10n.pharmacyOrderPhoneHint,
+            hintText: l10n.pharmacyOrderPhoneHint,
             controller: _phoneController,
             keyboardType: TextInputType.phone,
           ),
@@ -577,86 +563,13 @@ class _OrderSheetState extends ConsumerState<_OrderSheet> {
             ),
           ],
           const SizedBox(height: 22),
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.primary1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              onPressed: _submitting ? null : _submit,
-              child: _submitting
-                  ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text(
-                      l10n.pharmacyOrderConfirm,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-            ),
+          AppPrimaryButton(
+            text: l10n.pharmacyOrderConfirm,
+            onPressed: _submitting ? null : _submit,
+            isLoading: _submitting,
           ),
         ],
       ),
-    );
-  }
-}
-
-class _SheetField extends StatelessWidget {
-  final String label;
-  final String hint;
-  final TextEditingController controller;
-  final TextInputType? keyboardType;
-
-  const _SheetField({
-    required this.label,
-    required this.hint,
-    required this.controller,
-    this.keyboardType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: AppColors.primary3,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(fontSize: 14, color: Color(0xFF9A9A9A)),
-            isDense: true,
-            contentPadding: const EdgeInsets.symmetric(vertical: 10),
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: AppColors.additional2),
-            ),
-            focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: AppColors.primary1),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

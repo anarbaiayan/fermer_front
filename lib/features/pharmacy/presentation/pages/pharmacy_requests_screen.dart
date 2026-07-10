@@ -130,16 +130,40 @@ class _RequestCard extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              _MetaChip(
-                icon: Icons.inventory_2_outlined,
-                text: l10n.pharmacyQuantityShort(request.quantity),
-              ),
-              const SizedBox(width: 10),
-              if (request.createdAt != null)
-                _MetaChip(
-                  icon: Icons.event_outlined,
-                  text: formatRequestDate(request.createdAt),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
                 ),
+                decoration: BoxDecoration(
+                  color: AppColors.primary1.withValues(alpha: 0.07),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  l10n.pharmacyQuantityShort(request.quantity),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary1,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              if (request.createdAt != null) ...[
+                AppIcons.svg(
+                  'calendar',
+                  size: 14,
+                  color: AppColors.additional3,
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  formatRequestDate(request.createdAt),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.additional3,
+                  ),
+                ),
+              ],
             ],
           ),
           if ((request.contactPhone ?? '').isNotEmpty) ...[
@@ -158,28 +182,6 @@ class _RequestCard extends StatelessWidget {
           ],
         ],
       ),
-    );
-  }
-}
-
-class _MetaChip extends StatelessWidget {
-  final IconData icon;
-  final String text;
-
-  const _MetaChip({required this.icon, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 16, color: AppColors.additional3),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 13, color: AppColors.primary3),
-        ),
-      ],
     );
   }
 }
@@ -216,13 +218,9 @@ class _EmptyRequests extends StatelessWidget {
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       children: [
-        const SizedBox(height: 90),
-        const Icon(
-          Icons.receipt_long_outlined,
-          size: 64,
-          color: AppColors.additional2,
-        ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 70),
+        Image.asset('assets/image/noResult.png', width: 220),
+        const SizedBox(height: 20),
         Text(
           l10n.pharmacyRequestsEmptyTitle,
           textAlign: TextAlign.center,

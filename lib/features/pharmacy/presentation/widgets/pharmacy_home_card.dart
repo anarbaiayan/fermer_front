@@ -33,7 +33,7 @@ class PharmacyHomeCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,
-                child: AppIcons.svg('cart', size: 24, color: Colors.white),
+                child: AppIcons.svg('medicine', size: 26, color: Colors.white),
               ),
               const SizedBox(width: 14),
               Expanded(

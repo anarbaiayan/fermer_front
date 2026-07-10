@@ -97,14 +97,12 @@ class _PharmacyScreenState extends ConsumerState<PharmacyScreen> {
             ),
             const SizedBox(height: 12),
             _FilterDropdown(
-              icon: Icons.storefront_outlined,
               label: selectedCompany?.name ?? l10n.pharmacyFilterAllProducers,
               active: selectedCompany != null,
               onTap: () => _openProducerPicker(context, companies),
             ),
             const SizedBox(height: 10),
             _FilterDropdown(
-              icon: Icons.tune_rounded,
               label:
                   selectedAction?.localizedName(lang) ??
                   l10n.pharmacyFilterAllActions,
@@ -321,25 +319,33 @@ class _SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      onChanged: onChanged,
-      textInputAction: TextInputAction.search,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(fontSize: 14, color: Color(0xFF8A8A8A)),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.all(12),
-          child: AppIcons.svg('search', size: 20, color: AppColors.additional3),
-        ),
-        prefixIconConstraints: const BoxConstraints(minWidth: 44),
-        filled: true,
-        fillColor: const Color(0xFFF1EFEA),
-        isDense: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+    return Container(
+      height: 48,
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 239, 239, 239),
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        textAlignVertical: TextAlignVertical.center,
+        textInputAction: TextInputAction.search,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.zero,
+          hintText: hint,
+          hintStyle: const TextStyle(
+            fontSize: 14,
+            color: Color.fromARGB(255, 95, 95, 95),
+          ),
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(12),
+            child: AppIcons.svg('search', size: 20),
+          ),
+          prefixIconConstraints: const BoxConstraints(
+            minWidth: 44,
+            minHeight: 44,
+          ),
+          border: InputBorder.none,
         ),
       ),
     );
@@ -347,13 +353,11 @@ class _SearchField extends StatelessWidget {
 }
 
 class _FilterDropdown extends StatelessWidget {
-  final IconData icon;
   final String label;
   final bool active;
   final VoidCallback onTap;
 
   const _FilterDropdown({
-    required this.icon,
     required this.label,
     required this.active,
     required this.onTap,
@@ -361,38 +365,40 @@ class _FilterDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = active ? AppColors.primary1 : AppColors.additional3;
     return InkWell(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(40),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        height: 48,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
           color: active
-              ? AppColors.primary1.withValues(alpha: 0.10)
-              : const Color(0xFFF1EFEA),
-          borderRadius: BorderRadius.circular(14),
+              ? AppColors.primary1.withValues(alpha: 0.08)
+              : const Color.fromARGB(255, 239, 239, 239),
+          borderRadius: BorderRadius.circular(40),
           border: active
-              ? Border.all(color: AppColors.primary1, width: 1)
+              ? Border.all(color: AppColors.primary1, width: 1.2)
               : null,
         ),
         child: Row(
           children: [
-            Icon(icon, size: 18, color: accent),
-            const SizedBox(width: 8),
             Expanded(
               child: Text(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 15,
                   fontWeight: active ? FontWeight.w600 : FontWeight.w400,
                   color: active ? AppColors.primary1 : AppColors.primary3,
                 ),
               ),
             ),
-            Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: accent),
+            Icon(
+              Icons.keyboard_arrow_down_rounded,
+              size: 22,
+              color: active ? AppColors.primary1 : AppColors.additional3,
+            ),
           ],
         ),
       ),
@@ -439,9 +445,9 @@ class _EmptyCatalog extends StatelessWidget {
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       children: [
-        const SizedBox(height: 80),
-        Icon(Icons.search_off_rounded, size: 64, color: AppColors.additional2),
-        const SizedBox(height: 16),
+        const SizedBox(height: 60),
+        Image.asset('assets/image/noResult.png', width: 220),
+        const SizedBox(height: 20),
         Text(
           l10n.pharmacyEmptyCatalogTitle,
           textAlign: TextAlign.center,
