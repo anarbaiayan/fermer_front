@@ -3487,6 +3487,36 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Ветпрепараты и заявки на заказ'**
   String get pharmacyHomeCardSubtitle;
+
+  /// No description provided for @vetConsultantsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Консультации ветврачей'**
+  String get vetConsultantsTitle;
+
+  /// No description provided for @vetConsultantPriceLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Консультация'**
+  String get vetConsultantPriceLabel;
+
+  /// No description provided for @vetConsultantsEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет доступных ветврачей'**
+  String get vetConsultantsEmptyTitle;
+
+  /// No description provided for @vetConsultantsEmptySubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загляните сюда чуть позже'**
+  String get vetConsultantsEmptySubtitle;
+
+  /// No description provided for @vetOpeningWhatsapp.
+  ///
+  /// In ru, this message translates to:
+  /// **'Открываем WhatsApp...'**
+  String get vetOpeningWhatsapp;
 }
 
 class _AppLocalizationsDelegate

@@ -809,5 +809,10 @@
     "pharmacyStatusCancelled": "Бас тартылды",
     "pharmacyStatusUnknown": "—",
     "pharmacyHomeCardTitle": "Дәріхана",
-    "pharmacyHomeCardSubtitle": "Ветпрепараттар мен тапсырыс өтінімдері"
+    "pharmacyHomeCardSubtitle": "Ветпрепараттар мен тапсырыс өтінімдері",
+    "vetConsultantsTitle": "Мал дәрігерінің кеңесі",
+    "vetConsultantPriceLabel": "Кеңес",
+    "vetConsultantsEmptyTitle": "Қолжетімді мал дәрігерлері жоқ",
+    "vetConsultantsEmptySubtitle": "Сәл кейінірек қайта кіріңіз",
+    "vetOpeningWhatsapp": "WhatsApp ашылуда..."
 }

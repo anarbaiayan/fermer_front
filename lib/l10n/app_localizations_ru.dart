@@ -1826,4 +1826,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get pharmacyHomeCardSubtitle => 'Ветпрепараты и заявки на заказ';
+
+  @override
+  String get vetConsultantsTitle => 'Консультации ветврачей';
+
+  @override
+  String get vetConsultantPriceLabel => 'Консультация';
+
+  @override
+  String get vetConsultantsEmptyTitle => 'Нет доступных ветврачей';
+
+  @override
+  String get vetConsultantsEmptySubtitle => 'Загляните сюда чуть позже';
+
+  @override
+  String get vetOpeningWhatsapp => 'Открываем WhatsApp...';
 }

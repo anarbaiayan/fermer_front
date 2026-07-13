@@ -1821,4 +1821,19 @@ class AppLocalizationsKk extends AppLocalizations {
   @override
   String get pharmacyHomeCardSubtitle =>
       'Ветпрепараттар мен тапсырыс өтінімдері';
+
+  @override
+  String get vetConsultantsTitle => 'Мал дәрігерінің кеңесі';
+
+  @override
+  String get vetConsultantPriceLabel => 'Кеңес';
+
+  @override
+  String get vetConsultantsEmptyTitle => 'Қолжетімді мал дәрігерлері жоқ';
+
+  @override
+  String get vetConsultantsEmptySubtitle => 'Сәл кейінірек қайта кіріңіз';
+
+  @override
+  String get vetOpeningWhatsapp => 'WhatsApp ашылуда...';
 }

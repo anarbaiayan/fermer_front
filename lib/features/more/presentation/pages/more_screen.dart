@@ -86,6 +86,12 @@ class MoreScreen extends StatelessWidget {
                   color: AppColors.accent,
                   onTap: () => context.push('/pharmacy/requests'),
                 ),
+                _MoreItem(
+                  icon: 'health',
+                  title: l10n.vetConsultantsTitle,
+                  color: const Color(0xFF4A78C1),
+                  onTap: () => context.push('/vet-consultants'),
+                ),
               ],
             ),
             const SizedBox(height: 24),

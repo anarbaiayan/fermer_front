@@ -35,6 +35,7 @@ import 'package:frontend/features/rations/presentation/pages/add_user_rations_sc
 import 'package:frontend/features/rations/presentation/pages/inventory_screen.dart';
 import 'package:frontend/features/rations/presentation/pages/ration_template_details_screen.dart';
 import 'package:frontend/features/rations/presentation/pages/rations_screen.dart';
+import 'package:frontend/features/vet_consultants/presentation/pages/vet_consultants_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:frontend/features/splash/presentation/splash_screen.dart';
 import 'package:frontend/features/home/presentation/home_screen.dart';
@@ -252,6 +253,11 @@ final GoRouter appRouter = GoRouter(
         final group = state.extra as DrugGroupDto;
         return DrugGroupDetailsScreen(group: group);
       },
+    ),
+
+    GoRoute(
+      path: '/vet-consultants',
+      builder: (context, state) => const VetConsultantsScreen(),
     ),
   ],
 );

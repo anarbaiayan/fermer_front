@@ -830,5 +830,10 @@
     "pharmacyStatusCancelled": "Отменена",
     "pharmacyStatusUnknown": "—",
     "pharmacyHomeCardTitle": "Аптека",
-    "pharmacyHomeCardSubtitle": "Ветпрепараты и заявки на заказ"
+    "pharmacyHomeCardSubtitle": "Ветпрепараты и заявки на заказ",
+    "vetConsultantsTitle": "Консультации ветврачей",
+    "vetConsultantPriceLabel": "Консультация",
+    "vetConsultantsEmptyTitle": "Нет доступных ветврачей",
+    "vetConsultantsEmptySubtitle": "Загляните сюда чуть позже",
+    "vetOpeningWhatsapp": "Открываем WhatsApp..."
 }
