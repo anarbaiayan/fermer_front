@@ -65,14 +65,6 @@ class FermerPlusDrawer extends ConsumerWidget {
               },
             ),
             _DrawerItem(
-              icon: 'medicine',
-              text: l10n.drawerPharmacy,
-              onTap: () {
-                Navigator.of(context).pop();
-                context.push('/pharmacy');
-              },
-            ),
-            _DrawerItem(
               icon: 'questions',
               text: l10n.drawerFaq,
               onTap: () {

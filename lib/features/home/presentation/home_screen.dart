@@ -8,15 +8,12 @@ import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
 import 'package:frontend/features/home/presentation/widgets/briefSection/search_field.dart';
 import 'package:frontend/features/home/presentation/widgets/quantitySection/summary_quantity_section.dart';
-import 'package:frontend/features/pharmacy/presentation/widgets/pharmacy_home_card.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'widgets/briefSection/animal_status_card.dart';
-import 'widgets/briefSection/herd_summary_card.dart';
+import 'widgets/briefSection/quick_actions_section.dart';
 import 'widgets/briefSection/summary_tabs.dart';
-
-final herdLastUpdatedProvider = StateProvider<DateTime?>((ref) => null);
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -28,26 +25,10 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _summaryTabIndex = 0;
 
-  String _formatTimeAgo(DateTime? time) {
-    final l10n = context.l10n;
-    if (time == null) return '—';
-
-    final diff = DateTime.now().difference(time);
-
-    if (diff.inMinutes < 1) return l10n.timeJustNow;
-    if (diff.inMinutes < 60) return l10n.timeMinutesAgo(diff.inMinutes);
-    if (diff.inHours == 1) return l10n.timeOneHourAgo;
-    if (diff.inHours < 24) return l10n.timeHoursAgo(diff.inHours);
-    return l10n.timeDaysAgo(diff.inDays);
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final statsAsync = ref.watch(cattleStatisticsProvider);
-
-    final lastUpdatedDt = ref.watch(herdLastUpdatedProvider);
-    final lastUpdatedLabel = _formatTimeAgo(lastUpdatedDt);
 
     return AppScaffold(
       bottomNavIndex: 0,
@@ -62,14 +43,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
           data: (stats) {
-            final totalAnimals = stats.total;
-
             return ListView(
               children: [
                 const SizedBox(height: 16),
                 const SearchField(),
-                const SizedBox(height: 16),
-                const PharmacyHomeCard(),
                 const SizedBox(height: 22),
                 Text(
                   l10n.homeSummary,
@@ -86,29 +63,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 const SizedBox(height: 16),
                 if (_summaryTabIndex == 0) ...[
-                  Text(
-                    l10n.homeHerd,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  HerdSummaryCard(
-                    totalAnimals: totalAnimals,
-                    lastUpdated: lastUpdatedDt == null ? '—' : lastUpdatedLabel,
-                    onRefresh: () {
-                      ref.invalidate(cattleStatisticsProvider);
-                      ref.read(herdLastUpdatedProvider.notifier).state =
-                          DateTime.now();
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.homeDataUpdating)),
-                      );
-                    },
-                    onDetails: () {
-                      context.go('/herd');
-                    },
-                  ),
+                  const QuickActionsSection(),
                   const SizedBox(height: 24),
                   Text(
                     l10n.homeAnimalStatuses,

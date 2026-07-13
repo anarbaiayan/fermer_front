@@ -30,7 +30,7 @@ class RationsScreen extends ConsumerWidget {
     final isFromCattle = cattleId != null;
 
     return AppScaffold(
-      bottomNavIndex: 3,
+      bottomNavIndex: 4,
       enableDrawer: true,
       showBell: true,
       showAppBar: true,

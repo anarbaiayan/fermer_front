@@ -2,7 +2,7 @@
 
 ## Project Summary
 - Flutter mobile app for cattle/farm management.
-- Main domains: auth, herd, cattle events, lactation, rations/feed stock, notifications, profile/settings, support.
+- Main domains: auth, herd, cattle events, lactation, rations/feed stock, pharmacy, notifications, profile/settings, support.
 - Product languages: Russian and Kazakh.
 - Android package: `kz.fermerplus.app`.
 - Backend repository is stored next to this frontend project in sibling folder `../fp-backend`.
@@ -45,6 +45,15 @@
 ## Routing Rules
 - All app routes are centralized in `lib/core/router/app_router.dart`.
 - New screens must be added to router and linked from the correct entry points.
+- The canonical bottom navigation order is fixed:
+  - index 0: Home (`/home`)
+  - index 1: Herd (`/herd`)
+  - index 2: Events (`/events`)
+  - index 3: Lactation (`/lactation`)
+  - index 4: More (`/more`)
+- Rations and pharmacy are not bottom-navigation tabs. They are discovered through `/more`; ration, feed-stock, and pharmacy screens use bottom-nav index `4` when they show the bottom bar.
+- On the More screen, use `context.go` for primary bottom-navigation destinations and `context.push` for nested sections, so Back returns to More.
+- `FermerPlusDrawer` keeps profile, settings, FAQ, support, referral, and logout. Pharmacy must not be added back to the drawer.
 - Preserve route semantics already used in the app:
   - `/herd/:id`
   - `/rations`
@@ -61,6 +70,8 @@
 ## UI / UX Rules
 - Preserve the existing app visual language: custom app scaffold, drawer, app bar, cards, dialogs, buttons.
 - Reuse shared widgets from `lib/core/widgets` where possible.
+- The More screen (`lib/features/more`) is a grouped app directory. Keep its three groups: primary sections, farm management, and account/support.
+- More items use existing SVG icons in rounded-square icon containers, grouped white cards, and the existing green/brown/neutral palette.
 - Prefer explicit empty states and actionable errors over generic snackbars.
 - Destructive actions should keep confirm dialog + success/error feedback.
 

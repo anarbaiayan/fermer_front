@@ -27,6 +27,13 @@
 ## Support
 - Support route uses WhatsApp deep linking.
 
+## App Navigation
+- The bottom navigation is fixed to Home, Herd, Events, Lactation, and More.
+- More is the central directory for all modules, including shortcuts to the bottom-nav destinations.
+- Farm management entries in More include rations, feed stock, pharmacy, and pharmacy requests.
+- Account/support entries in More include profile, settings, notifications, and support.
+- Pharmacy must be available from More but not from the sidebar drawer.
+
 ## Localization
 - UI strings must exist in Russian and Kazakh.
 - Backend translations should be used where available instead of duplicating text in frontend.

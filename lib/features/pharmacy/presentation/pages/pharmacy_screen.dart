@@ -73,6 +73,7 @@ class _PharmacyScreenState extends ConsumerState<PharmacyScreen> {
           );
 
     return AppScaffold(
+      bottomNavIndex: 4,
       farmName: l10n.farmName,
       body: AppPage(
         child: Column(

@@ -52,7 +52,12 @@ Each feature usually contains:
 
 ## Navigation
 - Centralized in `lib/core/router/app_router.dart`.
-- Routes cover auth flow, herd screens, ration screens, notifications, profile, settings, support.
+- Routes cover auth flow, herd screens, ration screens, pharmacy, notifications, profile, settings, support, and More.
+- Canonical bottom navigation is: Home, Herd, Events, Lactation, More.
+- `MoreScreen` lives in `lib/features/more/presentation/pages/more_screen.dart` and is the app directory for both primary destinations and secondary sections.
+- More groups screens into primary sections, farm management, and account/support.
+- Rations, feed stock, pharmacy, and pharmacy requests are not standalone bottom tabs; their screens show More as the selected bottom-nav item when applicable.
+- Drawer remains a secondary account/help menu. It intentionally excludes pharmacy, which is accessed through More.
 
 ## State Management
 - Riverpod is the standard for:

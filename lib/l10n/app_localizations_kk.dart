@@ -30,6 +30,18 @@ class AppLocalizationsKk extends AppLocalizations {
   String get navLactation => 'Лактация';
 
   @override
+  String get navMore => 'Тағы';
+
+  @override
+  String get morePrimarySection => 'Негізгі бөлімдер';
+
+  @override
+  String get moreFarmSection => 'Ферманы басқару';
+
+  @override
+  String get moreAccountSection => 'Аккаунт және қолдау';
+
+  @override
   String get drawerProfile => 'Профиль';
 
   @override
@@ -307,6 +319,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get homeHerd => 'Табын';
+
+  @override
+  String get homeQuickActions => 'Жылдам әрекеттер';
+
+  @override
+  String get homeActionEvent => 'Оқиға';
 
   @override
   String get homeAnimalStatuses => 'Жануар статустары';

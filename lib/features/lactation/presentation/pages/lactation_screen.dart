@@ -45,7 +45,7 @@ class LactationScreen extends ConsumerWidget {
     }
 
     return AppScaffold(
-      bottomNavIndex: 4,
+      bottomNavIndex: 3,
       farmName: l10n.farmName,
       enableDrawer: true,
       showBell: true,

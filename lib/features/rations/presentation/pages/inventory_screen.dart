@@ -25,7 +25,7 @@ class UserRationsStocksScreen extends ConsumerWidget {
         : _typeTitle(l10n, filterType!);
 
     return AppScaffold(
-      bottomNavIndex: 3,
+      bottomNavIndex: 4,
       enableDrawer: true,
       showBell: true,
       showAppBar: true,

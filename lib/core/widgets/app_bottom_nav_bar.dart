@@ -31,10 +31,10 @@ class AppBottomNavBar extends StatelessWidget {
             context.go('/events');
             break;
           case 3:
-            context.go('/rations');
+            context.go('/lactation');
             break;
           case 4:
-            context.go('/lactation');
+            context.go('/more');
             break;
         }
       },
@@ -55,14 +55,14 @@ class AppBottomNavBar extends StatelessWidget {
           label: l10n.navEvents,
         ),
         BottomNavigationBarItem(
-          icon: AppIcons.svg('diet1', color: AppColors.additional3),
-          activeIcon: AppIcons.svg('diet1', color: AppColors.primary1),
-          label: l10n.navRation,
-        ),
-        BottomNavigationBarItem(
           icon: AppIcons.svg('lactation', color: AppColors.additional3),
           activeIcon: AppIcons.svg('lactation', color: AppColors.primary1),
           label: l10n.navLactation,
+        ),
+        BottomNavigationBarItem(
+          icon: AppIcons.svg('actions', color: AppColors.additional3),
+          activeIcon: AppIcons.svg('actions', color: AppColors.primary1),
+          label: l10n.navMore,
         ),
       ],
     );

@@ -9,6 +9,7 @@ Fermer+ is a Flutter mobile app for cattle and farm operations management.
 - create and complete cattle events
 - track lactation and milk data
 - manage feed stock and rations
+- find pharmacy catalog and manage pharmacy requests
 - view notifications and navigate to relevant animals
 - use localized UI in Russian or Kazakh
 
@@ -27,11 +28,18 @@ Fermer+ is a Flutter mobile app for cattle and farm operations management.
 - `cattle_events`
 - `lactation`
 - `rations`
+- `pharmacy`
 - `notifications`
 - `profile`
 - `settings`
 - `home`
+- `more`
 - `splash`
+
+## Navigation
+- Bottom navigation: Home, Herd, Events, Lactation, More.
+- More is the grouped directory for all app sections. It contains shortcuts to the primary tabs and direct entries to rations, feed stock, pharmacy, pharmacy requests, profile, settings, notifications, and support.
+- Pharmacy is deliberately not shown in the sidebar drawer.
 
 ## Backend Integration
 - Base API URL in current code: `https://fer-mer-plus.ru/api`

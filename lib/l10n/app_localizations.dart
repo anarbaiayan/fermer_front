@@ -140,6 +140,30 @@ abstract class AppLocalizations {
   /// **'Лактация'**
   String get navLactation;
 
+  /// No description provided for @navMore.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ещё'**
+  String get navMore;
+
+  /// No description provided for @morePrimarySection.
+  ///
+  /// In ru, this message translates to:
+  /// **'Основные разделы'**
+  String get morePrimarySection;
+
+  /// No description provided for @moreFarmSection.
+  ///
+  /// In ru, this message translates to:
+  /// **'Управление фермой'**
+  String get moreFarmSection;
+
+  /// No description provided for @moreAccountSection.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аккаунт и поддержка'**
+  String get moreAccountSection;
+
   /// No description provided for @drawerProfile.
   ///
   /// In ru, this message translates to:
@@ -655,6 +679,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Стадо'**
   String get homeHerd;
+
+  /// No description provided for @homeQuickActions.
+  ///
+  /// In ru, this message translates to:
+  /// **'Быстрые действия'**
+  String get homeQuickActions;
+
+  /// No description provided for @homeActionEvent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Событие'**
+  String get homeActionEvent;
 
   /// No description provided for @homeAnimalStatuses.
   ///

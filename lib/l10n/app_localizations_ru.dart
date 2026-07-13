@@ -30,6 +30,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navLactation => 'Лактация';
 
   @override
+  String get navMore => 'Ещё';
+
+  @override
+  String get morePrimarySection => 'Основные разделы';
+
+  @override
+  String get moreFarmSection => 'Управление фермой';
+
+  @override
+  String get moreAccountSection => 'Аккаунт и поддержка';
+
+  @override
   String get drawerProfile => 'Профиль';
 
   @override
@@ -307,6 +319,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get homeHerd => 'Стадо';
+
+  @override
+  String get homeQuickActions => 'Быстрые действия';
+
+  @override
+  String get homeActionEvent => 'Событие';
 
   @override
   String get homeAnimalStatuses => 'Статусы животных';

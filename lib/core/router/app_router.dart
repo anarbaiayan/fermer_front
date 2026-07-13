@@ -21,6 +21,7 @@ import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_scree
 import 'package:frontend/features/lactation/presentation/pages/add_bulk_lactation_screen.dart';
 import 'package:frontend/features/lactation/presentation/pages/add_lactation_screen.dart';
 import 'package:frontend/features/lactation/presentation/pages/lactation_screen.dart';
+import 'package:frontend/features/more/presentation/pages/more_screen.dart';
 import 'package:frontend/features/notifications/presentation/pages/archived_notifications_screen.dart';
 import 'package:frontend/features/notifications/presentation/pages/notifications_screen.dart';
 import 'package:frontend/features/pharmacy/data/models/drug_group_dto.dart';
@@ -57,6 +58,7 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
+    GoRoute(path: '/more', builder: (context, state) => const MoreScreen()),
     GoRoute(
       path: '/herd',
       builder: (context, state) {
