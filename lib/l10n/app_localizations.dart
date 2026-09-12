@@ -2252,6 +2252,84 @@ abstract class AppLocalizations {
   /// **'Лактация'**
   String get lactationTitle;
 
+  /// No description provided for @lactationMilkPositive.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите количество молока больше нуля.'**
+  String get lactationMilkPositive;
+
+  /// No description provided for @lactationMilkNonNegative.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите корректный объём молока: ноль или положительное число.'**
+  String get lactationMilkNonNegative;
+
+  /// No description provided for @lactationMilkBalanceError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Молоко для телят и непригодное молоко в сумме не должны превышать общий надой.'**
+  String get lactationMilkBalanceError;
+
+  /// No description provided for @lactationCowReports.
+  ///
+  /// In ru, this message translates to:
+  /// **'Коров по отчётам'**
+  String get lactationCowReports;
+
+  /// No description provided for @lactationCowReportsHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сумма числа коров в суточных отчётах, не количество уникальных животных. Повторные доения и разные дни могут учитывать одну корову несколько раз.'**
+  String get lactationCowReportsHint;
+
+  /// No description provided for @lactationInvalidBalanceWarning.
+  ///
+  /// In ru, this message translates to:
+  /// **'В выбранном периоде есть записи с неверным балансом молока: расходы превышают надой или содержат отрицательные значения. Показаны исходные данные. Обратитесь в поддержку для исправления записей.'**
+  String get lactationInvalidBalanceWarning;
+
+  /// No description provided for @lactationPeriodLimit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите период не более 366 дней.'**
+  String get lactationPeriodLimit;
+
+  /// No description provided for @lactationIncompleteData.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось получить все данные за период. Обновите статистику.'**
+  String get lactationIncompleteData;
+
+  /// No description provided for @lactationNetworkError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет соединения с сервером. Проверьте интернет и попробуйте снова.'**
+  String get lactationNetworkError;
+
+  /// No description provided for @lactationTimeoutError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервер не ответил вовремя. Попробуйте снова.'**
+  String get lactationTimeoutError;
+
+  /// No description provided for @lactationSessionExpired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сессия истекла. Войдите в аккаунт снова.'**
+  String get lactationSessionExpired;
+
+  /// No description provided for @lactationAccessDenied.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет доступа к данным лактации.'**
+  String get lactationAccessDenied;
+
+  /// No description provided for @lactationRequestError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось выполнить запрос. Попробуйте снова позже.'**
+  String get lactationRequestError;
+
   /// No description provided for @lactationMilkPerDay.
   ///
   /// In ru, this message translates to:

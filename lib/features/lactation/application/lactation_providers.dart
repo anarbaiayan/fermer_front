@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/lactation/data/models/bulk_lactation_dto.dart';
 import 'package:frontend/features/lactation/data/models/create_bulk_lactation_dto.dart';
 import 'package:frontend/features/lactation/data/models/lactation_daily_summary_dto.dart';
@@ -7,24 +9,29 @@ import '../data/datasources/lactation_api.dart';
 import '../data/models/create_lactation_dto.dart';
 import '../data/models/lactation_mappers.dart';
 import '../domain/entities/lactation.dart';
+import '../domain/entities/lactation_period_summary.dart';
+import '../domain/entities/lactation_validation.dart';
+import '../data/models/lactation_period_summary_mapper.dart';
 
-final lactationByIdProvider = FutureProvider.family<Lactation, int>((
-  ref,
-  id,
-) async {
-  final api = ref.read(lactationApiProvider);
-  final dto = await api.getById(id);
-  return lactationFromDto(dto);
-});
+final lactationByIdProvider = FutureProvider.autoDispose.family<Lactation, int>(
+  (ref, id) async {
+    final api = ref.read(lactationApiProvider);
+    final dto = await api.getById(id);
+    return lactationFromDto(dto);
+  },
+);
 
-final lactationsByCattleProvider = FutureProvider.family<List<Lactation>, int>((
-  ref,
-  cattleId,
-) async {
-  final api = ref.read(lactationApiProvider);
-  final page = await api.getByCattle(cattleId: cattleId, page: 0, size: 50);
-  return page.content.map(lactationFromDto).toList();
-});
+final lactationsByCattleProvider = FutureProvider.autoDispose
+    .family<List<Lactation>, int>((ref, cattleId) async {
+      final api = ref.read(lactationApiProvider);
+      final cancelToken = CancelToken();
+      ref.onDispose(() => cancelToken.cancel());
+      final records = await api.getAllByCattle(
+        cattleId,
+        cancelToken: cancelToken,
+      );
+      return records.map(lactationFromDto).toList();
+    });
 
 final createLactationProvider =
     Provider<Future<Lactation> Function(CreateLactationDto dto)>((ref) {
@@ -33,8 +40,15 @@ final createLactationProvider =
         final created = await api.create(dto);
         final entity = lactationFromDto(created);
 
-        // обновляем списки, где эта корова
-        ref.invalidate(lactationsByCattleProvider(entity.cattleId));
+        _invalidateExisting(ref, [
+          lactationsByCattleProvider(entity.cattleId),
+          lactationDailySummaryProvider,
+          lactationPeriodSummaryProvider,
+          cattleDetailsProvider(entity.cattleId),
+          cattleByIdProvider(entity.cattleId),
+          cattleListProvider,
+          cattleStatisticsProvider,
+        ]);
         return entity;
       };
     });
@@ -43,7 +57,9 @@ final lactationDailySummaryProvider =
     FutureProvider.autoDispose<LactationDailySummaryDto>((ref) async {
       final api = ref.read(lactationApiProvider);
       final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
-      return api.getDailySummary(date: today);
+      final cancelToken = CancelToken();
+      ref.onDispose(() => cancelToken.cancel());
+      return api.getDailySummary(date: today, cancelToken: cancelToken);
     });
 
 final createBulkLactationProvider =
@@ -54,12 +70,22 @@ final createBulkLactationProvider =
         final api = ref.read(lactationApiProvider);
         final created = await api.createBulk(dto);
 
-        // Обновим сводку на странице "Лактация"
-        ref.invalidate(lactationDailySummaryProvider);
+        _invalidateExisting(ref, [
+          lactationDailySummaryProvider,
+          lactationBulkListProvider,
+          lactationPeriodSummaryProvider,
+        ]);
 
         return created;
       };
     });
+
+void _invalidateExisting(Ref ref, List<ProviderBase<Object?>> providers) {
+  // Do not instantiate unrelated screens just to invalidate their caches.
+  for (final provider in providers) {
+    if (ref.exists(provider)) ref.invalidate(provider);
+  }
+}
 
 enum LactationRangeMode { week, month, period }
 
@@ -183,62 +209,42 @@ final lactationBulkListProvider =
       final range = ref.watch(lactationRangeProvider);
       final fmt = DateFormat('yyyy-MM-dd');
 
-      // берем побольше size, чтобы хватило для сумм по периоду
-      final page = await api.getBulk(
-        page: 0,
-        size: 200,
+      _validateRange(range);
+      final cancelToken = CancelToken();
+      ref.onDispose(() => cancelToken.cancel());
+      return api.getAllBulk(
+        cancelToken: cancelToken,
         dateFrom: fmt.format(range.from),
         dateTo: fmt.format(range.to),
       );
-
-      return page.content;
     });
 
-class LactationBulkSummary {
-  final int cowsTotal;
-  final double totalMilkLiters;
-  final double milkUsedForCalves;
-  final double unsuitableMilk;
-
-  const LactationBulkSummary({
-    required this.cowsTotal,
-    required this.totalMilkLiters,
-    required this.milkUsedForCalves,
-    required this.unsuitableMilk,
-  });
+void _validateRange(LactationRangeState range) {
+  final from = DateTime.utc(range.from.year, range.from.month, range.from.day);
+  final to = DateTime.utc(range.to.year, range.to.month, range.to.day);
+  final days = to.difference(from).inDays + 1;
+  if (days < 1 || days > maxLactationPeriodDays) {
+    throw LactationValidationError.periodTooLong;
+  }
 }
 
-final lactationBulkSummaryProvider = Provider.autoDispose<LactationBulkSummary>(
-  (ref) {
-    final listAsync = ref.watch(lactationBulkListProvider);
-
-    return listAsync.maybeWhen(
-      data: (list) {
-        int cows = 0;
-        double liters = 0;
-        double calves = 0;
-        double bad = 0;
-
-        for (final x in list) {
-          cows += (x.numberOfCows ?? 0);
-          liters += (x.totalMilkLiters ?? 0);
-          calves += (x.milkUsedForCalves ?? 0);
-          bad += (x.unsuitableMilk ?? 0);
-        }
-
-        return LactationBulkSummary(
-          cowsTotal: cows,
-          totalMilkLiters: liters,
-          milkUsedForCalves: calves,
-          unsuitableMilk: bad,
-        );
-      },
-      orElse: () => const LactationBulkSummary(
-        cowsTotal: 0,
-        totalMilkLiters: 0,
-        milkUsedForCalves: 0,
-        unsuitableMilk: 0,
-      ),
-    );
-  },
-);
+final lactationPeriodSummaryProvider =
+    FutureProvider.autoDispose<LactationPeriodSummary>((ref) async {
+      final range = ref.watch(lactationRangeProvider);
+      _validateRange(range);
+      final api = ref.read(lactationApiProvider);
+      final cancelToken = CancelToken();
+      ref.onDispose(() => cancelToken.cancel());
+      final results = await Future.wait<Object>([
+        api.getDailySummaries(
+          from: range.from,
+          to: range.to,
+          cancelToken: cancelToken,
+        ),
+        ref.watch(lactationBulkListProvider.future),
+      ]);
+      return lactationPeriodSummaryFromDtos(
+        results[0] as List<LactationDailySummaryDto>,
+        results[1] as List<BulkLactationDto>,
+      );
+    });

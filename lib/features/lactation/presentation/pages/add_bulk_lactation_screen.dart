@@ -11,6 +11,8 @@ import 'package:frontend/features/lactation/data/models/create_bulk_lactation_dt
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../domain/entities/lactation_validation.dart';
+import '../lactation_error_message.dart';
 
 class AddBulkLactationScreen extends ConsumerStatefulWidget {
   const AddBulkLactationScreen({super.key});
@@ -68,7 +70,7 @@ class _AddBulkLactationScreenState
       helpText: l10n.lactationSelectDate,
     );
 
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
 
     setState(() {
       _date = picked;
@@ -102,7 +104,7 @@ class _AddBulkLactationScreenState
       },
     );
 
-    if (picked != null) {
+    if (picked != null && mounted) {
       setState(() {
         _time = picked;
         _timeCtrl.text = _formatTime(picked);
@@ -129,17 +131,17 @@ class _AddBulkLactationScreenState
   }
 
   double? _parseDouble(String s) {
-    final v = s.trim().replaceAll(',', '.');
-    return double.tryParse(v);
+    return parseMilkAmount(s);
   }
 
   double? _parseOptionalDouble(String s) {
     final v = s.trim();
     if (v.isEmpty) return null;
-    return _parseDouble(v);
+    return _parseDouble(v) ?? double.nan;
   }
 
   Future<void> _submit() async {
+    if (_saving) return;
     final l10n = context.l10n;
     final cows = _parseInt(_cowsCtrl.text);
     final total = _parseDouble(_totalMilkCtrl.text);
@@ -151,14 +153,24 @@ class _AddBulkLactationScreenState
       return;
     }
 
-    if (total == null || total <= 0) {
+    if (total == null || !isValidMilkAmount(total)) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.lactationEnterTotalMilk)));
+      ).showSnackBar(SnackBar(content: Text(l10n.lactationMilkPositive)));
       return;
     }
 
     final milkingDt = _buildMilkingDateTime(_date, _time);
+    final calves = _parseOptionalDouble(_calvesCtrl.text);
+    final unsuitable = _parseOptionalDouble(_unsuitableCtrl.text);
+    try {
+      validateMilkBalance(total: total, calves: calves, unsuitable: unsuitable);
+    } on LactationValidationError catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(lactationErrorMessage(error, l10n))),
+      );
+      return;
+    }
 
     final dto = CreateBulkLactationDto(
       milkingDate: _dateApi.format(_date),
@@ -166,8 +178,8 @@ class _AddBulkLactationScreenState
       milkingTime: _milkingTime,
       numberOfCows: cows,
       totalMilkLiters: total,
-      milkUsedForCalves: _parseOptionalDouble(_calvesCtrl.text),
-      unsuitableMilk: _parseOptionalDouble(_unsuitableCtrl.text),
+      milkUsedForCalves: calves,
+      unsuitableMilk: unsuitable,
       notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
     );
 
@@ -182,18 +194,14 @@ class _AddBulkLactationScreenState
         context,
         title: l10n.lactationBulkSuccess,
         buttonText: l10n.lactationGoToList,
-        onButtonPressed: () {
-          context.go('/lactation');
-        },
       );
 
-      // если юзер закрыл диалог через кнопку - ок
-      if (mounted) context.pop(true);
+      if (mounted) context.go('/lactation');
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.errorPrefix('$e'))));
+      ).showSnackBar(SnackBar(content: Text(lactationErrorMessage(e, l10n))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }

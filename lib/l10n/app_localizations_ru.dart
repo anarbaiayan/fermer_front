@@ -1154,6 +1154,54 @@ class AppLocalizationsRu extends AppLocalizations {
   String get lactationTitle => 'Лактация';
 
   @override
+  String get lactationMilkPositive => 'Введите количество молока больше нуля.';
+
+  @override
+  String get lactationMilkNonNegative =>
+      'Введите корректный объём молока: ноль или положительное число.';
+
+  @override
+  String get lactationMilkBalanceError =>
+      'Молоко для телят и непригодное молоко в сумме не должны превышать общий надой.';
+
+  @override
+  String get lactationCowReports => 'Коров по отчётам';
+
+  @override
+  String get lactationCowReportsHint =>
+      'Сумма числа коров в суточных отчётах, не количество уникальных животных. Повторные доения и разные дни могут учитывать одну корову несколько раз.';
+
+  @override
+  String get lactationInvalidBalanceWarning =>
+      'В выбранном периоде есть записи с неверным балансом молока: расходы превышают надой или содержат отрицательные значения. Показаны исходные данные. Обратитесь в поддержку для исправления записей.';
+
+  @override
+  String get lactationPeriodLimit => 'Выберите период не более 366 дней.';
+
+  @override
+  String get lactationIncompleteData =>
+      'Не удалось получить все данные за период. Обновите статистику.';
+
+  @override
+  String get lactationNetworkError =>
+      'Нет соединения с сервером. Проверьте интернет и попробуйте снова.';
+
+  @override
+  String get lactationTimeoutError =>
+      'Сервер не ответил вовремя. Попробуйте снова.';
+
+  @override
+  String get lactationSessionExpired =>
+      'Сессия истекла. Войдите в аккаунт снова.';
+
+  @override
+  String get lactationAccessDenied => 'Нет доступа к данным лактации.';
+
+  @override
+  String get lactationRequestError =>
+      'Не удалось выполнить запрос. Попробуйте снова позже.';
+
+  @override
   String lactationMilkPerDay(String liters) {
     return 'Молоко за день: $liters л.';
   }

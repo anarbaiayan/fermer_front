@@ -1,7 +1,9 @@
+import '../../domain/entities/lactation_validation.dart';
+
 class CreateBulkLactationDto {
   final String milkingDate; // yyyy-MM-dd
-  final String? milkingDateTime; // ISO
-  final String? milkingTime; // MORNING/EVENING
+  final String milkingDateTime; // ISO
+  final String milkingTime; // MORNING/EVENING
 
   final int numberOfCows;
   final double totalMilkLiters;
@@ -13,8 +15,8 @@ class CreateBulkLactationDto {
 
   const CreateBulkLactationDto({
     required this.milkingDate,
-    this.milkingDateTime,
-    this.milkingTime,
+    required this.milkingDateTime,
+    required this.milkingTime,
     required this.numberOfCows,
     required this.totalMilkLiters,
     this.milkUsedForCalves,
@@ -23,6 +25,12 @@ class CreateBulkLactationDto {
   });
 
   Map<String, dynamic> toJson() {
+    if (numberOfCows <= 0) throw LactationValidationError.cowCount;
+    validateMilkBalance(
+      total: totalMilkLiters,
+      calves: milkUsedForCalves,
+      unsuitable: unsuitableMilk,
+    );
     final map = <String, dynamic>{
       'milkingDate': milkingDate,
       'milkingDateTime': milkingDateTime,

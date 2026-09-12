@@ -3,6 +3,12 @@ class LactationDailySummaryDto {
   final double totalLiters;
   final double totalKg;
   final int cowCount;
+  final double? individualLiters;
+  final double? bulkLiters;
+  final int? bulkCowCount;
+  final double? commercialMilk;
+  final double? milkUsedForCalves;
+  final double? unsuitableMilk;
   final List<LactationDailySummaryDetailDto> details;
 
   const LactationDailySummaryDto({
@@ -11,20 +17,32 @@ class LactationDailySummaryDto {
     required this.totalKg,
     required this.cowCount,
     required this.details,
+    this.individualLiters,
+    this.bulkLiters,
+    this.bulkCowCount,
+    this.commercialMilk,
+    this.milkUsedForCalves,
+    this.unsuitableMilk,
   });
 
   factory LactationDailySummaryDto.fromJson(Map<String, dynamic> json) {
     double asDouble(dynamic v) {
-      if (v == null) return 0.0;
-      if (v is num) return v.toDouble();
-      return double.tryParse(v.toString()) ?? 0.0;
+      if (v == null) throw const FormatException('Missing milk amount');
+      if (v is num && v.isFinite) return v.toDouble();
+      final parsed = double.tryParse(v.toString());
+      if (parsed == null || !parsed.isFinite) {
+        throw const FormatException('Invalid milk amount');
+      }
+      return parsed;
     }
 
     int asInt(dynamic v) {
-      if (v == null) return 0;
+      if (v == null) throw const FormatException('Missing integer');
       if (v is int) return v;
-      if (v is num) return v.toInt();
-      return int.tryParse(v.toString()) ?? 0;
+      if (v is num && v.isFinite && v == v.toInt()) return v.toInt();
+      final parsed = int.tryParse(v.toString());
+      if (parsed == null) throw const FormatException('Invalid integer');
+      return parsed;
     }
 
     return LactationDailySummaryDto(
@@ -32,6 +50,24 @@ class LactationDailySummaryDto {
       totalLiters: asDouble(json['totalLiters']),
       totalKg: asDouble(json['totalKg']),
       cowCount: asInt(json['cowCount']),
+      individualLiters: json['individualLiters'] == null
+          ? null
+          : asDouble(json['individualLiters']),
+      bulkLiters: json['bulkLiters'] == null
+          ? null
+          : asDouble(json['bulkLiters']),
+      bulkCowCount: json['bulkCowCount'] == null
+          ? null
+          : asInt(json['bulkCowCount']),
+      commercialMilk: json['commercialMilk'] == null
+          ? null
+          : asDouble(json['commercialMilk']),
+      milkUsedForCalves: json['milkUsedForCalves'] == null
+          ? null
+          : asDouble(json['milkUsedForCalves']),
+      unsuitableMilk: json['unsuitableMilk'] == null
+          ? null
+          : asDouble(json['unsuitableMilk']),
       details:
           (json['details'] as List?)
               ?.whereType<Map<String, dynamic>>()
@@ -66,21 +102,31 @@ class LactationDailySummaryDetailDto {
   factory LactationDailySummaryDetailDto.fromJson(Map<String, dynamic> json) {
     double? asNullableDouble(dynamic v) {
       if (v == null) return null;
-      if (v is num) return v.toDouble();
-      return double.tryParse(v.toString());
+      if (v is num && v.isFinite) return v.toDouble();
+      final parsed = double.tryParse(v.toString());
+      if (parsed == null || !parsed.isFinite) {
+        throw const FormatException('Invalid milk amount');
+      }
+      return parsed;
     }
 
     double asDouble(dynamic v) {
-      if (v == null) return 0.0;
-      if (v is num) return v.toDouble();
-      return double.tryParse(v.toString()) ?? 0.0;
+      if (v == null) throw const FormatException('Missing milk amount');
+      if (v is num && v.isFinite) return v.toDouble();
+      final parsed = double.tryParse(v.toString());
+      if (parsed == null || !parsed.isFinite) {
+        throw const FormatException('Invalid milk amount');
+      }
+      return parsed;
     }
 
     int asInt(dynamic v) {
-      if (v == null) return 0;
+      if (v == null) throw const FormatException('Missing integer');
       if (v is int) return v;
-      if (v is num) return v.toInt();
-      return int.tryParse(v.toString()) ?? 0;
+      if (v is num && v.isFinite && v == v.toInt()) return v.toInt();
+      final parsed = int.tryParse(v.toString());
+      if (parsed == null) throw const FormatException('Invalid integer');
+      return parsed;
     }
 
     return LactationDailySummaryDetailDto(

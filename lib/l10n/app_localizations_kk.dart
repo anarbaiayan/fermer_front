@@ -1156,6 +1156,55 @@ class AppLocalizationsKk extends AppLocalizations {
   String get lactationTitle => 'Лактация';
 
   @override
+  String get lactationMilkPositive => 'Нөлден үлкен сүт көлемін енгізіңіз.';
+
+  @override
+  String get lactationMilkNonNegative =>
+      'Сүт көлемін дұрыс енгізіңіз: нөл немесе оң сан.';
+
+  @override
+  String get lactationMilkBalanceError =>
+      'Бұзауларға жұмсалған және жарамсыз сүттің қосындысы жалпы сауылған сүт көлемінен аспауы керек.';
+
+  @override
+  String get lactationCowReports => 'Есептердегі сиыр саны';
+
+  @override
+  String get lactationCowReportsHint =>
+      'Бұл бірегей жануарлар саны емес, күндік есептердегі сиыр санының қосындысы. Қайта сауылғанда және әр күнде бір сиыр бірнеше рет есептелуі мүмкін.';
+
+  @override
+  String get lactationInvalidBalanceWarning =>
+      'Таңдалған кезеңде сүт теңгерімі қате жазбалар бар: шығын сауылған сүттен артық немесе теріс мәндер бар. Бастапқы деректер көрсетілген. Жазбаларды түзету үшін қолдау қызметіне хабарласыңыз.';
+
+  @override
+  String get lactationPeriodLimit => '366 күннен аспайтын кезеңді таңдаңыз.';
+
+  @override
+  String get lactationIncompleteData =>
+      'Кезең бойынша барлық деректерді алу мүмкін болмады. Статистиканы жаңартыңыз.';
+
+  @override
+  String get lactationNetworkError =>
+      'Сервермен байланыс жоқ. Интернетті тексеріп, қайталап көріңіз.';
+
+  @override
+  String get lactationTimeoutError =>
+      'Сервер уақытында жауап бермеді. Қайталап көріңіз.';
+
+  @override
+  String get lactationSessionExpired =>
+      'Сессия аяқталды. Аккаунтқа қайта кіріңіз.';
+
+  @override
+  String get lactationAccessDenied =>
+      'Лактация деректеріне қол жеткізуге рұқсат жоқ.';
+
+  @override
+  String get lactationRequestError =>
+      'Сұрауды орындау мүмкін болмады. Кейінірек қайталап көріңіз.';
+
+  @override
   String lactationMilkPerDay(String liters) {
     return 'Күндік сүт: $liters л.';
   }

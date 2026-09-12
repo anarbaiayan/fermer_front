@@ -11,6 +11,8 @@ import 'package:frontend/features/lactation/data/models/create_lactation_dto.dar
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../domain/entities/lactation_validation.dart';
+import '../lactation_error_message.dart';
 
 class AddLactationScreen extends ConsumerStatefulWidget {
   final int cattleId;
@@ -73,7 +75,7 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
       helpText: l10n.lactationSelectDate,
     );
 
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
 
     setState(() {
       _date = picked;
@@ -107,7 +109,7 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
       },
     );
 
-    if (picked != null) {
+    if (picked != null && mounted) {
       setState(() {
         _setTime(picked);
       });
@@ -124,13 +126,14 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
   }
 
   Future<void> _submit() async {
+    if (_saving) return;
     final l10n = context.l10n;
     final liters = _parseLiters(_milkCtrl.text);
     final milkingDt = _buildMilkingDateTime(_date, _time);
-    if (liters == null || liters <= 0) {
+    if (liters == null || !isValidMilkAmount(liters)) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.lactationEnterMilk)));
+      ).showSnackBar(SnackBar(content: Text(l10n.lactationMilkPositive)));
       return;
     }
 
@@ -156,18 +159,14 @@ class _AddLactationScreenState extends ConsumerState<AddLactationScreen> {
         context,
         title: l10n.lactationSuccessAdd,
         buttonText: l10n.lactationGoToList,
-        onButtonPressed: () {
-          context.go('/herd');
-        },
       );
 
-      // вернем true назад (на случай если пользователь закрыл попап)
-      if (mounted) context.pop(true);
+      if (mounted) context.go('/herd');
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.errorPrefix('$e'))));
+      ).showSnackBar(SnackBar(content: Text(lactationErrorMessage(e, l10n))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }

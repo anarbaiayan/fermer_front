@@ -4,6 +4,7 @@ import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/features/lactation/application/lactation_providers.dart';
+import '../lactation_error_message.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -14,8 +15,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final range = ref.watch(lactationRangeProvider);
-    final bulkAsync = ref.watch(lactationBulkListProvider);
-    final summary = ref.watch(lactationBulkSummaryProvider);
+    final summaryAsync = ref.watch(lactationPeriodSummaryProvider);
 
     final dmy = DateFormat('dd.MM.yyyy');
     final fromText = dmy.format(range.from);
@@ -32,7 +32,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
         helpText: l10n.lactationDateStartPeriod,
       );
 
-      if (picked != null) {
+      if (picked != null && context.mounted) {
         ref.read(lactationRangeProvider.notifier).setFrom(picked);
       }
     }
@@ -48,7 +48,7 @@ class LactationMilkAccountingSection extends ConsumerWidget {
         helpText: l10n.lactationDateEndPeriod,
       );
 
-      if (picked != null) {
+      if (picked != null && context.mounted) {
         ref.read(lactationRangeProvider.notifier).setTo(picked);
       }
     }
@@ -120,21 +120,65 @@ class LactationMilkAccountingSection extends ConsumerWidget {
         const SizedBox(height: 16),
 
         Expanded(
-          child: bulkAsync.when(
+          child: summaryAsync.when(
+            skipLoadingOnRefresh: false,
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (e, _) => Center(
-              child: Text(
-                l10n.errorLoadingData('$e'),
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.additional3),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      lactationErrorMessage(e, l10n),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: AppColors.additional3),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ref.invalidate(lactationBulkListProvider);
+                        ref.invalidate(lactationPeriodSummaryProvider);
+                      },
+                      child: Text(l10n.retry),
+                    ),
+                  ],
+                ),
               ),
             ),
-            data: (_) {
-              return _MilkSummaryGrid(
-                cows: summary.cowsTotal,
-                totalLiters: summary.totalMilkLiters,
-                calvesLiters: summary.milkUsedForCalves,
-                unsuitableLiters: summary.unsuitableMilk,
+            data: (summary) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.only(bottom: 96),
+                child: Column(
+                  children: [
+                    _MilkSummaryGrid(
+                      cows: summary.reportedCowCount,
+                      totalLiters: summary.totalMilkLiters,
+                      calvesLiters: summary.milkUsedForCalves,
+                      unsuitableLiters: summary.unsuitableMilk,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      l10n.lactationCowReportsHint,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.additional3,
+                      ),
+                    ),
+                    if (summary.hasInvalidMilkBalance) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary2,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          l10n.lactationInvalidBalanceWarning,
+                          style: const TextStyle(color: AppColors.primary3),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               );
             },
           ),
@@ -244,34 +288,33 @@ class _MilkSummaryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final litersFormat = NumberFormat('0.##', l10n.localeName);
     return Column(
       children: [
         const SizedBox(height: 8),
         _Pair(
           left: _Cell(
-            title: l10n.lactationMilkedCows,
+            title: l10n.lactationCowReports,
             valueText: cows.toString(),
             valueColor: const Color.fromRGBO(47, 108, 168, 1),
-            showArrow: true,
           ),
           right: _Cell(
             title: l10n.lactationTotalMilk,
-            valueText: l10n.unitLitersValue(totalLiters.toStringAsFixed(0)),
+            valueText: l10n.unitLitersValue(litersFormat.format(totalLiters)),
             valueColor: const Color.fromRGBO(238, 102, 31, 1),
-            showArrow: true,
           ),
         ),
         const SizedBox(height: 4),
         _Pair(
           left: _Cell(
             title: l10n.lactationCalfUsed,
-            valueText: l10n.unitLitersValue(calvesLiters.toStringAsFixed(1)),
+            valueText: l10n.unitLitersValue(litersFormat.format(calvesLiters)),
             valueColor: const Color.fromRGBO(166, 95, 58, 1),
           ),
           right: _Cell(
             title: l10n.lactationUnfitMilk,
             valueText: l10n.unitLitersValue(
-              unsuitableLiters.toStringAsFixed(0),
+              litersFormat.format(unsuitableLiters),
             ),
             valueColor: const Color.fromRGBO(19, 186, 186, 1),
           ),
@@ -285,13 +328,11 @@ class _Cell extends StatelessWidget {
   final String title;
   final String valueText;
   final Color valueColor;
-  final bool showArrow;
 
   const _Cell({
     required this.title,
     required this.valueText,
     required this.valueColor,
-    this.showArrow = false,
   });
 
   @override
@@ -340,30 +381,16 @@ class _Cell extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                valueText,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: valueColor,
+              Flexible(
+                child: Text(
+                  valueText,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: valueColor,
+                  ),
                 ),
               ),
-              if (showArrow)
-                Container(
-                  width: 40,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color.fromRGBO(213, 215, 218, 0.4),
-                      width: 1,
-                    ),
-                  ),
-                  child: Center(
-                    child: AppIcons.svg('arrow2', size: 22, color: valueColor),
-                  ),
-                ),
             ],
           ),
           const SizedBox(height: 26),

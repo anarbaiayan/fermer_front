@@ -9,6 +9,8 @@ import 'package:frontend/features/lactation/data/models/lactation_daily_summary_
 import 'package:frontend/features/lactation/presentation/pages/lactation_milk_accounting_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
+import '../lactation_error_message.dart';
 
 final lactationRefreshingProvider = StateProvider.autoDispose<bool>(
   (ref) => false,
@@ -29,19 +31,29 @@ class LactationScreen extends ConsumerWidget {
       try {
         ref.invalidate(lactationDailySummaryProvider);
         ref.invalidate(lactationBulkListProvider);
-        ref.invalidate(lactationBulkSummaryProvider);
+        ref.invalidate(lactationPeriodSummaryProvider);
 
         await Future.wait([
           ref.read(lactationDailySummaryProvider.future),
-          ref.read(lactationBulkListProvider.future),
+          ref.read(lactationPeriodSummaryProvider.future),
         ]);
+      } catch (error) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(lactationErrorMessage(error, l10n))),
+          );
+        }
       } finally {
-        ref.read(lactationRefreshingProvider.notifier).state = false;
+        if (context.mounted) {
+          ref.read(lactationRefreshingProvider.notifier).state = false;
+        }
       }
     }
 
     String milkText(LactationDailySummaryDto s) {
-      return l10n.lactationMilkPerDay(s.totalLiters.toStringAsFixed(0));
+      return l10n.lactationMilkPerDay(
+        NumberFormat('0.##', l10n.localeName).format(s.totalLiters),
+      );
     }
 
     return AppScaffold(
@@ -108,7 +120,7 @@ class LactationScreen extends ConsumerWidget {
               child: summaryAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (e, _) => _LactationErrorState(
-                  error: '$e',
+                  error: lactationErrorMessage(e, l10n),
                   onRetry: () => ref.invalidate(lactationDailySummaryProvider),
                 ),
                 data: (summary) {
