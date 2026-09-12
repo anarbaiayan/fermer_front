@@ -827,5 +827,187 @@
     "vetConsultantPriceLabel": "Кеңес",
     "vetConsultantsEmptyTitle": "Қолжетімді мал дәрігерлері жоқ",
     "vetConsultantsEmptySubtitle": "Сәл кейінірек қайта кіріңіз",
-    "vetOpeningWhatsapp": "WhatsApp ашылуда..."
+    "vetOpeningWhatsapp": "WhatsApp ашылуда...",
+    "lactationAddSheetTitle": "Сауым деректерін қосу",
+    "lactationAddSheetFarmHint": "Күнделікті жалпы есеп",
+    "lactationAddSheetControlHint": "Жекелеген сиырлардың өнімділігін өлшеу",
+    "controlMilkingTitle": "Бақылау сауымы",
+    "controlMilkingStep": "{total} қадамның {step}-сі",
+    "@controlMilkingStep": {
+        "placeholders": {
+            "step": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingSelectCows": "Сиырларды таңдаңыз",
+    "controlMilkingSearchHint": "Бирка немесе есім бойынша іздеу",
+    "controlMilkingFilterAll": "Барлығы",
+    "controlMilkingFilterLactating": "Сауын сиырлар",
+    "controlMilkingFilterGroup": "Топ",
+    "controlMilkingGroupTitle": "Топ",
+    "controlMilkingGroupAll": "Барлығы",
+    "controlMilkingGroupNone": "Топсыз",
+    "controlMilkingSelectAllCount": "Барлығын таңдау ({count})",
+    "@controlMilkingSelectAllCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingSelected": "Таңдалды: {count}",
+    "@controlMilkingSelected": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingNext": "Әрі қарай",
+    "controlMilkingEmptyTitle": "Қолжетімді сиырлар жоқ",
+    "controlMilkingEmptySubtitle": "Бақылау сауымын өткізу үшін «Отар» бөліміне жануарларды қосыңыз.",
+    "controlMilkingNotFoundTitle": "Сиырлар табылмады",
+    "controlMilkingNotFoundSubtitle": "Іздеу параметрлерін немесе сүзгілерді өзгертіңіз.",
+    "controlMilkingSearchEmpty": "«{query}» сұрауы бойынша ештеңе табылмады.",
+    "@controlMilkingSearchEmpty": {
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingLoading": "Сиырлар тізімі жүктелуде...",
+    "controlMilkingLoadErrorTitle": "Сиырлар тізімін жүктеу мүмкін болмады",
+    "controlMilkingLoadErrorSubtitle": "Интернет байланысын тексеріп, қайталап көріңіз.",
+    "controlMilkingCowsSelected": "{count} сиыр таңдалды",
+    "@controlMilkingCowsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingTabUnfilled": "Толтырылмаған {count}",
+    "@controlMilkingTabUnfilled": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingFilledProgress": "{total} ішінен {filled} толтырылды",
+    "@controlMilkingFilledProgress": {
+        "placeholders": {
+            "filled": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingTotalVolume": "барлығы {liters} л",
+    "@controlMilkingTotalVolume": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingInvalidValue": "Сүт мөлшерін тексеріңіз: тек нөлден бастап сандар рұқсат етіледі.",
+    "controlMilkingNothingToSave": "Кемінде бір сиыр үшін сүт мөлшерін енгізіңіз.",
+    "controlMilkingPartialTitle": "{count} сиыр үшін деректер толтырылмаған",
+    "@controlMilkingPartialTitle": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingPartialMessage": "Кейбір таңдалған сиырлар үшін сүт мөлшері көрсетілмеген.",
+    "controlMilkingPartialContinue": "Толтыруды жалғастыру",
+    "controlMilkingPartialSave": "Тек {count} сиырды сақтау",
+    "@controlMilkingPartialSave": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingDuplicateTitle": "Өлшемдер бұрыннан бар",
+    "controlMilkingDuplicateMessage": "{date} • {time} күніне {count} сиыр үшін бақылау сауымы бұрыннан бар.",
+    "@controlMilkingDuplicateMessage": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingDuplicateKeep": "Барын қалдыру",
+    "controlMilkingDuplicateUpdate": "Мәндерді өзгерту",
+    "controlMilkingSavedTitle": "Бақылау сауымы сақталды",
+    "controlMilkingSavedMessage": "{count} сиыр\nБақылау өлшемдерінің жалпы көлемі: {liters} л",
+    "@controlMilkingSavedMessage": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingSaveErrorTitle": "Бақылау сауымын сақтау мүмкін болмады",
+    "controlMilkingSaveErrorSubtitle": "Енгізілген деректер экранда сақталды.",
+    "controlMilkingSavePartialFailed": "{count} сиыр үшін деректерді сақтау мүмкін болмады. Енгізілген мәндер экранда қалды.",
+    "@controlMilkingSavePartialFailed": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingRetrySave": "Қайталап көру",
+    "controlMilkingCancelTitle": "Бақылау сауымын болдырмау керек пе?",
+    "controlMilkingCancelMessage": "Енгізілген деректер сақталмайды.",
+    "controlMilkingCancelStay": "Толтыруды жалғастыру",
+    "controlMilkingCancelExit": "Сақтамай шығу",
+    "controlMilkingRemoveTitle": "Сиырды бақылау сауымынан алып тастау керек пе?",
+    "controlMilkingRemoveMessage": "Бұл сиыр үшін {liters} л енгізілген.",
+    "@controlMilkingRemoveMessage": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingRemoveConfirm": "Алып тастау",
+    "milkProductivityLastControl": "Соңғы бақылау сауымы",
+    "milkProductivityAverage": "Орташа сауым",
+    "milkProductivityAverageHint": "соңғы {count} өлшем бойынша",
+    "@milkProductivityAverageHint": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "milkProductivityMax": "Ең жоғары сауым",
+    "milkProductivityMeasurements": "Өлшемдер саны",
+    "milkProductivityHistory": "Өлшемдер тарихы",
+    "milkProductivityEmpty": "Бақылау сауымдары әлі жоқ",
+    "milkProductivityEmptyHint": "Өлшемдер «Лактация» → «Бақылау сауымы» бөлімінде енгізіледі.",
+    "controlMilkingColumnCow": "Есімі / биркасы",
+    "controlMilkingColumnMilk": "Сүт",
+    "controlMilkingTabUnfilledEmpty": "Толтырылмағандар"
 }

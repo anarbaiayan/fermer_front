@@ -1889,4 +1889,233 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get vetOpeningWhatsapp => 'Открываем WhatsApp...';
+
+  @override
+  String get lactationAddSheetTitle => 'Добавить данные о надое';
+
+  @override
+  String get lactationAddSheetFarmHint => 'Ежедневный общий отчёт';
+
+  @override
+  String get lactationAddSheetControlHint =>
+      'Замер продуктивности отдельных коров';
+
+  @override
+  String get controlMilkingTitle => 'Контрольный надой';
+
+  @override
+  String controlMilkingStep(int step, int total) {
+    return 'Шаг $step из $total';
+  }
+
+  @override
+  String get controlMilkingSelectCows => 'Выберите коров';
+
+  @override
+  String get controlMilkingSearchHint => 'Поиск по бирке или имени';
+
+  @override
+  String get controlMilkingFilterAll => 'Все';
+
+  @override
+  String get controlMilkingFilterLactating => 'Дойные';
+
+  @override
+  String get controlMilkingFilterGroup => 'Группа';
+
+  @override
+  String get controlMilkingGroupTitle => 'Группа';
+
+  @override
+  String get controlMilkingGroupAll => 'Все';
+
+  @override
+  String get controlMilkingGroupNone => 'Без группы';
+
+  @override
+  String controlMilkingSelectAllCount(int count) {
+    return 'Выбрать все ($count)';
+  }
+
+  @override
+  String controlMilkingSelected(int count) {
+    return 'Выбрано: $count';
+  }
+
+  @override
+  String get controlMilkingNext => 'Далее';
+
+  @override
+  String get controlMilkingEmptyTitle => 'Нет доступных коров';
+
+  @override
+  String get controlMilkingEmptySubtitle =>
+      'Добавьте животных в раздел «Стадо», чтобы провести контрольный надой.';
+
+  @override
+  String get controlMilkingNotFoundTitle => 'Коровы не найдены';
+
+  @override
+  String get controlMilkingNotFoundSubtitle =>
+      'Измените параметры поиска или фильтры.';
+
+  @override
+  String controlMilkingSearchEmpty(String query) {
+    return 'По запросу «$query» ничего не найдено.';
+  }
+
+  @override
+  String get controlMilkingLoading => 'Загрузка коров...';
+
+  @override
+  String get controlMilkingLoadErrorTitle =>
+      'Не удалось загрузить список коров';
+
+  @override
+  String get controlMilkingLoadErrorSubtitle =>
+      'Проверьте подключение к интернету и попробуйте снова.';
+
+  @override
+  String controlMilkingCowsSelected(int count) {
+    return '$count коров выбрано';
+  }
+
+  @override
+  String controlMilkingTabUnfilled(int count) {
+    return 'Не заполнено $count';
+  }
+
+  @override
+  String controlMilkingFilledProgress(int filled, int total) {
+    return '$filled из $total заполнено';
+  }
+
+  @override
+  String controlMilkingTotalVolume(String liters) {
+    return '$liters л всего';
+  }
+
+  @override
+  String get controlMilkingInvalidValue =>
+      'Проверьте количество молока: допустимы только числа от нуля.';
+
+  @override
+  String get controlMilkingNothingToSave =>
+      'Введите количество молока хотя бы для одной коровы.';
+
+  @override
+  String controlMilkingPartialTitle(int count) {
+    return 'Не заполнены данные для $count коров';
+  }
+
+  @override
+  String get controlMilkingPartialMessage =>
+      'Для некоторых выбранных коров количество молока не указано.';
+
+  @override
+  String get controlMilkingPartialContinue => 'Продолжить заполнение';
+
+  @override
+  String controlMilkingPartialSave(int count) {
+    return 'Сохранить только $count';
+  }
+
+  @override
+  String get controlMilkingDuplicateTitle => 'Замеры уже существуют';
+
+  @override
+  String controlMilkingDuplicateMessage(int count, String date, String time) {
+    return 'Для $count коров на $date • $time уже есть контрольный замер.';
+  }
+
+  @override
+  String get controlMilkingDuplicateKeep => 'Оставить существующие';
+
+  @override
+  String get controlMilkingDuplicateUpdate => 'Изменить значения';
+
+  @override
+  String get controlMilkingSavedTitle => 'Контрольный надой сохранён';
+
+  @override
+  String controlMilkingSavedMessage(int count, String liters) {
+    return '$count коров\nОбщий объём контрольных замеров: $liters л';
+  }
+
+  @override
+  String get controlMilkingSaveErrorTitle =>
+      'Не удалось сохранить контрольный надой';
+
+  @override
+  String get controlMilkingSaveErrorSubtitle =>
+      'Введённые данные сохранены на экране.';
+
+  @override
+  String controlMilkingSavePartialFailed(int count) {
+    return 'Не удалось сохранить данные для $count коров. Введённые значения остались на экране.';
+  }
+
+  @override
+  String get controlMilkingRetrySave => 'Попробовать снова';
+
+  @override
+  String get controlMilkingCancelTitle => 'Отменить контрольный надой?';
+
+  @override
+  String get controlMilkingCancelMessage =>
+      'Введённые данные не будут сохранены.';
+
+  @override
+  String get controlMilkingCancelStay => 'Продолжить заполнение';
+
+  @override
+  String get controlMilkingCancelExit => 'Выйти без сохранения';
+
+  @override
+  String get controlMilkingRemoveTitle =>
+      'Убрать корову из контрольного надоя?';
+
+  @override
+  String controlMilkingRemoveMessage(String liters) {
+    return 'Для этой коровы уже введено $liters л.';
+  }
+
+  @override
+  String get controlMilkingRemoveConfirm => 'Убрать';
+
+  @override
+  String get milkProductivityLastControl => 'Последний контрольный надой';
+
+  @override
+  String get milkProductivityAverage => 'Средний надой';
+
+  @override
+  String milkProductivityAverageHint(int count) {
+    return 'за последние $count замеров';
+  }
+
+  @override
+  String get milkProductivityMax => 'Максимальный надой';
+
+  @override
+  String get milkProductivityMeasurements => 'Количество замеров';
+
+  @override
+  String get milkProductivityHistory => 'История замеров';
+
+  @override
+  String get milkProductivityEmpty => 'Контрольных надоев ещё нет';
+
+  @override
+  String get milkProductivityEmptyHint =>
+      'Замеры вносятся в разделе «Лактация» → «Контрольный надой».';
+
+  @override
+  String get controlMilkingColumnCow => 'Кличка / бирка';
+
+  @override
+  String get controlMilkingColumnMilk => 'Молоко';
+
+  @override
+  String get controlMilkingTabUnfilledEmpty => 'Незаполненные';
 }

@@ -19,7 +19,8 @@ import 'package:frontend/features/herd/presentation/pages/herd_animal_screen.dar
 import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_details_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_screen.dart';
 import 'package:frontend/features/lactation/presentation/pages/add_bulk_lactation_screen.dart';
-import 'package:frontend/features/lactation/presentation/pages/add_lactation_screen.dart';
+import 'package:frontend/features/lactation/presentation/pages/control_milking_select_screen.dart';
+import 'package:frontend/features/lactation/presentation/pages/control_milking_values_screen.dart';
 import 'package:frontend/features/lactation/presentation/pages/lactation_screen.dart';
 import 'package:frontend/features/more/presentation/pages/more_screen.dart';
 import 'package:frontend/features/notifications/presentation/pages/archived_notifications_screen.dart';
@@ -159,20 +160,20 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: '/herd/:id/lactation/add',
-      builder: (context, state) {
-        final id = int.parse(state.pathParameters['id']!);
-        final extra = state.extra;
-        final tag = (extra is Map && extra['cattleTagNumber'] is String)
-            ? extra['cattleTagNumber'] as String
-            : '';
-        return AddLactationScreen(cattleId: id, cattleTagNumber: tag);
-      },
-    ),
-
-    GoRoute(
       path: '/lactation/bulk/add',
       builder: (context, state) => const AddBulkLactationScreen(),
+    ),
+
+    // Контрольный надой: двухшаговый сценарий, доступный только из раздела
+    // "Лактация". Индивидуальные замеры из карточки животного больше не
+    // создаются.
+    GoRoute(
+      path: '/lactation/control',
+      builder: (context, state) => const ControlMilkingSelectScreen(),
+    ),
+    GoRoute(
+      path: '/lactation/control/values',
+      builder: (context, state) => const ControlMilkingValuesScreen(),
     ),
 
     GoRoute(

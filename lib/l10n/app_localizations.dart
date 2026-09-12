@@ -3595,6 +3595,378 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Открываем WhatsApp...'**
   String get vetOpeningWhatsapp;
+
+  /// No description provided for @lactationAddSheetTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить данные о надое'**
+  String get lactationAddSheetTitle;
+
+  /// No description provided for @lactationAddSheetFarmHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ежедневный общий отчёт'**
+  String get lactationAddSheetFarmHint;
+
+  /// No description provided for @lactationAddSheetControlHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Замер продуктивности отдельных коров'**
+  String get lactationAddSheetControlHint;
+
+  /// No description provided for @controlMilkingTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Контрольный надой'**
+  String get controlMilkingTitle;
+
+  /// No description provided for @controlMilkingStep.
+  ///
+  /// In ru, this message translates to:
+  /// **'Шаг {step} из {total}'**
+  String controlMilkingStep(int step, int total);
+
+  /// No description provided for @controlMilkingSelectCows.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите коров'**
+  String get controlMilkingSelectCows;
+
+  /// No description provided for @controlMilkingSearchHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск по бирке или имени'**
+  String get controlMilkingSearchHint;
+
+  /// No description provided for @controlMilkingFilterAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get controlMilkingFilterAll;
+
+  /// No description provided for @controlMilkingFilterLactating.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дойные'**
+  String get controlMilkingFilterLactating;
+
+  /// No description provided for @controlMilkingFilterGroup.
+  ///
+  /// In ru, this message translates to:
+  /// **'Группа'**
+  String get controlMilkingFilterGroup;
+
+  /// No description provided for @controlMilkingGroupTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Группа'**
+  String get controlMilkingGroupTitle;
+
+  /// No description provided for @controlMilkingGroupAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get controlMilkingGroupAll;
+
+  /// No description provided for @controlMilkingGroupNone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Без группы'**
+  String get controlMilkingGroupNone;
+
+  /// No description provided for @controlMilkingSelectAllCount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбрать все ({count})'**
+  String controlMilkingSelectAllCount(int count);
+
+  /// No description provided for @controlMilkingSelected.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбрано: {count}'**
+  String controlMilkingSelected(int count);
+
+  /// No description provided for @controlMilkingNext.
+  ///
+  /// In ru, this message translates to:
+  /// **'Далее'**
+  String get controlMilkingNext;
+
+  /// No description provided for @controlMilkingEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет доступных коров'**
+  String get controlMilkingEmptyTitle;
+
+  /// No description provided for @controlMilkingEmptySubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте животных в раздел «Стадо», чтобы провести контрольный надой.'**
+  String get controlMilkingEmptySubtitle;
+
+  /// No description provided for @controlMilkingNotFoundTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Коровы не найдены'**
+  String get controlMilkingNotFoundTitle;
+
+  /// No description provided for @controlMilkingNotFoundSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Измените параметры поиска или фильтры.'**
+  String get controlMilkingNotFoundSubtitle;
+
+  /// No description provided for @controlMilkingSearchEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'По запросу «{query}» ничего не найдено.'**
+  String controlMilkingSearchEmpty(String query);
+
+  /// No description provided for @controlMilkingLoading.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загрузка коров...'**
+  String get controlMilkingLoading;
+
+  /// No description provided for @controlMilkingLoadErrorTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось загрузить список коров'**
+  String get controlMilkingLoadErrorTitle;
+
+  /// No description provided for @controlMilkingLoadErrorSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверьте подключение к интернету и попробуйте снова.'**
+  String get controlMilkingLoadErrorSubtitle;
+
+  /// No description provided for @controlMilkingCowsSelected.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} коров выбрано'**
+  String controlMilkingCowsSelected(int count);
+
+  /// No description provided for @controlMilkingTabUnfilled.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не заполнено {count}'**
+  String controlMilkingTabUnfilled(int count);
+
+  /// No description provided for @controlMilkingFilledProgress.
+  ///
+  /// In ru, this message translates to:
+  /// **'{filled} из {total} заполнено'**
+  String controlMilkingFilledProgress(int filled, int total);
+
+  /// No description provided for @controlMilkingTotalVolume.
+  ///
+  /// In ru, this message translates to:
+  /// **'{liters} л всего'**
+  String controlMilkingTotalVolume(String liters);
+
+  /// No description provided for @controlMilkingInvalidValue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверьте количество молока: допустимы только числа от нуля.'**
+  String get controlMilkingInvalidValue;
+
+  /// No description provided for @controlMilkingNothingToSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите количество молока хотя бы для одной коровы.'**
+  String get controlMilkingNothingToSave;
+
+  /// No description provided for @controlMilkingPartialTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не заполнены данные для {count} коров'**
+  String controlMilkingPartialTitle(int count);
+
+  /// No description provided for @controlMilkingPartialMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для некоторых выбранных коров количество молока не указано.'**
+  String get controlMilkingPartialMessage;
+
+  /// No description provided for @controlMilkingPartialContinue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продолжить заполнение'**
+  String get controlMilkingPartialContinue;
+
+  /// No description provided for @controlMilkingPartialSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить только {count}'**
+  String controlMilkingPartialSave(int count);
+
+  /// No description provided for @controlMilkingDuplicateTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Замеры уже существуют'**
+  String get controlMilkingDuplicateTitle;
+
+  /// No description provided for @controlMilkingDuplicateMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для {count} коров на {date} • {time} уже есть контрольный замер.'**
+  String controlMilkingDuplicateMessage(int count, String date, String time);
+
+  /// No description provided for @controlMilkingDuplicateKeep.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оставить существующие'**
+  String get controlMilkingDuplicateKeep;
+
+  /// No description provided for @controlMilkingDuplicateUpdate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Изменить значения'**
+  String get controlMilkingDuplicateUpdate;
+
+  /// No description provided for @controlMilkingSavedTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Контрольный надой сохранён'**
+  String get controlMilkingSavedTitle;
+
+  /// No description provided for @controlMilkingSavedMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} коров\nОбщий объём контрольных замеров: {liters} л'**
+  String controlMilkingSavedMessage(int count, String liters);
+
+  /// No description provided for @controlMilkingSaveErrorTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось сохранить контрольный надой'**
+  String get controlMilkingSaveErrorTitle;
+
+  /// No description provided for @controlMilkingSaveErrorSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введённые данные сохранены на экране.'**
+  String get controlMilkingSaveErrorSubtitle;
+
+  /// No description provided for @controlMilkingSavePartialFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось сохранить данные для {count} коров. Введённые значения остались на экране.'**
+  String controlMilkingSavePartialFailed(int count);
+
+  /// No description provided for @controlMilkingRetrySave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Попробовать снова'**
+  String get controlMilkingRetrySave;
+
+  /// No description provided for @controlMilkingCancelTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отменить контрольный надой?'**
+  String get controlMilkingCancelTitle;
+
+  /// No description provided for @controlMilkingCancelMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введённые данные не будут сохранены.'**
+  String get controlMilkingCancelMessage;
+
+  /// No description provided for @controlMilkingCancelStay.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продолжить заполнение'**
+  String get controlMilkingCancelStay;
+
+  /// No description provided for @controlMilkingCancelExit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выйти без сохранения'**
+  String get controlMilkingCancelExit;
+
+  /// No description provided for @controlMilkingRemoveTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Убрать корову из контрольного надоя?'**
+  String get controlMilkingRemoveTitle;
+
+  /// No description provided for @controlMilkingRemoveMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для этой коровы уже введено {liters} л.'**
+  String controlMilkingRemoveMessage(String liters);
+
+  /// No description provided for @controlMilkingRemoveConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Убрать'**
+  String get controlMilkingRemoveConfirm;
+
+  /// No description provided for @milkProductivityLastControl.
+  ///
+  /// In ru, this message translates to:
+  /// **'Последний контрольный надой'**
+  String get milkProductivityLastControl;
+
+  /// No description provided for @milkProductivityAverage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Средний надой'**
+  String get milkProductivityAverage;
+
+  /// No description provided for @milkProductivityAverageHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'за последние {count} замеров'**
+  String milkProductivityAverageHint(int count);
+
+  /// No description provided for @milkProductivityMax.
+  ///
+  /// In ru, this message translates to:
+  /// **'Максимальный надой'**
+  String get milkProductivityMax;
+
+  /// No description provided for @milkProductivityMeasurements.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество замеров'**
+  String get milkProductivityMeasurements;
+
+  /// No description provided for @milkProductivityHistory.
+  ///
+  /// In ru, this message translates to:
+  /// **'История замеров'**
+  String get milkProductivityHistory;
+
+  /// No description provided for @milkProductivityEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Контрольных надоев ещё нет'**
+  String get milkProductivityEmpty;
+
+  /// No description provided for @milkProductivityEmptyHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Замеры вносятся в разделе «Лактация» → «Контрольный надой».'**
+  String get milkProductivityEmptyHint;
+
+  /// No description provided for @controlMilkingColumnCow.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кличка / бирка'**
+  String get controlMilkingColumnCow;
+
+  /// No description provided for @controlMilkingColumnMilk.
+  ///
+  /// In ru, this message translates to:
+  /// **'Молоко'**
+  String get controlMilkingColumnMilk;
+
+  /// No description provided for @controlMilkingTabUnfilledEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Незаполненные'**
+  String get controlMilkingTabUnfilledEmpty;
 }
 
 class _AppLocalizationsDelegate

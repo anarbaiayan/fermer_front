@@ -14,7 +14,7 @@ import 'package:frontend/features/herd/domain/entities/animal_category_resolver.
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_small_action_card.dart';
 import 'package:frontend/features/herd/domain/entities/bull_purpose.dart';
-import 'package:frontend/features/lactation/application/lactation_providers.dart';
+import 'package:frontend/features/lactation/presentation/widgets/milk_productivity_section.dart';
 import 'package:frontend/features/rations/application/rations_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -857,30 +857,14 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                               ),
                             ),
 
+                          // Карточка животного только показывает продуктивность.
+                          // Новые замеры вносятся в разделе "Лактация" →
+                          // "Контрольный надой".
                           if (isCow)
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                              child: _MilkProductivityPreview(
+                              child: MilkProductivitySection(
                                 cattleId: cattle.id,
-                                cattleTagNumber: cattle.tagNumber,
-                                onAddPressed: () async {
-                                  final res = await context.push<bool>(
-                                    '/herd/${cattle.id}/lactation/add',
-                                    extra: {
-                                      'cattleId': cattle.id,
-                                      'cattleTagNumber': cattle.tagNumber,
-                                    },
-                                  );
-
-                                  if (res == true) {
-                                    ref.invalidate(
-                                      lactationsByCattleProvider(cattle.id),
-                                    );
-                                    ref.invalidate(
-                                      cattleDetailsProvider(cattle.id),
-                                    );
-                                  }
-                                },
                               ),
                             ),
                         ],
@@ -1074,64 +1058,6 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
       case null:
         return null;
     }
-  }
-}
-
-class _MilkProductivityPreview extends StatelessWidget {
-  final int cattleId;
-  final String cattleTagNumber;
-  final VoidCallback onAddPressed;
-
-  const _MilkProductivityPreview({
-    required this.cattleId,
-    required this.cattleTagNumber,
-    required this.onAddPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: AppColors.primary2,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(child: AppIcons.svg('lactation_number')),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                l10n.milkProductivityTitle,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary3,
-                ),
-              ),
-            ),
-            IconButton(
-              padding: EdgeInsets.zero,
-              icon: AppIcons.svg('add_event', size: 30),
-              onPressed: onAddPressed,
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        const Divider(height: 1, color: AppColors.additional2),
-        const SizedBox(height: 8),
-        Text(
-          l10n.milkProductivityHint,
-          style: TextStyle(fontSize: 14, color: AppColors.additional3),
-        ),
-      ],
-    );
   }
 }
 

@@ -848,5 +848,187 @@
     "vetConsultantPriceLabel": "Консультация",
     "vetConsultantsEmptyTitle": "Нет доступных ветврачей",
     "vetConsultantsEmptySubtitle": "Загляните сюда чуть позже",
-    "vetOpeningWhatsapp": "Открываем WhatsApp..."
+    "vetOpeningWhatsapp": "Открываем WhatsApp...",
+    "lactationAddSheetTitle": "Добавить данные о надое",
+    "lactationAddSheetFarmHint": "Ежедневный общий отчёт",
+    "lactationAddSheetControlHint": "Замер продуктивности отдельных коров",
+    "controlMilkingTitle": "Контрольный надой",
+    "controlMilkingStep": "Шаг {step} из {total}",
+    "@controlMilkingStep": {
+        "placeholders": {
+            "step": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingSelectCows": "Выберите коров",
+    "controlMilkingSearchHint": "Поиск по бирке или имени",
+    "controlMilkingFilterAll": "Все",
+    "controlMilkingFilterLactating": "Дойные",
+    "controlMilkingFilterGroup": "Группа",
+    "controlMilkingGroupTitle": "Группа",
+    "controlMilkingGroupAll": "Все",
+    "controlMilkingGroupNone": "Без группы",
+    "controlMilkingSelectAllCount": "Выбрать все ({count})",
+    "@controlMilkingSelectAllCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingSelected": "Выбрано: {count}",
+    "@controlMilkingSelected": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingNext": "Далее",
+    "controlMilkingEmptyTitle": "Нет доступных коров",
+    "controlMilkingEmptySubtitle": "Добавьте животных в раздел «Стадо», чтобы провести контрольный надой.",
+    "controlMilkingNotFoundTitle": "Коровы не найдены",
+    "controlMilkingNotFoundSubtitle": "Измените параметры поиска или фильтры.",
+    "controlMilkingSearchEmpty": "По запросу «{query}» ничего не найдено.",
+    "@controlMilkingSearchEmpty": {
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingLoading": "Загрузка коров...",
+    "controlMilkingLoadErrorTitle": "Не удалось загрузить список коров",
+    "controlMilkingLoadErrorSubtitle": "Проверьте подключение к интернету и попробуйте снова.",
+    "controlMilkingCowsSelected": "{count} коров выбрано",
+    "@controlMilkingCowsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingTabUnfilled": "Не заполнено {count}",
+    "@controlMilkingTabUnfilled": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingFilledProgress": "{filled} из {total} заполнено",
+    "@controlMilkingFilledProgress": {
+        "placeholders": {
+            "filled": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingTotalVolume": "{liters} л всего",
+    "@controlMilkingTotalVolume": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingInvalidValue": "Проверьте количество молока: допустимы только числа от нуля.",
+    "controlMilkingNothingToSave": "Введите количество молока хотя бы для одной коровы.",
+    "controlMilkingPartialTitle": "Не заполнены данные для {count} коров",
+    "@controlMilkingPartialTitle": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingPartialMessage": "Для некоторых выбранных коров количество молока не указано.",
+    "controlMilkingPartialContinue": "Продолжить заполнение",
+    "controlMilkingPartialSave": "Сохранить только {count}",
+    "@controlMilkingPartialSave": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingDuplicateTitle": "Замеры уже существуют",
+    "controlMilkingDuplicateMessage": "Для {count} коров на {date} • {time} уже есть контрольный замер.",
+    "@controlMilkingDuplicateMessage": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingDuplicateKeep": "Оставить существующие",
+    "controlMilkingDuplicateUpdate": "Изменить значения",
+    "controlMilkingSavedTitle": "Контрольный надой сохранён",
+    "controlMilkingSavedMessage": "{count} коров\nОбщий объём контрольных замеров: {liters} л",
+    "@controlMilkingSavedMessage": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingSaveErrorTitle": "Не удалось сохранить контрольный надой",
+    "controlMilkingSaveErrorSubtitle": "Введённые данные сохранены на экране.",
+    "controlMilkingSavePartialFailed": "Не удалось сохранить данные для {count} коров. Введённые значения остались на экране.",
+    "@controlMilkingSavePartialFailed": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingRetrySave": "Попробовать снова",
+    "controlMilkingCancelTitle": "Отменить контрольный надой?",
+    "controlMilkingCancelMessage": "Введённые данные не будут сохранены.",
+    "controlMilkingCancelStay": "Продолжить заполнение",
+    "controlMilkingCancelExit": "Выйти без сохранения",
+    "controlMilkingRemoveTitle": "Убрать корову из контрольного надоя?",
+    "controlMilkingRemoveMessage": "Для этой коровы уже введено {liters} л.",
+    "@controlMilkingRemoveMessage": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingRemoveConfirm": "Убрать",
+    "milkProductivityLastControl": "Последний контрольный надой",
+    "milkProductivityAverage": "Средний надой",
+    "milkProductivityAverageHint": "за последние {count} замеров",
+    "@milkProductivityAverageHint": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "milkProductivityMax": "Максимальный надой",
+    "milkProductivityMeasurements": "Количество замеров",
+    "milkProductivityHistory": "История замеров",
+    "milkProductivityEmpty": "Контрольных надоев ещё нет",
+    "milkProductivityEmptyHint": "Замеры вносятся в разделе «Лактация» → «Контрольный надой».",
+    "controlMilkingColumnCow": "Кличка / бирка",
+    "controlMilkingColumnMilk": "Молоко",
+    "controlMilkingTabUnfilledEmpty": "Незаполненные"
 }

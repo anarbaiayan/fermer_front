@@ -1885,4 +1885,232 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get vetOpeningWhatsapp => 'WhatsApp ашылуда...';
+
+  @override
+  String get lactationAddSheetTitle => 'Сауым деректерін қосу';
+
+  @override
+  String get lactationAddSheetFarmHint => 'Күнделікті жалпы есеп';
+
+  @override
+  String get lactationAddSheetControlHint =>
+      'Жекелеген сиырлардың өнімділігін өлшеу';
+
+  @override
+  String get controlMilkingTitle => 'Бақылау сауымы';
+
+  @override
+  String controlMilkingStep(int step, int total) {
+    return '$total қадамның $step-сі';
+  }
+
+  @override
+  String get controlMilkingSelectCows => 'Сиырларды таңдаңыз';
+
+  @override
+  String get controlMilkingSearchHint => 'Бирка немесе есім бойынша іздеу';
+
+  @override
+  String get controlMilkingFilterAll => 'Барлығы';
+
+  @override
+  String get controlMilkingFilterLactating => 'Сауын сиырлар';
+
+  @override
+  String get controlMilkingFilterGroup => 'Топ';
+
+  @override
+  String get controlMilkingGroupTitle => 'Топ';
+
+  @override
+  String get controlMilkingGroupAll => 'Барлығы';
+
+  @override
+  String get controlMilkingGroupNone => 'Топсыз';
+
+  @override
+  String controlMilkingSelectAllCount(int count) {
+    return 'Барлығын таңдау ($count)';
+  }
+
+  @override
+  String controlMilkingSelected(int count) {
+    return 'Таңдалды: $count';
+  }
+
+  @override
+  String get controlMilkingNext => 'Әрі қарай';
+
+  @override
+  String get controlMilkingEmptyTitle => 'Қолжетімді сиырлар жоқ';
+
+  @override
+  String get controlMilkingEmptySubtitle =>
+      'Бақылау сауымын өткізу үшін «Отар» бөліміне жануарларды қосыңыз.';
+
+  @override
+  String get controlMilkingNotFoundTitle => 'Сиырлар табылмады';
+
+  @override
+  String get controlMilkingNotFoundSubtitle =>
+      'Іздеу параметрлерін немесе сүзгілерді өзгертіңіз.';
+
+  @override
+  String controlMilkingSearchEmpty(String query) {
+    return '«$query» сұрауы бойынша ештеңе табылмады.';
+  }
+
+  @override
+  String get controlMilkingLoading => 'Сиырлар тізімі жүктелуде...';
+
+  @override
+  String get controlMilkingLoadErrorTitle =>
+      'Сиырлар тізімін жүктеу мүмкін болмады';
+
+  @override
+  String get controlMilkingLoadErrorSubtitle =>
+      'Интернет байланысын тексеріп, қайталап көріңіз.';
+
+  @override
+  String controlMilkingCowsSelected(int count) {
+    return '$count сиыр таңдалды';
+  }
+
+  @override
+  String controlMilkingTabUnfilled(int count) {
+    return 'Толтырылмаған $count';
+  }
+
+  @override
+  String controlMilkingFilledProgress(int filled, int total) {
+    return '$total ішінен $filled толтырылды';
+  }
+
+  @override
+  String controlMilkingTotalVolume(String liters) {
+    return 'барлығы $liters л';
+  }
+
+  @override
+  String get controlMilkingInvalidValue =>
+      'Сүт мөлшерін тексеріңіз: тек нөлден бастап сандар рұқсат етіледі.';
+
+  @override
+  String get controlMilkingNothingToSave =>
+      'Кемінде бір сиыр үшін сүт мөлшерін енгізіңіз.';
+
+  @override
+  String controlMilkingPartialTitle(int count) {
+    return '$count сиыр үшін деректер толтырылмаған';
+  }
+
+  @override
+  String get controlMilkingPartialMessage =>
+      'Кейбір таңдалған сиырлар үшін сүт мөлшері көрсетілмеген.';
+
+  @override
+  String get controlMilkingPartialContinue => 'Толтыруды жалғастыру';
+
+  @override
+  String controlMilkingPartialSave(int count) {
+    return 'Тек $count сиырды сақтау';
+  }
+
+  @override
+  String get controlMilkingDuplicateTitle => 'Өлшемдер бұрыннан бар';
+
+  @override
+  String controlMilkingDuplicateMessage(int count, String date, String time) {
+    return '$date • $time күніне $count сиыр үшін бақылау сауымы бұрыннан бар.';
+  }
+
+  @override
+  String get controlMilkingDuplicateKeep => 'Барын қалдыру';
+
+  @override
+  String get controlMilkingDuplicateUpdate => 'Мәндерді өзгерту';
+
+  @override
+  String get controlMilkingSavedTitle => 'Бақылау сауымы сақталды';
+
+  @override
+  String controlMilkingSavedMessage(int count, String liters) {
+    return '$count сиыр\nБақылау өлшемдерінің жалпы көлемі: $liters л';
+  }
+
+  @override
+  String get controlMilkingSaveErrorTitle =>
+      'Бақылау сауымын сақтау мүмкін болмады';
+
+  @override
+  String get controlMilkingSaveErrorSubtitle =>
+      'Енгізілген деректер экранда сақталды.';
+
+  @override
+  String controlMilkingSavePartialFailed(int count) {
+    return '$count сиыр үшін деректерді сақтау мүмкін болмады. Енгізілген мәндер экранда қалды.';
+  }
+
+  @override
+  String get controlMilkingRetrySave => 'Қайталап көру';
+
+  @override
+  String get controlMilkingCancelTitle => 'Бақылау сауымын болдырмау керек пе?';
+
+  @override
+  String get controlMilkingCancelMessage => 'Енгізілген деректер сақталмайды.';
+
+  @override
+  String get controlMilkingCancelStay => 'Толтыруды жалғастыру';
+
+  @override
+  String get controlMilkingCancelExit => 'Сақтамай шығу';
+
+  @override
+  String get controlMilkingRemoveTitle =>
+      'Сиырды бақылау сауымынан алып тастау керек пе?';
+
+  @override
+  String controlMilkingRemoveMessage(String liters) {
+    return 'Бұл сиыр үшін $liters л енгізілген.';
+  }
+
+  @override
+  String get controlMilkingRemoveConfirm => 'Алып тастау';
+
+  @override
+  String get milkProductivityLastControl => 'Соңғы бақылау сауымы';
+
+  @override
+  String get milkProductivityAverage => 'Орташа сауым';
+
+  @override
+  String milkProductivityAverageHint(int count) {
+    return 'соңғы $count өлшем бойынша';
+  }
+
+  @override
+  String get milkProductivityMax => 'Ең жоғары сауым';
+
+  @override
+  String get milkProductivityMeasurements => 'Өлшемдер саны';
+
+  @override
+  String get milkProductivityHistory => 'Өлшемдер тарихы';
+
+  @override
+  String get milkProductivityEmpty => 'Бақылау сауымдары әлі жоқ';
+
+  @override
+  String get milkProductivityEmptyHint =>
+      'Өлшемдер «Лактация» → «Бақылау сауымы» бөлімінде енгізіледі.';
+
+  @override
+  String get controlMilkingColumnCow => 'Есімі / биркасы';
+
+  @override
+  String get controlMilkingColumnMilk => 'Сүт';
+
+  @override
+  String get controlMilkingTabUnfilledEmpty => 'Толтырылмағандар';
 }

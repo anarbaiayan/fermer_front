@@ -66,6 +66,44 @@ class LactationApi {
     );
   }
 
+  /// Ищет уже существующий индивидуальный замер коровы на дату и время доения.
+  ///
+  /// Отдельного эндпоинта проверки дубликата на бэкенде нет, поэтому идём по
+  /// истории коровы, отсортированной от новых к старым, и выходим, как только
+  /// страница ушла раньше искомой даты.
+  Future<LactationDto?> findByCattleDateAndTime({
+    required int cattleId,
+    required String milkingDate, // yyyy-MM-dd
+    required String milkingTime, // MORNING/EVENING
+    CancelToken? cancelToken,
+  }) async {
+    for (var number = 0; ; number++) {
+      if (cancelToken?.isCancelled ?? false) throw cancelToken!.cancelError!;
+
+      final page = await getByCattle(
+        cattleId: cattleId,
+        page: number,
+        size: 100,
+        sortBy: 'milkingDate',
+        sortDirection: 'DESC',
+        cancelToken: cancelToken,
+      );
+
+      for (final item in page.content) {
+        if (item.milkingDate == milkingDate &&
+            item.milkingTime == milkingTime) {
+          return item;
+        }
+      }
+
+      if (page.content.isEmpty || number + 1 >= page.totalPages) return null;
+
+      // Даты в формате yyyy-MM-dd сравнимы лексикографически.
+      final oldest = page.content.last.milkingDate;
+      if (oldest != null && oldest.compareTo(milkingDate) < 0) return null;
+    }
+  }
+
   Future<PagedResponseDto<BulkLactationDto>> getBulk({
     int page = 0,
     int size = 20,

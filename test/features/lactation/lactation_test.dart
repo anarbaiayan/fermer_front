@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/core/network/dio_client.dart';
 import 'package:frontend/core/network/network_providers.dart';
+import 'package:frontend/features/lactation/application/control_milking_providers.dart';
 import 'package:frontend/features/lactation/application/lactation_providers.dart';
 import 'package:frontend/features/lactation/data/datasources/lactation_api.dart';
 import 'package:frontend/features/lactation/data/models/bulk_lactation_dto.dart';
@@ -14,7 +15,9 @@ import 'package:frontend/features/lactation/data/models/create_lactation_dto.dar
 import 'package:frontend/features/lactation/data/models/lactation_daily_summary_dto.dart';
 import 'package:frontend/features/lactation/data/models/lactation_period_summary_mapper.dart';
 import 'package:frontend/features/lactation/data/models/paged_response_dto.dart';
+import 'package:frontend/features/lactation/domain/entities/control_milking.dart';
 import 'package:frontend/features/lactation/domain/entities/lactation_validation.dart';
+import 'package:frontend/features/lactation/domain/entities/milking_time.dart';
 import 'package:frontend/features/lactation/presentation/lactation_error_message.dart';
 import 'package:frontend/l10n/app_localizations_kk.dart';
 import 'package:frontend/l10n/app_localizations_ru.dart';
@@ -127,7 +130,7 @@ void main() {
       );
     });
 
-    test('includes individual milk without double-counting bulk', () {
+    test('farm statistics count bulk reports only', () {
       final summary = lactationPeriodSummaryFromDtos(
         [LactationDailySummaryDto.fromJson(_day('2026-09-12'))],
         [
@@ -138,18 +141,20 @@ void main() {
           ),
         ],
       );
-      expect(summary.totalMilkLiters, 330);
-      expect(summary.reportedCowCount, 11);
+      // В дне 30 л контрольных замеров и 300 л по ферме: в статистику
+      // попадают только 300, иначе молоко учтётся дважды.
+      expect(summary.totalMilkLiters, 300);
+      expect(summary.reportedCowCount, 10);
       expect(summary.milkUsedForCalves, 30);
       expect(summary.unsuitableMilk, 10);
       expect(summary.hasInvalidMilkBalance, isFalse);
     });
 
-    test('individual-only and empty periods are supported', () {
+    test('days with control milking but no farm report show zero', () {
       final summary = lactationPeriodSummaryFromDtos([
         LactationDailySummaryDto.fromJson(_day('2026-09-12', bulk: 0)),
       ], []);
-      expect(summary.totalMilkLiters, 30);
+      expect(summary.totalMilkLiters, 0);
       final empty = lactationPeriodSummaryFromDtos([], []);
       expect(empty.totalMilkLiters, 0);
       expect(empty.reportedCowCount, 0);
@@ -376,89 +381,234 @@ void main() {
       expect((dio.httpClientAdapter as _Adapter).requests, isEmpty);
     });
 
-    for (final bulkMutation in [true, false]) {
-      test(
-        '${bulkMutation ? 'bulk' : 'individual'} create refreshes watched summaries',
-        () async {
-          var individual = 30.0;
-          var bulk = 300.0;
-          var bulkReads = 0;
-          final api = apiWith((r) {
-            if (r.method == 'POST') {
-              if (bulkMutation) {
-                bulk += 100;
-                return {'id': 2, 'totalMilkLiters': 100};
-              }
-              individual += 10;
-              return {
-                'id': 3,
-                'cattleId': 157,
-                'milkingDate': '2026-09-12',
-                'milkLiters': 10,
-              };
-            }
-            if (r.path == '/lactations/bulk') {
-              bulkReads++;
-              return _page([
-                {'id': 1, 'totalMilkLiters': bulk},
-              ]);
-            }
-            return _day(
-              r.queryParameters['date'] as String,
-              individual: individual,
-              bulk: bulk,
-            );
-          });
-          final container = ProviderContainer(
-            overrides: [
-              lactationApiProvider.overrideWithValue(api),
-              dioClientProvider.overrideWithValue(DioClient(dio: dio)),
-            ],
-          );
-          addTearDown(container.dispose);
-          final range = container.read(lactationRangeProvider.notifier);
-          range.setFrom(DateTime(2026, 9, 12));
-          range.setTo(DateTime(2026, 9, 12));
-          range.setFrom(DateTime(2026, 9, 12));
-          container.listen(lactationPeriodSummaryProvider, (_, _) {});
-          container.listen(lactationDailySummaryProvider, (_, _) {});
-          expect(
-            (await container.read(
-              lactationPeriodSummaryProvider.future,
-            )).totalMilkLiters,
-            330,
-          );
-          await container.read(lactationDailySummaryProvider.future);
-          if (bulkMutation) {
-            await container.read(createBulkLactationProvider)(_bulkRequest());
-          } else {
-            await container.read(createLactationProvider)(
-              const CreateLactationDto(
-                cattleId: 157,
-                milkingDate: '2026-09-12',
-                milkingDateTime: '2026-09-12T06:30:00',
-                milkingTime: 'MORNING',
-                milkLiters: 10,
-              ),
+    test('bulk create refreshes watched summaries', () async {
+      var bulk = 300.0;
+      var bulkReads = 0;
+      final api = apiWith((r) {
+        if (r.method == 'POST') {
+          bulk += 100;
+          return {'id': 2, 'totalMilkLiters': 100};
+        }
+        if (r.path == '/lactations/bulk') {
+          bulkReads++;
+          return _page([
+            {'id': 1, 'totalMilkLiters': bulk},
+          ]);
+        }
+        return _day(r.queryParameters['date'] as String, bulk: bulk);
+      });
+      final container = ProviderContainer(
+        overrides: [
+          lactationApiProvider.overrideWithValue(api),
+          dioClientProvider.overrideWithValue(DioClient(dio: dio)),
+        ],
+      );
+      addTearDown(container.dispose);
+      final range = container.read(lactationRangeProvider.notifier);
+      range.setFrom(DateTime(2026, 9, 12));
+      range.setTo(DateTime(2026, 9, 12));
+      range.setFrom(DateTime(2026, 9, 12));
+      container.listen(lactationPeriodSummaryProvider, (_, _) {});
+      container.listen(lactationDailySummaryProvider, (_, _) {});
+      expect(
+        (await container.read(
+          lactationPeriodSummaryProvider.future,
+        )).totalMilkLiters,
+        300,
+      );
+      await container.read(lactationDailySummaryProvider.future);
+      await container.read(createBulkLactationProvider)(_bulkRequest());
+      expect(
+        (await container.read(
+          lactationPeriodSummaryProvider.future,
+        )).totalMilkLiters,
+        400,
+      );
+      expect(
+        (await container.read(lactationDailySummaryProvider.future)).bulkLiters,
+        400,
+      );
+      expect(bulkReads, greaterThan(1));
+    });
+
+    test('control milking never changes farm statistics', () async {
+      var individual = 30.0;
+      final api = apiWith((r) {
+        if (r.method == 'POST') {
+          individual += 10;
+          return {
+            'id': 3,
+            'cattleId': 157,
+            'milkingDate': '2026-09-12',
+            'milkLiters': 10,
+          };
+        }
+        if (r.path == '/lactations/bulk') {
+          return _page([
+            {'id': 1, 'totalMilkLiters': 300},
+          ]);
+        }
+        return _day(
+          r.queryParameters['date'] as String,
+          individual: individual,
+        );
+      });
+      final container = ProviderContainer(
+        overrides: [
+          lactationApiProvider.overrideWithValue(api),
+          dioClientProvider.overrideWithValue(DioClient(dio: dio)),
+        ],
+      );
+      addTearDown(container.dispose);
+      final range = container.read(lactationRangeProvider.notifier);
+      range.setFrom(DateTime(2026, 9, 12));
+      range.setTo(DateTime(2026, 9, 12));
+      range.setFrom(DateTime(2026, 9, 12));
+      container.listen(lactationPeriodSummaryProvider, (_, _) {});
+      expect(
+        (await container.read(
+          lactationPeriodSummaryProvider.future,
+        )).totalMilkLiters,
+        300,
+      );
+
+      final result = await container.read(saveControlMilkingProvider)(
+        date: DateTime(2026, 9, 12),
+        milkingTime: MilkingTime.morning,
+        entries: const [
+          ControlMilkingEntry(
+            cattleId: 157,
+            cattleTagNumber: '00123',
+            liters: 10,
+          ),
+        ],
+        duplicateCattleIds: const {},
+        duplicateAction: ControlMilkingDuplicateAction.update,
+      );
+
+      expect(result.savedCount, 1);
+      expect(result.savedLiters, 10);
+      expect(result.hasFailures, isFalse);
+      // Контрольный замер учтён отдельно: статистика фермы остаётся прежней.
+      expect(
+        (await container.read(
+          lactationPeriodSummaryProvider.future,
+        )).totalMilkLiters,
+        300,
+      );
+    });
+
+    test('partial save keeps failures and reports what went through', () async {
+      final api = apiWith((r) {
+        if (r.method == 'POST') {
+          final cattleId = (r.data as Map)['cattleId'];
+          if (cattleId == 158) {
+            return ResponseBody.fromString(
+              jsonEncode({'message': 'Cattle not found'}),
+              404,
+              headers: {
+                Headers.contentTypeHeader: [Headers.jsonContentType],
+              },
             );
           }
-          final expected = bulkMutation ? 430 : 340;
-          expect(
-            (await container.read(
-              lactationPeriodSummaryProvider.future,
-            )).totalMilkLiters,
-            expected,
-          );
-          expect(
-            (await container.read(
-              lactationDailySummaryProvider.future,
-            )).totalLiters,
-            expected,
-          );
-          if (bulkMutation) expect(bulkReads, greaterThan(1));
-        },
+          return {'id': 3, 'cattleId': cattleId, 'milkLiters': 10};
+        }
+        return <String, dynamic>{};
+      });
+      final container = ProviderContainer(
+        overrides: [
+          lactationApiProvider.overrideWithValue(api),
+          dioClientProvider.overrideWithValue(DioClient(dio: dio)),
+        ],
       );
-    }
+      addTearDown(container.dispose);
+
+      final result = await container.read(saveControlMilkingProvider)(
+        date: DateTime(2026, 9, 12),
+        milkingTime: MilkingTime.morning,
+        entries: const [
+          ControlMilkingEntry(
+            cattleId: 157,
+            cattleTagNumber: '00123',
+            liters: 10,
+          ),
+          ControlMilkingEntry(
+            cattleId: 158,
+            cattleTagNumber: '00124',
+            liters: 12,
+          ),
+        ],
+        duplicateCattleIds: const {},
+        duplicateAction: ControlMilkingDuplicateAction.update,
+      );
+
+      expect(result.savedCount, 1);
+      expect(result.processedCattleIds, {157});
+      expect(result.failures.keys, [158]);
+    });
+
+    test('duplicates are kept or updated, never duplicated', () async {
+      final posts = <RequestOptions>[];
+      final puts = <RequestOptions>[];
+      final api = apiWith((r) {
+        if (r.method == 'POST') {
+          posts.add(r);
+          return {'id': 9, 'cattleId': 157, 'milkLiters': 10};
+        }
+        if (r.method == 'PUT') {
+          puts.add(r);
+          return {'id': 7, 'cattleId': 157, 'milkLiters': 10};
+        }
+        return _page([
+          {
+            'id': 7,
+            'cattleId': 157,
+            'milkingDate': '2026-09-12',
+            'milkingTime': 'MORNING',
+            'milkLiters': 18.5,
+          },
+        ]);
+      });
+      final container = ProviderContainer(
+        overrides: [
+          lactationApiProvider.overrideWithValue(api),
+          dioClientProvider.overrideWithValue(DioClient(dio: dio)),
+        ],
+      );
+      addTearDown(container.dispose);
+      const entries = [
+        ControlMilkingEntry(
+          cattleId: 157,
+          cattleTagNumber: '00123',
+          liters: 21,
+        ),
+      ];
+
+      final kept = await container.read(saveControlMilkingProvider)(
+        date: DateTime(2026, 9, 12),
+        milkingTime: MilkingTime.morning,
+        entries: entries,
+        duplicateCattleIds: const {157},
+        duplicateAction: ControlMilkingDuplicateAction.keepExisting,
+      );
+      expect(kept.keptExistingCount, 1);
+      expect(kept.savedCount, 0);
+      expect(posts, isEmpty);
+      expect(puts, isEmpty);
+
+      final updated = await container.read(saveControlMilkingProvider)(
+        date: DateTime(2026, 9, 12),
+        milkingTime: MilkingTime.morning,
+        entries: entries,
+        duplicateCattleIds: const {157},
+        duplicateAction: ControlMilkingDuplicateAction.update,
+      );
+      expect(updated.savedCount, 1);
+      // Обновляем существующую запись вместо создания второй на ту же дату.
+      expect(posts, isEmpty);
+      expect(puts.single.path, '/lactations/7');
+      expect((puts.single.data as Map)['milkLiters'], 21);
+    });
   });
 
   group('Localized errors', () {
