@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:frontend/core/localization/locale_controller.dart';
+import 'package:frontend/core/notifications/push_notification_providers.dart';
 import 'package:frontend/core/router/app_router.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
@@ -28,6 +31,9 @@ class FermerPlusApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(appLocaleProvider);
+
+    // Push setup is independent of the active screen and runs once per app run.
+    unawaited(ref.read(pushNotificationServiceProvider).initialize());
 
     // 👇 слушаем истечение сессии
     ref.listen<bool>(sessionExpiredProvider, (prev, next) {

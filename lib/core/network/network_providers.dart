@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'dio_client.dart';
@@ -25,7 +26,16 @@ BaseOptions _baseOptions(String baseUrl) => BaseOptions(
 final rawDioProvider = Provider<Dio>((ref) {
   final baseUrl = ref.read(baseUrlProvider);
   final dio = Dio(_baseOptions(baseUrl));
-  dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+  if (kDebugMode) {
+    dio.interceptors.add(
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: false,
+        responseHeader: false,
+      ),
+    );
+  }
   return dio;
 });
 
@@ -39,7 +49,16 @@ final dioClientProvider = Provider<DioClient>((ref) {
 
   // Основной dio (с авторизацией)
   final dio = Dio(_baseOptions(baseUrl));
-  dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+  if (kDebugMode) {
+    dio.interceptors.add(
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: false,
+        responseHeader: false,
+      ),
+    );
+  }
 
   // ВАЖНО: передаем dio внутрь interceptor, чтобы retry НЕ читал dioClientProvider
   dio.interceptors.add(AuthInterceptor(ref, dio));

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/network/token_repository.dart';
+import 'package:frontend/core/notifications/push_notification_service.dart';
 import 'package:frontend/features/auth/domain/entities/auth_error_code.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -38,8 +39,10 @@ class AuthState {
 class AuthController extends StateNotifier<AuthState> {
   final AuthApi _api;
   final TokenRepository _tokens;
+  final PushNotificationService _pushNotifications;
 
-  AuthController(this._api, this._tokens) : super(const AuthState());
+  AuthController(this._api, this._tokens, this._pushNotifications)
+    : super(const AuthState());
 
   String _mapDioError(DioException e, {required bool isLogin}) {
     final status = e.response?.statusCode;
@@ -110,6 +113,7 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
+      await _pushNotifications.registerCurrentToken();
     } on DioException catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -167,6 +171,7 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
+      await _pushNotifications.registerCurrentToken();
     } on DioException catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -268,6 +273,11 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
+    await _pushNotifications.unregisterCurrentToken().timeout(
+      const Duration(seconds: 2),
+      onTimeout: () {},
+    );
+    _pushNotifications.onLogout();
     await _tokens.clear();
     state = const AuthState();
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frontend/features/cattle_events/application/planned_events_providers.dart';
+import 'package:frontend/core/notifications/push_notification_providers.dart';
 import 'package:frontend/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -75,12 +76,16 @@ class LoginScreen extends HookConsumerWidget {
           context.mounted) {
         ref.invalidate(plannedEventsProvider('PENDING'));
         ref.invalidate(plannedEventsProvider('COMPLETED'));
-        context.go('/home');
+        final openedPush = await ref
+            .read(pushNotificationServiceProvider)
+            .handlePendingNavigation(isAuthenticated: true);
+        if (context.mounted && !openedPush) {
+          context.go('/home');
+        }
       } else if (newState.error != null && context.mounted) {
         final message = localizeAuthError(context, newState.error!);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(message)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(message)));
       }
     }
 

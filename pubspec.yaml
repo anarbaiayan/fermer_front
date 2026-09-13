@@ -58,6 +58,10 @@ dependencies:
   flutter_secure_storage: ^10.0.0
   flutter_dotenv: ^5.1.0
   url_launcher: ^6.3.1
+  firebase_core: ^4.14.0
+  firebase_messaging: ^16.6.0
+  # 20.x supports this project's Dart 3.9 SDK constraint.
+  flutter_local_notifications: ^20.1.0
 
 dev_dependencies:
   flutter_test:

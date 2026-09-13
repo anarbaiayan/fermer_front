@@ -1,5 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:frontend/core/network/network_providers.dart';
+import 'package:frontend/core/notifications/push_notification_providers.dart';
+
 import '../data/datasources/auth_api.dart';
 import 'auth_controller.dart';
 
@@ -12,6 +14,7 @@ final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
   (ref) {
     final api = ref.read(authApiProvider);
     final tokensRepo = ref.read(tokenRepositoryProvider); // вот это
-    return AuthController(api, tokensRepo);
+    final pushNotifications = ref.read(pushNotificationServiceProvider);
+    return AuthController(api, tokensRepo, pushNotifications);
   },
 );
