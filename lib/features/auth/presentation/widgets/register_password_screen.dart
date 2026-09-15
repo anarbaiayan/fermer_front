@@ -77,6 +77,8 @@ class RegisterStep2Screen extends HookConsumerWidget {
             firstName: initialData.firstName,
             lastName: initialData.lastName,
             farmName: initialData.farmName,
+            city: initialData.city,
+            region: initialData.region,
           );
 
       final newState = ref.read(authControllerProvider);
@@ -107,8 +109,9 @@ class RegisterStep2Screen extends HookConsumerWidget {
         }
       } else if (newState.error != null && context.mounted) {
         final message = localizeAuthError(context, newState.error!);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
       }
     }
 

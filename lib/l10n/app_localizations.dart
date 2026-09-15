@@ -518,6 +518,18 @@ abstract class AppLocalizations {
   /// **'Введите название фермы'**
   String get registerFarmNameHint;
 
+  /// No description provided for @registerCity.
+  String get registerCity;
+
+  /// No description provided for @registerCityHint.
+  String get registerCityHint;
+
+  /// No description provided for @registerRegion.
+  String get registerRegion;
+
+  /// No description provided for @registerRegionHint.
+  String get registerRegionHint;
+
   /// No description provided for @registerFillAll.
   ///
   /// In ru, this message translates to:
@@ -3199,6 +3211,24 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Ферма'**
   String get profileFarmLabel;
+
+  /// No description provided for @profileCityLabel.
+  String get profileCityLabel;
+
+  /// No description provided for @profileRegionLabel.
+  String get profileRegionLabel;
+
+  /// No description provided for @profileEditFarmTitle.
+  String get profileEditFarmTitle;
+
+  /// No description provided for @profileFarmNameHint.
+  String get profileFarmNameHint;
+
+  /// No description provided for @profileSaveButton.
+  String get profileSaveButton;
+
+  /// No description provided for @profileSavedMessage.
+  String get profileSavedMessage;
 
   /// No description provided for @profileResetPasswordTitle.
   ///

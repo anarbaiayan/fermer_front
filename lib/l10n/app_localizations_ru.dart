@@ -235,6 +235,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get registerFarmNameHint => 'Введите название фермы';
 
   @override
+  String get registerCity => 'Город';
+
+  @override
+  String get registerCityHint => 'Введите город';
+
+  @override
+  String get registerRegion => 'Регион';
+
+  @override
+  String get registerRegionHint => 'Введите регион';
+
+  @override
   String get registerFillAll => 'Заполните все поля';
 
   @override
@@ -1671,6 +1683,24 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileFarmLabel => 'Ферма';
+
+  @override
+  String get profileCityLabel => 'Город';
+
+  @override
+  String get profileRegionLabel => 'Регион';
+
+  @override
+  String get profileEditFarmTitle => 'Изменить название фермы';
+
+  @override
+  String get profileFarmNameHint => 'Введите новое название';
+
+  @override
+  String get profileSaveButton => 'Сохранить';
+
+  @override
+  String get profileSavedMessage => 'Название фермы обновлено';
 
   @override
   String get profileResetPasswordTitle => 'Сбросить пароль';

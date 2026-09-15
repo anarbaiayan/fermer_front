@@ -6,6 +6,7 @@ import '../models/refresh_request_dto.dart';
 import '../models/logout_request_dto.dart';
 import '../models/restore_account_request_dto.dart';
 import '../models/auth_response_dto.dart';
+import '../models/user_profile_update_request_dto.dart';
 
 class AuthApi {
   final DioClient _client;
@@ -60,5 +61,15 @@ class AuthApi {
         responseType: ResponseType.plain,
       ),
     );
+  }
+
+  Future<UserDto> updateProfile(UserProfileUpdateRequestDto body) async {
+    final res = await _client.patch('/users/profile', data: body.toJson());
+    return UserDto.fromJson(res.data as Map<String, dynamic>);
+  }
+
+  Future<UserDto> getProfile() async {
+    final res = await _client.get('/users/profile');
+    return UserDto.fromJson(res.data as Map<String, dynamic>);
   }
 }
