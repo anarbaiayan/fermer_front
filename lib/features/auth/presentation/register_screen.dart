@@ -19,13 +19,21 @@ class RegisterStep1Screen extends HookWidget {
     final firstNameController = useTextEditingController();
     final lastNameController = useTextEditingController();
     final farmNameController = useTextEditingController();
+    final cityController = useTextEditingController();
+    final regionController = useTextEditingController();
 
     Future<void> onNextPressed() async {
       final first = firstNameController.text.trim();
       final last = lastNameController.text.trim();
       final farm = farmNameController.text.trim();
+      final city = cityController.text.trim();
+      final region = regionController.text.trim();
 
-      if (first.isEmpty || last.isEmpty || farm.isEmpty) {
+      if (first.isEmpty ||
+          last.isEmpty ||
+          farm.isEmpty ||
+          city.isEmpty ||
+          region.isEmpty) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(l10n.registerFillAll)));
@@ -36,6 +44,8 @@ class RegisterStep1Screen extends HookWidget {
         firstName: first,
         lastName: last,
         farmName: farm,
+        city: city,
+        region: region,
       );
 
       context.push('/register-step2', extra: data);
@@ -89,6 +99,22 @@ class RegisterStep1Screen extends HookWidget {
                       label: l10n.registerFarmName,
                       hintText: l10n.registerFarmNameHint,
                       controller: farmNameController,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    AppTextField(
+                      label: l10n.registerCity,
+                      hintText: l10n.registerCityHint,
+                      controller: cityController,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    AppTextField(
+                      label: l10n.registerRegion,
+                      hintText: l10n.registerRegionHint,
+                      controller: regionController,
                     ),
 
                     const SizedBox(height: 32),

@@ -235,6 +235,18 @@ class AppLocalizationsKk extends AppLocalizations {
   String get registerFarmNameHint => 'Ферма атауын енгізіңіз';
 
   @override
+  String get registerCity => 'Қала';
+
+  @override
+  String get registerCityHint => 'Қаланы енгізіңіз';
+
+  @override
+  String get registerRegion => 'Өңір';
+
+  @override
+  String get registerRegionHint => 'Өңірді енгізіңіз';
+
+  @override
   String get registerFillAll => 'Барлық өрістерді толтырыңыз';
 
   @override
@@ -1669,6 +1681,24 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get profileFarmLabel => 'Ферма';
+
+  @override
+  String get profileCityLabel => 'Қала';
+
+  @override
+  String get profileRegionLabel => 'Өңір';
+
+  @override
+  String get profileEditFarmTitle => 'Ферма атауын өзгерту';
+
+  @override
+  String get profileFarmNameHint => 'Жаңа атауды енгізіңіз';
+
+  @override
+  String get profileSaveButton => 'Сақтау';
+
+  @override
+  String get profileSavedMessage => 'Ферма атауы жаңартылды';
 
   @override
   String get profileResetPasswordTitle => 'Құпиясөзді қалпына келтіру';

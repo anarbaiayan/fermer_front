@@ -12,6 +12,7 @@ import 'package:frontend/features/cattle_events/application/planned_events_provi
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_small_action_card.dart';
 import 'package:frontend/features/notifications/application/notifications_providers.dart';
+import 'package:frontend/features/profile/presentation/widgets/edit_farm_name_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -66,12 +67,34 @@ class ProfileScreen extends ConsumerWidget {
     context.go('/login');
   }
 
+  Future<void> _editFarmName(
+    BuildContext context,
+    WidgetRef ref,
+    String currentName,
+  ) async {
+    final l10n = context.l10n;
+    final value = await showDialog<String>(
+      context: context,
+      builder: (_) => EditFarmNameDialog(initialName: currentName),
+    );
+
+    final farmName = value?.trim();
+    if (farmName == null || farmName.isEmpty || !context.mounted) return;
+    await ref.read(authControllerProvider.notifier).updateFarmName(farmName);
+    if (!context.mounted) return;
+    final error = ref.read(authControllerProvider).error;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(error ?? l10n.profileSavedMessage)));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final farmName = l10n.farmName;
-    const phone = '+7 709 851 31 21';
-    const String? email = null;
+    final user = ref.watch(authControllerProvider).user;
+    final farmName = user?.farmName ?? l10n.farmName;
+    final phone = user?.phoneNumber ?? '—';
+    final email = user?.email;
 
     final headerColor = const Color(0xFFB7E4C7);
 
@@ -195,7 +218,13 @@ class ProfileScreen extends ConsumerWidget {
                                       IconButton(
                                         padding: EdgeInsets.zero,
                                         icon: AppIcons.svg('edit', size: 30),
-                                        onPressed: () {},
+                                        onPressed: user == null
+                                            ? null
+                                            : () => _editFarmName(
+                                                context,
+                                                ref,
+                                                farmName,
+                                              ),
                                       ),
                                     ],
                                   ),
@@ -217,6 +246,22 @@ class ProfileScreen extends ConsumerWidget {
                                       label: l10n.profileFarmLabel,
                                       value: '"$farmName"',
                                     ),
+                                    if (user?.city != null &&
+                                        user!.city!.isNotEmpty) ...[
+                                      const SizedBox(height: 8),
+                                      _InfoRow(
+                                        label: l10n.profileCityLabel,
+                                        value: user.city!,
+                                      ),
+                                    ],
+                                    if (user?.region != null &&
+                                        user!.region!.isNotEmpty) ...[
+                                      const SizedBox(height: 8),
+                                      _InfoRow(
+                                        label: l10n.profileRegionLabel,
+                                        value: user.region!,
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ),

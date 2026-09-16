@@ -518,6 +518,30 @@ abstract class AppLocalizations {
   /// **'Введите название фермы'**
   String get registerFarmNameHint;
 
+  /// No description provided for @registerCity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Город'**
+  String get registerCity;
+
+  /// No description provided for @registerCityHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите город'**
+  String get registerCityHint;
+
+  /// No description provided for @registerRegion.
+  ///
+  /// In ru, this message translates to:
+  /// **'Регион'**
+  String get registerRegion;
+
+  /// No description provided for @registerRegionHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите регион'**
+  String get registerRegionHint;
+
   /// No description provided for @registerFillAll.
   ///
   /// In ru, this message translates to:
@@ -3199,6 +3223,42 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Ферма'**
   String get profileFarmLabel;
+
+  /// No description provided for @profileCityLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Город'**
+  String get profileCityLabel;
+
+  /// No description provided for @profileRegionLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Регион'**
+  String get profileRegionLabel;
+
+  /// No description provided for @profileEditFarmTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Изменить название фермы'**
+  String get profileEditFarmTitle;
+
+  /// No description provided for @profileFarmNameHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите новое название'**
+  String get profileFarmNameHint;
+
+  /// No description provided for @profileSaveButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
+  String get profileSaveButton;
+
+  /// No description provided for @profileSavedMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название фермы обновлено'**
+  String get profileSavedMessage;
 
   /// No description provided for @profileResetPasswordTitle.
   ///

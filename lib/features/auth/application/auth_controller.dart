@@ -10,6 +10,7 @@ import '../data/models/login_request_dto.dart';
 import '../data/models/refresh_request_dto.dart';
 import '../data/models/register_request_dto.dart';
 import '../data/models/restore_account_request_dto.dart';
+import '../data/models/user_profile_update_request_dto.dart';
 import '../domain/entities/tokens.dart';
 import '../domain/entities/user.dart';
 
@@ -95,6 +96,9 @@ class AuthController extends StateNotifier<AuthState> {
         email: dto.user.email,
         firstName: dto.user.firstName,
         lastName: dto.user.lastName,
+        farmName: dto.user.farmName,
+        city: dto.user.city,
+        region: dto.user.region,
         roles: dto.user.roles,
         phoneVerified: dto.user.phoneVerified,
       );
@@ -133,6 +137,8 @@ class AuthController extends StateNotifier<AuthState> {
     required String firstName,
     required String lastName,
     required String farmName,
+    required String city,
+    required String region,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
 
@@ -144,6 +150,8 @@ class AuthController extends StateNotifier<AuthState> {
           firstName: firstName,
           lastName: lastName,
           farmName: farmName,
+          city: city,
+          region: region,
         ),
       );
 
@@ -153,6 +161,9 @@ class AuthController extends StateNotifier<AuthState> {
         email: dto.user.email,
         firstName: dto.user.firstName,
         lastName: dto.user.lastName,
+        farmName: dto.user.farmName,
+        city: dto.user.city,
+        region: dto.user.region,
         roles: dto.user.roles,
         phoneVerified: dto.user.phoneVerified,
       );
@@ -219,6 +230,21 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
+      final profile = await _api.getProfile();
+      state = state.copyWith(
+        user: User(
+          id: profile.id,
+          phoneNumber: profile.phoneNumber,
+          email: profile.email,
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          farmName: profile.farmName,
+          city: profile.city,
+          region: profile.region,
+          roles: profile.roles,
+          phoneVerified: profile.phoneVerified,
+        ),
+      );
     } catch (_) {}
   }
 
@@ -241,6 +267,43 @@ class AuthController extends StateNotifier<AuthState> {
       state = state.copyWith(
         isLoading: false,
         error: AuthErrorCode.deleteAccountFailed,
+      );
+    }
+  }
+
+  Future<void> updateFarmName(String farmName) async {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final dto = await _api.updateProfile(
+        UserProfileUpdateRequestDto(farmName: farmName),
+      );
+      state = state.copyWith(
+        isLoading: false,
+        user: User(
+          id: dto.id,
+          phoneNumber: dto.phoneNumber,
+          email: dto.email,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
+          farmName: dto.farmName,
+          city: dto.city,
+          region: dto.region,
+          roles: dto.roles,
+          phoneVerified: dto.phoneVerified,
+        ),
+      );
+    } on DioException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: extractApiMessage(e, fallback: AuthErrorCode.registerFailed),
+      );
+    } catch (_) {
+      state = state.copyWith(
+        isLoading: false,
+        error: AuthErrorCode.registerFailed,
       );
     }
   }
