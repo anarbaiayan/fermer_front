@@ -11,6 +11,7 @@ import 'package:frontend/features/lactation/application/lactation_providers.dart
 import 'package:frontend/features/lactation/data/datasources/lactation_api.dart';
 import 'package:frontend/features/lactation/data/models/bulk_lactation_dto.dart';
 import 'package:frontend/features/lactation/data/models/create_bulk_lactation_dto.dart';
+import 'package:frontend/features/lactation/data/models/create_lactation_batch_dto.dart';
 import 'package:frontend/features/lactation/data/models/create_lactation_dto.dart';
 import 'package:frontend/features/lactation/data/models/lactation_daily_summary_dto.dart';
 import 'package:frontend/features/lactation/data/models/lactation_period_summary_mapper.dart';
@@ -436,12 +437,14 @@ void main() {
       final api = apiWith((r) {
         if (r.method == 'POST') {
           individual += 10;
-          return {
-            'id': 3,
-            'cattleId': 157,
-            'milkingDate': '2026-09-12',
-            'milkLiters': 10,
-          };
+          return [
+            {
+              'id': 3,
+              'cattleId': 157,
+              'milkingDate': '2026-09-12',
+              'milkLiters': 10,
+            },
+          ];
         }
         if (r.path == '/lactations/bulk') {
           return _page([
@@ -498,22 +501,23 @@ void main() {
       );
     });
 
-    test('partial save keeps failures and reports what went through', () async {
+    List<ControlMilkingEntry> entriesFor(int count, {int firstId = 1}) => [
+      for (var i = 0; i < count; i++)
+        ControlMilkingEntry(
+          cattleId: firstId + i,
+          cattleTagNumber: 'T${firstId + i}',
+          liters: 10,
+        ),
+    ];
+
+    test('new milkings are sent in one batch request', () async {
+      final posts = <RequestOptions>[];
       final api = apiWith((r) {
-        if (r.method == 'POST') {
-          final cattleId = (r.data as Map)['cattleId'];
-          if (cattleId == 158) {
-            return ResponseBody.fromString(
-              jsonEncode({'message': 'Cattle not found'}),
-              404,
-              headers: {
-                Headers.contentTypeHeader: [Headers.jsonContentType],
-              },
-            );
-          }
-          return {'id': 3, 'cattleId': cattleId, 'milkLiters': 10};
-        }
-        return <String, dynamic>{};
+        posts.add(r);
+        return [
+          for (final record in (r.data as Map)['records'] as List)
+            {'id': (record as Map)['cattleId'], ...record},
+        ];
       });
       final container = ProviderContainer(
         overrides: [
@@ -525,27 +529,79 @@ void main() {
 
       final result = await container.read(saveControlMilkingProvider)(
         date: DateTime(2026, 9, 12),
-        milkingTime: MilkingTime.morning,
-        entries: const [
-          ControlMilkingEntry(
-            cattleId: 157,
-            cattleTagNumber: '00123',
-            liters: 10,
-          ),
-          ControlMilkingEntry(
-            cattleId: 158,
-            cattleTagNumber: '00124',
-            liters: 12,
-          ),
-        ],
+        milkingTime: MilkingTime.evening,
+        entries: entriesFor(37),
         duplicateCattleIds: const {},
         duplicateAction: ControlMilkingDuplicateAction.update,
       );
 
-      expect(result.savedCount, 1);
-      expect(result.processedCattleIds, {157});
-      expect(result.failures.keys, [158]);
+      // 37 коров — один запрос, а не 37.
+      expect(posts, hasLength(1));
+      expect(posts.single.path, '/lactations/batch');
+      final records = (posts.single.data as Map)['records'] as List;
+      expect(records, hasLength(37));
+      expect(records.first, {
+        'cattleId': 1,
+        'milkingDate': '2026-09-12',
+        'milkingDateTime': '2026-09-12T18:30:00',
+        'milkingTime': 'EVENING',
+        'milkLiters': 10.0,
+      });
+      expect(result.savedCount, 37);
+      expect(result.savedLiters, 370);
+      expect(result.hasFailures, isFalse);
     });
+
+    test(
+      'more than 100 cows are split and a rejected batch is retried whole',
+      () async {
+        final batchSizes = <int>[];
+        final api = apiWith((r) {
+          final records = (r.data as Map)['records'] as List;
+          batchSizes.add(records.length);
+          // Второй пакет сервер отклоняет целиком — как при атомарном откате.
+          if (batchSizes.length == 2) {
+            return ResponseBody.fromString(
+              jsonEncode({'message': 'Cattle not found'}),
+              500,
+              headers: {
+                Headers.contentTypeHeader: [Headers.jsonContentType],
+              },
+            );
+          }
+          return [
+            for (final record in records)
+              {'id': (record as Map)['cattleId'], ...record},
+          ];
+        });
+        final container = ProviderContainer(
+          overrides: [
+            lactationApiProvider.overrideWithValue(api),
+            dioClientProvider.overrideWithValue(DioClient(dio: dio)),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        final result = await container.read(saveControlMilkingProvider)(
+          date: DateTime(2026, 9, 12),
+          milkingTime: MilkingTime.morning,
+          entries: entriesFor(150),
+          duplicateCattleIds: const {},
+          duplicateAction: ControlMilkingDuplicateAction.update,
+        );
+
+        expect(batchSizes, [100, 50]);
+        // Первый пакет на сервере — повторять его нельзя, иначе будут дубли.
+        expect(result.savedCount, 100);
+        expect(result.processedCattleIds, {
+          for (var id = 1; id <= 100; id++) id,
+        });
+        // Второй откатился целиком: все 50 коров остаются для повтора.
+        expect(result.failures.keys.toSet(), {
+          for (var id = 101; id <= 150; id++) id,
+        });
+      },
+    );
 
     test('duplicates are kept or updated, never duplicated', () async {
       final posts = <RequestOptions>[];
@@ -608,6 +664,90 @@ void main() {
       expect(posts, isEmpty);
       expect(puts.single.path, '/lactations/7');
       expect((puts.single.data as Map)['milkLiters'], 21);
+    });
+
+    test('a vanished duplicate is created in the same batch', () async {
+      final posts = <RequestOptions>[];
+      final api = apiWith((r) {
+        if (r.method == 'POST') {
+          posts.add(r);
+          return [
+            for (final record in (r.data as Map)['records'] as List)
+              {'id': (record as Map)['cattleId'], ...record},
+          ];
+        }
+        // Запись, найденная при проверке дубликатов, успела исчезнуть.
+        return _page([]);
+      });
+      final container = ProviderContainer(
+        overrides: [
+          lactationApiProvider.overrideWithValue(api),
+          dioClientProvider.overrideWithValue(DioClient(dio: dio)),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final result = await container.read(saveControlMilkingProvider)(
+        date: DateTime(2026, 9, 12),
+        milkingTime: MilkingTime.morning,
+        entries: entriesFor(3),
+        duplicateCattleIds: const {2},
+        duplicateAction: ControlMilkingDuplicateAction.update,
+      );
+
+      expect(posts, hasLength(1));
+      final ids = [
+        for (final record in (posts.single.data as Map)['records'] as List)
+          (record as Map)['cattleId'],
+      ];
+      expect(ids, unorderedEquals([1, 2, 3]));
+      expect(result.savedCount, 3);
+      expect(result.hasFailures, isFalse);
+    });
+
+    test('batch body rejects empty and oversized requests locally', () {
+      CreateLactationDto record(int id) => CreateLactationDto(
+        cattleId: id,
+        milkingDate: '2026-09-12',
+        milkingDateTime: '2026-09-12T06:30:00',
+        milkingTime: 'MORNING',
+        milkLiters: 10,
+      );
+
+      expect(
+        () => const CreateLactationBatchDto(records: []).toJson(),
+        throwsArgumentError,
+      );
+      expect(
+        () => CreateLactationBatchDto(
+          records: [for (var id = 1; id <= 101; id++) record(id)],
+        ).toJson(),
+        throwsArgumentError,
+      );
+      expect(
+        (CreateLactationBatchDto(
+                  records: [for (var id = 1; id <= 100; id++) record(id)],
+                ).toJson()['records']
+                as List)
+            .length,
+        100,
+      );
+      // Ноль не уходит в пакет: сервер отклонил бы его вместе с остальными.
+      expect(
+        () => CreateLactationBatchDto(
+          records: [
+            record(1),
+            const CreateLactationDto(
+              cattleId: 2,
+              milkingDate: '2026-09-12',
+              milkingDateTime: '2026-09-12T06:30:00',
+              milkingTime: 'MORNING',
+              milkLiters: 0,
+            ),
+          ],
+        ).toJson(),
+        throwsA(LactationValidationError.milk),
+      );
     });
   });
 

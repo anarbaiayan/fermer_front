@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:frontend/core/network/network_providers.dart';
 import '../../domain/entities/lactation_validation.dart';
 
+import '../models/create_lactation_batch_dto.dart';
 import '../models/create_lactation_dto.dart';
 import '../models/lactation_dto.dart';
 import '../models/paged_response_dto.dart';
@@ -22,6 +23,21 @@ class LactationApi {
   Future<LactationDto> create(CreateLactationDto dto) async {
     final r = await _dio.post('/lactations', data: dto.toJson());
     return LactationDto.fromJson(r.data as Map<String, dynamic>);
+  }
+
+  /// Создаёт до [CreateLactationBatchDto.maxRecords] индивидуальных замеров
+  /// одним запросом. Сервер сохраняет пакет атомарно и возвращает записи
+  /// в порядке запроса.
+  Future<List<LactationDto>> createBatch(CreateLactationBatchDto dto) async {
+    final r = await _dio.post('/lactations/batch', data: dto.toJson());
+    final data = r.data;
+    if (data is! List) throw const FormatException('Invalid batch response');
+    return data.map((item) {
+      if (item is! Map<String, dynamic>) {
+        throw const FormatException('Invalid batch item');
+      }
+      return LactationDto.fromJson(item);
+    }).toList();
   }
 
   Future<LactationDto> getById(int id) async {

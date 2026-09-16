@@ -20,6 +20,7 @@ List<MilkingCandidate> _cows(int count) => [
 Future<void> _pumpValuesScreen(
   WidgetTester tester, {
   required List<MilkingCandidate> cows,
+  List<Override> overrides = const [],
 }) async {
   tester.view.physicalSize = const Size(360, 720);
   tester.view.devicePixelRatio = 1;
@@ -27,7 +28,10 @@ Future<void> _pumpValuesScreen(
   addTearDown(tester.view.resetDevicePixelRatio);
 
   final container = ProviderContainer(
-    overrides: [milkingCandidatesProvider.overrideWith((ref) async => cows)],
+    overrides: [
+      milkingCandidatesProvider.overrideWith((ref) async => cows),
+      ...overrides,
+    ],
   );
   addTearDown(container.dispose);
   container
@@ -115,5 +119,53 @@ void main() {
 
     final second = tester.widget<TextField>(fields.at(1));
     expect(second.focusNode?.hasFocus, isTrue);
+  });
+
+  testWidgets('zero litres block saving before any request is sent', (
+    tester,
+  ) async {
+    var duplicateChecks = 0;
+    var saves = 0;
+    final cows = _cows(3);
+    await _pumpValuesScreen(
+      tester,
+      cows: cows,
+      overrides: [
+        findControlMilkingDuplicatesProvider.overrideWithValue(({
+          required date,
+          required milkingTime,
+          required cattleIds,
+        }) async {
+          duplicateChecks++;
+          return {};
+        }),
+        saveControlMilkingProvider.overrideWithValue(({
+          required date,
+          required milkingTime,
+          required entries,
+          required duplicateCattleIds,
+          required duplicateAction,
+        }) async {
+          saves++;
+          throw StateError('must not be called');
+        }),
+      ],
+    );
+    final context = tester.element(find.byType(ControlMilkingValuesScreen));
+    final l10n = AppLocalizations.of(context)!;
+
+    final fields = find.byType(TextField);
+    await tester.enterText(fields.at(0), '18.5');
+    await tester.enterText(fields.at(1), '0');
+    await tester.enterText(fields.at(2), '21');
+    await tester.tap(find.text(l10n.save));
+    await tester.pump();
+
+    // Одна корова с нулём уронила бы весь атомарный пакет — не отправляем.
+    expect(find.text(l10n.lactationMilkPositive), findsOneWidget);
+    expect(duplicateChecks, 0);
+    expect(saves, 0);
+    // Ноль остаётся в поле, а не превращается в пустое значение.
+    expect(tester.widget<TextField>(fields.at(1)).controller?.text, '0');
   });
 }

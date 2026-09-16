@@ -210,11 +210,11 @@ class _ControlMilkingValuesScreenState
   }
 
   /// Собирает строки к отправке и помечает некорректные значения.
-  ({List<ControlMilkingEntry> entries, Set<int> invalid}) _collect(
-    List<MilkingCandidate> cows,
-  ) {
+  ({List<ControlMilkingEntry> entries, Set<int> invalid, bool hasZero})
+  _collect(List<MilkingCandidate> cows) {
     final entries = <ControlMilkingEntry>[];
     final invalid = <int>{};
+    var hasZero = false;
 
     for (final cow in cows) {
       final text = _textOf(cow.id);
@@ -226,6 +226,14 @@ class _ControlMilkingValuesScreenState
         invalid.add(cow.id);
         continue;
       }
+      // Бэкенд требует milkLiters > 0, а пакет сохраняется атомарно: одна
+      // корова с нулём откатила бы весь пакет до 100 коров. Поэтому ноль не
+      // отправляем, а подсвечиваем — и не превращаем молча в пустое поле.
+      if (value == 0) {
+        invalid.add(cow.id);
+        hasZero = true;
+        continue;
+      }
       entries.add(
         ControlMilkingEntry(
           cattleId: cow.id,
@@ -235,7 +243,7 @@ class _ControlMilkingValuesScreenState
       );
     }
 
-    return (entries: entries, invalid: invalid);
+    return (entries: entries, invalid: invalid, hasZero: hasZero);
   }
 
   Future<void> _save() async {
@@ -251,7 +259,13 @@ class _ControlMilkingValuesScreenState
 
     if (collected.invalid.isNotEmpty) {
       messenger.showSnackBar(
-        SnackBar(content: Text(l10n.controlMilkingInvalidValue)),
+        SnackBar(
+          content: Text(
+            collected.hasZero
+                ? l10n.lactationMilkPositive
+                : l10n.controlMilkingInvalidValue,
+          ),
+        ),
       );
       return;
     }

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../data/datasources/lactation_api.dart';
 import '../data/datasources/milking_candidates_api.dart';
+import '../data/models/create_lactation_batch_dto.dart';
 import '../data/models/create_lactation_dto.dart';
 import '../data/models/milking_candidate_dto.dart';
 import '../domain/entities/control_milking.dart';
@@ -15,9 +16,10 @@ import 'lactation_providers.dart';
 final _apiDate = DateFormat('yyyy-MM-dd');
 final _apiDateTime = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-/// Сколько записей отправляем параллельно. Бэкенд не умеет создавать замеры
-/// пачкой, поэтому шлём по одной, но не открываем 100 соединений сразу.
-const _saveConcurrency = 4;
+/// Сколько перезаписей существующих замеров идёт параллельно. Пакетного
+/// обновления на бэкенде нет, но и открывать запрос на каждую корову сразу
+/// незачем.
+const _updateConcurrency = 4;
 
 /// Все коровы пользователя — источник списка на шаге 1.
 ///
@@ -132,8 +134,16 @@ typedef SaveControlMilking =
       required ControlMilkingDuplicateAction duplicateAction,
     });
 
-/// Сохраняет контрольный надой: создаёт новые записи и, если пользователь
-/// подтвердил перезапись, обновляет существующие.
+/// Сохраняет контрольный надой.
+///
+/// Новые замеры уходят через `POST /lactations/batch` пакетами до 100 записей.
+/// Пакет атомарен: если сервер его отклонил, не сохранилась ни одна корова из
+/// него, и все они возвращаются как неудачные — ровно для повторной отправки.
+/// Уже отправленные пакеты при этом остаются сохранёнными.
+///
+/// Пакетного обновления на бэкенде нет, поэтому перезапись существующих
+/// замеров по-прежнему идёт через `PUT` по одной корове. Дубликатов обычно
+/// единицы, так что это не упирается в количество запросов.
 final saveControlMilkingProvider = Provider<SaveControlMilking>((ref) {
   return ({
     required date,
@@ -148,67 +158,100 @@ final saveControlMilkingProvider = Provider<SaveControlMilking>((ref) {
       _defaultDateTimeFor(date, milkingTime),
     );
 
-    final pending = <ControlMilkingEntry>[];
+    final toCreate = <ControlMilkingEntry>[];
+    final toUpdate = <ControlMilkingEntry>[];
     final keptExisting = <int>[];
     for (final entry in entries) {
-      final isDuplicate = duplicateCattleIds.contains(entry.cattleId);
-      if (isDuplicate &&
-          duplicateAction == ControlMilkingDuplicateAction.keepExisting) {
+      if (!duplicateCattleIds.contains(entry.cattleId)) {
+        toCreate.add(entry);
+      } else if (duplicateAction ==
+          ControlMilkingDuplicateAction.keepExisting) {
         keptExisting.add(entry.cattleId);
-        continue;
+      } else {
+        toUpdate.add(entry);
       }
-      pending.add(entry);
     }
 
     final failures = <int, Object>{};
     final savedIds = <int>[];
     var savedLiters = 0.0;
 
-    Future<void> submit(ControlMilkingEntry entry) async {
-      try {
-        if (duplicateCattleIds.contains(entry.cattleId)) {
-          final existing = await api.findByCattleDateAndTime(
-            cattleId: entry.cattleId,
-            milkingDate: dateText,
-            milkingTime: milkingTime.apiValue,
-          );
-          final existingId = existing?.id;
-          if (existingId != null) {
-            await api.update(
-              id: existingId,
-              body: {
-                'milkingDate': dateText,
-                'milkingDateTime': timeText,
-                'milkingTime': milkingTime.apiValue,
-                'milkLiters': entry.liters,
-              },
-            );
-            savedIds.add(entry.cattleId);
-            savedLiters += entry.liters;
-            return;
-          }
-        }
+    void markSaved(ControlMilkingEntry entry) {
+      savedIds.add(entry.cattleId);
+      savedLiters += entry.liters;
+    }
 
-        await api.create(
-          CreateLactationDto(
-            cattleId: entry.cattleId,
-            milkingDate: dateText,
-            milkingDateTime: timeText,
-            milkingTime: milkingTime.apiValue,
-            milkLiters: entry.liters,
-          ),
+    // Сначала перезапись: если существующую запись успели удалить, корова
+    // уходит в общий пакет на создание, а не отдельным запросом.
+    Future<void> update(ControlMilkingEntry entry) async {
+      try {
+        final existing = await api.findByCattleDateAndTime(
+          cattleId: entry.cattleId,
+          milkingDate: dateText,
+          milkingTime: milkingTime.apiValue,
         );
-        savedIds.add(entry.cattleId);
-        savedLiters += entry.liters;
+        final existingId = existing?.id;
+        if (existingId == null) {
+          toCreate.add(entry);
+          return;
+        }
+        await api.update(
+          id: existingId,
+          body: {
+            'milkingDate': dateText,
+            'milkingDateTime': timeText,
+            'milkingTime': milkingTime.apiValue,
+            'milkLiters': entry.liters,
+          },
+        );
+        markSaved(entry);
       } catch (error) {
         failures[entry.cattleId] = error;
       }
     }
 
-    for (var offset = 0; offset < pending.length; offset += _saveConcurrency) {
+    for (
+      var offset = 0;
+      offset < toUpdate.length;
+      offset += _updateConcurrency
+    ) {
       await Future.wait(
-        pending.skip(offset).take(_saveConcurrency).map(submit),
+        toUpdate.skip(offset).take(_updateConcurrency).map(update),
       );
+    }
+
+    // Пакеты идут последовательно: так при сбое точно известно, какие из
+    // них уже сохранены на сервере.
+    for (
+      var offset = 0;
+      offset < toCreate.length;
+      offset += CreateLactationBatchDto.maxRecords
+    ) {
+      final chunk = toCreate
+          .skip(offset)
+          .take(CreateLactationBatchDto.maxRecords)
+          .toList();
+      try {
+        await api.createBatch(
+          CreateLactationBatchDto(
+            records: [
+              for (final entry in chunk)
+                CreateLactationDto(
+                  cattleId: entry.cattleId,
+                  milkingDate: dateText,
+                  milkingDateTime: timeText,
+                  milkingTime: milkingTime.apiValue,
+                  milkLiters: entry.liters,
+                ),
+            ],
+          ),
+        );
+        chunk.forEach(markSaved);
+      } catch (error) {
+        for (final entry in chunk) {
+          failures[entry.cattleId] = error;
+        }
+      }
     }
 
     if (savedIds.isNotEmpty) {
