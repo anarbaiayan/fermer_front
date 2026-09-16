@@ -6,6 +6,7 @@ import 'package:frontend/core/widgets/app_text_field.dart';
 import 'package:frontend/core/widgets/app_primary_button.dart';
 import 'package:frontend/core/widgets/app_success_dialog.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
+import 'package:frontend/core/notifications/push_notification_providers.dart';
 import 'package:frontend/features/auth/presentation/widgets/register_header.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_steps_indicator.dart';
 import 'package:frontend/l10n/app_localizations.dart';
@@ -97,13 +98,17 @@ class RegisterStep2Screen extends HookConsumerWidget {
           buttonIconAfterText: true,
         );
         if (context.mounted) {
-          context.go('/home');
+          final openedPush = await ref
+              .read(pushNotificationServiceProvider)
+              .handlePendingNavigation(isAuthenticated: true);
+          if (context.mounted && !openedPush) {
+            context.go('/home');
+          }
         }
       } else if (newState.error != null && context.mounted) {
         final message = localizeAuthError(context, newState.error!);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(message)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(message)));
       }
     }
 

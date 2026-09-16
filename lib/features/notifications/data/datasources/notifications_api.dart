@@ -29,11 +29,7 @@ class NotificationsApi {
     try {
       final r = await _dio.get(
         '/notifications',
-        queryParameters: {
-          'page': page,
-          'size': size,
-          'sort': sort,
-        },
+        queryParameters: {'page': page, 'size': size, 'sort': sort},
       );
       return NotificationsPageDto.fromJson(r.data as Map<String, dynamic>);
     } on DioException catch (e) {
@@ -49,11 +45,7 @@ class NotificationsApi {
     try {
       final r = await _dio.get(
         '/notifications/archived',
-        queryParameters: {
-          'page': page,
-          'size': size,
-          'sort': sort,
-        },
+        queryParameters: {'page': page, 'size': size, 'sort': sort},
       );
       return NotificationsPageDto.fromJson(r.data as Map<String, dynamic>);
     } on DioException catch (e) {
@@ -86,6 +78,28 @@ class NotificationsApi {
       return 0;
     } on DioException catch (e) {
       _fail(e, 'Ошибка при получении количества непрочитанных уведомлений');
+    }
+  }
+
+  Future<void> registerPushToken({
+    required String token,
+    required String platform,
+  }) async {
+    try {
+      await _dio.post(
+        '/push-tokens',
+        data: {'token': token, 'platform': platform},
+      );
+    } on DioException catch (e) {
+      _fail(e, 'Ошибка при регистрации push-уведомлений');
+    }
+  }
+
+  Future<void> unregisterPushToken(String token) async {
+    try {
+      await _dio.delete('/push-tokens/${Uri.encodeComponent(token)}');
+    } on DioException catch (e) {
+      _fail(e, 'Ошибка при отключении push-уведомлений');
     }
   }
 }
