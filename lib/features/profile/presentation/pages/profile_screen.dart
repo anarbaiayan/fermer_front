@@ -12,6 +12,7 @@ import 'package:frontend/features/cattle_events/application/planned_events_provi
 import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_small_action_card.dart';
 import 'package:frontend/features/notifications/application/notifications_providers.dart';
+import 'package:frontend/features/profile/presentation/widgets/edit_farm_name_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -72,40 +73,10 @@ class ProfileScreen extends ConsumerWidget {
     String currentName,
   ) async {
     final l10n = context.l10n;
-    final controller = TextEditingController(text: currentName);
     final value = await showDialog<String>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.profileEditFarmTitle),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          maxLength: 255,
-          textInputAction: TextInputAction.done,
-          decoration: InputDecoration(
-            hintText: l10n.profileFarmNameHint,
-            filled: true,
-            fillColor: const Color(0xFFF1F1ED),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide.none,
-            ),
-          ),
-          onSubmitted: (_) => Navigator.of(dialogContext).pop(controller.text),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(l10n.dialogCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(controller.text),
-            child: Text(l10n.profileSaveButton),
-          ),
-        ],
-      ),
+      builder: (_) => EditFarmNameDialog(initialName: currentName),
     );
-    controller.dispose();
 
     final farmName = value?.trim();
     if (farmName == null || farmName.isEmpty || !context.mounted) return;
