@@ -30,10 +30,12 @@ class PushNotificationService {
     required NotificationsApi notificationsApi,
     required TokenRepository tokenRepository,
     required PushNotificationRouter router,
+    this.onNotificationReceived,
   }) : _notificationsApi = notificationsApi,
        _tokenRepository = tokenRepository,
        _router = router;
 
+  final VoidCallback? onNotificationReceived;
   static const _tokenKey = 'fcm_device_token';
   static bool _firebaseInitialized = false;
 
@@ -95,9 +97,9 @@ class PushNotificationService {
     const initializationSettings = InitializationSettings(
       android: AndroidInitializationSettings('@drawable/ic_stat_notification'),
       iOS: DarwinInitializationSettings(
-        requestAlertPermission: false,
-        requestBadgePermission: false,
-        requestSoundPermission: false,
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
       ),
     );
 
@@ -155,6 +157,19 @@ class PushNotificationService {
 
   Future<void> _refreshAndStoreToken() async {
     try {
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        String? apnsToken = await _messaging.getAPNSToken();
+        if (apnsToken == null) {
+          for (var i = 0; i < 10; i++) {
+            await Future.delayed(const Duration(milliseconds: 500));
+            apnsToken = await _messaging.getAPNSToken();
+            if (apnsToken != null) break;
+          }
+        }
+        if (kDebugMode) {
+          debugPrint('iOS APNs token: $apnsToken');
+        }
+      }
       final token = await _messaging.getToken();
       if (token == null) return;
       await _storeToken(token);
@@ -224,12 +239,12 @@ class PushNotificationService {
   }
 
   Future<void> _onForegroundMessage(RemoteMessage message) async {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      await _showAndroidNotification(_payloadFromMessage(message));
-    }
+    final payload = _payloadFromMessage(message);
+    await _showNotification(payload);
+    onNotificationReceived?.call();
   }
 
-  Future<void> _showAndroidNotification(PushNotificationPayload payload) async {
+  Future<void> _showNotification(PushNotificationPayload payload) async {
     await _localNotifications.show(
       id:
           payload.notificationId?.hashCode ??
@@ -245,12 +260,18 @@ class PushNotificationService {
           priority: Priority.high,
           icon: 'ic_stat_notification',
         ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
       ),
       payload: jsonEncode(payload.toJson()),
     );
   }
 
   Future<void> _onNotificationTap(RemoteMessage message) async {
+    onNotificationReceived?.call();
     final payload = _payloadFromMessage(message);
     if (!_navigationReady || await _tokenRepository.accessToken == null) {
       await _router.savePending(payload);

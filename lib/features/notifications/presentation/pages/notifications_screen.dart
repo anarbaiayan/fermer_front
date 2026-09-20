@@ -128,9 +128,12 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                                 ),
                               )
                             : RefreshIndicator(
-                                onRefresh: () => ref
-                                    .read(notificationsFeedProvider(false).notifier)
-                                    .refresh(),
+                                onRefresh: () async {
+                                  ref.invalidate(unreadNotificationsCountProvider);
+                                  await ref
+                                      .read(notificationsFeedProvider(false).notifier)
+                                      .refresh();
+                                },
                                 child: ListView.separated(
                                   controller: _scrollController,
                                   itemCount:

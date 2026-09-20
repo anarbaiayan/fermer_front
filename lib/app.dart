@@ -9,6 +9,7 @@ import 'package:frontend/core/router/app_router.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/auth/session_events.dart';
+import 'package:frontend/features/notifications/application/notifications_providers.dart';
 import 'package:frontend/l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -25,11 +26,34 @@ const _defaultSystemOverlay = SystemUiOverlayStyle(
   systemNavigationBarContrastEnforced: false,
 );
 
-class FermerPlusApp extends ConsumerWidget {
+class FermerPlusApp extends ConsumerStatefulWidget {
   const FermerPlusApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FermerPlusApp> createState() => _FermerPlusAppState();
+}
+
+class _FermerPlusAppState extends ConsumerState<FermerPlusApp> {
+  late final AppLifecycleListener _lifecycleListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycleListener = AppLifecycleListener(
+      onResume: () {
+        ref.invalidate(unreadNotificationsCountProvider);
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _lifecycleListener.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final locale = ref.watch(appLocaleProvider);
 
     // Push setup is independent of the active screen and runs once per app run.

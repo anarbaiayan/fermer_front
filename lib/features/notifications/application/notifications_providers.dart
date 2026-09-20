@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../data/datasources/notifications_api.dart';
@@ -31,8 +33,15 @@ class NotificationsFeedState {
   }
 }
 
-final unreadNotificationsCountProvider = FutureProvider<int>((ref) async {
+final unreadNotificationsCountProvider = FutureProvider.autoDispose<int>((ref) async {
   final api = ref.read(notificationsApiProvider);
+
+  // Periodically refresh the unread count while this provider is active/watched
+  final timer = Timer(const Duration(seconds: 30), () {
+    ref.invalidateSelf();
+  });
+  ref.onDispose(timer.cancel);
+
   return api.getUnreadCount();
 });
 
