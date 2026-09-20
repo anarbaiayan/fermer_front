@@ -39,10 +39,13 @@ class _FermerPlusAppState extends ConsumerState<FermerPlusApp> {
   @override
   void initState() {
     super.initState();
+    unawaited(ref.read(pushNotificationServiceProvider).initialize());
     _lifecycleListener = AppLifecycleListener(
       onResume: () {
         ref.invalidate(unreadNotificationsCountProvider);
+        unawaited(ref.read(pushNotificationServiceProvider).onResume());
       },
+      onPause: () => ref.read(pushNotificationServiceProvider).onPause(),
     );
   }
 
@@ -55,9 +58,6 @@ class _FermerPlusAppState extends ConsumerState<FermerPlusApp> {
   @override
   Widget build(BuildContext context) {
     final locale = ref.watch(appLocaleProvider);
-
-    // Push setup is independent of the active screen and runs once per app run.
-    unawaited(ref.read(pushNotificationServiceProvider).initialize());
 
     // 👇 слушаем истечение сессии
     ref.listen<bool>(sessionExpiredProvider, (prev, next) {

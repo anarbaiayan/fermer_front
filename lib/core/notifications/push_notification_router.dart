@@ -47,6 +47,11 @@ class PushNotificationRouter {
     );
   }
 
+  Future<void> clearPending() async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.remove(_pendingPayloadKey);
+  }
+
   Future<bool> handlePendingNavigation({required bool isAuthenticated}) async {
     if (!isAuthenticated) return false;
 

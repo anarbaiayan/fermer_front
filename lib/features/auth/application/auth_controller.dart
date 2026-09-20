@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/network/token_repository.dart';
@@ -117,7 +119,7 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
-      await _pushNotifications.registerCurrentToken();
+      unawaited(_pushNotifications.registerCurrentToken());
     } on DioException catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -182,7 +184,7 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
-      await _pushNotifications.registerCurrentToken();
+      unawaited(_pushNotifications.registerCurrentToken());
     } on DioException catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -245,6 +247,7 @@ class AuthController extends StateNotifier<AuthState> {
           phoneVerified: profile.phoneVerified,
         ),
       );
+      unawaited(_pushNotifications.registerCurrentToken());
     } catch (_) {}
   }
 
@@ -253,6 +256,9 @@ class AuthController extends StateNotifier<AuthState> {
 
     try {
       await _api.deleteAccount();
+      await _pushNotifications
+          .unregisterCurrentToken(unregisterFromBackend: false)
+          .timeout(const Duration(seconds: 2), onTimeout: () {});
       await _tokens.clear();
       state = const AuthState();
     } on DioException catch (e) {
@@ -340,7 +346,6 @@ class AuthController extends StateNotifier<AuthState> {
       const Duration(seconds: 2),
       onTimeout: () {},
     );
-    _pushNotifications.onLogout();
     await _tokens.clear();
     state = const AuthState();
   }
