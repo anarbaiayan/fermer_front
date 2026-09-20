@@ -231,6 +231,8 @@ class PushNotificationService {
   Future<void> _storeToken(String token) async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setString(_tokenKey, token);
+    // Needed to address a console test push at this device.
+    if (kDebugMode) debugPrint('FCM token: $token');
   }
 
   Future<String?> _getStoredToken() async {
