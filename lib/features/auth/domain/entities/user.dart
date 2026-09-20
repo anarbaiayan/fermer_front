@@ -2,9 +2,9 @@ class User {
   final int id;
   final String phoneNumber;
   final String? email;
-  final String firstName;
-  final String lastName;
-  final String farmName;
+  final String? firstName;
+  final String? lastName;
+  final String? farmName;
   final String? city;
   final String? region;
   final List<String> roles;
@@ -23,5 +23,6 @@ class User {
     required this.phoneVerified,
   });
 
-  String get fullName => '$firstName $lastName';
+  String get fullName =>
+      [firstName, lastName].whereType<String>().join(' ').trim();
 }
