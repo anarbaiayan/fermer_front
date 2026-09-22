@@ -1,4 +1,5 @@
 import 'package:frontend/core/screens/not_found_screen.dart';
+import 'package:frontend/core/widgets/app_shell.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_code_screen.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_new_password_screen.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_phone_screen.dart';
@@ -59,16 +60,6 @@ final GoRouter appRouter = GoRouter(
         return RegisterStep2Screen(initialData: data);
       },
     ),
-    GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
-    GoRoute(path: '/more', builder: (context, state) => const MoreScreen()),
-    GoRoute(
-      path: '/herd',
-      builder: (context, state) {
-        final filter = state.extra as HerdFilterType?;
-        return HerdScreen(filter: filter);
-      },
-    ),
-
     // сначала add
     GoRoute(
       path: '/herd/add',
@@ -155,11 +146,6 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: '/lactation',
-      builder: (context, state) => const LactationScreen(),
-    ),
-
-    GoRoute(
       path: '/lactation/bulk/add',
       builder: (context, state) => const AddBulkLactationScreen(),
     ),
@@ -197,25 +183,9 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const ArchivedNotificationsScreen(),
     ),
 
-    GoRoute(path: '/events', builder: (context, state) => const EventsScreen()),
     GoRoute(
       path: '/events/bulk/add',
       builder: (context, state) => const AddBulkCattleEventScreen(),
-    ),
-    GoRoute(
-      path: '/rations',
-      builder: (context, state) {
-        final extra = state.extra;
-        int? cattleId;
-
-        if (extra is Map<String, dynamic>) {
-          final v = extra['cattleId'];
-          if (v is int) cattleId = v;
-          if (v is String) cattleId = int.tryParse(v);
-        }
-
-        return RationsScreen(cattleId: cattleId);
-      },
     ),
     GoRoute(
       path: '/rations/cattle/:cattleId',
@@ -228,22 +198,7 @@ final GoRouter appRouter = GoRouter(
       path: '/rations/stocks/add',
       builder: (context, state) => const AddUserRationsScreen(),
     ),
-    GoRoute(
-      path: '/rations/stocks',
-      builder: (context, state) => const UserRationsStocksScreen(),
-    ),
-    GoRoute(
-      path: '/rations/stocks/:type',
-      builder: (context, state) {
-        final type = state.pathParameters['type'];
-        return UserRationsStocksScreen(filterType: type);
-      },
-    ),
 
-    GoRoute(
-      path: '/pharmacy',
-      builder: (context, state) => const PharmacyScreen(),
-    ),
     GoRoute(
       path: '/pharmacy/requests',
       builder: (context, state) => const PharmacyRequestsScreen(),
@@ -256,9 +211,88 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    GoRoute(
-      path: '/vet-consultants',
-      builder: (context, state) => const VetConsultantsScreen(),
+    // Экраны с нижним баром. Оболочка держит бар и drawer вне анимаций
+    // перехода, поэтому при смене экрана меняется только содержимое.
+    // Маршрут стоит последним: '/rations/stocks/:type' не должен перехватывать
+    // '/rations/stocks/add'. В экраны оболочки из экранов вне неё переходить
+    // через context.go, не push: push создал бы вторую копию оболочки.
+    ShellRoute(
+      builder: (context, state, child) => AppShell(
+        currentIndex: AppShell.indexForPath(state.topRoute?.path),
+        child: child,
+      ),
+      routes: [
+        // Вкладки переключаются без анимации, как нативный tab bar.
+        GoRoute(
+          path: '/home',
+          pageBuilder: (context, state) =>
+              NoTransitionPage(key: state.pageKey, child: const HomeScreen()),
+        ),
+        GoRoute(
+          path: '/herd',
+          pageBuilder: (context, state) {
+            final filter = state.extra as HerdFilterType?;
+            return NoTransitionPage(
+              key: state.pageKey,
+              child: HerdScreen(filter: filter),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/events',
+          pageBuilder: (context, state) =>
+              NoTransitionPage(key: state.pageKey, child: const EventsScreen()),
+        ),
+        GoRoute(
+          path: '/lactation',
+          pageBuilder: (context, state) => NoTransitionPage(
+            key: state.pageKey,
+            child: const LactationScreen(),
+          ),
+        ),
+        GoRoute(
+          path: '/more',
+          pageBuilder: (context, state) =>
+              NoTransitionPage(key: state.pageKey, child: const MoreScreen()),
+        ),
+
+        // Разделы из "Ещё" открываются обычным переходом платформы, свайп
+        // назад на iOS работает; анимируется только содержимое над баром.
+        GoRoute(
+          path: '/rations',
+          builder: (context, state) {
+            final extra = state.extra;
+            int? cattleId;
+
+            if (extra is Map<String, dynamic>) {
+              final v = extra['cattleId'];
+              if (v is int) cattleId = v;
+              if (v is String) cattleId = int.tryParse(v);
+            }
+
+            return RationsScreen(cattleId: cattleId);
+          },
+        ),
+        GoRoute(
+          path: '/rations/stocks',
+          builder: (context, state) => const UserRationsStocksScreen(),
+        ),
+        GoRoute(
+          path: '/rations/stocks/:type',
+          builder: (context, state) {
+            final type = state.pathParameters['type'];
+            return UserRationsStocksScreen(filterType: type);
+          },
+        ),
+        GoRoute(
+          path: '/pharmacy',
+          builder: (context, state) => const PharmacyScreen(),
+        ),
+        GoRoute(
+          path: '/vet-consultants',
+          builder: (context, state) => const VetConsultantsScreen(),
+        ),
+      ],
     ),
   ],
 );

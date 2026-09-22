@@ -52,6 +52,11 @@
   - index 3: Lactation (`/lactation`)
   - index 4: More (`/more`)
 - Rations and pharmacy are not bottom-navigation tabs. They are discovered through `/more`; ration, feed-stock, and pharmacy screens use bottom-nav index `4` when they show the bottom bar.
+- Screens that show the bottom bar live inside the `ShellRoute` in `app_router.dart`. `AppShell` (`lib/core/widgets/app_shell.dart`) owns the bar and the drawer, so they stay fixed while pages change:
+  - tabs use `NoTransitionPage`; sections opened from More use the default platform transition (iOS swipe-back works);
+  - the highlighted tab comes from `AppShell.indexForPath`, so a new bar screen needs both a shell route and an entry there; `AppScaffold.bottomNavIndex` only matters outside the shell;
+  - the `ShellRoute` stays last in the route list so `/rations/stocks/:type` does not swallow `/rations/stocks/add`;
+  - from a screen outside the shell, reach shell screens with `context.go`, never `context.push` — push would build a second shell with the same navigator key.
 - On the More screen, use `context.go` for primary bottom-navigation destinations and `context.push` for nested sections, so Back returns to More.
 - `FermerPlusDrawer` keeps profile, settings, FAQ, support, referral, and logout. Pharmacy must not be added back to the drawer.
 - Preserve route semantics already used in the app:

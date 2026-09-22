@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_bottom_nav_bar.dart';
+import 'package:frontend/core/widgets/app_shell.dart';
 import 'package:frontend/core/widgets/fermer_plus_app_bar.dart';
 import 'package:frontend/core/widgets/fermer_plus_drawer.dart';
 
@@ -36,8 +37,12 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Inside AppShell the bottom bar and the drawer belong to the shell, so
+    // they stay in place while pages change.
+    final shell = AppShellScope.maybeOf(context);
+
     return Scaffold(
-      drawer: enableDrawer
+      drawer: enableDrawer && shell == null
           ? FermerPlusDrawer(farmName: farmName, avatarUrl: avatarUrl)
           : null,
 
@@ -47,7 +52,7 @@ class AppScaffold extends StatelessWidget {
               child: Builder(
                 builder: (ctx) => FermerPlusAppBar(
                   onMenuTap: enableDrawer
-                      ? () => Scaffold.of(ctx).openDrawer()
+                      ? shell?.openDrawer ?? () => Scaffold.of(ctx).openDrawer()
                       : null,
                   showBell: showBell,
                 ),
@@ -55,7 +60,7 @@ class AppScaffold extends StatelessWidget {
             )
           : null,
 
-      bottomNavigationBar: bottomNavIndex == null
+      bottomNavigationBar: shell != null || bottomNavIndex == null
           ? null
           : AppBottomNavBar(currentIndex: bottomNavIndex!),
 
