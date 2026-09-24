@@ -232,22 +232,27 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
-      final profile = await _api.getProfile();
-      state = state.copyWith(
-        user: User(
-          id: profile.id,
-          phoneNumber: profile.phoneNumber,
-          email: profile.email,
-          firstName: profile.firstName,
-          lastName: profile.lastName,
-          farmName: profile.farmName,
-          city: profile.city,
-          region: profile.region,
-          roles: profile.roles,
-          phoneVerified: profile.phoneVerified,
-        ),
-      );
       unawaited(_pushNotifications.registerCurrentToken());
+
+      // Профиль подгружается отдельно: пока на бэкенде нет GET /users/profile,
+      // запрос падает, и это не должно ломать вход по сохранённым токенам.
+      try {
+        final profile = await _api.getProfile();
+        state = state.copyWith(
+          user: User(
+            id: profile.id,
+            phoneNumber: profile.phoneNumber,
+            email: profile.email,
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            farmName: profile.farmName,
+            city: profile.city,
+            region: profile.region,
+            roles: profile.roles,
+            phoneVerified: profile.phoneVerified,
+          ),
+        );
+      } catch (_) {}
     } catch (_) {}
   }
 
@@ -277,10 +282,9 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
+  /// Не требует загруженного профиля: пользователя определяет токен, а ответ
+  /// возвращает актуальные данные профиля.
   Future<void> updateFarmName(String farmName) async {
-    final currentUser = state.user;
-    if (currentUser == null) return;
-
     state = state.copyWith(isLoading: true, error: null);
     try {
       final dto = await _api.updateProfile(

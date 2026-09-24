@@ -218,13 +218,13 @@ class ProfileScreen extends ConsumerWidget {
                                       IconButton(
                                         padding: EdgeInsets.zero,
                                         icon: AppIcons.svg('edit', size: 30),
-                                        onPressed: user == null
-                                            ? null
-                                            : () => _editFarmName(
-                                                context,
-                                                ref,
-                                                farmName,
-                                              ),
+                                        // Переименование доступно и до загрузки
+                                        // профиля: запрос идёт по токену.
+                                        onPressed: () => _editFarmName(
+                                          context,
+                                          ref,
+                                          user?.farmName ?? '',
+                                        ),
                                       ),
                                     ],
                                   ),
