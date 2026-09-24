@@ -19,6 +19,16 @@ class FermerPlusDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    // Имя хозяйства приходит из профиля; farmName остаётся подписью по
+    // умолчанию, пока профиль не загружен или поле не заполнено.
+    final profileFarmName = ref
+        .watch(authControllerProvider)
+        .user
+        ?.farmName
+        ?.trim();
+    final title = profileFarmName == null || profileFarmName.isEmpty
+        ? farmName
+        : profileFarmName;
 
     return Drawer(
       backgroundColor: Colors.white,
@@ -35,7 +45,7 @@ class FermerPlusDrawer extends ConsumerWidget {
                   _AvatarCircle(avatarUrl: avatarUrl),
                   const SizedBox(height: 14),
                   Text(
-                    '"$farmName"',
+                    '"$title"',
                     style: const TextStyle(
                       fontSize: 14,
                       color: AppColors.additional3,
