@@ -2303,4 +2303,198 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get financeReportReadyTitle => 'Есеп дайын';
+
+  @override
+  String get financeSave => 'Сақтау';
+
+  @override
+  String get financeOptional => 'міндетті емес';
+
+  @override
+  String get financeHideAction => 'Жасыру';
+
+  @override
+  String get financeNameLabel => 'Атауы';
+
+  @override
+  String get financeCashboxName => 'Касса';
+
+  @override
+  String get financeOnboardingTitle => 'Қолыңыздағы ақшадан бастайық';
+
+  @override
+  String get financeOnboardingText =>
+      'Кассада және картада қазір қанша бар екенін көрсетіңіз. Одан әрі сату мен шығыс қалдықты өздері өзгертеді.';
+
+  @override
+  String get financeOnboardingAmountLabel => 'Қазір қанша';
+
+  @override
+  String get financeOnboardingAmountHint => 'Мысалы, 245 000';
+
+  @override
+  String get financeOnboardingOtherAccount => 'Басқа шот';
+
+  @override
+  String get financeOnboardingStart => 'Бастау';
+
+  @override
+  String get financeOnboardingLater =>
+      'Қалдықты кейін «Шоттар мен сатып алушылар» бөлімінде түзетуге болады';
+
+  @override
+  String get financeOnboardingEmptyError =>
+      'Кемінде бір шоттың қалдығын көрсетіңіз. Ақша жоқ болса, 0 деп жазыңыз.';
+
+  @override
+  String get financeOnboardingDone =>
+      'Шоттар құрылды — енді сату мен шығысты жазыңыз';
+
+  @override
+  String get financeSettingsAccountsTab => 'Шоттар';
+
+  @override
+  String get financeSettingsBuyersTab => 'Сатып алушылар';
+
+  @override
+  String get financeAddAccount => 'Шот қосу';
+
+  @override
+  String get financeAddCounterparty => 'Сатып алушы қосу';
+
+  @override
+  String get financeHiddenSection => 'Жасырылғандар';
+
+  @override
+  String get financeHiddenHint => 'Жаңа жазбаларда ұсынылмайды';
+
+  @override
+  String get financeAccountsCallout =>
+      'Шот жойылмайды, тек жасырылады: ол жаңа жазбаларда ұсынылмайды, бірақ тарихта қалады.';
+
+  @override
+  String get financeBuyersCallout =>
+      'Сатып алушы жойылмайды, тек жасырылады: ескі сатуларда ол қалады.';
+
+  @override
+  String get financeNoPhone => 'телефонсыз';
+
+  @override
+  String financeBuyerOwes(String amount) {
+    return '$amount қарыз';
+  }
+
+  @override
+  String get financeAccountsEmptyTitle => 'Әзірге шот жоқ';
+
+  @override
+  String get financeAccountsEmptyText =>
+      'Сату мен шығысты жазу үшін касса немесе карта қосыңыз';
+
+  @override
+  String get financeBuyersEmptyTitle => 'Әзірге сатып алушы жоқ';
+
+  @override
+  String get financeBuyersEmptyText =>
+      'Дүкенді не жеке сатып алушыны осы жерде немесе сату кезінде қосыңыз';
+
+  @override
+  String get financeAccountNameError => 'Шотқа атау беріңіз, мысалы «Касса»';
+
+  @override
+  String get financeAccountTypeLabel => 'Түрі';
+
+  @override
+  String get financeAccountInitialNewLabel => 'Шотта қазір қанша';
+
+  @override
+  String get financeAccountInitialEditLabel => 'Бастапқы қалдық';
+
+  @override
+  String get financeAccountInitialError => 'Соманы көрсетіңіз, 0 болса да';
+
+  @override
+  String get financeAccountInitialCallout =>
+      'Қолма-қол ақшаны санаңыз немесе банк қосымшасынан балансты қараңыз. Қалдық осы сомадан есептеледі — онсыз сандар шындыққа сәйкес келмейді.';
+
+  @override
+  String get financeAccountBalanceNow => 'Шотта қазір';
+
+  @override
+  String financeBalanceWillBe(String name, String amount) {
+    return '«$name» қалдығы $amount болады';
+  }
+
+  @override
+  String get financeAccountCreate => 'Шот құру';
+
+  @override
+  String get financeAccountHide => 'Шотты жасыру';
+
+  @override
+  String financeAccountHideConfirm(String name) {
+    return '«$name» шотын жасыру керек пе?';
+  }
+
+  @override
+  String get financeAccountHideNote =>
+      'Жасырылған шот жаңа жазбаларда ұсынылмайды, бірақ тарихта қалады';
+
+  @override
+  String financeAccountCreated(String name) {
+    return '«$name» шоты құрылды';
+  }
+
+  @override
+  String get financeAccountSaved => 'Шот сақталды';
+
+  @override
+  String get financeAccountHidden => 'Шот жасырылды';
+
+  @override
+  String get financeAccountNotFound => 'Шот табылмады';
+
+  @override
+  String get financeCounterpartyNameHint => 'Береке дүкені';
+
+  @override
+  String get financeCounterpartyNameError => 'Атауын көрсетіңіз';
+
+  @override
+  String get financePhoneLabel => 'Телефон';
+
+  @override
+  String get financePhoneHint => '+7 (777) 777-77-77';
+
+  @override
+  String get financePhoneHelper => 'Қарызды бір түртумен еске салу үшін';
+
+  @override
+  String get financePhoneError => 'Нөмірді толық енгізіңіз';
+
+  @override
+  String get financeCounterpartyAdd => 'Қосу';
+
+  @override
+  String get financeCounterpartyHide => 'Сатып алушыны жасыру';
+
+  @override
+  String financeCounterpartyHideConfirm(String name) {
+    return '«$name» сатып алушысын жасыру керек пе?';
+  }
+
+  @override
+  String get financeCounterpartyHideNote => 'Ескі сатуларда сатып алушы қалады';
+
+  @override
+  String get financeCounterpartyCreated => 'Сатып алушы қосылды';
+
+  @override
+  String get financeCounterpartySaved => 'Сатып алушы сақталды';
+
+  @override
+  String get financeCounterpartyHidden => 'Сатып алушы жасырылды';
+
+  @override
+  String get financeCounterpartyNotFound => 'Сатып алушы табылмады';
 }

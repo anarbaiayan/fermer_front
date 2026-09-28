@@ -4333,6 +4333,354 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Отчёт готов'**
   String get financeReportReadyTitle;
+
+  /// No description provided for @financeSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
+  String get financeSave;
+
+  /// No description provided for @financeOptional.
+  ///
+  /// In ru, this message translates to:
+  /// **'необязательно'**
+  String get financeOptional;
+
+  /// No description provided for @financeHideAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть'**
+  String get financeHideAction;
+
+  /// No description provided for @financeNameLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название'**
+  String get financeNameLabel;
+
+  /// No description provided for @financeCashboxName.
+  ///
+  /// In ru, this message translates to:
+  /// **'Касса'**
+  String get financeCashboxName;
+
+  /// No description provided for @financeOnboardingTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начнём с денег, которые у вас есть'**
+  String get financeOnboardingTitle;
+
+  /// No description provided for @financeOnboardingText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите, сколько сейчас в кассе и на карте. Продажи и расходы дальше будут менять остаток сами.'**
+  String get financeOnboardingText;
+
+  /// No description provided for @financeOnboardingAmountLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сколько сейчас'**
+  String get financeOnboardingAmountLabel;
+
+  /// No description provided for @financeOnboardingAmountHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, 245 000'**
+  String get financeOnboardingAmountHint;
+
+  /// No description provided for @financeOnboardingOtherAccount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Другой счёт'**
+  String get financeOnboardingOtherAccount;
+
+  /// No description provided for @financeOnboardingStart.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начать'**
+  String get financeOnboardingStart;
+
+  /// No description provided for @financeOnboardingLater.
+  ///
+  /// In ru, this message translates to:
+  /// **'Остаток можно поправить позже в «Счета и покупатели»'**
+  String get financeOnboardingLater;
+
+  /// No description provided for @financeOnboardingEmptyError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите остаток хотя бы для одного счёта. Если денег нет, впишите 0.'**
+  String get financeOnboardingEmptyError;
+
+  /// No description provided for @financeOnboardingDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счета созданы — теперь записывайте продажи и расходы'**
+  String get financeOnboardingDone;
+
+  /// No description provided for @financeSettingsAccountsTab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счета'**
+  String get financeSettingsAccountsTab;
+
+  /// No description provided for @financeSettingsBuyersTab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатели'**
+  String get financeSettingsBuyersTab;
+
+  /// No description provided for @financeAddAccount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить счёт'**
+  String get financeAddAccount;
+
+  /// No description provided for @financeAddCounterparty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить покупателя'**
+  String get financeAddCounterparty;
+
+  /// No description provided for @financeHiddenSection.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрытые'**
+  String get financeHiddenSection;
+
+  /// No description provided for @financeHiddenHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не предлагается в новых записях'**
+  String get financeHiddenHint;
+
+  /// No description provided for @financeAccountsCallout.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт не удаляется, а скрывается: он не предлагается в новых записях, но остаётся в истории.'**
+  String get financeAccountsCallout;
+
+  /// No description provided for @financeBuyersCallout.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель не удаляется, а скрывается: в старых продажах он останется.'**
+  String get financeBuyersCallout;
+
+  /// No description provided for @financeNoPhone.
+  ///
+  /// In ru, this message translates to:
+  /// **'без телефона'**
+  String get financeNoPhone;
+
+  /// No description provided for @financeBuyerOwes.
+  ///
+  /// In ru, this message translates to:
+  /// **'должен {amount}'**
+  String financeBuyerOwes(String amount);
+
+  /// No description provided for @financeAccountsEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счетов пока нет'**
+  String get financeAccountsEmptyTitle;
+
+  /// No description provided for @financeAccountsEmptyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте кассу или карту, чтобы записывать продажи и расходы'**
+  String get financeAccountsEmptyText;
+
+  /// No description provided for @financeBuyersEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупателей пока нет'**
+  String get financeBuyersEmptyTitle;
+
+  /// No description provided for @financeBuyersEmptyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте магазин или частника здесь или прямо при продаже'**
+  String get financeBuyersEmptyText;
+
+  /// No description provided for @financeAccountNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Назовите счёт, например «Касса»'**
+  String get financeAccountNameError;
+
+  /// No description provided for @financeAccountTypeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тип'**
+  String get financeAccountTypeLabel;
+
+  /// No description provided for @financeAccountInitialNewLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сколько на счёте сейчас'**
+  String get financeAccountInitialNewLabel;
+
+  /// No description provided for @financeAccountInitialEditLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начальный остаток'**
+  String get financeAccountInitialEditLabel;
+
+  /// No description provided for @financeAccountInitialError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите сумму, даже если это 0'**
+  String get financeAccountInitialError;
+
+  /// No description provided for @financeAccountInitialCallout.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пересчитайте наличные или посмотрите баланс в приложении банка. От этой суммы считается остаток — без неё цифры разойдутся с реальными.'**
+  String get financeAccountInitialCallout;
+
+  /// No description provided for @financeAccountBalanceNow.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сейчас на счёте'**
+  String get financeAccountBalanceNow;
+
+  /// No description provided for @financeBalanceWillBe.
+  ///
+  /// In ru, this message translates to:
+  /// **'Остаток «{name}» станет {amount}'**
+  String financeBalanceWillBe(String name, String amount);
+
+  /// No description provided for @financeAccountCreate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Создать счёт'**
+  String get financeAccountCreate;
+
+  /// No description provided for @financeAccountHide.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть счёт'**
+  String get financeAccountHide;
+
+  /// No description provided for @financeAccountHideConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть счёт «{name}»?'**
+  String financeAccountHideConfirm(String name);
+
+  /// No description provided for @financeAccountHideNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрытый счёт не предлагается в новых записях, но остаётся в истории'**
+  String get financeAccountHideNote;
+
+  /// No description provided for @financeAccountCreated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт «{name}» создан'**
+  String financeAccountCreated(String name);
+
+  /// No description provided for @financeAccountSaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт сохранён'**
+  String get financeAccountSaved;
+
+  /// No description provided for @financeAccountHidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт скрыт'**
+  String get financeAccountHidden;
+
+  /// No description provided for @financeAccountNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт не найден'**
+  String get financeAccountNotFound;
+
+  /// No description provided for @financeCounterpartyNameHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Магазин Береке'**
+  String get financeCounterpartyNameHint;
+
+  /// No description provided for @financeCounterpartyNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите название'**
+  String get financeCounterpartyNameError;
+
+  /// No description provided for @financePhoneLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Телефон'**
+  String get financePhoneLabel;
+
+  /// No description provided for @financePhoneHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'+7 (777) 777-77-77'**
+  String get financePhoneHint;
+
+  /// No description provided for @financePhoneHelper.
+  ///
+  /// In ru, this message translates to:
+  /// **'Чтобы напомнить о долге в один тап'**
+  String get financePhoneHelper;
+
+  /// No description provided for @financePhoneError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите номер полностью'**
+  String get financePhoneError;
+
+  /// No description provided for @financeCounterpartyAdd.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить'**
+  String get financeCounterpartyAdd;
+
+  /// No description provided for @financeCounterpartyHide.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть покупателя'**
+  String get financeCounterpartyHide;
+
+  /// No description provided for @financeCounterpartyHideConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть покупателя «{name}»?'**
+  String financeCounterpartyHideConfirm(String name);
+
+  /// No description provided for @financeCounterpartyHideNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'В старых продажах покупатель останется'**
+  String get financeCounterpartyHideNote;
+
+  /// No description provided for @financeCounterpartyCreated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель добавлен'**
+  String get financeCounterpartyCreated;
+
+  /// No description provided for @financeCounterpartySaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель сохранён'**
+  String get financeCounterpartySaved;
+
+  /// No description provided for @financeCounterpartyHidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель скрыт'**
+  String get financeCounterpartyHidden;
+
+  /// No description provided for @financeCounterpartyNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель не найден'**
+  String get financeCounterpartyNotFound;
 }
 
 class _AppLocalizationsDelegate

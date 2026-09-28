@@ -2307,4 +2307,199 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get financeReportReadyTitle => 'Отчёт готов';
+
+  @override
+  String get financeSave => 'Сохранить';
+
+  @override
+  String get financeOptional => 'необязательно';
+
+  @override
+  String get financeHideAction => 'Скрыть';
+
+  @override
+  String get financeNameLabel => 'Название';
+
+  @override
+  String get financeCashboxName => 'Касса';
+
+  @override
+  String get financeOnboardingTitle => 'Начнём с денег, которые у вас есть';
+
+  @override
+  String get financeOnboardingText =>
+      'Укажите, сколько сейчас в кассе и на карте. Продажи и расходы дальше будут менять остаток сами.';
+
+  @override
+  String get financeOnboardingAmountLabel => 'Сколько сейчас';
+
+  @override
+  String get financeOnboardingAmountHint => 'Например, 245 000';
+
+  @override
+  String get financeOnboardingOtherAccount => 'Другой счёт';
+
+  @override
+  String get financeOnboardingStart => 'Начать';
+
+  @override
+  String get financeOnboardingLater =>
+      'Остаток можно поправить позже в «Счета и покупатели»';
+
+  @override
+  String get financeOnboardingEmptyError =>
+      'Укажите остаток хотя бы для одного счёта. Если денег нет, впишите 0.';
+
+  @override
+  String get financeOnboardingDone =>
+      'Счета созданы — теперь записывайте продажи и расходы';
+
+  @override
+  String get financeSettingsAccountsTab => 'Счета';
+
+  @override
+  String get financeSettingsBuyersTab => 'Покупатели';
+
+  @override
+  String get financeAddAccount => 'Добавить счёт';
+
+  @override
+  String get financeAddCounterparty => 'Добавить покупателя';
+
+  @override
+  String get financeHiddenSection => 'Скрытые';
+
+  @override
+  String get financeHiddenHint => 'Не предлагается в новых записях';
+
+  @override
+  String get financeAccountsCallout =>
+      'Счёт не удаляется, а скрывается: он не предлагается в новых записях, но остаётся в истории.';
+
+  @override
+  String get financeBuyersCallout =>
+      'Покупатель не удаляется, а скрывается: в старых продажах он останется.';
+
+  @override
+  String get financeNoPhone => 'без телефона';
+
+  @override
+  String financeBuyerOwes(String amount) {
+    return 'должен $amount';
+  }
+
+  @override
+  String get financeAccountsEmptyTitle => 'Счетов пока нет';
+
+  @override
+  String get financeAccountsEmptyText =>
+      'Добавьте кассу или карту, чтобы записывать продажи и расходы';
+
+  @override
+  String get financeBuyersEmptyTitle => 'Покупателей пока нет';
+
+  @override
+  String get financeBuyersEmptyText =>
+      'Добавьте магазин или частника здесь или прямо при продаже';
+
+  @override
+  String get financeAccountNameError => 'Назовите счёт, например «Касса»';
+
+  @override
+  String get financeAccountTypeLabel => 'Тип';
+
+  @override
+  String get financeAccountInitialNewLabel => 'Сколько на счёте сейчас';
+
+  @override
+  String get financeAccountInitialEditLabel => 'Начальный остаток';
+
+  @override
+  String get financeAccountInitialError => 'Укажите сумму, даже если это 0';
+
+  @override
+  String get financeAccountInitialCallout =>
+      'Пересчитайте наличные или посмотрите баланс в приложении банка. От этой суммы считается остаток — без неё цифры разойдутся с реальными.';
+
+  @override
+  String get financeAccountBalanceNow => 'Сейчас на счёте';
+
+  @override
+  String financeBalanceWillBe(String name, String amount) {
+    return 'Остаток «$name» станет $amount';
+  }
+
+  @override
+  String get financeAccountCreate => 'Создать счёт';
+
+  @override
+  String get financeAccountHide => 'Скрыть счёт';
+
+  @override
+  String financeAccountHideConfirm(String name) {
+    return 'Скрыть счёт «$name»?';
+  }
+
+  @override
+  String get financeAccountHideNote =>
+      'Скрытый счёт не предлагается в новых записях, но остаётся в истории';
+
+  @override
+  String financeAccountCreated(String name) {
+    return 'Счёт «$name» создан';
+  }
+
+  @override
+  String get financeAccountSaved => 'Счёт сохранён';
+
+  @override
+  String get financeAccountHidden => 'Счёт скрыт';
+
+  @override
+  String get financeAccountNotFound => 'Счёт не найден';
+
+  @override
+  String get financeCounterpartyNameHint => 'Магазин Береке';
+
+  @override
+  String get financeCounterpartyNameError => 'Укажите название';
+
+  @override
+  String get financePhoneLabel => 'Телефон';
+
+  @override
+  String get financePhoneHint => '+7 (777) 777-77-77';
+
+  @override
+  String get financePhoneHelper => 'Чтобы напомнить о долге в один тап';
+
+  @override
+  String get financePhoneError => 'Введите номер полностью';
+
+  @override
+  String get financeCounterpartyAdd => 'Добавить';
+
+  @override
+  String get financeCounterpartyHide => 'Скрыть покупателя';
+
+  @override
+  String financeCounterpartyHideConfirm(String name) {
+    return 'Скрыть покупателя «$name»?';
+  }
+
+  @override
+  String get financeCounterpartyHideNote =>
+      'В старых продажах покупатель останется';
+
+  @override
+  String get financeCounterpartyCreated => 'Покупатель добавлен';
+
+  @override
+  String get financeCounterpartySaved => 'Покупатель сохранён';
+
+  @override
+  String get financeCounterpartyHidden => 'Покупатель скрыт';
+
+  @override
+  String get financeCounterpartyNotFound => 'Покупатель не найден';
 }

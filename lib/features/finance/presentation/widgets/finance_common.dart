@@ -23,6 +23,15 @@ class FinanceIconSquare extends StatelessWidget {
        _iconSize = 20,
        _radius = 10;
 
+  /// Крупная — на экране первого входа.
+  const FinanceIconSquare.large({
+    super.key,
+    required this.icon,
+    required this.color,
+  }) : _size = 64,
+       _iconSize = 32,
+       _radius = 20;
+
   final String icon;
   final Color color;
   final double _size;
@@ -73,18 +82,21 @@ class FinancePill extends StatelessWidget {
     return Container(
       height: 22,
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(999),
       ),
-      child: Text(
-        label,
-        maxLines: 1,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: foreground,
+      // По ширине текста, даже в растягивающей колонке.
+      child: Center(
+        widthFactor: 1,
+        child: Text(
+          label,
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: foreground,
+          ),
         ),
       ),
     );
@@ -184,6 +196,231 @@ class FinanceCard extends StatelessWidget {
         ],
       ),
       child: child,
+    );
+  }
+}
+
+/// Строка списка: иконка, название с подписью, сумма или метка справа.
+class FinanceListRow extends StatelessWidget {
+  const FinanceListRow({
+    super.key,
+    this.leading,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.footer,
+    this.onTap,
+    this.showChevron = false,
+  });
+
+  final Widget? leading;
+  final String title;
+  final String? subtitle;
+  final Widget? trailing;
+
+  /// Метка под подписью, например долг покупателя. Не отнимает ширину у
+  /// названия, как [trailing].
+  final Widget? footer;
+  final VoidCallback? onTap;
+  final bool showChevron;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: LayoutBuilder(builder: _buildRow),
+      ),
+    );
+  }
+
+  Widget _buildRow(BuildContext context, BoxConstraints constraints) {
+    return Row(
+      children: [
+        if (leading != null) ...[leading!, const SizedBox(width: 12)],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary3,
+                ),
+              ),
+              if (subtitle != null) ...[
+                const SizedBox(height: 2),
+                Text(
+                  subtitle!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.additional3,
+                  ),
+                ),
+              ],
+              if (footer != null) ...[const SizedBox(height: 6), footer!],
+            ],
+          ),
+        ),
+        if (trailing != null) ...[
+          const SizedBox(width: 8),
+          // Сумма или метка справа занимают не больше половины строки
+          // и при нехватке места уменьшаются целиком, а не рвут ряд.
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.55),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: trailing,
+            ),
+          ),
+        ],
+        if (showChevron) ...[
+          const SizedBox(width: 4),
+          const Icon(
+            Icons.chevron_right_rounded,
+            size: 20,
+            color: AppColors.additional3,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// Карточка со строками через разделитель.
+class FinanceCardList extends StatelessWidget {
+  const FinanceCardList({super.key, required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return FinanceCard(
+      child: Column(
+        children: [
+          for (var i = 0; i < children.length; i++) ...[
+            if (i > 0) const Divider(height: 1, color: AppColors.additional2),
+            children[i],
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Сумма крупно, для проверки на глаз: «Сейчас на счёте 245 000 ₸».
+class FinanceAmountBox extends StatelessWidget {
+  const FinanceAmountBox({
+    super.key,
+    required this.label,
+    required this.amount,
+  });
+
+  final String label;
+  final String amount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      decoration: BoxDecoration(
+        color: FinanceColors.softGreen,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 13, color: AppColors.primary1),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            amount,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primary1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+enum FinanceCalloutTone { info, soft }
+
+/// Пояснение с иконкой «i»: коричневое — важное, зелёное — справка.
+class FinanceCallout extends StatelessWidget {
+  const FinanceCallout({
+    super.key,
+    required this.text,
+    this.tone = FinanceCalloutTone.soft,
+  });
+
+  final String text;
+  final FinanceCalloutTone tone;
+
+  @override
+  Widget build(BuildContext context) {
+    final (background, foreground, icon) = switch (tone) {
+      FinanceCalloutTone.info => (
+        FinanceColors.dueBackground,
+        const Color(0xFF6B3A21),
+        FinanceColors.dueText,
+      ),
+      FinanceCalloutTone.soft => (
+        FinanceColors.softGreen,
+        AppColors.primary1,
+        AppColors.primary1,
+      ),
+    };
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.info_outline_rounded, size: 20, color: icon),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 13, height: 1.45, color: foreground),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Приглушённый текст под кнопкой: «Остаток «Касса» станет 474 000 ₸».
+class FinanceNote extends StatelessWidget {
+  const FinanceNote(this.text, {super.key, this.color = AppColors.additional3});
+
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 13, color: color),
     );
   }
 }

@@ -1112,5 +1112,101 @@
     "financeSaleTitle": "Продажа",
     "financeExpenseNewTitle": "Новый расход",
     "financeExpenseTitle": "Расход",
-    "financeReportReadyTitle": "Отчёт готов"
+    "financeReportReadyTitle": "Отчёт готов",
+    "financeSave": "Сохранить",
+    "financeOptional": "необязательно",
+    "financeHideAction": "Скрыть",
+    "financeNameLabel": "Название",
+    "financeCashboxName": "Касса",
+    "financeOnboardingTitle": "Начнём с денег, которые у вас есть",
+    "financeOnboardingText": "Укажите, сколько сейчас в кассе и на карте. Продажи и расходы дальше будут менять остаток сами.",
+    "financeOnboardingAmountLabel": "Сколько сейчас",
+    "financeOnboardingAmountHint": "Например, 245 000",
+    "financeOnboardingOtherAccount": "Другой счёт",
+    "financeOnboardingStart": "Начать",
+    "financeOnboardingLater": "Остаток можно поправить позже в «Счета и покупатели»",
+    "financeOnboardingEmptyError": "Укажите остаток хотя бы для одного счёта. Если денег нет, впишите 0.",
+    "financeOnboardingDone": "Счета созданы — теперь записывайте продажи и расходы",
+    "financeSettingsAccountsTab": "Счета",
+    "financeSettingsBuyersTab": "Покупатели",
+    "financeAddAccount": "Добавить счёт",
+    "financeAddCounterparty": "Добавить покупателя",
+    "financeHiddenSection": "Скрытые",
+    "financeHiddenHint": "Не предлагается в новых записях",
+    "financeAccountsCallout": "Счёт не удаляется, а скрывается: он не предлагается в новых записях, но остаётся в истории.",
+    "financeBuyersCallout": "Покупатель не удаляется, а скрывается: в старых продажах он останется.",
+    "financeNoPhone": "без телефона",
+    "financeBuyerOwes": "должен {amount}",
+    "@financeBuyerOwes": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountsEmptyTitle": "Счетов пока нет",
+    "financeAccountsEmptyText": "Добавьте кассу или карту, чтобы записывать продажи и расходы",
+    "financeBuyersEmptyTitle": "Покупателей пока нет",
+    "financeBuyersEmptyText": "Добавьте магазин или частника здесь или прямо при продаже",
+    "financeAccountNameError": "Назовите счёт, например «Касса»",
+    "financeAccountTypeLabel": "Тип",
+    "financeAccountInitialNewLabel": "Сколько на счёте сейчас",
+    "financeAccountInitialEditLabel": "Начальный остаток",
+    "financeAccountInitialError": "Укажите сумму, даже если это 0",
+    "financeAccountInitialCallout": "Пересчитайте наличные или посмотрите баланс в приложении банка. От этой суммы считается остаток — без неё цифры разойдутся с реальными.",
+    "financeAccountBalanceNow": "Сейчас на счёте",
+    "financeBalanceWillBe": "Остаток «{name}» станет {amount}",
+    "@financeBalanceWillBe": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            },
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountCreate": "Создать счёт",
+    "financeAccountHide": "Скрыть счёт",
+    "financeAccountHideConfirm": "Скрыть счёт «{name}»?",
+    "@financeAccountHideConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountHideNote": "Скрытый счёт не предлагается в новых записях, но остаётся в истории",
+    "financeAccountCreated": "Счёт «{name}» создан",
+    "@financeAccountCreated": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountSaved": "Счёт сохранён",
+    "financeAccountHidden": "Счёт скрыт",
+    "financeAccountNotFound": "Счёт не найден",
+    "financeCounterpartyNameHint": "Магазин Береке",
+    "financeCounterpartyNameError": "Укажите название",
+    "financePhoneLabel": "Телефон",
+    "financePhoneHint": "+7 (777) 777-77-77",
+    "financePhoneHelper": "Чтобы напомнить о долге в один тап",
+    "financePhoneError": "Введите номер полностью",
+    "financeCounterpartyAdd": "Добавить",
+    "financeCounterpartyHide": "Скрыть покупателя",
+    "financeCounterpartyHideConfirm": "Скрыть покупателя «{name}»?",
+    "@financeCounterpartyHideConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeCounterpartyHideNote": "В старых продажах покупатель останется",
+    "financeCounterpartyCreated": "Покупатель добавлен",
+    "financeCounterpartySaved": "Покупатель сохранён",
+    "financeCounterpartyHidden": "Покупатель скрыт",
+    "financeCounterpartyNotFound": "Покупатель не найден"
 }

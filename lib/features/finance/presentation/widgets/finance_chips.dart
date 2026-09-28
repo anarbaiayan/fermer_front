@@ -105,8 +105,8 @@ class FinanceChip extends StatelessWidget {
             child: Container(
               height: 36,
               padding: const EdgeInsets.symmetric(horizontal: 14),
-              alignment: Alignment.center,
-              child: content,
+              // По ширине содержимого и вне ряда чипов.
+              child: Center(widthFactor: 1, child: content),
             ),
           ),
         ),

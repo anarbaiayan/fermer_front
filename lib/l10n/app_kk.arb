@@ -1091,5 +1091,101 @@
     "financeSaleTitle": "Сату",
     "financeExpenseNewTitle": "Жаңа шығыс",
     "financeExpenseTitle": "Шығыс",
-    "financeReportReadyTitle": "Есеп дайын"
+    "financeReportReadyTitle": "Есеп дайын",
+    "financeSave": "Сақтау",
+    "financeOptional": "міндетті емес",
+    "financeHideAction": "Жасыру",
+    "financeNameLabel": "Атауы",
+    "financeCashboxName": "Касса",
+    "financeOnboardingTitle": "Қолыңыздағы ақшадан бастайық",
+    "financeOnboardingText": "Кассада және картада қазір қанша бар екенін көрсетіңіз. Одан әрі сату мен шығыс қалдықты өздері өзгертеді.",
+    "financeOnboardingAmountLabel": "Қазір қанша",
+    "financeOnboardingAmountHint": "Мысалы, 245 000",
+    "financeOnboardingOtherAccount": "Басқа шот",
+    "financeOnboardingStart": "Бастау",
+    "financeOnboardingLater": "Қалдықты кейін «Шоттар мен сатып алушылар» бөлімінде түзетуге болады",
+    "financeOnboardingEmptyError": "Кемінде бір шоттың қалдығын көрсетіңіз. Ақша жоқ болса, 0 деп жазыңыз.",
+    "financeOnboardingDone": "Шоттар құрылды — енді сату мен шығысты жазыңыз",
+    "financeSettingsAccountsTab": "Шоттар",
+    "financeSettingsBuyersTab": "Сатып алушылар",
+    "financeAddAccount": "Шот қосу",
+    "financeAddCounterparty": "Сатып алушы қосу",
+    "financeHiddenSection": "Жасырылғандар",
+    "financeHiddenHint": "Жаңа жазбаларда ұсынылмайды",
+    "financeAccountsCallout": "Шот жойылмайды, тек жасырылады: ол жаңа жазбаларда ұсынылмайды, бірақ тарихта қалады.",
+    "financeBuyersCallout": "Сатып алушы жойылмайды, тек жасырылады: ескі сатуларда ол қалады.",
+    "financeNoPhone": "телефонсыз",
+    "financeBuyerOwes": "{amount} қарыз",
+    "@financeBuyerOwes": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountsEmptyTitle": "Әзірге шот жоқ",
+    "financeAccountsEmptyText": "Сату мен шығысты жазу үшін касса немесе карта қосыңыз",
+    "financeBuyersEmptyTitle": "Әзірге сатып алушы жоқ",
+    "financeBuyersEmptyText": "Дүкенді не жеке сатып алушыны осы жерде немесе сату кезінде қосыңыз",
+    "financeAccountNameError": "Шотқа атау беріңіз, мысалы «Касса»",
+    "financeAccountTypeLabel": "Түрі",
+    "financeAccountInitialNewLabel": "Шотта қазір қанша",
+    "financeAccountInitialEditLabel": "Бастапқы қалдық",
+    "financeAccountInitialError": "Соманы көрсетіңіз, 0 болса да",
+    "financeAccountInitialCallout": "Қолма-қол ақшаны санаңыз немесе банк қосымшасынан балансты қараңыз. Қалдық осы сомадан есептеледі — онсыз сандар шындыққа сәйкес келмейді.",
+    "financeAccountBalanceNow": "Шотта қазір",
+    "financeBalanceWillBe": "«{name}» қалдығы {amount} болады",
+    "@financeBalanceWillBe": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            },
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountCreate": "Шот құру",
+    "financeAccountHide": "Шотты жасыру",
+    "financeAccountHideConfirm": "«{name}» шотын жасыру керек пе?",
+    "@financeAccountHideConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountHideNote": "Жасырылған шот жаңа жазбаларда ұсынылмайды, бірақ тарихта қалады",
+    "financeAccountCreated": "«{name}» шоты құрылды",
+    "@financeAccountCreated": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountSaved": "Шот сақталды",
+    "financeAccountHidden": "Шот жасырылды",
+    "financeAccountNotFound": "Шот табылмады",
+    "financeCounterpartyNameHint": "Береке дүкені",
+    "financeCounterpartyNameError": "Атауын көрсетіңіз",
+    "financePhoneLabel": "Телефон",
+    "financePhoneHint": "+7 (777) 777-77-77",
+    "financePhoneHelper": "Қарызды бір түртумен еске салу үшін",
+    "financePhoneError": "Нөмірді толық енгізіңіз",
+    "financeCounterpartyAdd": "Қосу",
+    "financeCounterpartyHide": "Сатып алушыны жасыру",
+    "financeCounterpartyHideConfirm": "«{name}» сатып алушысын жасыру керек пе?",
+    "@financeCounterpartyHideConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeCounterpartyHideNote": "Ескі сатуларда сатып алушы қалады",
+    "financeCounterpartyCreated": "Сатып алушы қосылды",
+    "financeCounterpartySaved": "Сатып алушы сақталды",
+    "financeCounterpartyHidden": "Сатып алушы жасырылды",
+    "financeCounterpartyNotFound": "Сатып алушы табылмады"
 }

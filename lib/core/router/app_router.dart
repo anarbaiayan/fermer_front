@@ -13,7 +13,10 @@ import 'package:frontend/features/auth/presentation/register_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_bulk_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/events_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_account_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_counterparty_form_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_settings_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_stub_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
@@ -226,28 +229,31 @@ final GoRouter appRouter = GoRouter(
       ),
       GoRoute(
         path: '/finance/settings',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeSettingsTitle),
+        builder: (context, state) => FinanceSettingsScreen(
+          initialTab: FinanceSettingsTab.fromQuery(
+            state.uri.queryParameters['tab'],
+          ),
+        ),
       ),
       GoRoute(
         path: '/finance/accounts/new',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeAccountNewTitle),
+        builder: (context, state) => const FinanceAccountFormScreen(),
       ),
       GoRoute(
         path: '/finance/accounts/:id',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeAccountTitle),
+        builder: (context, state) => FinanceAccountFormScreen(
+          accountId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+        ),
       ),
       GoRoute(
         path: '/finance/counterparties/new',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeCounterpartyNewTitle),
+        builder: (context, state) => const FinanceCounterpartyFormScreen(),
       ),
       GoRoute(
         path: '/finance/counterparties/:id',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeCounterpartyTitle),
+        builder: (context, state) => FinanceCounterpartyFormScreen(
+          counterpartyId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+        ),
       ),
       GoRoute(
         path: '/finance/sales/new',

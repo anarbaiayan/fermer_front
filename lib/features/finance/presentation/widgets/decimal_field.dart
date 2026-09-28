@@ -19,6 +19,18 @@ class DecimalInputFormatter extends TextInputFormatter {
   final int maxIntegerDigits;
   final int maxFractionDigits;
 
+  /// Сумма в тенге: `numeric(15,2)`.
+  static const money = DecimalInputFormatter();
+
+  /// Текст для поля из готового числа, например при правке записи.
+  String formatText(String raw) => formatEditUpdate(
+    TextEditingValue.empty,
+    TextEditingValue(
+      text: raw,
+      selection: TextSelection.collapsed(offset: raw.length),
+    ),
+  ).text;
+
   static const _groupSeparator = '\u00A0';
   static const _decimalSeparator = ',';
 

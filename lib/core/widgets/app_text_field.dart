@@ -17,6 +17,13 @@ class AppTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final ValueChanged<String>? onChanged;
 
+  /// Small grey note next to the label, e.g. "optional".
+  final String? labelNote;
+
+  /// Grey hint under the field, hidden while [errorText] is shown.
+  final String? helperText;
+  final TextCapitalization textCapitalization;
+
   const AppTextField({
     super.key,
     required this.label,
@@ -28,6 +35,9 @@ class AppTextField extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.onChanged,
+    this.labelNote,
+    this.helperText,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   @override
@@ -37,21 +47,42 @@ class AppTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: AppColors.primary3,
+        // Пустой label — подпись рисует сам экран.
+        if (label.isNotEmpty) ...[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary3,
+                  ),
+                ),
+              ),
+              if (labelNote != null)
+                Text(
+                  labelNote!,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.additional3,
+                  ),
+                ),
+            ],
           ),
-        ),
-        const SizedBox(height: 8),
+          const SizedBox(height: 8),
+        ],
         TextField(
           controller: controller,
           obscureText: obscureText,
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
           onChanged: onChanged,
+          textCapitalization: textCapitalization,
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(
@@ -89,6 +120,18 @@ class AppTextField extends StatelessWidget {
           Text(
             errorText!,
             style: const TextStyle(fontSize: 12, color: AppColors.error),
+          ),
+        ] else if (helperText != null) ...[
+          const SizedBox(height: 6),
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              helperText!,
+              style: const TextStyle(
+                fontSize: 12,
+                color: AppColors.additional3,
+              ),
+            ),
           ),
         ],
       ],
