@@ -1019,5 +1019,77 @@
     "milkProductivityEmptyHint": "Өлшемдер «Лактация» → «Бақылау сауымы» бөлімінде енгізіледі.",
     "controlMilkingColumnCow": "Есімі / биркасы",
     "controlMilkingColumnMilk": "Сүт",
-    "controlMilkingTabUnfilledEmpty": "Толтырылмағандар"
+    "controlMilkingTabUnfilledEmpty": "Толтырылмағандар",
+    "financeTitle": "Қаржы",
+    "financeNewBadge": "Жаңа",
+    "financeTabSummary": "Жиынтық",
+    "financeTabIncome": "Кіріс",
+    "financeTabExpense": "Шығыс",
+    "financeTabReport": "Есеп",
+    "financeSettingsTitle": "Шоттар мен сатып алушылар",
+    "financePrevMonth": "Алдыңғы ай",
+    "financeNextMonth": "Келесі ай",
+    "financeAddSale": "Сату",
+    "financeAddExpense": "Шығыс",
+    "financeDateToday": "Бүгін, {date}",
+    "@financeDateToday": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountTypeCash": "Қолма-қол",
+    "financeAccountTypeCard": "Карта",
+    "financeAccountTypeBank": "Банк",
+    "financeCategoryFeed": "Жем-шөп",
+    "financeCategoryVeterinary": "Ветпрепараттар",
+    "financeCategorySalary": "Жалақы",
+    "financeCategoryFuel": "Жанармай",
+    "financeCategoryRent": "Жалдау",
+    "financeCategoryEquipment": "Жабдық",
+    "financeCategoryOther": "Басқа",
+    "financeUnitLiter": "л",
+    "financeUnitKg": "кг",
+    "financeUnitPiece": "дана",
+    "financeProductKurt": "Құрт",
+    "financeProductButter": "Сары май",
+    "financeProductSourCream": "Қаймақ",
+    "financeProductMilk": "Сүт",
+    "financeProductKefir": "Кефир",
+    "financeProductCottageCheese": "Сүзбе",
+    "financeProductGhee": "Гхи",
+    "financeProductCheese": "Ірімшік",
+    "financeProductOther": "Басқа",
+    "financeSaleStatusPaid": "Төленді",
+    "financeSaleStatusDue": "{date} дейін қарыз",
+    "@financeSaleStatusDue": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleStatusOverdue": "{days} күн кешікті",
+    "@financeSaleStatusOverdue": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeSaleStatusDebt": "Қарызға",
+    "financeLoadError": "Деректерді жүктеу мүмкін болмады",
+    "financeRetry": "Қайталау",
+    "financeStubMessage": "Бұл экран бөлімнің келесі модульдерінде қосылады",
+    "financeDebtsTitle": "Қарыздар",
+    "financeAccountNewTitle": "Жаңа шот",
+    "financeAccountTitle": "Шот",
+    "financeCounterpartyNewTitle": "Жаңа сатып алушы",
+    "financeCounterpartyTitle": "Сатып алушы",
+    "financeSaleNewTitle": "Жаңа сату",
+    "financeSaleTitle": "Сату",
+    "financeExpenseNewTitle": "Жаңа шығыс",
+    "financeExpenseTitle": "Шығыс",
+    "financeReportReadyTitle": "Есеп дайын"
 }

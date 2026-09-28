@@ -58,6 +58,7 @@
   - the `ShellRoute` stays last in the route list so `/rations/stocks/:type` does not swallow `/rations/stocks/add`;
   - from a screen outside the shell, reach shell screens with `context.go`, never `context.push` — push would build a second shell with the same navigator key.
 - On the More screen, use `context.go` for primary bottom-navigation destinations and `context.push` for nested sections, so Back returns to More.
+- Finance: `/finance` is one shell screen (bar index `4`); its tabs Summary / Income / Expense / Report switch inside `FinanceScreen`, deep link `/finance?tab=income`. Forms, debts, accounts and buyers, and the ready PDF live under `/finance/**` outside the shell, without the bar.
 - `FermerPlusDrawer` keeps profile, settings, FAQ, support, referral, and logout. Pharmacy must not be added back to the drawer.
 - Preserve route semantics already used in the app:
   - `/herd/:id`
@@ -87,6 +88,15 @@
 - If user has no available feeds, ration-related screens should show the proper empty state, not a raw server error.
 - Sidebar logout and profile delete-account are different flows; do not merge them casually.
 - Notifications use pagination, unread badge, archive/read actions, and navigation to herd item if cattle exists.
+
+## Finance Module (`lib/features/finance`)
+- Hidden behind `kFinanceEnabled` (`lib/core/config/feature_flags.dart`), debug only while the module runs on mock data. Do not enable it for release until it is wired to the real API.
+- Screens use only `FinanceRepository` via `financeRepositoryProvider`. Default source is `MockFinanceRepository` (same rules as the backend); `--dart-define=FINANCE_API=true` switches to `FinanceApi`. Once the backend ships `/api/finance/**`, flip `kFinanceUseMock` and `kFinanceEnabled`.
+- Mutations go through `financeMutationsProvider`, which invalidates the exact affected providers.
+- Money is `Money` (integer tiyn) and quantities are `Quantity` (thousandths); no arithmetic on `double`. Format with `FinanceFormat`.
+- Account balance = initial balance + paid sales − expenses. A debt sale never changes balances until it is paid.
+- UI says "Покупатели" for backend `counterparties`.
+- Backend differs from the spec: sales filter param is `paid` (not `isPaid`), payment is `PUT /finance/sales/{id}/pay`, `DELETE` on accounts and counterparties only deactivates, and summary/debts/PDF endpoints are not implemented yet. The backend does not default a debt due date; the form always sends it (sale date + 14 days).
 
 ## Platform / Release Rules
 - Android release must keep `INTERNET` permission in `android/app/src/main/AndroidManifest.xml`.

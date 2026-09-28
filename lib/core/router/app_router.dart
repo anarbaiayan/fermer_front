@@ -1,3 +1,5 @@
+import 'package:frontend/core/config/feature_flags.dart';
+import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/screens/not_found_screen.dart';
 import 'package:frontend/core/widgets/app_shell.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_code_screen.dart';
@@ -11,6 +13,8 @@ import 'package:frontend/features/auth/presentation/register_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_bulk_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/events_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_stub_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
@@ -211,6 +215,67 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
+    // «Финансы»: формы, долги, справочники и готовый PDF открываются без
+    // нижнего бара. Пока модули не готовы, здесь заглушки; раздел скрыт
+    // флагом, пока работает на моковых данных.
+    if (kFinanceEnabled) ...[
+      GoRoute(
+        path: '/finance/debts',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeDebtsTitle),
+      ),
+      GoRoute(
+        path: '/finance/settings',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeSettingsTitle),
+      ),
+      GoRoute(
+        path: '/finance/accounts/new',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeAccountNewTitle),
+      ),
+      GoRoute(
+        path: '/finance/accounts/:id',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeAccountTitle),
+      ),
+      GoRoute(
+        path: '/finance/counterparties/new',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeCounterpartyNewTitle),
+      ),
+      GoRoute(
+        path: '/finance/counterparties/:id',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeCounterpartyTitle),
+      ),
+      GoRoute(
+        path: '/finance/sales/new',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeSaleNewTitle),
+      ),
+      GoRoute(
+        path: '/finance/sales/:id',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeSaleTitle),
+      ),
+      GoRoute(
+        path: '/finance/expenses/new',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeExpenseNewTitle),
+      ),
+      GoRoute(
+        path: '/finance/expenses/:id',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeExpenseTitle),
+      ),
+      GoRoute(
+        path: '/finance/report/ready',
+        builder: (context, state) =>
+            FinanceStubScreen(title: context.l10n.financeReportReadyTitle),
+      ),
+    ],
+
     // Экраны с нижним баром. Оболочка держит бар и drawer вне анимаций
     // перехода, поэтому при смене экрана меняется только содержимое.
     // Маршрут стоит последним: '/rations/stocks/:type' не должен перехватывать
@@ -292,6 +357,16 @@ final GoRouter appRouter = GoRouter(
           path: '/vet-consultants',
           builder: (context, state) => const VetConsultantsScreen(),
         ),
+        // Вкладки «Финансов» переключаются внутри экрана: `?tab=income`.
+        if (kFinanceEnabled)
+          GoRoute(
+            path: '/finance',
+            builder: (context, state) => FinanceScreen(
+              initialTab: FinanceTab.fromQuery(
+                state.uri.queryParameters['tab'],
+              ),
+            ),
+          ),
       ],
     ),
   ],

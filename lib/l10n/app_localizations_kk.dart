@@ -2143,4 +2143,164 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get controlMilkingTabUnfilledEmpty => 'Толтырылмағандар';
+
+  @override
+  String get financeTitle => 'Қаржы';
+
+  @override
+  String get financeNewBadge => 'Жаңа';
+
+  @override
+  String get financeTabSummary => 'Жиынтық';
+
+  @override
+  String get financeTabIncome => 'Кіріс';
+
+  @override
+  String get financeTabExpense => 'Шығыс';
+
+  @override
+  String get financeTabReport => 'Есеп';
+
+  @override
+  String get financeSettingsTitle => 'Шоттар мен сатып алушылар';
+
+  @override
+  String get financePrevMonth => 'Алдыңғы ай';
+
+  @override
+  String get financeNextMonth => 'Келесі ай';
+
+  @override
+  String get financeAddSale => 'Сату';
+
+  @override
+  String get financeAddExpense => 'Шығыс';
+
+  @override
+  String financeDateToday(String date) {
+    return 'Бүгін, $date';
+  }
+
+  @override
+  String get financeAccountTypeCash => 'Қолма-қол';
+
+  @override
+  String get financeAccountTypeCard => 'Карта';
+
+  @override
+  String get financeAccountTypeBank => 'Банк';
+
+  @override
+  String get financeCategoryFeed => 'Жем-шөп';
+
+  @override
+  String get financeCategoryVeterinary => 'Ветпрепараттар';
+
+  @override
+  String get financeCategorySalary => 'Жалақы';
+
+  @override
+  String get financeCategoryFuel => 'Жанармай';
+
+  @override
+  String get financeCategoryRent => 'Жалдау';
+
+  @override
+  String get financeCategoryEquipment => 'Жабдық';
+
+  @override
+  String get financeCategoryOther => 'Басқа';
+
+  @override
+  String get financeUnitLiter => 'л';
+
+  @override
+  String get financeUnitKg => 'кг';
+
+  @override
+  String get financeUnitPiece => 'дана';
+
+  @override
+  String get financeProductKurt => 'Құрт';
+
+  @override
+  String get financeProductButter => 'Сары май';
+
+  @override
+  String get financeProductSourCream => 'Қаймақ';
+
+  @override
+  String get financeProductMilk => 'Сүт';
+
+  @override
+  String get financeProductKefir => 'Кефир';
+
+  @override
+  String get financeProductCottageCheese => 'Сүзбе';
+
+  @override
+  String get financeProductGhee => 'Гхи';
+
+  @override
+  String get financeProductCheese => 'Ірімшік';
+
+  @override
+  String get financeProductOther => 'Басқа';
+
+  @override
+  String get financeSaleStatusPaid => 'Төленді';
+
+  @override
+  String financeSaleStatusDue(String date) {
+    return '$date дейін қарыз';
+  }
+
+  @override
+  String financeSaleStatusOverdue(int days) {
+    return '$days күн кешікті';
+  }
+
+  @override
+  String get financeSaleStatusDebt => 'Қарызға';
+
+  @override
+  String get financeLoadError => 'Деректерді жүктеу мүмкін болмады';
+
+  @override
+  String get financeRetry => 'Қайталау';
+
+  @override
+  String get financeStubMessage =>
+      'Бұл экран бөлімнің келесі модульдерінде қосылады';
+
+  @override
+  String get financeDebtsTitle => 'Қарыздар';
+
+  @override
+  String get financeAccountNewTitle => 'Жаңа шот';
+
+  @override
+  String get financeAccountTitle => 'Шот';
+
+  @override
+  String get financeCounterpartyNewTitle => 'Жаңа сатып алушы';
+
+  @override
+  String get financeCounterpartyTitle => 'Сатып алушы';
+
+  @override
+  String get financeSaleNewTitle => 'Жаңа сату';
+
+  @override
+  String get financeSaleTitle => 'Сату';
+
+  @override
+  String get financeExpenseNewTitle => 'Жаңа шығыс';
+
+  @override
+  String get financeExpenseTitle => 'Шығыс';
+
+  @override
+  String get financeReportReadyTitle => 'Есеп дайын';
 }

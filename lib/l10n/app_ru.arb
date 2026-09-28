@@ -1040,5 +1040,77 @@
     "milkProductivityEmptyHint": "Замеры вносятся в разделе «Лактация» → «Контрольный надой».",
     "controlMilkingColumnCow": "Кличка / бирка",
     "controlMilkingColumnMilk": "Молоко",
-    "controlMilkingTabUnfilledEmpty": "Незаполненные"
+    "controlMilkingTabUnfilledEmpty": "Незаполненные",
+    "financeTitle": "Финансы",
+    "financeNewBadge": "Новое",
+    "financeTabSummary": "Сводка",
+    "financeTabIncome": "Доход",
+    "financeTabExpense": "Расход",
+    "financeTabReport": "Отчёт",
+    "financeSettingsTitle": "Счета и покупатели",
+    "financePrevMonth": "Предыдущий месяц",
+    "financeNextMonth": "Следующий месяц",
+    "financeAddSale": "Продажа",
+    "financeAddExpense": "Расход",
+    "financeDateToday": "Сегодня, {date}",
+    "@financeDateToday": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountTypeCash": "Наличные",
+    "financeAccountTypeCard": "Карта",
+    "financeAccountTypeBank": "Банк",
+    "financeCategoryFeed": "Корма",
+    "financeCategoryVeterinary": "Ветпрепараты",
+    "financeCategorySalary": "Зарплата",
+    "financeCategoryFuel": "Топливо",
+    "financeCategoryRent": "Аренда",
+    "financeCategoryEquipment": "Оборудование",
+    "financeCategoryOther": "Прочее",
+    "financeUnitLiter": "л",
+    "financeUnitKg": "кг",
+    "financeUnitPiece": "шт",
+    "financeProductKurt": "Құрт",
+    "financeProductButter": "Масло",
+    "financeProductSourCream": "Сметана",
+    "financeProductMilk": "Молоко",
+    "financeProductKefir": "Кефир",
+    "financeProductCottageCheese": "Творог",
+    "financeProductGhee": "Гхи",
+    "financeProductCheese": "Сыр",
+    "financeProductOther": "Другое",
+    "financeSaleStatusPaid": "Оплачено",
+    "financeSaleStatusDue": "В долг до {date}",
+    "@financeSaleStatusDue": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleStatusOverdue": "Просрочено {days} дн.",
+    "@financeSaleStatusOverdue": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeSaleStatusDebt": "В долг",
+    "financeLoadError": "Не удалось загрузить данные",
+    "financeRetry": "Повторить",
+    "financeStubMessage": "Экран появится в следующих модулях раздела",
+    "financeDebtsTitle": "Долги",
+    "financeAccountNewTitle": "Новый счёт",
+    "financeAccountTitle": "Счёт",
+    "financeCounterpartyNewTitle": "Новый покупатель",
+    "financeCounterpartyTitle": "Покупатель",
+    "financeSaleNewTitle": "Новая продажа",
+    "financeSaleTitle": "Продажа",
+    "financeExpenseNewTitle": "Новый расход",
+    "financeExpenseTitle": "Расход",
+    "financeReportReadyTitle": "Отчёт готов"
 }

@@ -255,6 +255,8 @@ void main() {
         '/rations/stocks/JUICY',
         '/pharmacy',
         '/vet-consultants',
+        '/finance',
+        '/finance?tab=expense',
       ]) {
         expect(inShell(location), isTrue, reason: location);
       }
@@ -267,6 +269,17 @@ void main() {
         '/notifications',
         '/profile',
         '/login',
+        '/finance/debts',
+        '/finance/settings',
+        '/finance/accounts/new',
+        '/finance/accounts/3',
+        '/finance/counterparties/new',
+        '/finance/counterparties/3',
+        '/finance/sales/new',
+        '/finance/sales/88',
+        '/finance/expenses/new',
+        '/finance/expenses/7',
+        '/finance/report/ready',
       ]) {
         expect(inShell(location), isFalse, reason: location);
       }
@@ -284,6 +297,7 @@ void main() {
         '/rations/stocks/:type': 4,
         '/pharmacy': 4,
         '/vet-consultants': 4,
+        '/finance': 4,
       };
       final shell = appRouter.configuration.routes
           .whereType<ShellRoute>()

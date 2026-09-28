@@ -2148,4 +2148,163 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get controlMilkingTabUnfilledEmpty => 'Незаполненные';
+
+  @override
+  String get financeTitle => 'Финансы';
+
+  @override
+  String get financeNewBadge => 'Новое';
+
+  @override
+  String get financeTabSummary => 'Сводка';
+
+  @override
+  String get financeTabIncome => 'Доход';
+
+  @override
+  String get financeTabExpense => 'Расход';
+
+  @override
+  String get financeTabReport => 'Отчёт';
+
+  @override
+  String get financeSettingsTitle => 'Счета и покупатели';
+
+  @override
+  String get financePrevMonth => 'Предыдущий месяц';
+
+  @override
+  String get financeNextMonth => 'Следующий месяц';
+
+  @override
+  String get financeAddSale => 'Продажа';
+
+  @override
+  String get financeAddExpense => 'Расход';
+
+  @override
+  String financeDateToday(String date) {
+    return 'Сегодня, $date';
+  }
+
+  @override
+  String get financeAccountTypeCash => 'Наличные';
+
+  @override
+  String get financeAccountTypeCard => 'Карта';
+
+  @override
+  String get financeAccountTypeBank => 'Банк';
+
+  @override
+  String get financeCategoryFeed => 'Корма';
+
+  @override
+  String get financeCategoryVeterinary => 'Ветпрепараты';
+
+  @override
+  String get financeCategorySalary => 'Зарплата';
+
+  @override
+  String get financeCategoryFuel => 'Топливо';
+
+  @override
+  String get financeCategoryRent => 'Аренда';
+
+  @override
+  String get financeCategoryEquipment => 'Оборудование';
+
+  @override
+  String get financeCategoryOther => 'Прочее';
+
+  @override
+  String get financeUnitLiter => 'л';
+
+  @override
+  String get financeUnitKg => 'кг';
+
+  @override
+  String get financeUnitPiece => 'шт';
+
+  @override
+  String get financeProductKurt => 'Құрт';
+
+  @override
+  String get financeProductButter => 'Масло';
+
+  @override
+  String get financeProductSourCream => 'Сметана';
+
+  @override
+  String get financeProductMilk => 'Молоко';
+
+  @override
+  String get financeProductKefir => 'Кефир';
+
+  @override
+  String get financeProductCottageCheese => 'Творог';
+
+  @override
+  String get financeProductGhee => 'Гхи';
+
+  @override
+  String get financeProductCheese => 'Сыр';
+
+  @override
+  String get financeProductOther => 'Другое';
+
+  @override
+  String get financeSaleStatusPaid => 'Оплачено';
+
+  @override
+  String financeSaleStatusDue(String date) {
+    return 'В долг до $date';
+  }
+
+  @override
+  String financeSaleStatusOverdue(int days) {
+    return 'Просрочено $days дн.';
+  }
+
+  @override
+  String get financeSaleStatusDebt => 'В долг';
+
+  @override
+  String get financeLoadError => 'Не удалось загрузить данные';
+
+  @override
+  String get financeRetry => 'Повторить';
+
+  @override
+  String get financeStubMessage => 'Экран появится в следующих модулях раздела';
+
+  @override
+  String get financeDebtsTitle => 'Долги';
+
+  @override
+  String get financeAccountNewTitle => 'Новый счёт';
+
+  @override
+  String get financeAccountTitle => 'Счёт';
+
+  @override
+  String get financeCounterpartyNewTitle => 'Новый покупатель';
+
+  @override
+  String get financeCounterpartyTitle => 'Покупатель';
+
+  @override
+  String get financeSaleNewTitle => 'Новая продажа';
+
+  @override
+  String get financeSaleTitle => 'Продажа';
+
+  @override
+  String get financeExpenseNewTitle => 'Новый расход';
+
+  @override
+  String get financeExpenseTitle => 'Расход';
+
+  @override
+  String get financeReportReadyTitle => 'Отчёт готов';
 }
