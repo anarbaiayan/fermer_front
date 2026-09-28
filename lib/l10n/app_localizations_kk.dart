@@ -2497,4 +2497,101 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get financeCounterpartyNotFound => 'Сатып алушы табылмады';
+
+  @override
+  String financeDateYesterday(String date) {
+    return 'Кеше, $date';
+  }
+
+  @override
+  String get financeFilterAll => 'Барлығы';
+
+  @override
+  String get financeAllAccounts => 'Барлық шоттар';
+
+  @override
+  String get financeSpentLabel => 'Жұмсалды';
+
+  @override
+  String financeRecordsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count жазба',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get financeExpensesEmptyTitle => 'Шығыс табылмады';
+
+  @override
+  String get financeExpensesEmptyText =>
+      'Сүзгіні өзгертіңіз немесе шығыс қосыңыз';
+
+  @override
+  String get financeDeleteAction => 'Жою';
+
+  @override
+  String get financeDateLabel => 'Күні';
+
+  @override
+  String get financeAmountLabel => 'Сома';
+
+  @override
+  String get financeAmountError => 'Соманы көрсетіңіз';
+
+  @override
+  String get financeCommentLabel => 'Түсініктеме';
+
+  @override
+  String get financeNoActiveAccounts =>
+      'Алдымен шот қосыңыз — ақша төлейтін және түсетін касса немесе карта';
+
+  @override
+  String get financeExpenseCategoryLabel => 'Санат';
+
+  @override
+  String get financeExpenseCategoryError => 'Санатты таңдаңыз';
+
+  @override
+  String get financeExpenseNameLabel => 'Не үшін';
+
+  @override
+  String get financeExpenseNameHintFeed => 'Құрама жем КК-60, 2 қап';
+
+  @override
+  String get financeExpenseNameHint => 'Мысалы, дизель 50 л';
+
+  @override
+  String get financeExpenseNameError => 'Не үшін жұмсағаныңызды жазыңыз';
+
+  @override
+  String get financeExpenseAccountLabel => 'Қайдан төледіңіз';
+
+  @override
+  String get financeExpenseCommentHint => 'Мысалы, кімнен сатып алдыңыз';
+
+  @override
+  String get financeExpenseSaveNew => 'Шығысты сақтау';
+
+  @override
+  String get financeExpenseDelete => 'Шығысты жою';
+
+  @override
+  String financeExpenseDeleteConfirm(String name) {
+    return '«$name» шығысын жою керек пе?';
+  }
+
+  @override
+  String get financeExpenseSaved => 'Шығыс сақталды';
+
+  @override
+  String get financeExpenseUpdated => 'Шығыс өзгертілді';
+
+  @override
+  String get financeExpenseDeleted => 'Шығыс жойылды';
+
+  @override
+  String get financeExpenseNotFound => 'Шығыс табылмады';
 }

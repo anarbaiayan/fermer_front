@@ -5,6 +5,7 @@ import '../data/datasources/finance_api.dart';
 import '../data/mock/mock_finance_repository.dart';
 import '../domain/entities/finance_date.dart';
 import '../domain/entities/finance_entities.dart';
+import '../domain/entities/finance_enums.dart';
 import '../domain/entities/finance_inputs.dart';
 import '../domain/finance_repository.dart';
 
@@ -75,6 +76,32 @@ final financeDebtsProvider = FutureProvider.autoDispose<List<CounterpartyDebt>>(
 final financeMonthProvider = StateProvider.autoDispose<DateTime>(
   (ref) => monthStart(ref.watch(financeTodayProvider)),
 );
+
+/// Фильтр категории на вкладке «Расход»; `null` — все. Живёт, пока открыт
+/// раздел: сводка открывает вкладку сразу с нужной категорией.
+final financeExpenseCategoryFilterProvider =
+    StateProvider.autoDispose<ExpenseCategory?>((ref) => null);
+
+/// Фильтр счёта на вкладке «Расход»; `null` — все счета.
+final financeExpenseAccountFilterProvider = StateProvider.autoDispose<int?>(
+  (ref) => null,
+);
+
+/// Последний счёт, через который платили или получали деньги. Форма
+/// подставляет его, чтобы запись занимала секунды (решение Р4 прототипа).
+final financeLastAccountProvider = StateProvider<int?>((ref) => null);
+
+/// Счёт по умолчанию для новой записи: последний использованный, иначе
+/// первая касса, иначе первый активный.
+FinanceAccount? pickDefaultAccount(
+  List<FinanceAccount> accounts,
+  int? lastUsedId,
+) {
+  final active = accounts.where((account) => account.active).toList();
+  return active.where((a) => a.id == lastUsedId).firstOrNull ??
+      active.where((a) => a.type == AccountType.cash).firstOrNull ??
+      active.firstOrNull;
+}
 
 // ---- изменения ----
 
@@ -165,12 +192,14 @@ class FinanceMutations {
   Future<Expense> createExpense(ExpenseInput input) async {
     final expense = await _repository.createExpense(input);
     _expensesChanged();
+    _ref.read(financeLastAccountProvider.notifier).state = input.accountId;
     return expense;
   }
 
   Future<Expense> updateExpense(int id, ExpenseInput input) async {
     final expense = await _repository.updateExpense(id, input);
     _expensesChanged();
+    _ref.read(financeLastAccountProvider.notifier).state = input.accountId;
     return expense;
   }
 

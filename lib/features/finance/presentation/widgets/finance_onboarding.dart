@@ -16,6 +16,7 @@ import '../finance_styles.dart';
 import 'decimal_field.dart';
 import 'finance_chips.dart';
 import 'finance_common.dart';
+import 'finance_page.dart';
 
 /// Первый вход в «Финансы»: пока нет ни одного счёта, раздел просит
 /// реальные остатки в кассе и на карте. Без начального остатка баланс
@@ -84,9 +85,7 @@ class _FinanceOnboardingState extends ConsumerState<FinanceOnboarding> {
         _created.add(controller);
       }
       if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.financeOnboardingDone)),
-      );
+      showFinanceMessage(messenger, l10n.financeOnboardingDone);
       widget.onDone();
     } catch (error) {
       if (mounted) setState(() => _error = extractApiMessage(error));

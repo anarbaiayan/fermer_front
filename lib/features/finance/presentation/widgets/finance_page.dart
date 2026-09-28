@@ -48,6 +48,28 @@ class FinancePage extends StatelessWidget {
   }
 }
 
+/// Сообщение после сохранения.
+///
+/// [aboveFab] — для форм, которые возвращают к списку с плавающей кнопкой.
+/// Снекбар показывает корневой Scaffold оболочки, и кнопка страницы под
+/// ним не поднимается; поднимаем сообщение, чтобы «+ Расход» можно было
+/// нажать сразу. На остальных экранах так оно закрыло бы их кнопки.
+void showFinanceMessage(
+  ScaffoldMessengerState messenger,
+  String text, {
+  bool aboveFab = false,
+}) {
+  messenger
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(text),
+        behavior: aboveFab ? SnackBarBehavior.floating : null,
+        margin: aboveFab ? const EdgeInsets.fromLTRB(16, 0, 16, 84) : null,
+      ),
+    );
+}
+
 /// Назад по стеку, а если экран открыт по ссылке — в раздел. Вход в
 /// оболочку только через `go`, иначе появится вторая копия оболочки.
 void closeFinancePage<T>(BuildContext context, [T? result]) {

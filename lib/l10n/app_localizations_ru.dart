@@ -2502,4 +2502,103 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get financeCounterpartyNotFound => 'Покупатель не найден';
+
+  @override
+  String financeDateYesterday(String date) {
+    return 'Вчера, $date';
+  }
+
+  @override
+  String get financeFilterAll => 'Все';
+
+  @override
+  String get financeAllAccounts => 'Все счета';
+
+  @override
+  String get financeSpentLabel => 'Потрачено';
+
+  @override
+  String financeRecordsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count записи',
+      many: '$count записей',
+      few: '$count записи',
+      one: '$count запись',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get financeExpensesEmptyTitle => 'Расходов не найдено';
+
+  @override
+  String get financeExpensesEmptyText => 'Измените фильтр или добавьте расход';
+
+  @override
+  String get financeDeleteAction => 'Удалить';
+
+  @override
+  String get financeDateLabel => 'Дата';
+
+  @override
+  String get financeAmountLabel => 'Сумма';
+
+  @override
+  String get financeAmountError => 'Укажите сумму';
+
+  @override
+  String get financeCommentLabel => 'Комментарий';
+
+  @override
+  String get financeNoActiveAccounts =>
+      'Сначала добавьте счёт — кассу или карту, откуда платите и куда приходят деньги';
+
+  @override
+  String get financeExpenseCategoryLabel => 'Категория';
+
+  @override
+  String get financeExpenseCategoryError => 'Выберите категорию';
+
+  @override
+  String get financeExpenseNameLabel => 'На что';
+
+  @override
+  String get financeExpenseNameHintFeed => 'Комбикорм КК-60, 2 мешка';
+
+  @override
+  String get financeExpenseNameHint => 'Например, дизель 50 л';
+
+  @override
+  String get financeExpenseNameError => 'Напишите, на что потратили';
+
+  @override
+  String get financeExpenseAccountLabel => 'Откуда платили';
+
+  @override
+  String get financeExpenseCommentHint => 'Например, у кого покупали';
+
+  @override
+  String get financeExpenseSaveNew => 'Сохранить расход';
+
+  @override
+  String get financeExpenseDelete => 'Удалить расход';
+
+  @override
+  String financeExpenseDeleteConfirm(String name) {
+    return 'Удалить расход «$name»?';
+  }
+
+  @override
+  String get financeExpenseSaved => 'Расход сохранён';
+
+  @override
+  String get financeExpenseUpdated => 'Расход изменён';
+
+  @override
+  String get financeExpenseDeleted => 'Расход удалён';
+
+  @override
+  String get financeExpenseNotFound => 'Расход не найден';
 }

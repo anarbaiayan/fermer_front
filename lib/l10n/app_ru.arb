@@ -1208,5 +1208,54 @@
     "financeCounterpartyCreated": "Покупатель добавлен",
     "financeCounterpartySaved": "Покупатель сохранён",
     "financeCounterpartyHidden": "Покупатель скрыт",
-    "financeCounterpartyNotFound": "Покупатель не найден"
+    "financeCounterpartyNotFound": "Покупатель не найден",
+    "financeDateYesterday": "Вчера, {date}",
+    "@financeDateYesterday": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeFilterAll": "Все",
+    "financeAllAccounts": "Все счета",
+    "financeSpentLabel": "Потрачено",
+    "financeRecordsCount": "{count, plural, one{{count} запись} few{{count} записи} many{{count} записей} other{{count} записи}}",
+    "@financeRecordsCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "financeExpensesEmptyTitle": "Расходов не найдено",
+    "financeExpensesEmptyText": "Измените фильтр или добавьте расход",
+    "financeDeleteAction": "Удалить",
+    "financeDateLabel": "Дата",
+    "financeAmountLabel": "Сумма",
+    "financeAmountError": "Укажите сумму",
+    "financeCommentLabel": "Комментарий",
+    "financeNoActiveAccounts": "Сначала добавьте счёт — кассу или карту, откуда платите и куда приходят деньги",
+    "financeExpenseCategoryLabel": "Категория",
+    "financeExpenseCategoryError": "Выберите категорию",
+    "financeExpenseNameLabel": "На что",
+    "financeExpenseNameHintFeed": "Комбикорм КК-60, 2 мешка",
+    "financeExpenseNameHint": "Например, дизель 50 л",
+    "financeExpenseNameError": "Напишите, на что потратили",
+    "financeExpenseAccountLabel": "Откуда платили",
+    "financeExpenseCommentHint": "Например, у кого покупали",
+    "financeExpenseSaveNew": "Сохранить расход",
+    "financeExpenseDelete": "Удалить расход",
+    "financeExpenseDeleteConfirm": "Удалить расход «{name}»?",
+    "@financeExpenseDeleteConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeExpenseSaved": "Расход сохранён",
+    "financeExpenseUpdated": "Расход изменён",
+    "financeExpenseDeleted": "Расход удалён",
+    "financeExpenseNotFound": "Расход не найден"
 }

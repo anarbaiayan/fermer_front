@@ -4681,6 +4681,174 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Покупатель не найден'**
   String get financeCounterpartyNotFound;
+
+  /// No description provided for @financeDateYesterday.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вчера, {date}'**
+  String financeDateYesterday(String date);
+
+  /// No description provided for @financeFilterAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get financeFilterAll;
+
+  /// No description provided for @financeAllAccounts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все счета'**
+  String get financeAllAccounts;
+
+  /// No description provided for @financeSpentLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Потрачено'**
+  String get financeSpentLabel;
+
+  /// No description provided for @financeRecordsCount.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count, plural, one{{count} запись} few{{count} записи} many{{count} записей} other{{count} записи}}'**
+  String financeRecordsCount(int count);
+
+  /// No description provided for @financeExpensesEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расходов не найдено'**
+  String get financeExpensesEmptyTitle;
+
+  /// No description provided for @financeExpensesEmptyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Измените фильтр или добавьте расход'**
+  String get financeExpensesEmptyText;
+
+  /// No description provided for @financeDeleteAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get financeDeleteAction;
+
+  /// No description provided for @financeDateLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата'**
+  String get financeDateLabel;
+
+  /// No description provided for @financeAmountLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сумма'**
+  String get financeAmountLabel;
+
+  /// No description provided for @financeAmountError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите сумму'**
+  String get financeAmountError;
+
+  /// No description provided for @financeCommentLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Комментарий'**
+  String get financeCommentLabel;
+
+  /// No description provided for @financeNoActiveAccounts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сначала добавьте счёт — кассу или карту, откуда платите и куда приходят деньги'**
+  String get financeNoActiveAccounts;
+
+  /// No description provided for @financeExpenseCategoryLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория'**
+  String get financeExpenseCategoryLabel;
+
+  /// No description provided for @financeExpenseCategoryError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите категорию'**
+  String get financeExpenseCategoryError;
+
+  /// No description provided for @financeExpenseNameLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'На что'**
+  String get financeExpenseNameLabel;
+
+  /// No description provided for @financeExpenseNameHintFeed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Комбикорм КК-60, 2 мешка'**
+  String get financeExpenseNameHintFeed;
+
+  /// No description provided for @financeExpenseNameHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, дизель 50 л'**
+  String get financeExpenseNameHint;
+
+  /// No description provided for @financeExpenseNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Напишите, на что потратили'**
+  String get financeExpenseNameError;
+
+  /// No description provided for @financeExpenseAccountLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Откуда платили'**
+  String get financeExpenseAccountLabel;
+
+  /// No description provided for @financeExpenseCommentHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, у кого покупали'**
+  String get financeExpenseCommentHint;
+
+  /// No description provided for @financeExpenseSaveNew.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить расход'**
+  String get financeExpenseSaveNew;
+
+  /// No description provided for @financeExpenseDelete.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить расход'**
+  String get financeExpenseDelete;
+
+  /// No description provided for @financeExpenseDeleteConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить расход «{name}»?'**
+  String financeExpenseDeleteConfirm(String name);
+
+  /// No description provided for @financeExpenseSaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход сохранён'**
+  String get financeExpenseSaved;
+
+  /// No description provided for @financeExpenseUpdated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход изменён'**
+  String get financeExpenseUpdated;
+
+  /// No description provided for @financeExpenseDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход удалён'**
+  String get financeExpenseDeleted;
+
+  /// No description provided for @financeExpenseNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход не найден'**
+  String get financeExpenseNotFound;
 }
 
 class _AppLocalizationsDelegate

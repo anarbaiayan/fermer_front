@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../application/finance_providers.dart';
 import '../../domain/entities/finance_date.dart';
 import '../finance_format.dart';
+
+/// Переключатель общего месяца вкладок «Сводка», «Доход», «Расход».
+class FinanceMonthSwitcher extends ConsumerWidget {
+  const FinanceMonthSwitcher({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FinancePeriodSwitcher(
+      month: ref.watch(financeMonthProvider),
+      maxMonth: ref.watch(financeTodayProvider),
+      onChanged: (month) =>
+          ref.read(financeMonthProvider.notifier).state = month,
+    );
+  }
+}
 
 /// «‹ Сентябрь 2026 ›». Будущие месяцы недоступны.
 class FinancePeriodSwitcher extends StatelessWidget {

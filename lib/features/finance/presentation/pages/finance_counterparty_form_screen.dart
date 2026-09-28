@@ -120,14 +120,11 @@ class _CounterpartyFormState extends ConsumerState<_CounterpartyForm> {
           : await mutations.updateCounterparty(buyer.id, input);
       if (!mounted) return;
       closeFinancePage(context, saved);
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            buyer == null
-                ? l10n.financeCounterpartyCreated
-                : l10n.financeCounterpartySaved,
-          ),
-        ),
+      showFinanceMessage(
+        messenger,
+        buyer == null
+            ? l10n.financeCounterpartyCreated
+            : l10n.financeCounterpartySaved,
       );
     } catch (error) {
       if (mounted) setState(() => _saveError = extractApiMessage(error));
@@ -154,9 +151,7 @@ class _CounterpartyFormState extends ConsumerState<_CounterpartyForm> {
       await ref.read(financeMutationsProvider).deactivateCounterparty(buyer.id);
       if (!mounted) return;
       closeFinancePage(context);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.financeCounterpartyHidden)),
-      );
+      showFinanceMessage(messenger, l10n.financeCounterpartyHidden);
     } catch (error) {
       if (mounted) setState(() => _saveError = extractApiMessage(error));
     } finally {

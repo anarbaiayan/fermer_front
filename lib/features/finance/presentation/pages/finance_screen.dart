@@ -9,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../application/finance_providers.dart';
 import '../widgets/finance_common.dart';
+import '../tabs/finance_expense_tab.dart';
 import '../widgets/finance_onboarding.dart';
 import '../widgets/finance_period_switcher.dart';
 import '../widgets/finance_tab_bar.dart';
@@ -57,6 +58,12 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    // Месяц и фильтры живут, пока открыт раздел: при переходе между
+    // вкладками и в формы и обратно они не сбрасываются.
+    ref
+      ..listen(financeMonthProvider, (_, _) {})
+      ..listen(financeExpenseCategoryFilterProvider, (_, _) {})
+      ..listen(financeExpenseAccountFilterProvider, (_, _) {});
     final accountsAsync = ref.watch(financeAccountsProvider);
     final accounts = accountsAsync.valueOrNull;
     // Поле, а не setState: решение принимается по данным этого же кадра.
@@ -190,29 +197,23 @@ class _FinanceHeader extends StatelessWidget {
   }
 }
 
-/// Содержимое вкладки. Пока модули не готовы — заглушка под переключателем
-/// месяца; модули 1–6 заменяют её экранами из прототипа.
-class _TabBody extends ConsumerWidget {
+/// Содержимое вкладки. Вкладки, чьи модули ещё не готовы, — заглушка под
+/// переключателем месяца.
+class _TabBody extends StatelessWidget {
   const _TabBody({required this.tab});
 
   final FinanceTab tab;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final today = ref.watch(financeTodayProvider);
-    final month = ref.watch(financeMonthProvider);
+  Widget build(BuildContext context) {
+    if (tab == FinanceTab.expense) return const FinanceExpenseTab();
 
     return ListView(
       // Снизу место под плавающую кнопку.
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 96),
       children: [
         if (tab != FinanceTab.report) ...[
-          FinancePeriodSwitcher(
-            month: month,
-            maxMonth: today,
-            onChanged: (value) =>
-                ref.read(financeMonthProvider.notifier).state = value,
-          ),
+          const FinanceMonthSwitcher(),
           const SizedBox(height: 20),
         ],
         FinanceMessageCard(title: context.l10n.financeStubMessage),

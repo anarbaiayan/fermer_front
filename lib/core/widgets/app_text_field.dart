@@ -24,6 +24,9 @@ class AppTextField extends StatelessWidget {
   final String? helperText;
   final TextCapitalization textCapitalization;
 
+  /// More than one line turns the pill into a text area with softer corners.
+  final int maxLines;
+
   const AppTextField({
     super.key,
     required this.label,
@@ -38,11 +41,13 @@ class AppTextField extends StatelessWidget {
     this.labelNote,
     this.helperText,
     this.textCapitalization = TextCapitalization.none,
+    this.maxLines = 1,
   });
 
   @override
   Widget build(BuildContext context) {
     final hasError = errorText != null;
+    final radius = BorderRadius.circular(maxLines > 1 ? 22 : 40);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,6 +88,8 @@ class AppTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           onChanged: onChanged,
           textCapitalization: textCapitalization,
+          minLines: maxLines > 1 ? 2 : null,
+          maxLines: maxLines,
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(
@@ -98,17 +105,17 @@ class AppTextField extends StatelessWidget {
             ),
             suffixIcon: suffixIcon,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: radius,
               borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: radius,
               borderSide: hasError
                   ? const BorderSide(color: AppColors.error, width: 1)
                   : BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: radius,
               borderSide: hasError
                   ? const BorderSide(color: AppColors.error, width: 1.5)
                   : BorderSide.none,

@@ -14,7 +14,9 @@ import 'package:frontend/features/cattle_events/presentation/pages/add_bulk_catt
 import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/events_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_account_form_screen.dart';
+import 'package:frontend/features/finance/domain/entities/finance_entities.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_counterparty_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_expense_form_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_settings_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_stub_screen.dart';
@@ -267,13 +269,14 @@ final GoRouter appRouter = GoRouter(
       ),
       GoRoute(
         path: '/finance/expenses/new',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeExpenseNewTitle),
+        builder: (context, state) => const FinanceExpenseFormScreen(),
       ),
       GoRoute(
         path: '/finance/expenses/:id',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeExpenseTitle),
+        builder: (context, state) => FinanceExpenseFormScreen(
+          expenseId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+          initial: state.extra is Expense ? state.extra as Expense : null,
+        ),
       ),
       GoRoute(
         path: '/finance/report/ready',

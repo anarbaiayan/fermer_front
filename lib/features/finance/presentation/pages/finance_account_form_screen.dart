@@ -150,14 +150,11 @@ class _AccountFormState extends ConsumerState<_AccountForm> {
           : await mutations.updateAccount(account.id, input);
       if (!mounted) return;
       closeFinancePage(context, saved);
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            account == null
-                ? l10n.financeAccountCreated(saved.name)
-                : l10n.financeAccountSaved,
-          ),
-        ),
+      showFinanceMessage(
+        messenger,
+        account == null
+            ? l10n.financeAccountCreated(saved.name)
+            : l10n.financeAccountSaved,
       );
     } catch (error) {
       if (mounted) setState(() => _saveError = extractApiMessage(error));
@@ -184,9 +181,7 @@ class _AccountFormState extends ConsumerState<_AccountForm> {
       await ref.read(financeMutationsProvider).deactivateAccount(account.id);
       if (!mounted) return;
       closeFinancePage(context);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.financeAccountHidden)),
-      );
+      showFinanceMessage(messenger, l10n.financeAccountHidden);
     } catch (error) {
       if (mounted) setState(() => _saveError = extractApiMessage(error));
     } finally {

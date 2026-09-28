@@ -45,14 +45,15 @@ Future<T?> showFinanceSheet<T>({
 }
 
 /// Шторка выбора одного значения из списка, например фильтра счёта.
-/// Возвращает выбранный ключ или `null`, если шторку закрыли.
-Future<T?> showFinancePickerSheet<T>({
+/// Возвращает `(ключ,)` или `null`, если шторку закрыли: ключ сам может
+/// быть `null` («Все счета»), и так эти случаи не путаются.
+Future<(T,)?> showFinancePickerSheet<T>({
   required BuildContext context,
   required String title,
   required Map<T, String> options,
   required T selected,
 }) {
-  return showFinanceSheet<T>(
+  return showFinanceSheet<(T,)>(
     context: context,
     builder: (sheetContext) => Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -68,7 +69,7 @@ Future<T?> showFinancePickerSheet<T>({
         const SizedBox(height: 4),
         for (final entry in options.entries)
           InkWell(
-            onTap: () => Navigator.of(sheetContext).pop(entry.key),
+            onTap: () => Navigator.of(sheetContext).pop((entry.key,)),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
               decoration: const BoxDecoration(

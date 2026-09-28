@@ -1187,5 +1187,54 @@
     "financeCounterpartyCreated": "Сатып алушы қосылды",
     "financeCounterpartySaved": "Сатып алушы сақталды",
     "financeCounterpartyHidden": "Сатып алушы жасырылды",
-    "financeCounterpartyNotFound": "Сатып алушы табылмады"
+    "financeCounterpartyNotFound": "Сатып алушы табылмады",
+    "financeDateYesterday": "Кеше, {date}",
+    "@financeDateYesterday": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeFilterAll": "Барлығы",
+    "financeAllAccounts": "Барлық шоттар",
+    "financeSpentLabel": "Жұмсалды",
+    "financeRecordsCount": "{count, plural, other{{count} жазба}}",
+    "@financeRecordsCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "financeExpensesEmptyTitle": "Шығыс табылмады",
+    "financeExpensesEmptyText": "Сүзгіні өзгертіңіз немесе шығыс қосыңыз",
+    "financeDeleteAction": "Жою",
+    "financeDateLabel": "Күні",
+    "financeAmountLabel": "Сома",
+    "financeAmountError": "Соманы көрсетіңіз",
+    "financeCommentLabel": "Түсініктеме",
+    "financeNoActiveAccounts": "Алдымен шот қосыңыз — ақша төлейтін және түсетін касса немесе карта",
+    "financeExpenseCategoryLabel": "Санат",
+    "financeExpenseCategoryError": "Санатты таңдаңыз",
+    "financeExpenseNameLabel": "Не үшін",
+    "financeExpenseNameHintFeed": "Құрама жем КК-60, 2 қап",
+    "financeExpenseNameHint": "Мысалы, дизель 50 л",
+    "financeExpenseNameError": "Не үшін жұмсағаныңызды жазыңыз",
+    "financeExpenseAccountLabel": "Қайдан төледіңіз",
+    "financeExpenseCommentHint": "Мысалы, кімнен сатып алдыңыз",
+    "financeExpenseSaveNew": "Шығысты сақтау",
+    "financeExpenseDelete": "Шығысты жою",
+    "financeExpenseDeleteConfirm": "«{name}» шығысын жою керек пе?",
+    "@financeExpenseDeleteConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeExpenseSaved": "Шығыс сақталды",
+    "financeExpenseUpdated": "Шығыс өзгертілді",
+    "financeExpenseDeleted": "Шығыс жойылды",
+    "financeExpenseNotFound": "Шығыс табылмады"
 }
