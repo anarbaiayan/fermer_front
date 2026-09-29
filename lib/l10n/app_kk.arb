@@ -1383,5 +1383,45 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "financeDebtsTotal": "Барлық қарыз",
+    "financeNoPhoneFull": "телефон көрсетілмеген",
+    "financeDueUntilPill": "{date} дейін",
+    "@financeDueUntilPill": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleDueWas": "мерзімі {date} болатын",
+    "@financeSaleDueWas": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePayUntil": "{date} дейін төлеу",
+    "@financeSalePayUntil": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeGetPaymentShort": "Алу",
+    "financeCall": "Қоңырау шалу",
+    "financeRemind": "Еске салу",
+    "financeDebtReminderText": "Сәлеметсіз бе! {amount} төлемді еске саламын. Рақмет!",
+    "@financeDebtReminderText": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeCallError": "Қоңырау шалу мүмкін болмады",
+    "financeNoDebtsTitle": "Қарыз жоқ",
+    "financeNoDebtsText": "Барлық сату төленді"
 }

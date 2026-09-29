@@ -5167,6 +5167,78 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'За {month} расходов нет'**
   String financeNoExpensesFor(String month);
+
+  /// No description provided for @financeDebtsTotal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Всего должны'**
+  String get financeDebtsTotal;
+
+  /// No description provided for @financeNoPhoneFull.
+  ///
+  /// In ru, this message translates to:
+  /// **'телефон не указан'**
+  String get financeNoPhoneFull;
+
+  /// No description provided for @financeDueUntilPill.
+  ///
+  /// In ru, this message translates to:
+  /// **'До {date}'**
+  String financeDueUntilPill(String date);
+
+  /// No description provided for @financeSaleDueWas.
+  ///
+  /// In ru, this message translates to:
+  /// **'срок был {date}'**
+  String financeSaleDueWas(String date);
+
+  /// No description provided for @financeSalePayUntil.
+  ///
+  /// In ru, this message translates to:
+  /// **'оплатить до {date}'**
+  String financeSalePayUntil(String date);
+
+  /// No description provided for @financeGetPaymentShort.
+  ///
+  /// In ru, this message translates to:
+  /// **'Получить'**
+  String get financeGetPaymentShort;
+
+  /// No description provided for @financeCall.
+  ///
+  /// In ru, this message translates to:
+  /// **'Позвонить'**
+  String get financeCall;
+
+  /// No description provided for @financeRemind.
+  ///
+  /// In ru, this message translates to:
+  /// **'Напомнить'**
+  String get financeRemind;
+
+  /// No description provided for @financeDebtReminderText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Здравствуйте! Напоминаю об оплате {amount}. Спасибо!'**
+  String financeDebtReminderText(String amount);
+
+  /// No description provided for @financeCallError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось открыть звонок'**
+  String get financeCallError;
+
+  /// No description provided for @financeNoDebtsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Долгов нет'**
+  String get financeNoDebtsTitle;
+
+  /// No description provided for @financeNoDebtsText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все продажи оплачены'**
+  String get financeNoDebtsText;
 }
 
 class _AppLocalizationsDelegate

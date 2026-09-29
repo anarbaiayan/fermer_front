@@ -33,6 +33,15 @@ abstract final class FinancePhone {
     return digits.length == 11 ? text.trim() : '';
   }
 
+  /// Цифры с кодом страны для звонка и WhatsApp: `77012345678`. Номер не
+  /// из Казахстана — как ввели, только цифры; `null` — цифр нет.
+  static String? international(String phone) {
+    final national = _national(phone);
+    if (national != null) return '7$national';
+    final digits = phone.replaceAll(RegExp(r'\D'), '');
+    return digits.isEmpty ? null : digits;
+  }
+
   /// Десять цифр номера без кода страны.
   static String? _national(String phone) {
     final digits = phone.replaceAll(RegExp(r'\D'), '');

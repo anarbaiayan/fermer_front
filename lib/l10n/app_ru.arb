@@ -1404,5 +1404,45 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "financeDebtsTotal": "Всего должны",
+    "financeNoPhoneFull": "телефон не указан",
+    "financeDueUntilPill": "До {date}",
+    "@financeDueUntilPill": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleDueWas": "срок был {date}",
+    "@financeSaleDueWas": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePayUntil": "оплатить до {date}",
+    "@financeSalePayUntil": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeGetPaymentShort": "Получить",
+    "financeCall": "Позвонить",
+    "financeRemind": "Напомнить",
+    "financeDebtReminderText": "Здравствуйте! Напоминаю об оплате {amount}. Спасибо!",
+    "@financeDebtReminderText": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeCallError": "Не удалось открыть звонок",
+    "financeNoDebtsTitle": "Долгов нет",
+    "financeNoDebtsText": "Все продажи оплачены"
 }

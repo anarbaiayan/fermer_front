@@ -2788,4 +2788,48 @@ class AppLocalizationsKk extends AppLocalizations {
   String financeNoExpensesFor(String month) {
     return '$month айында шығыс жоқ';
   }
+
+  @override
+  String get financeDebtsTotal => 'Барлық қарыз';
+
+  @override
+  String get financeNoPhoneFull => 'телефон көрсетілмеген';
+
+  @override
+  String financeDueUntilPill(String date) {
+    return '$date дейін';
+  }
+
+  @override
+  String financeSaleDueWas(String date) {
+    return 'мерзімі $date болатын';
+  }
+
+  @override
+  String financeSalePayUntil(String date) {
+    return '$date дейін төлеу';
+  }
+
+  @override
+  String get financeGetPaymentShort => 'Алу';
+
+  @override
+  String get financeCall => 'Қоңырау шалу';
+
+  @override
+  String get financeRemind => 'Еске салу';
+
+  @override
+  String financeDebtReminderText(String amount) {
+    return 'Сәлеметсіз бе! $amount төлемді еске саламын. Рақмет!';
+  }
+
+  @override
+  String get financeCallError => 'Қоңырау шалу мүмкін болмады';
+
+  @override
+  String get financeNoDebtsTitle => 'Қарыз жоқ';
+
+  @override
+  String get financeNoDebtsText => 'Барлық сату төленді';
 }

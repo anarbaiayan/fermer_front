@@ -16,6 +16,7 @@ import 'package:frontend/features/cattle_events/presentation/pages/events_screen
 import 'package:frontend/features/finance/presentation/pages/finance_account_form_screen.dart';
 import 'package:frontend/features/finance/domain/entities/finance_entities.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_counterparty_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_debts_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_expense_form_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_sale_form_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_screen.dart';
@@ -227,8 +228,11 @@ final GoRouter appRouter = GoRouter(
     if (kFinanceEnabled) ...[
       GoRoute(
         path: '/finance/debts',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeDebtsTitle),
+        builder: (context, state) => FinanceDebtsScreen(
+          counterpartyId: int.tryParse(
+            state.uri.queryParameters['counterpartyId'] ?? '',
+          ),
+        ),
       ),
       GoRoute(
         path: '/finance/settings',

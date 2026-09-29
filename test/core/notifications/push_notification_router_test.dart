@@ -48,6 +48,35 @@ void main() {
     expect(navigation, ['go /home', 'push /notifications']);
   });
 
+  test('opens debts with the buyer for an overdue debt', () {
+    router.navigateAuthenticated(
+      const PushNotificationPayload(
+        notificationId: '1',
+        type: 'FINANCE_OVERDUE',
+        cattleId: null,
+        title: null,
+        body: null,
+        counterpartyId: 5,
+      ),
+    );
+    router.navigateAuthenticated(
+      const PushNotificationPayload(
+        notificationId: '2',
+        type: 'FINANCE_OVERDUE',
+        cattleId: null,
+        title: null,
+        body: null,
+      ),
+    );
+
+    expect(navigation, [
+      'go /home',
+      'push /finance/debts?counterpartyId=5',
+      'go /home',
+      'push /finance/debts',
+    ]);
+  });
+
   test('does not navigate to cattle without cattle id', () {
     router.navigateAuthenticated(
       const PushNotificationPayload(

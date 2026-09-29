@@ -2797,4 +2797,48 @@ class AppLocalizationsRu extends AppLocalizations {
   String financeNoExpensesFor(String month) {
     return 'За $month расходов нет';
   }
+
+  @override
+  String get financeDebtsTotal => 'Всего должны';
+
+  @override
+  String get financeNoPhoneFull => 'телефон не указан';
+
+  @override
+  String financeDueUntilPill(String date) {
+    return 'До $date';
+  }
+
+  @override
+  String financeSaleDueWas(String date) {
+    return 'срок был $date';
+  }
+
+  @override
+  String financeSalePayUntil(String date) {
+    return 'оплатить до $date';
+  }
+
+  @override
+  String get financeGetPaymentShort => 'Получить';
+
+  @override
+  String get financeCall => 'Позвонить';
+
+  @override
+  String get financeRemind => 'Напомнить';
+
+  @override
+  String financeDebtReminderText(String amount) {
+    return 'Здравствуйте! Напоминаю об оплате $amount. Спасибо!';
+  }
+
+  @override
+  String get financeCallError => 'Не удалось открыть звонок';
+
+  @override
+  String get financeNoDebtsTitle => 'Долгов нет';
+
+  @override
+  String get financeNoDebtsText => 'Все продажи оплачены';
 }
