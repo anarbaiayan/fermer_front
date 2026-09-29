@@ -96,7 +96,9 @@
 - Money is `Money` (integer tiyn) and quantities are `Quantity` (thousandths); no arithmetic on `double`. Format with `FinanceFormat`.
 - Account balance = initial balance + paid sales − expenses. A debt sale never changes balances until it is paid.
 - UI says "Покупатели" for backend `counterparties`.
-- Backend differs from the spec: sales filter param is `paid` (not `isPaid`), payment is `PUT /finance/sales/{id}/pay`, `DELETE` on accounts and counterparties only deactivates, and summary/debts/PDF endpoints are not implemented yet. The backend does not default a debt due date; the form always sends it (sale date + 14 days).
+- Backend differs from the spec: sales filter param is `paid` (not `isPaid`), payment is `PUT /finance/sales/{id}/pay`, `DELETE` on accounts and counterparties only deactivates, and debts/PDF endpoints are not implemented yet. `GET /finance/summary` matches the spec; its `accounts` include hidden ones (active first). The backend does not default a debt due date; the form always sends it (sale date + 14 days).
+- The backend is expected to match the spec in full. Build endpoints it has not shipped yet (debts, PDF report, milk on Home) against the spec contract; `FinanceApi` follows the backend code only where it already exists, so re-check those differences when wiring the API.
+- Product decisions for the module (payment, price hint, PDF sharing, overdue push) are in `docs/business-decisions.md`, section Finance.
 
 ## Platform / Release Rules
 - Android release must keep `INTERNET` permission in `android/app/src/main/AndroidManifest.xml`.
