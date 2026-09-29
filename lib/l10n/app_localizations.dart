@@ -4849,6 +4849,270 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Расход не найден'**
   String get financeExpenseNotFound;
+
+  /// No description provided for @financeIncomeFilterPaid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оплачено'**
+  String get financeIncomeFilterPaid;
+
+  /// No description provided for @financeIncomeFilterDebt.
+  ///
+  /// In ru, this message translates to:
+  /// **'В долг'**
+  String get financeIncomeFilterDebt;
+
+  /// No description provided for @financeIncomeFilterOverdue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Просрочено'**
+  String get financeIncomeFilterOverdue;
+
+  /// No description provided for @financeSoldLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продано на'**
+  String get financeSoldLabel;
+
+  /// No description provided for @financeUnpaidAmount.
+  ///
+  /// In ru, this message translates to:
+  /// **'не оплачено {amount}'**
+  String financeUnpaidAmount(String amount);
+
+  /// No description provided for @financeSalesEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продаж не найдено'**
+  String get financeSalesEmptyTitle;
+
+  /// No description provided for @financeSalesEmptyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Измените фильтр или запишите продажу'**
+  String get financeSalesEmptyText;
+
+  /// No description provided for @financeGetPayment.
+  ///
+  /// In ru, this message translates to:
+  /// **'Получить оплату'**
+  String get financeGetPayment;
+
+  /// No description provided for @financeNoBuyer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Без покупателя'**
+  String get financeNoBuyer;
+
+  /// No description provided for @financeSaleOfDate.
+  ///
+  /// In ru, this message translates to:
+  /// **'продажа {date}'**
+  String financeSaleOfDate(String date);
+
+  /// No description provided for @financePayAccountLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Куда пришли деньги'**
+  String get financePayAccountLabel;
+
+  /// No description provided for @financePayDateLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата оплаты'**
+  String get financePayDateLabel;
+
+  /// No description provided for @financePayConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Деньги получены'**
+  String get financePayConfirm;
+
+  /// No description provided for @financePaymentReceived.
+  ///
+  /// In ru, this message translates to:
+  /// **'{amount} зачислено на «{account}»'**
+  String financePaymentReceived(String amount, String account);
+
+  /// No description provided for @financeSaleBuyerLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель'**
+  String get financeSaleBuyerLabel;
+
+  /// No description provided for @financeSaleBuyerNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'можно пропустить'**
+  String get financeSaleBuyerNote;
+
+  /// No description provided for @financeAllBuyers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все покупатели'**
+  String get financeAllBuyers;
+
+  /// No description provided for @financeNewBuyer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый'**
+  String get financeNewBuyer;
+
+  /// No description provided for @financeSaleProductLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар'**
+  String get financeSaleProductLabel;
+
+  /// No description provided for @financeSaleProductHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, айран'**
+  String get financeSaleProductHint;
+
+  /// No description provided for @financeSaleProductError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите товар'**
+  String get financeSaleProductError;
+
+  /// No description provided for @financeSaleProductNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Напишите, что продали'**
+  String get financeSaleProductNameError;
+
+  /// No description provided for @financeSaleQuantityLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество'**
+  String get financeSaleQuantityLabel;
+
+  /// No description provided for @financeSaleQuantityError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите количество больше нуля'**
+  String get financeSaleQuantityError;
+
+  /// No description provided for @financeSalePriceLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цена за 1 {unit}'**
+  String financeSalePriceLabel(String unit);
+
+  /// No description provided for @financeSalePriceError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите цену'**
+  String get financeSalePriceError;
+
+  /// No description provided for @financeSalePriceHintBuyer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Как в прошлый раз у этого покупателя: {price}'**
+  String financeSalePriceHintBuyer(String price);
+
+  /// No description provided for @financeSalePriceHintLast.
+  ///
+  /// In ru, this message translates to:
+  /// **'Последняя цена: {price}'**
+  String financeSalePriceHintLast(String price);
+
+  /// No description provided for @financeSaleAmountNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'считается сама'**
+  String get financeSaleAmountNote;
+
+  /// No description provided for @financeSalePaymentLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оплата'**
+  String get financeSalePaymentLabel;
+
+  /// No description provided for @financeSaleDueLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оплатить до'**
+  String get financeSaleDueLabel;
+
+  /// No description provided for @financeSaleDueHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'{days, plural, one{Через {days} день после продажи. Можно изменить.} few{Через {days} дня после продажи. Можно изменить.} many{Через {days} дней после продажи. Можно изменить.} other{Через {days} дня после продажи. Можно изменить.}}'**
+  String financeSaleDueHint(int days);
+
+  /// No description provided for @financeSaleDateLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата продажи'**
+  String get financeSaleDateLabel;
+
+  /// No description provided for @financeSaleCommentHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, отдал с доставкой'**
+  String get financeSaleCommentHint;
+
+  /// No description provided for @financeSaleSaveNew.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить продажу'**
+  String get financeSaleSaveNew;
+
+  /// No description provided for @financeSaleDebtNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Остатки счетов не изменятся — деньги придут, когда отметите оплату'**
+  String get financeSaleDebtNote;
+
+  /// No description provided for @financeSaleDebtBuyerError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для продажи в долг выберите покупателя'**
+  String get financeSaleDebtBuyerError;
+
+  /// No description provided for @financeSaleHiddenAccountError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Этот счёт скрыт — выберите, куда пришли деньги'**
+  String get financeSaleHiddenAccountError;
+
+  /// No description provided for @financeSaleDelete.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить продажу'**
+  String get financeSaleDelete;
+
+  /// No description provided for @financeSaleDeleteConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить продажу «{name}»?'**
+  String financeSaleDeleteConfirm(String name);
+
+  /// No description provided for @financeSaleSaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа сохранена'**
+  String get financeSaleSaved;
+
+  /// No description provided for @financeSaleUpdated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа изменена'**
+  String get financeSaleUpdated;
+
+  /// No description provided for @financeSaleDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа удалена'**
+  String get financeSaleDeleted;
+
+  /// No description provided for @financeSaleNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа не найдена'**
+  String get financeSaleNotFound;
 }
 
 class _AppLocalizationsDelegate

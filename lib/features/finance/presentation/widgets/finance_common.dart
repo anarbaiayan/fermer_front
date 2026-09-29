@@ -322,10 +322,14 @@ class FinanceAmountBox extends StatelessWidget {
     super.key,
     required this.label,
     required this.amount,
+    this.caption,
   });
 
   final String label;
   final String amount;
+
+  /// Мелкая строка под подписью: «считается сама».
+  final String? caption;
 
   @override
   Widget build(BuildContext context) {
@@ -335,24 +339,51 @@ class FinanceAmountBox extends StatelessWidget {
         color: FinanceColors.softGreen,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(fontSize: 13, color: AppColors.primary1),
+      child: LayoutBuilder(
+        builder: (context, constraints) => Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.primary1,
+                    ),
+                  ),
+                  if (caption != null)
+                    Text(
+                      caption!,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Color(0xFF5E7F6B),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            amount,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primary1,
+            const SizedBox(width: 12),
+            // Крупная сумма уменьшается, а не рвёт строку на узком экране.
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.6),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerRight,
+                child: Text(
+                  amount,
+                  maxLines: 1,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary1,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

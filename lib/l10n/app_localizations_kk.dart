@@ -2594,4 +2594,161 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get financeExpenseNotFound => 'Шығыс табылмады';
+
+  @override
+  String get financeIncomeFilterPaid => 'Төленді';
+
+  @override
+  String get financeIncomeFilterDebt => 'Қарызға';
+
+  @override
+  String get financeIncomeFilterOverdue => 'Мерзімі өткен';
+
+  @override
+  String get financeSoldLabel => 'Сатылды';
+
+  @override
+  String financeUnpaidAmount(String amount) {
+    return 'төленбегені $amount';
+  }
+
+  @override
+  String get financeSalesEmptyTitle => 'Сату табылмады';
+
+  @override
+  String get financeSalesEmptyText =>
+      'Сүзгіні өзгертіңіз немесе сатуды жазыңыз';
+
+  @override
+  String get financeGetPayment => 'Төлемді алу';
+
+  @override
+  String get financeNoBuyer => 'Сатып алушысыз';
+
+  @override
+  String financeSaleOfDate(String date) {
+    return 'сату $date';
+  }
+
+  @override
+  String get financePayAccountLabel => 'Ақша қайда түсті';
+
+  @override
+  String get financePayDateLabel => 'Төлем күні';
+
+  @override
+  String get financePayConfirm => 'Ақша алынды';
+
+  @override
+  String financePaymentReceived(String amount, String account) {
+    return '$amount «$account» шотына түсті';
+  }
+
+  @override
+  String get financeSaleBuyerLabel => 'Сатып алушы';
+
+  @override
+  String get financeSaleBuyerNote => 'міндетті емес';
+
+  @override
+  String get financeAllBuyers => 'Барлық сатып алушылар';
+
+  @override
+  String get financeNewBuyer => 'Жаңа';
+
+  @override
+  String get financeSaleProductLabel => 'Тауар';
+
+  @override
+  String get financeSaleProductHint => 'Мысалы, айран';
+
+  @override
+  String get financeSaleProductError => 'Тауарды таңдаңыз';
+
+  @override
+  String get financeSaleProductNameError => 'Не сатқаныңызды жазыңыз';
+
+  @override
+  String get financeSaleQuantityLabel => 'Саны';
+
+  @override
+  String get financeSaleQuantityError => 'Нөлден көп санды көрсетіңіз';
+
+  @override
+  String financeSalePriceLabel(String unit) {
+    return '1 $unit бағасы';
+  }
+
+  @override
+  String get financeSalePriceError => 'Бағасын көрсетіңіз';
+
+  @override
+  String financeSalePriceHintBuyer(String price) {
+    return 'Осы сатып алушыға өткен жолғыдай: $price';
+  }
+
+  @override
+  String financeSalePriceHintLast(String price) {
+    return 'Соңғы баға: $price';
+  }
+
+  @override
+  String get financeSaleAmountNote => 'өзі есептеледі';
+
+  @override
+  String get financeSalePaymentLabel => 'Төлем';
+
+  @override
+  String get financeSaleDueLabel => 'Төлеу мерзімі';
+
+  @override
+  String financeSaleDueHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Сатудан кейін $days күн. Өзгертуге болады.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get financeSaleDateLabel => 'Сату күні';
+
+  @override
+  String get financeSaleCommentHint => 'Мысалы, жеткізіп бердім';
+
+  @override
+  String get financeSaleSaveNew => 'Сатуды сақтау';
+
+  @override
+  String get financeSaleDebtNote =>
+      'Шот қалдықтары өзгермейді — ақша төлемді белгілегенде түседі';
+
+  @override
+  String get financeSaleDebtBuyerError =>
+      'Қарызға сату үшін сатып алушыны таңдаңыз';
+
+  @override
+  String get financeSaleHiddenAccountError =>
+      'Бұл шот жасырылған — ақша қайда түскенін таңдаңыз';
+
+  @override
+  String get financeSaleDelete => 'Сатуды жою';
+
+  @override
+  String financeSaleDeleteConfirm(String name) {
+    return '«$name» сатуын жою керек пе?';
+  }
+
+  @override
+  String get financeSaleSaved => 'Сату сақталды';
+
+  @override
+  String get financeSaleUpdated => 'Сату өзгертілді';
+
+  @override
+  String get financeSaleDeleted => 'Сату жойылды';
+
+  @override
+  String get financeSaleNotFound => 'Сату табылмады';
 }

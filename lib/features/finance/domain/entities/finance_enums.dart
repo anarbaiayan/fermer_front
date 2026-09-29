@@ -118,13 +118,26 @@ enum SaleProduct {
     SaleProduct.cheese => l10n.financeProductCheese,
   };
 
-  /// Товар из списка по сохранённому названию, без учёта регистра.
-  /// `null` — название введено вручную («Другое»).
-  static SaleProduct? matching(String name, AppLocalizations l10n) {
+  /// Товар из списка по сохранённому названию на любом языке приложения,
+  /// без учёта регистра: «Молоко» и «Сүт» — один товар, если фермер сменил
+  /// язык. `null` — название введено вручную («Другое»).
+  static SaleProduct? matching(String name) {
     final key = name.trim().toLowerCase();
-    for (final product in values) {
-      if (product.localizedLabel(l10n).toLowerCase() == key) return product;
+    for (final l10n in _allLocalizations) {
+      for (final product in values) {
+        if (product.localizedLabel(l10n).toLowerCase() == key) return product;
+      }
     }
     return null;
   }
+
+  static final _allLocalizations = [
+    for (final locale in AppLocalizations.supportedLocales)
+      lookupAppLocalizations(locale),
+  ];
 }
+
+/// Ключ товара для сравнения продаж: товар из списка — на любом языке,
+/// свой — по названию без учёта регистра и пробелов по краям.
+String saleProductKey(String name) =>
+    SaleProduct.matching(name)?.name ?? name.trim().toLowerCase();

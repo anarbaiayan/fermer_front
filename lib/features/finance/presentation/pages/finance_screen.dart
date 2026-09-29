@@ -10,6 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../application/finance_providers.dart';
 import '../widgets/finance_common.dart';
 import '../tabs/finance_expense_tab.dart';
+import '../tabs/finance_income_tab.dart';
 import '../widgets/finance_onboarding.dart';
 import '../widgets/finance_period_switcher.dart';
 import '../widgets/finance_tab_bar.dart';
@@ -63,7 +64,8 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
     ref
       ..listen(financeMonthProvider, (_, _) {})
       ..listen(financeExpenseCategoryFilterProvider, (_, _) {})
-      ..listen(financeExpenseAccountFilterProvider, (_, _) {});
+      ..listen(financeExpenseAccountFilterProvider, (_, _) {})
+      ..listen(financeIncomeFilterProvider, (_, _) {});
     final accountsAsync = ref.watch(financeAccountsProvider);
     final accounts = accountsAsync.valueOrNull;
     // Поле, а не setState: решение принимается по данным этого же кадра.
@@ -206,7 +208,15 @@ class _TabBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (tab == FinanceTab.expense) return const FinanceExpenseTab();
+    switch (tab) {
+      case FinanceTab.income:
+        return const FinanceIncomeTab();
+      case FinanceTab.expense:
+        return const FinanceExpenseTab();
+      case FinanceTab.summary:
+      case FinanceTab.report:
+        break;
+    }
 
     return ListView(
       // Снизу место под плавающую кнопку.

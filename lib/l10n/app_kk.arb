@@ -1236,5 +1236,108 @@
     "financeExpenseSaved": "Шығыс сақталды",
     "financeExpenseUpdated": "Шығыс өзгертілді",
     "financeExpenseDeleted": "Шығыс жойылды",
-    "financeExpenseNotFound": "Шығыс табылмады"
+    "financeExpenseNotFound": "Шығыс табылмады",
+    "financeIncomeFilterPaid": "Төленді",
+    "financeIncomeFilterDebt": "Қарызға",
+    "financeIncomeFilterOverdue": "Мерзімі өткен",
+    "financeSoldLabel": "Сатылды",
+    "financeUnpaidAmount": "төленбегені {amount}",
+    "@financeUnpaidAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalesEmptyTitle": "Сату табылмады",
+    "financeSalesEmptyText": "Сүзгіні өзгертіңіз немесе сатуды жазыңыз",
+    "financeGetPayment": "Төлемді алу",
+    "financeNoBuyer": "Сатып алушысыз",
+    "financeSaleOfDate": "сату {date}",
+    "@financeSaleOfDate": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financePayAccountLabel": "Ақша қайда түсті",
+    "financePayDateLabel": "Төлем күні",
+    "financePayConfirm": "Ақша алынды",
+    "financePaymentReceived": "{amount} «{account}» шотына түсті",
+    "@financePaymentReceived": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            },
+            "account": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleBuyerLabel": "Сатып алушы",
+    "financeSaleBuyerNote": "міндетті емес",
+    "financeAllBuyers": "Барлық сатып алушылар",
+    "financeNewBuyer": "Жаңа",
+    "financeSaleProductLabel": "Тауар",
+    "financeSaleProductHint": "Мысалы, айран",
+    "financeSaleProductError": "Тауарды таңдаңыз",
+    "financeSaleProductNameError": "Не сатқаныңызды жазыңыз",
+    "financeSaleQuantityLabel": "Саны",
+    "financeSaleQuantityError": "Нөлден көп санды көрсетіңіз",
+    "financeSalePriceLabel": "1 {unit} бағасы",
+    "@financeSalePriceLabel": {
+        "placeholders": {
+            "unit": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePriceError": "Бағасын көрсетіңіз",
+    "financeSalePriceHintBuyer": "Осы сатып алушыға өткен жолғыдай: {price}",
+    "@financeSalePriceHintBuyer": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePriceHintLast": "Соңғы баға: {price}",
+    "@financeSalePriceHintLast": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleAmountNote": "өзі есептеледі",
+    "financeSalePaymentLabel": "Төлем",
+    "financeSaleDueLabel": "Төлеу мерзімі",
+    "financeSaleDueHint": "{days, plural, other{Сатудан кейін {days} күн. Өзгертуге болады.}}",
+    "@financeSaleDueHint": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeSaleDateLabel": "Сату күні",
+    "financeSaleCommentHint": "Мысалы, жеткізіп бердім",
+    "financeSaleSaveNew": "Сатуды сақтау",
+    "financeSaleDebtNote": "Шот қалдықтары өзгермейді — ақша төлемді белгілегенде түседі",
+    "financeSaleDebtBuyerError": "Қарызға сату үшін сатып алушыны таңдаңыз",
+    "financeSaleHiddenAccountError": "Бұл шот жасырылған — ақша қайда түскенін таңдаңыз",
+    "financeSaleDelete": "Сатуды жою",
+    "financeSaleDeleteConfirm": "«{name}» сатуын жою керек пе?",
+    "@financeSaleDeleteConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleSaved": "Сату сақталды",
+    "financeSaleUpdated": "Сату өзгертілді",
+    "financeSaleDeleted": "Сату жойылды",
+    "financeSaleNotFound": "Сату табылмады"
 }

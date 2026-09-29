@@ -53,13 +53,17 @@ class FinanceChip extends StatelessWidget {
           AppIcons.svg(icon!, size: 16, color: foreground),
           const SizedBox(width: 6),
         ],
-        Text(
-          label,
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: add || selected ? FontWeight.w600 : FontWeight.w500,
-            color: foreground,
+        // Длинное имя покупателя обрезается, а не выходит за строку.
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: add || selected ? FontWeight.w600 : FontWeight.w500,
+              color: foreground,
+            ),
           ),
         ),
         if (trailingText != null) ...[

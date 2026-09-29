@@ -130,6 +130,8 @@ void main() {
       await tester.tap(find.text(_ru.financeTabReport));
       await tester.pump();
       expect(find.text('Август 2026'), findsNothing);
+      // Вкладка «Доход» успела запросить продажи — дожидаемся ответа.
+      await tester.pumpAndSettle();
     });
 
     testWidgets('income tab adds a sale, expense tab adds an expense', (

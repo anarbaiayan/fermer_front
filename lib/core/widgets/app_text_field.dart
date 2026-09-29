@@ -16,6 +16,7 @@ class AppTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final ValueChanged<String>? onChanged;
+  final FocusNode? focusNode;
 
   /// Small grey note next to the label, e.g. "optional".
   final String? labelNote;
@@ -38,6 +39,7 @@ class AppTextField extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.onChanged,
+    this.focusNode,
     this.labelNote,
     this.helperText,
     this.textCapitalization = TextCapitalization.none,
@@ -83,6 +85,7 @@ class AppTextField extends StatelessWidget {
         ],
         TextField(
           controller: controller,
+          focusNode: focusNode,
           obscureText: obscureText,
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,

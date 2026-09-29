@@ -1257,5 +1257,108 @@
     "financeExpenseSaved": "Расход сохранён",
     "financeExpenseUpdated": "Расход изменён",
     "financeExpenseDeleted": "Расход удалён",
-    "financeExpenseNotFound": "Расход не найден"
+    "financeExpenseNotFound": "Расход не найден",
+    "financeIncomeFilterPaid": "Оплачено",
+    "financeIncomeFilterDebt": "В долг",
+    "financeIncomeFilterOverdue": "Просрочено",
+    "financeSoldLabel": "Продано на",
+    "financeUnpaidAmount": "не оплачено {amount}",
+    "@financeUnpaidAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalesEmptyTitle": "Продаж не найдено",
+    "financeSalesEmptyText": "Измените фильтр или запишите продажу",
+    "financeGetPayment": "Получить оплату",
+    "financeNoBuyer": "Без покупателя",
+    "financeSaleOfDate": "продажа {date}",
+    "@financeSaleOfDate": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financePayAccountLabel": "Куда пришли деньги",
+    "financePayDateLabel": "Дата оплаты",
+    "financePayConfirm": "Деньги получены",
+    "financePaymentReceived": "{amount} зачислено на «{account}»",
+    "@financePaymentReceived": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            },
+            "account": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleBuyerLabel": "Покупатель",
+    "financeSaleBuyerNote": "можно пропустить",
+    "financeAllBuyers": "Все покупатели",
+    "financeNewBuyer": "Новый",
+    "financeSaleProductLabel": "Товар",
+    "financeSaleProductHint": "Например, айран",
+    "financeSaleProductError": "Выберите товар",
+    "financeSaleProductNameError": "Напишите, что продали",
+    "financeSaleQuantityLabel": "Количество",
+    "financeSaleQuantityError": "Укажите количество больше нуля",
+    "financeSalePriceLabel": "Цена за 1 {unit}",
+    "@financeSalePriceLabel": {
+        "placeholders": {
+            "unit": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePriceError": "Укажите цену",
+    "financeSalePriceHintBuyer": "Как в прошлый раз у этого покупателя: {price}",
+    "@financeSalePriceHintBuyer": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePriceHintLast": "Последняя цена: {price}",
+    "@financeSalePriceHintLast": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleAmountNote": "считается сама",
+    "financeSalePaymentLabel": "Оплата",
+    "financeSaleDueLabel": "Оплатить до",
+    "financeSaleDueHint": "{days, plural, one{Через {days} день после продажи. Можно изменить.} few{Через {days} дня после продажи. Можно изменить.} many{Через {days} дней после продажи. Можно изменить.} other{Через {days} дня после продажи. Можно изменить.}}",
+    "@financeSaleDueHint": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeSaleDateLabel": "Дата продажи",
+    "financeSaleCommentHint": "Например, отдал с доставкой",
+    "financeSaleSaveNew": "Сохранить продажу",
+    "financeSaleDebtNote": "Остатки счетов не изменятся — деньги придут, когда отметите оплату",
+    "financeSaleDebtBuyerError": "Для продажи в долг выберите покупателя",
+    "financeSaleHiddenAccountError": "Этот счёт скрыт — выберите, куда пришли деньги",
+    "financeSaleDelete": "Удалить продажу",
+    "financeSaleDeleteConfirm": "Удалить продажу «{name}»?",
+    "@financeSaleDeleteConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleSaved": "Продажа сохранена",
+    "financeSaleUpdated": "Продажа изменена",
+    "financeSaleDeleted": "Продажа удалена",
+    "financeSaleNotFound": "Продажа не найдена"
 }

@@ -3,12 +3,15 @@ import 'package:frontend/core/theme/app_colors.dart';
 
 /// Нижняя шторка «Финансов»: белая, скругление 24, ручка сверху.
 /// Поднимается над клавиатурой и прокручивается, если не помещается.
+/// Открывается поверх всего экрана: затемнение закрывает и нижний бар,
+/// чтобы из открытой шторки нельзя было уйти в другой раздел.
 Future<T?> showFinanceSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
 }) {
   return showModalBottomSheet<T>(
     context: context,
+    useRootNavigator: true,
     isScrollControlled: true,
     useSafeArea: true,
     backgroundColor: Colors.white,

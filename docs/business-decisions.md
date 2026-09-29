@@ -40,7 +40,9 @@ Source: spec v1.0 (19.09.2026) and the "Фермер+ Финансы" prototype.
 - The UI says "Покупатели" (buyers); the API keeps `counterparties`.
 - Red marks only overdue debts. Expenses are shown dark with a minus sign.
 - Defaults that keep a record under 15 seconds: date is today, account is the last used one (else the first cash account), a debt is due 14 days after the sale (shown in the form), unit and price come from the previous sale of the same product.
-- The price hint is computed on the client from the sales list for now; revisit when the backend is finished.
+- The price hint is computed on the client from the sales list for now; revisit when the backend is finished. It prefers the last sale to the same buyer (or also without a buyer), then the latest sale. A price the farmer typed is never replaced.
+- Products are a fixed list plus the farmer's own past products; the API still gets free text. A listed product is the same product in Russian and Kazakh («Молоко» = «Сүт»), so hints survive a language switch.
+- A paid sale gets the sale date as the payment date. A debt switched to paid in the edit form is paid today; the payment sheet lets the farmer pick the date.
 - The sale amount is quantity × price, read-only; the saved value comes from the backend.
 - A debt sale requires a buyer. A debt without a name cannot be reminded or listed in debts.
 - A debt is overdue when it is unpaid and its due date is before today.

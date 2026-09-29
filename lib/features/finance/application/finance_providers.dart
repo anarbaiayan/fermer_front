@@ -87,9 +87,83 @@ final financeExpenseAccountFilterProvider = StateProvider.autoDispose<int?>(
   (ref) => null,
 );
 
+/// Фильтр на вкладке «Доход». Живёт, пока открыт раздел.
+final financeIncomeFilterProvider = StateProvider.autoDispose<IncomeFilter>(
+  (ref) => IncomeFilter.all,
+);
+
+/// Фильтры вкладки «Доход». Просрочка считается на лету (правило 3), поэтому
+/// фильтруем на клиенте: бэкенд умеет только `paid`.
+enum IncomeFilter {
+  all,
+  paid,
+  debt,
+  overdue;
+
+  bool matches(Sale sale, DateTime today) => switch (this) {
+    IncomeFilter.all => true,
+    IncomeFilter.paid => sale.paid,
+    IncomeFilter.debt => !sale.paid,
+    IncomeFilter.overdue => sale.isOverdueOn(today),
+  };
+}
+
 /// Последний счёт, через который платили или получали деньги. Форма
 /// подставляет его, чтобы запись занимала секунды (решение Р4 прототипа).
 final financeLastAccountProvider = StateProvider<int?>((ref) => null);
+
+/// Прошлая продажа товара — источник единицы и цены в форме (вопрос В3:
+/// пока считаем на клиенте по списку продаж). Сначала последняя продажа
+/// тому же покупателю (или тоже без покупателя), иначе последняя вообще.
+/// Товары из списка сравниваются на любом языке: «Сүт» находит «Молоко».
+Sale? lastSaleOf(List<Sale> sales, String productName, int? counterpartyId) {
+  if (productName.trim().isEmpty) return null;
+  final key = saleProductKey(productName);
+  Sale? latest;
+  Sale? sameBuyer;
+  for (final sale in sales) {
+    if (saleProductKey(sale.productName) != key) continue;
+    if (latest == null || _isLater(sale, latest)) latest = sale;
+    if (sale.counterpartyId == counterpartyId &&
+        (sameBuyer == null || _isLater(sale, sameBuyer))) {
+      sameBuyer = sale;
+    }
+  }
+  return sameBuyer ?? latest;
+}
+
+bool _isLater(Sale a, Sale b) {
+  final byDate = a.saleDate.compareTo(b.saleDate);
+  return byDate != 0 ? byDate > 0 : a.id > b.id;
+}
+
+/// Активные покупатели для формы продажи: кому продавали недавно — первыми
+/// (ТЗ: «последние сверху»), остальные по имени.
+List<Counterparty> recentCounterparties(
+  List<Counterparty> counterparties,
+  List<Sale> sales,
+) {
+  final lastSale = <int, DateTime>{};
+  for (final sale in sales) {
+    final id = sale.counterpartyId;
+    if (id == null) continue;
+    final known = lastSale[id];
+    if (known == null || sale.saleDate.isAfter(known)) {
+      lastSale[id] = sale.saleDate;
+    }
+  }
+  return counterparties.where((c) => c.active).toList()..sort((a, b) {
+    final aLast = lastSale[a.id];
+    final bLast = lastSale[b.id];
+    if (aLast != null && bLast != null) {
+      final byDate = bLast.compareTo(aLast);
+      if (byDate != 0) return byDate;
+    } else if (aLast != null || bLast != null) {
+      return aLast != null ? -1 : 1;
+    }
+    return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+  });
+}
 
 /// Счёт по умолчанию для новой записи: последний использованный, иначе
 /// первая касса, иначе первый активный.
@@ -167,6 +241,7 @@ class FinanceMutations {
     final sale = await _repository.createSale(input);
     _salesChanged();
     _ref.invalidate(financeProductNamesProvider);
+    if (input.paid) _usedAccount(input.accountId);
     return sale;
   }
 
@@ -174,12 +249,14 @@ class FinanceMutations {
     final sale = await _repository.updateSale(id, input);
     _salesChanged();
     _ref.invalidate(financeProductNamesProvider);
+    if (input.paid) _usedAccount(input.accountId);
     return sale;
   }
 
   Future<Sale> paySale(int id, SalePayment payment) async {
     final sale = await _repository.paySale(id, payment);
     _salesChanged();
+    _usedAccount(payment.accountId);
     return sale;
   }
 
@@ -192,20 +269,24 @@ class FinanceMutations {
   Future<Expense> createExpense(ExpenseInput input) async {
     final expense = await _repository.createExpense(input);
     _expensesChanged();
-    _ref.read(financeLastAccountProvider.notifier).state = input.accountId;
+    _usedAccount(input.accountId);
     return expense;
   }
 
   Future<Expense> updateExpense(int id, ExpenseInput input) async {
     final expense = await _repository.updateExpense(id, input);
     _expensesChanged();
-    _ref.read(financeLastAccountProvider.notifier).state = input.accountId;
+    _usedAccount(input.accountId);
     return expense;
   }
 
   Future<void> deleteExpense(int id) async {
     await _repository.deleteExpense(id);
     _expensesChanged();
+  }
+
+  void _usedAccount(int? id) {
+    if (id != null) _ref.read(financeLastAccountProvider.notifier).state = id;
   }
 
   void _balancesChanged() {

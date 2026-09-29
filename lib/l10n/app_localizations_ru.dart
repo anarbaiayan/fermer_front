@@ -2601,4 +2601,163 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get financeExpenseNotFound => 'Расход не найден';
+
+  @override
+  String get financeIncomeFilterPaid => 'Оплачено';
+
+  @override
+  String get financeIncomeFilterDebt => 'В долг';
+
+  @override
+  String get financeIncomeFilterOverdue => 'Просрочено';
+
+  @override
+  String get financeSoldLabel => 'Продано на';
+
+  @override
+  String financeUnpaidAmount(String amount) {
+    return 'не оплачено $amount';
+  }
+
+  @override
+  String get financeSalesEmptyTitle => 'Продаж не найдено';
+
+  @override
+  String get financeSalesEmptyText => 'Измените фильтр или запишите продажу';
+
+  @override
+  String get financeGetPayment => 'Получить оплату';
+
+  @override
+  String get financeNoBuyer => 'Без покупателя';
+
+  @override
+  String financeSaleOfDate(String date) {
+    return 'продажа $date';
+  }
+
+  @override
+  String get financePayAccountLabel => 'Куда пришли деньги';
+
+  @override
+  String get financePayDateLabel => 'Дата оплаты';
+
+  @override
+  String get financePayConfirm => 'Деньги получены';
+
+  @override
+  String financePaymentReceived(String amount, String account) {
+    return '$amount зачислено на «$account»';
+  }
+
+  @override
+  String get financeSaleBuyerLabel => 'Покупатель';
+
+  @override
+  String get financeSaleBuyerNote => 'можно пропустить';
+
+  @override
+  String get financeAllBuyers => 'Все покупатели';
+
+  @override
+  String get financeNewBuyer => 'Новый';
+
+  @override
+  String get financeSaleProductLabel => 'Товар';
+
+  @override
+  String get financeSaleProductHint => 'Например, айран';
+
+  @override
+  String get financeSaleProductError => 'Выберите товар';
+
+  @override
+  String get financeSaleProductNameError => 'Напишите, что продали';
+
+  @override
+  String get financeSaleQuantityLabel => 'Количество';
+
+  @override
+  String get financeSaleQuantityError => 'Укажите количество больше нуля';
+
+  @override
+  String financeSalePriceLabel(String unit) {
+    return 'Цена за 1 $unit';
+  }
+
+  @override
+  String get financeSalePriceError => 'Укажите цену';
+
+  @override
+  String financeSalePriceHintBuyer(String price) {
+    return 'Как в прошлый раз у этого покупателя: $price';
+  }
+
+  @override
+  String financeSalePriceHintLast(String price) {
+    return 'Последняя цена: $price';
+  }
+
+  @override
+  String get financeSaleAmountNote => 'считается сама';
+
+  @override
+  String get financeSalePaymentLabel => 'Оплата';
+
+  @override
+  String get financeSaleDueLabel => 'Оплатить до';
+
+  @override
+  String financeSaleDueHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Через $days дня после продажи. Можно изменить.',
+      many: 'Через $days дней после продажи. Можно изменить.',
+      few: 'Через $days дня после продажи. Можно изменить.',
+      one: 'Через $days день после продажи. Можно изменить.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get financeSaleDateLabel => 'Дата продажи';
+
+  @override
+  String get financeSaleCommentHint => 'Например, отдал с доставкой';
+
+  @override
+  String get financeSaleSaveNew => 'Сохранить продажу';
+
+  @override
+  String get financeSaleDebtNote =>
+      'Остатки счетов не изменятся — деньги придут, когда отметите оплату';
+
+  @override
+  String get financeSaleDebtBuyerError =>
+      'Для продажи в долг выберите покупателя';
+
+  @override
+  String get financeSaleHiddenAccountError =>
+      'Этот счёт скрыт — выберите, куда пришли деньги';
+
+  @override
+  String get financeSaleDelete => 'Удалить продажу';
+
+  @override
+  String financeSaleDeleteConfirm(String name) {
+    return 'Удалить продажу «$name»?';
+  }
+
+  @override
+  String get financeSaleSaved => 'Продажа сохранена';
+
+  @override
+  String get financeSaleUpdated => 'Продажа изменена';
+
+  @override
+  String get financeSaleDeleted => 'Продажа удалена';
+
+  @override
+  String get financeSaleNotFound => 'Продажа не найдена';
 }

@@ -3,11 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
-import 'package:frontend/core/widgets/app_outlined_button.dart';
 import 'package:frontend/core/widgets/app_primary_button.dart';
 import 'package:frontend/core/widgets/app_text_field.dart';
 import 'package:frontend/core/widgets/confirm_dialog.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../application/finance_providers.dart';
@@ -17,12 +15,11 @@ import '../../domain/entities/finance_enums.dart';
 import '../../domain/entities/finance_inputs.dart';
 import '../../domain/entities/money.dart';
 import '../finance_format.dart';
-import '../finance_styles.dart';
 import '../widgets/decimal_field.dart';
 import '../widgets/expense_category_tiles.dart';
-import '../widgets/finance_chips.dart';
 import '../widgets/finance_common.dart';
 import '../widgets/finance_date_field.dart';
+import '../widgets/finance_form_parts.dart';
 import '../widgets/finance_page.dart';
 
 /// Новый расход или правка [expenseId].
@@ -303,7 +300,7 @@ class _ExpenseFormState extends ConsumerState<_ExpenseForm> {
     return FinancePage(
       title: isNew ? l10n.financeExpenseNewTitle : l10n.financeExpenseTitle,
       children: [
-        _Labeled(
+        FinanceLabeled(
           label: l10n.financeExpenseCategoryLabel,
           error: _categoryError,
           child: ExpenseCategoryTiles(
@@ -331,24 +328,14 @@ class _ExpenseFormState extends ConsumerState<_ExpenseForm> {
           errorText: _amountError,
           onChanged: (_) => setState(() => _amountError = null),
         ),
-        _Labeled(
+        FinanceLabeled(
           label: l10n.financeExpenseAccountLabel,
           child: choices.isEmpty
-              ? _NoAccounts()
-              // С переносом, а не прокруткой: выбранный по умолчанию счёт
-              // не должен прятаться за краем экрана.
-              : FinanceChipRow(
-                  wrap: true,
-                  children: [
-                    for (final account in choices)
-                      FinanceChip(
-                        label: account.name,
-                        icon: account.type.iconName,
-                        trailingText: format.money(account.balance),
-                        selected: account.id == _accountId,
-                        onTap: () => setState(() => _accountId = account.id),
-                      ),
-                  ],
+              ? const FinanceNoAccounts()
+              : FinanceAccountChips(
+                  accounts: choices,
+                  selectedId: _accountId,
+                  onSelected: (id) => setState(() => _accountId = id),
                 ),
         ),
         FinanceDateField(
@@ -397,64 +384,6 @@ class _ExpenseFormState extends ConsumerState<_ExpenseForm> {
               ),
             ],
           ],
-        ),
-      ],
-    );
-  }
-}
-
-/// Подпись над нестандартным полем (плитки, чипы) и ошибка под ним.
-class _Labeled extends StatelessWidget {
-  const _Labeled({required this.label, required this.child, this.error});
-
-  final String label;
-  final Widget child;
-  final String? error;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: AppColors.primary3,
-          ),
-        ),
-        const SizedBox(height: 8),
-        child,
-        if (error != null) ...[
-          const SizedBox(height: 6),
-          Text(
-            error!,
-            style: const TextStyle(fontSize: 12, color: AppColors.error),
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-/// Без счёта расход не записать: объясняем и ведём к созданию.
-class _NoAccounts extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        FinanceCallout(
-          text: l10n.financeNoActiveAccounts,
-          tone: FinanceCalloutTone.info,
-        ),
-        const SizedBox(height: 10),
-        AppOutlinedButton(
-          text: l10n.financeAddAccount,
-          height: 44,
-          onPressed: () => context.push('/finance/accounts/new'),
         ),
       ],
     );

@@ -17,6 +17,7 @@ import 'package:frontend/features/finance/presentation/pages/finance_account_for
 import 'package:frontend/features/finance/domain/entities/finance_entities.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_counterparty_form_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_expense_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_sale_form_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_settings_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_stub_screen.dart';
@@ -259,13 +260,14 @@ final GoRouter appRouter = GoRouter(
       ),
       GoRoute(
         path: '/finance/sales/new',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeSaleNewTitle),
+        builder: (context, state) => const FinanceSaleFormScreen(),
       ),
       GoRoute(
         path: '/finance/sales/:id',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeSaleTitle),
+        builder: (context, state) => FinanceSaleFormScreen(
+          saleId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+          initial: state.extra is Sale ? state.extra as Sale : null,
+        ),
       ),
       GoRoute(
         path: '/finance/expenses/new',

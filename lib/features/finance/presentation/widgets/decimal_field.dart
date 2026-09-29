@@ -126,6 +126,7 @@ class DecimalField extends StatelessWidget {
     required this.controller,
     this.hintText = '0',
     this.errorText,
+    this.helperText,
     this.onChanged,
     this.suffix,
     this.maxIntegerDigits = 13,
@@ -139,6 +140,7 @@ class DecimalField extends StatelessWidget {
     required this.controller,
     this.hintText = '0',
     this.errorText,
+    this.helperText,
     this.onChanged,
   }) : suffix = FinanceFormat.currency,
        maxIntegerDigits = 13,
@@ -148,6 +150,9 @@ class DecimalField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final String? errorText;
+
+  /// Подсказка под полем, например прошлая цена.
+  final String? helperText;
   final ValueChanged<String>? onChanged;
   final String? suffix;
   final int maxIntegerDigits;
@@ -160,6 +165,7 @@ class DecimalField extends StatelessWidget {
       hintText: hintText,
       controller: controller,
       errorText: errorText,
+      helperText: helperText,
       onChanged: onChanged,
       keyboardType: TextInputType.numberWithOptions(
         decimal: maxFractionDigits > 0,
