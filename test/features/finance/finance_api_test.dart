@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/features/finance/data/datasources/finance_api.dart';
+import 'package:frontend/features/finance/data/models/finance_json.dart';
 import 'package:frontend/features/finance/domain/entities/finance_date.dart';
 import 'package:frontend/features/finance/domain/entities/finance_enums.dart';
 import 'package:frontend/features/finance/domain/entities/finance_inputs.dart';
@@ -358,6 +359,77 @@ void main() {
       expect(adapter.requests[2].method, 'DELETE');
       expect(adapter.requests[2].path, '/finance/accounts/1');
     });
+  });
+
+  group('report pdf', () {
+    final request = FinanceReportRequest(
+      period: FinancePeriod.month(DateTime.utc(2026, 9, 19)),
+      type: FinanceReportType.income,
+    );
+
+    test('asks for the period and type, keeps bytes and file name', () async {
+      final pdf = Uint8List.fromList(utf8.encode('%PDF-1.4 test'));
+      final (api, adapter) = _api(
+        (_) => ResponseBody.fromBytes(
+          pdf,
+          200,
+          headers: {
+            Headers.contentTypeHeader: ['application/pdf'],
+            'content-disposition': [
+              "attachment; filename=\"report.pdf\"; filename*=UTF-8''"
+                  '${Uri.encodeComponent('Финансы_сентябрь_2026.pdf')}',
+            ],
+          },
+        ),
+      );
+      final file = await api.getReportPdf(request);
+
+      final sent = adapter.requests.single;
+      expect(sent.path, '/finance/report/pdf');
+      expect(sent.queryParameters, {
+        'from': '2026-09-01',
+        'to': '2026-09-30',
+        'type': 'INCOME',
+      });
+      expect(file.bytes, pdf);
+      expect(file.fileName, 'Финансы_сентябрь_2026.pdf');
+    });
+
+    test('an error sent as bytes still shows its message', () async {
+      final (api, _) = _api(
+        (_) => ResponseBody.fromString(
+          jsonEncode({'message': 'Нет данных за период'}),
+          400,
+          headers: {
+            Headers.contentTypeHeader: [Headers.jsonContentType],
+          },
+        ),
+      );
+      await expectLater(
+        api.getReportPdf(request),
+        throwsA(
+          isA<ApiException>()
+              .having((e) => e.statusCode, 'status', 400)
+              .having((e) => e.message, 'message', 'Нет данных за период'),
+        ),
+      );
+    });
+  });
+
+  test('file name from Content-Disposition', () {
+    expect(fileNameFromDisposition(null), isNull);
+    expect(fileNameFromDisposition('attachment'), isNull);
+    expect(
+      fileNameFromDisposition('attachment; filename="otchet.pdf"'),
+      'otchet.pdf',
+    );
+    expect(fileNameFromDisposition('inline; filename=a.pdf'), 'a.pdf');
+    expect(
+      fileNameFromDisposition(
+        "attachment; filename*=utf-8''%D0%9E%D1%82%D1%87%D1%91%D1%82.pdf",
+      ),
+      'Отчёт.pdf',
+    );
   });
 
   test('backend message is passed to the user', () async {

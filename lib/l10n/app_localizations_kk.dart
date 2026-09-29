@@ -2271,10 +2271,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get financeRetry => 'Қайталау';
 
   @override
-  String get financeStubMessage =>
-      'Бұл экран бөлімнің келесі модульдерінде қосылады';
-
-  @override
   String get financeDebtsTitle => 'Қарыздар';
 
   @override
@@ -2832,4 +2828,87 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get financeNoDebtsText => 'Барлық сату төленді';
+
+  @override
+  String get financeReportPeriodLabel => 'Кезең';
+
+  @override
+  String get financeReportThisMonth => 'Осы ай';
+
+  @override
+  String get financeReportLastMonth => 'Өткен ай';
+
+  @override
+  String get financeReportQuarter => 'Тоқсан';
+
+  @override
+  String get financeReportCustom => 'Өз кезеңім';
+
+  @override
+  String get financeReportFrom => 'Басы';
+
+  @override
+  String get financeReportTo => 'Соңы';
+
+  @override
+  String get financeReportTypeLabel => 'Есепте не болады';
+
+  @override
+  String get financeReportFull => 'Толық';
+
+  @override
+  String get financeReportFullHint => 'Кіріс, шығыс және пайда';
+
+  @override
+  String get financeReportIncome => 'Кірістер';
+
+  @override
+  String get financeReportIncomeHint => 'Кезеңдегі барлық сату';
+
+  @override
+  String get financeReportExpense => 'Шығыстар';
+
+  @override
+  String get financeReportExpenseHint => 'Санаттар бойынша шығын';
+
+  @override
+  String get financeReportDebtsHint => 'Кім қанша қарыз';
+
+  @override
+  String get financeReportContents => 'Құжатқа кіреді';
+
+  @override
+  String get financeReportFarm => 'Шаруашылық';
+
+  @override
+  String get financeProfit => 'Пайда';
+
+  @override
+  String get financeReportOperations => 'Операциялар';
+
+  @override
+  String get financeReportMake => 'PDF жасау';
+
+  @override
+  String get financeReportShare => 'Жіберу';
+
+  @override
+  String get financeReportShareHint =>
+      '«Жіберу» арқылы файлды WhatsApp, Telegram немесе поштаға жіберуге болады — сол жерде телефонға сақтауға да болады';
+
+  @override
+  String get financeReportMissing => 'Есеп табылмады — оны қайта жасаңыз';
+
+  @override
+  String get financeReportFilePrefix => 'Қаржы';
+
+  @override
+  String financeFileSizeKb(String size) {
+    return '$size КБ';
+  }
+
+  @override
+  String financeFileSizeMb(String size) {
+    return '$size МБ';
+  }
 }

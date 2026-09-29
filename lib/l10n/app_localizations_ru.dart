@@ -2276,9 +2276,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get financeRetry => 'Повторить';
 
   @override
-  String get financeStubMessage => 'Экран появится в следующих модулях раздела';
-
-  @override
   String get financeDebtsTitle => 'Долги';
 
   @override
@@ -2841,4 +2838,87 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get financeNoDebtsText => 'Все продажи оплачены';
+
+  @override
+  String get financeReportPeriodLabel => 'Период';
+
+  @override
+  String get financeReportThisMonth => 'Этот месяц';
+
+  @override
+  String get financeReportLastMonth => 'Прошлый месяц';
+
+  @override
+  String get financeReportQuarter => 'Квартал';
+
+  @override
+  String get financeReportCustom => 'Свой период';
+
+  @override
+  String get financeReportFrom => 'Начало';
+
+  @override
+  String get financeReportTo => 'Конец';
+
+  @override
+  String get financeReportTypeLabel => 'Что в отчёте';
+
+  @override
+  String get financeReportFull => 'Полный';
+
+  @override
+  String get financeReportFullHint => 'Доход, расход и прибыль';
+
+  @override
+  String get financeReportIncome => 'Доходы';
+
+  @override
+  String get financeReportIncomeHint => 'Все продажи за период';
+
+  @override
+  String get financeReportExpense => 'Расходы';
+
+  @override
+  String get financeReportExpenseHint => 'Траты по категориям';
+
+  @override
+  String get financeReportDebtsHint => 'Кто и сколько должен';
+
+  @override
+  String get financeReportContents => 'В документ попадут';
+
+  @override
+  String get financeReportFarm => 'Хозяйство';
+
+  @override
+  String get financeProfit => 'Прибыль';
+
+  @override
+  String get financeReportOperations => 'Операций';
+
+  @override
+  String get financeReportMake => 'Сформировать PDF';
+
+  @override
+  String get financeReportShare => 'Отправить';
+
+  @override
+  String get financeReportShareHint =>
+      'Через «Отправить» файл уходит в WhatsApp, Telegram или на почту — там же его можно сохранить на телефон';
+
+  @override
+  String get financeReportMissing => 'Отчёт не найден — сформируйте его заново';
+
+  @override
+  String get financeReportFilePrefix => 'Финансы';
+
+  @override
+  String financeFileSizeKb(String size) {
+    return '$size КБ';
+  }
+
+  @override
+  String financeFileSizeMb(String size) {
+    return '$size МБ';
+  }
 }

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:frontend/core/network/api_exceptions.dart';
 
 import '../../domain/entities/finance_date.dart';
@@ -288,6 +291,10 @@ class MockFinanceRepository implements FinanceRepository {
   Future<FinanceSummary> getSummary(FinancePeriod period) async {
     await _respond();
     _validatePeriod(period.from, period.to);
+    return _summary(period);
+  }
+
+  FinanceSummary _summary(FinancePeriod period) {
     final sales = _sales.where((sale) => period.contains(sale.saleDate));
     final expenses = _expenses.where(
       (expense) => period.contains(expense.expenseDate),
@@ -385,6 +392,73 @@ class MockFinanceRepository implements FinanceRepository {
   static int _bySaleDate(_SaleRow a, _SaleRow b) {
     final byDate = a.saleDate.compareTo(b.saleDate);
     return byDate != 0 ? byDate : a.id.compareTo(b.id);
+  }
+
+  // ---- отчёт ----
+
+  /// Настоящий PDF формирует бэкенд. Мок отдаёт одностраничный PDF
+  /// латиницей с итогами — чтобы в сборке на моке работали сохранение и
+  /// «Поделиться». Имени файла нет, как если бы бэкенд его не прислал.
+  @override
+  Future<FinanceReportFile> getReportPdf(FinanceReportRequest request) async {
+    await _respond();
+    final period = request.period;
+    _validatePeriod(period.from, period.to);
+    final summary = _summary(period);
+    String tenge(Money value) => '${value.toPlainString()} KZT';
+    final lines = [
+      'Fermer+ finance report (demo data)',
+      'Type: ${request.type.apiValue}',
+      'Period: ${formatApiDate(period.from)} - ${formatApiDate(period.to)}',
+      'Income: ${tenge(summary.totalIncome)}',
+      'Expense: ${tenge(summary.totalExpense)}',
+      'Profit: ${tenge(summary.profit)}',
+      'Debts: ${tenge(summary.totalDebt)}',
+      'Created: ${formatApiDate(_today)}',
+    ];
+    return FinanceReportFile(bytes: _pdf(lines));
+  }
+
+  /// Минимальный PDF 1.4: одна страница A4, шрифт Helvetica, строки ASCII.
+  static Uint8List _pdf(List<String> lines) {
+    String escape(String text) => text
+        .replaceAll(r'\', r'\\')
+        .replaceAll('(', r'\(')
+        .replaceAll(')', r'\)');
+    final content = StringBuffer('BT /F1 14 Tf 50 790 Td');
+    for (var i = 0; i < lines.length; i++) {
+      if (i > 0) content.write(' 0 -24 Td');
+      content.write(' (${escape(lines[i])}) Tj');
+    }
+    content.write(' ET');
+    final stream = content.toString();
+
+    final objects = [
+      '<< /Type /Catalog /Pages 2 0 R >>',
+      '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+      '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] '
+          '/Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>',
+      '<< /Length ${stream.length} >>\nstream\n$stream\nendstream',
+      '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+    ];
+    final pdf = StringBuffer('%PDF-1.4\n');
+    final offsets = <int>[];
+    for (var i = 0; i < objects.length; i++) {
+      offsets.add(pdf.length);
+      pdf.write('${i + 1} 0 obj\n${objects[i]}\nendobj\n');
+    }
+    final xref = pdf.length;
+    pdf
+      ..write('xref\n0 ${objects.length + 1}\n')
+      ..write('0000000000 65535 f \n');
+    for (final offset in offsets) {
+      pdf.write('${offset.toString().padLeft(10, '0')} 00000 n \n');
+    }
+    pdf.write(
+      'trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\n'
+      'startxref\n$xref\n%%EOF\n',
+    );
+    return Uint8List.fromList(ascii.encode(pdf.toString()));
   }
 
   // ---- правила ----

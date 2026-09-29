@@ -7,7 +7,6 @@ import 'package:frontend/features/finance/domain/entities/finance_entities.dart'
 import 'package:frontend/features/finance/domain/entities/finance_enums.dart';
 import 'package:frontend/features/finance/domain/entities/money.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_screen.dart';
-import 'package:frontend/features/finance/presentation/pages/finance_stub_screen.dart';
 import 'package:frontend/features/finance/presentation/widgets/expense_category_tiles.dart';
 import 'package:frontend/features/finance/presentation/widgets/finance_chips.dart';
 import 'package:frontend/features/finance/presentation/widgets/finance_common.dart';
@@ -45,10 +44,20 @@ Widget _app({required Widget home, Locale locale = const Locale('ru')}) =>
       ),
     );
 
+/// Экран-заглушка вместо форм: здесь проверяются только переходы.
+class _Stub extends StatelessWidget {
+  const _Stub(this.title);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) =>
+      Scaffold(body: Center(child: Text(title)));
+}
+
 GoRouter _router(String initialLocation) {
-  Widget stub(String Function(AppLocalizations) title) => Builder(
-    builder: (context) => FinanceStubScreen(title: title(context.l10n)),
-  );
+  Widget stub(String Function(AppLocalizations) title) =>
+      Builder(builder: (context) => _Stub(title(context.l10n)));
   return GoRouter(
     initialLocation: initialLocation,
     routes: [
@@ -175,10 +184,10 @@ void main() {
       await tester.tap(find.byTooltip(_ru.financeSettingsTitle));
       await tester.pumpAndSettle();
 
-      final stub = tester.widget<FinanceStubScreen>(
-        find.byType(FinanceStubScreen),
+      expect(
+        tester.widget<_Stub>(find.byType(_Stub)).title,
+        _ru.financeSettingsTitle,
       );
-      expect(stub.title, _ru.financeSettingsTitle);
     });
 
     testWidgets('More opens Finance', (tester) async {

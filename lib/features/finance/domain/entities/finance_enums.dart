@@ -86,6 +86,21 @@ enum FinanceReportType {
   const FinanceReportType(this.apiValue);
 
   final String apiValue;
+
+  String localizedLabel(AppLocalizations l10n) => switch (this) {
+    FinanceReportType.full => l10n.financeReportFull,
+    FinanceReportType.income => l10n.financeReportIncome,
+    FinanceReportType.expense => l10n.financeReportExpense,
+    FinanceReportType.debts => l10n.financeDebtsTitle,
+  };
+
+  /// Что внутри: «Доход, расход и прибыль».
+  String localizedHint(AppLocalizations l10n) => switch (this) {
+    FinanceReportType.full => l10n.financeReportFullHint,
+    FinanceReportType.income => l10n.financeReportIncomeHint,
+    FinanceReportType.expense => l10n.financeReportExpenseHint,
+    FinanceReportType.debts => l10n.financeReportDebtsHint,
+  };
 }
 
 /// Товар для быстрого выбора в форме продажи.

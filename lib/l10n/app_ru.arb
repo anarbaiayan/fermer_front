@@ -1102,7 +1102,6 @@
     "financeSaleStatusDebt": "В долг",
     "financeLoadError": "Не удалось загрузить данные",
     "financeRetry": "Повторить",
-    "financeStubMessage": "Экран появится в следующих модулях раздела",
     "financeDebtsTitle": "Долги",
     "financeAccountNewTitle": "Новый счёт",
     "financeAccountTitle": "Счёт",
@@ -1444,5 +1443,45 @@
     },
     "financeCallError": "Не удалось открыть звонок",
     "financeNoDebtsTitle": "Долгов нет",
-    "financeNoDebtsText": "Все продажи оплачены"
+    "financeNoDebtsText": "Все продажи оплачены",
+    "financeReportPeriodLabel": "Период",
+    "financeReportThisMonth": "Этот месяц",
+    "financeReportLastMonth": "Прошлый месяц",
+    "financeReportQuarter": "Квартал",
+    "financeReportCustom": "Свой период",
+    "financeReportFrom": "Начало",
+    "financeReportTo": "Конец",
+    "financeReportTypeLabel": "Что в отчёте",
+    "financeReportFull": "Полный",
+    "financeReportFullHint": "Доход, расход и прибыль",
+    "financeReportIncome": "Доходы",
+    "financeReportIncomeHint": "Все продажи за период",
+    "financeReportExpense": "Расходы",
+    "financeReportExpenseHint": "Траты по категориям",
+    "financeReportDebtsHint": "Кто и сколько должен",
+    "financeReportContents": "В документ попадут",
+    "financeReportFarm": "Хозяйство",
+    "financeProfit": "Прибыль",
+    "financeReportOperations": "Операций",
+    "financeReportMake": "Сформировать PDF",
+    "financeReportShare": "Отправить",
+    "financeReportShareHint": "Через «Отправить» файл уходит в WhatsApp, Telegram или на почту — там же его можно сохранить на телефон",
+    "financeReportMissing": "Отчёт не найден — сформируйте его заново",
+    "financeReportFilePrefix": "Финансы",
+    "financeFileSizeKb": "{size} КБ",
+    "@financeFileSizeKb": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "financeFileSizeMb": "{size} МБ",
+    "@financeFileSizeMb": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    }
 }

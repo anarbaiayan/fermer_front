@@ -1,5 +1,4 @@
 import 'package:frontend/core/config/feature_flags.dart';
-import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/screens/not_found_screen.dart';
 import 'package:frontend/core/widgets/app_shell.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_code_screen.dart';
@@ -21,7 +20,8 @@ import 'package:frontend/features/finance/presentation/pages/finance_expense_for
 import 'package:frontend/features/finance/presentation/pages/finance_sale_form_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_screen.dart';
 import 'package:frontend/features/finance/presentation/pages/finance_settings_screen.dart';
-import 'package:frontend/features/finance/presentation/pages/finance_stub_screen.dart';
+import 'package:frontend/features/finance/application/finance_report.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_report_ready_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
@@ -286,8 +286,11 @@ final GoRouter appRouter = GoRouter(
       ),
       GoRoute(
         path: '/finance/report/ready',
-        builder: (context, state) =>
-            FinanceStubScreen(title: context.l10n.financeReportReadyTitle),
+        builder: (context, state) => FinanceReportReadyScreen(
+          document: state.extra is FinanceReportDocument
+              ? state.extra as FinanceReportDocument
+              : null,
+        ),
       ),
     ],
 

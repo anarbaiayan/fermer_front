@@ -1081,7 +1081,6 @@
     "financeSaleStatusDebt": "Қарызға",
     "financeLoadError": "Деректерді жүктеу мүмкін болмады",
     "financeRetry": "Қайталау",
-    "financeStubMessage": "Бұл экран бөлімнің келесі модульдерінде қосылады",
     "financeDebtsTitle": "Қарыздар",
     "financeAccountNewTitle": "Жаңа шот",
     "financeAccountTitle": "Шот",
@@ -1423,5 +1422,45 @@
     },
     "financeCallError": "Қоңырау шалу мүмкін болмады",
     "financeNoDebtsTitle": "Қарыз жоқ",
-    "financeNoDebtsText": "Барлық сату төленді"
+    "financeNoDebtsText": "Барлық сату төленді",
+    "financeReportPeriodLabel": "Кезең",
+    "financeReportThisMonth": "Осы ай",
+    "financeReportLastMonth": "Өткен ай",
+    "financeReportQuarter": "Тоқсан",
+    "financeReportCustom": "Өз кезеңім",
+    "financeReportFrom": "Басы",
+    "financeReportTo": "Соңы",
+    "financeReportTypeLabel": "Есепте не болады",
+    "financeReportFull": "Толық",
+    "financeReportFullHint": "Кіріс, шығыс және пайда",
+    "financeReportIncome": "Кірістер",
+    "financeReportIncomeHint": "Кезеңдегі барлық сату",
+    "financeReportExpense": "Шығыстар",
+    "financeReportExpenseHint": "Санаттар бойынша шығын",
+    "financeReportDebtsHint": "Кім қанша қарыз",
+    "financeReportContents": "Құжатқа кіреді",
+    "financeReportFarm": "Шаруашылық",
+    "financeProfit": "Пайда",
+    "financeReportOperations": "Операциялар",
+    "financeReportMake": "PDF жасау",
+    "financeReportShare": "Жіберу",
+    "financeReportShareHint": "«Жіберу» арқылы файлды WhatsApp, Telegram немесе поштаға жіберуге болады — сол жерде телефонға сақтауға да болады",
+    "financeReportMissing": "Есеп табылмады — оны қайта жасаңыз",
+    "financeReportFilePrefix": "Қаржы",
+    "financeFileSizeKb": "{size} КБ",
+    "@financeFileSizeKb": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "financeFileSizeMb": "{size} МБ",
+    "@financeFileSizeMb": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    }
 }

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
 
@@ -182,4 +185,44 @@ class FinanceApi implements FinanceRepository {
   @override
   Future<List<CounterpartyDebt>> getDebts() =>
       _getList('/finance/debts', debtFromJson);
+
+  // ---- отчёт (контракт из ТЗ) ----
+
+  @override
+  Future<FinanceReportFile> getReportPdf(FinanceReportRequest request) async {
+    try {
+      final r = await _dio.get<List<int>>(
+        '/finance/report/pdf',
+        queryParameters: reportRequestToQuery(request),
+        options: Options(
+          responseType: ResponseType.bytes,
+          headers: {'Accept': 'application/pdf'},
+        ),
+      );
+      return FinanceReportFile(
+        bytes: Uint8List.fromList(r.data ?? const []),
+        fileName: fileNameFromDisposition(
+          r.headers.value('content-disposition'),
+        ),
+      );
+    } on DioException catch (e) {
+      throw ApiException(
+        _bytesMessage(e.response?.data) ?? extractApiMessage(e),
+        e.response?.statusCode,
+      );
+    }
+  }
+
+  /// При `ResponseType.bytes` и ошибка бэкенда приходит байтами:
+  /// достаём `{message}` сами.
+  static String? _bytesMessage(Object? data) {
+    if (data is! List<int>) return null;
+    try {
+      final json = jsonDecode(utf8.decode(data, allowMalformed: true));
+      final message = json is Map ? json['message']?.toString().trim() : null;
+      return message == null || message.isEmpty ? null : message;
+    } on FormatException {
+      return null;
+    }
+  }
 }

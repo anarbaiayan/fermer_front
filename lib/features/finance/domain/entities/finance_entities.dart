@@ -194,6 +194,16 @@ class DebtSale {
       dueDate != null && dateOnly(dueDate!).isBefore(dateOnly(today));
 }
 
+/// Готовый PDF от бэкенда. [fileName] — из `Content-Disposition`, если
+/// бэкенд его прислал.
+@immutable
+class FinanceReportFile {
+  const FinanceReportFile({required this.bytes, this.fileName});
+
+  final Uint8List bytes;
+  final String? fileName;
+}
+
 /// Долг одного покупателя: `GET /api/finance/debts` (ТЗ, раздел 4).
 @immutable
 class CounterpartyDebt {

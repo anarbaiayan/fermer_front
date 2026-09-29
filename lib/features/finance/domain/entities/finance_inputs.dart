@@ -126,6 +126,24 @@ class SaleFilter {
   int get hashCode => Object.hash(from, to, counterpartyId, paid);
 }
 
+/// Параметры `GET /api/finance/report/pdf?from=&to=&type=`.
+@immutable
+class FinanceReportRequest {
+  const FinanceReportRequest({required this.period, required this.type});
+
+  final FinancePeriod period;
+  final FinanceReportType type;
+
+  @override
+  bool operator ==(Object other) =>
+      other is FinanceReportRequest &&
+      other.period == period &&
+      other.type == type;
+
+  @override
+  int get hashCode => Object.hash(period, type);
+}
+
 /// Фильтр `GET /api/finance/expenses`.
 @immutable
 class ExpenseFilter {

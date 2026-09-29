@@ -8,9 +8,11 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../application/finance_providers.dart';
+import '../../application/finance_report.dart';
 import '../widgets/finance_common.dart';
 import '../tabs/finance_expense_tab.dart';
 import '../tabs/finance_income_tab.dart';
+import '../tabs/finance_report_tab.dart';
 import '../tabs/finance_summary_tab.dart';
 import '../widgets/finance_onboarding.dart';
 import '../widgets/finance_tab_bar.dart';
@@ -65,7 +67,9 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
       ..listen(financeMonthProvider, (_, _) {})
       ..listen(financeExpenseCategoryFilterProvider, (_, _) {})
       ..listen(financeExpenseAccountFilterProvider, (_, _) {})
-      ..listen(financeIncomeFilterProvider, (_, _) {});
+      ..listen(financeIncomeFilterProvider, (_, _) {})
+      ..listen(financeReportPeriodProvider, (_, _) {})
+      ..listen(financeReportTypeProvider, (_, _) {});
     final accountsAsync = ref.watch(financeAccountsProvider);
     final accounts = accountsAsync.valueOrNull;
     // Поле, а не setState: решение принимается по данным этого же кадра.
@@ -202,7 +206,7 @@ class _FinanceHeader extends StatelessWidget {
   }
 }
 
-/// Содержимое вкладки. Вкладки, чьи модули ещё не готовы, — заглушка.
+/// Содержимое вкладки.
 class _TabBody extends StatelessWidget {
   const _TabBody({required this.tab, required this.onOpenTab});
 
@@ -220,10 +224,7 @@ class _TabBody extends StatelessWidget {
       ),
       FinanceTab.income => const FinanceIncomeTab(),
       FinanceTab.expense => const FinanceExpenseTab(),
-      FinanceTab.report => ListView(
-        padding: const EdgeInsets.all(24),
-        children: [FinanceMessageCard(title: context.l10n.financeStubMessage)],
-      ),
+      FinanceTab.report => const FinanceReportTab(),
     };
   }
 }

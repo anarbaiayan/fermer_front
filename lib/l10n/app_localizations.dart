@@ -4268,12 +4268,6 @@ abstract class AppLocalizations {
   /// **'Повторить'**
   String get financeRetry;
 
-  /// No description provided for @financeStubMessage.
-  ///
-  /// In ru, this message translates to:
-  /// **'Экран появится в следующих модулях раздела'**
-  String get financeStubMessage;
-
   /// No description provided for @financeDebtsTitle.
   ///
   /// In ru, this message translates to:
@@ -5239,6 +5233,162 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Все продажи оплачены'**
   String get financeNoDebtsText;
+
+  /// No description provided for @financeReportPeriodLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Период'**
+  String get financeReportPeriodLabel;
+
+  /// No description provided for @financeReportThisMonth.
+  ///
+  /// In ru, this message translates to:
+  /// **'Этот месяц'**
+  String get financeReportThisMonth;
+
+  /// No description provided for @financeReportLastMonth.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прошлый месяц'**
+  String get financeReportLastMonth;
+
+  /// No description provided for @financeReportQuarter.
+  ///
+  /// In ru, this message translates to:
+  /// **'Квартал'**
+  String get financeReportQuarter;
+
+  /// No description provided for @financeReportCustom.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свой период'**
+  String get financeReportCustom;
+
+  /// No description provided for @financeReportFrom.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начало'**
+  String get financeReportFrom;
+
+  /// No description provided for @financeReportTo.
+  ///
+  /// In ru, this message translates to:
+  /// **'Конец'**
+  String get financeReportTo;
+
+  /// No description provided for @financeReportTypeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Что в отчёте'**
+  String get financeReportTypeLabel;
+
+  /// No description provided for @financeReportFull.
+  ///
+  /// In ru, this message translates to:
+  /// **'Полный'**
+  String get financeReportFull;
+
+  /// No description provided for @financeReportFullHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Доход, расход и прибыль'**
+  String get financeReportFullHint;
+
+  /// No description provided for @financeReportIncome.
+  ///
+  /// In ru, this message translates to:
+  /// **'Доходы'**
+  String get financeReportIncome;
+
+  /// No description provided for @financeReportIncomeHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все продажи за период'**
+  String get financeReportIncomeHint;
+
+  /// No description provided for @financeReportExpense.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расходы'**
+  String get financeReportExpense;
+
+  /// No description provided for @financeReportExpenseHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Траты по категориям'**
+  String get financeReportExpenseHint;
+
+  /// No description provided for @financeReportDebtsHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кто и сколько должен'**
+  String get financeReportDebtsHint;
+
+  /// No description provided for @financeReportContents.
+  ///
+  /// In ru, this message translates to:
+  /// **'В документ попадут'**
+  String get financeReportContents;
+
+  /// No description provided for @financeReportFarm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Хозяйство'**
+  String get financeReportFarm;
+
+  /// No description provided for @financeProfit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прибыль'**
+  String get financeProfit;
+
+  /// No description provided for @financeReportOperations.
+  ///
+  /// In ru, this message translates to:
+  /// **'Операций'**
+  String get financeReportOperations;
+
+  /// No description provided for @financeReportMake.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сформировать PDF'**
+  String get financeReportMake;
+
+  /// No description provided for @financeReportShare.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить'**
+  String get financeReportShare;
+
+  /// No description provided for @financeReportShareHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Через «Отправить» файл уходит в WhatsApp, Telegram или на почту — там же его можно сохранить на телефон'**
+  String get financeReportShareHint;
+
+  /// No description provided for @financeReportMissing.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отчёт не найден — сформируйте его заново'**
+  String get financeReportMissing;
+
+  /// No description provided for @financeReportFilePrefix.
+  ///
+  /// In ru, this message translates to:
+  /// **'Финансы'**
+  String get financeReportFilePrefix;
+
+  /// No description provided for @financeFileSizeKb.
+  ///
+  /// In ru, this message translates to:
+  /// **'{size} КБ'**
+  String financeFileSizeKb(String size);
+
+  /// No description provided for @financeFileSizeMb.
+  ///
+  /// In ru, this message translates to:
+  /// **'{size} МБ'**
+  String financeFileSizeMb(String size);
 }
 
 class _AppLocalizationsDelegate

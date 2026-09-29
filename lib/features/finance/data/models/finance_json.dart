@@ -7,8 +7,9 @@ import '../../domain/entities/money.dart';
 // JSON-контракт `/api/finance/**`.
 //
 // Счета, покупатели, продажи и расходы сверены с веткой бэкенда `finance`
-// (коммит 56cfd72 от 27.09.2026). Сводка и долги пока только в ТЗ, раздел 4:
-// эндпоинтов ещё нет, форма ответа может поменяться.
+// (коммит 56cfd72 от 27.09.2026), сводка — с коммитом 06c84b1 от 28.09.2026.
+// Долги и PDF-отчёт пока только в ТЗ, раздел 4: эндпоинтов ещё нет, форма
+// ответа может поменяться.
 
 int _id(Object? value) => (value as num).toInt();
 
@@ -201,3 +202,33 @@ Map<String, dynamic> periodToQuery(FinancePeriod period) => {
   'from': formatApiDate(period.from),
   'to': formatApiDate(period.to),
 };
+
+/// `GET /api/finance/report/pdf?from=&to=&type=` (ТЗ, раздел 4).
+Map<String, dynamic> reportRequestToQuery(FinanceReportRequest request) => {
+  ...periodToQuery(request.period),
+  'type': request.type.apiValue,
+};
+
+/// Имя файла из `Content-Disposition`: сначала `filename*=UTF-8''…`
+/// (кириллица), потом обычный `filename=`. `null` — заголовка нет.
+String? fileNameFromDisposition(String? header) {
+  if (header == null) return null;
+  final extended = RegExp(
+    r"filename\*\s*=\s*([\w-]+)'[^']*'([^;]+)",
+    caseSensitive: false,
+  ).firstMatch(header);
+  if (extended != null) {
+    try {
+      final name = Uri.decodeComponent(extended.group(2)!.trim());
+      if (name.isNotEmpty) return name;
+    } on ArgumentError {
+      // Битое кодирование — берём обычное имя.
+    }
+  }
+  final plain = RegExp(
+    r'filename\s*=\s*"?([^";]+)"?',
+    caseSensitive: false,
+  ).firstMatch(header);
+  final name = plain?.group(1)?.trim();
+  return name == null || name.isEmpty ? null : name;
+}

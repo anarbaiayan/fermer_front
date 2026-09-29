@@ -43,4 +43,9 @@ abstract interface class FinanceRepository {
 
   /// Сверху — самые просроченные.
   Future<List<CounterpartyDebt>> getDebts();
+
+  /// PDF-отчёт за произвольный период: `/api/finance/report/pdf`. Документ
+  /// формирует бэкенд (ТЗ, FP-512), приложение его только сохраняет и
+  /// отправляет.
+  Future<FinanceReportFile> getReportPdf(FinanceReportRequest request);
 }
