@@ -2760,4 +2760,41 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get financeSaleNotFound => 'Продажа не найдена';
+
+  @override
+  String financeProfitFor(String month) {
+    return 'Прибыль за $month';
+  }
+
+  @override
+  String get financeBalancesTitle => 'Остатки на счетах';
+
+  @override
+  String get financeOwedToYou => 'Вам должны';
+
+  @override
+  String financeOverdueAmount(String amount) {
+    return 'Просрочено $amount';
+  }
+
+  @override
+  String financeDebtOverdueDays(int days) {
+    return 'просрочка $days дн.';
+  }
+
+  @override
+  String financeDebtDueUntil(String date) {
+    return 'до $date';
+  }
+
+  @override
+  String get financeExpensesByCategory => 'Расходы по категориям';
+
+  @override
+  String get financeTotal => 'Всего';
+
+  @override
+  String financeNoExpensesFor(String month) {
+    return 'За $month расходов нет';
+  }
 }

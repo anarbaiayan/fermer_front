@@ -1360,5 +1360,49 @@
     "financeSaleSaved": "Продажа сохранена",
     "financeSaleUpdated": "Продажа изменена",
     "financeSaleDeleted": "Продажа удалена",
-    "financeSaleNotFound": "Продажа не найдена"
+    "financeSaleNotFound": "Продажа не найдена",
+    "financeProfitFor": "Прибыль за {month}",
+    "@financeProfitFor": {
+        "placeholders": {
+            "month": {
+                "type": "String"
+            }
+        }
+    },
+    "financeBalancesTitle": "Остатки на счетах",
+    "financeOwedToYou": "Вам должны",
+    "financeOverdueAmount": "Просрочено {amount}",
+    "@financeOverdueAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeDebtOverdueDays": "просрочка {days} дн.",
+    "@financeDebtOverdueDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeDebtDueUntil": "до {date}",
+    "@financeDebtDueUntil": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeExpensesByCategory": "Расходы по категориям",
+    "financeTotal": "Всего",
+    "financeNoExpensesFor": "За {month} расходов нет",
+    "@financeNoExpensesFor": {
+        "placeholders": {
+            "month": {
+                "type": "String"
+            }
+        }
+    }
 }

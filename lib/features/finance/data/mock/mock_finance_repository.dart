@@ -48,13 +48,15 @@ class MockFinanceRepository implements FinanceRepository {
   @override
   Future<List<FinanceAccount>> getAccounts() async {
     await _respond();
-    final rows = [..._accounts]
-      ..sort((a, b) {
-        if (a.active != b.active) return a.active ? -1 : 1;
-        return a.name.toLowerCase().compareTo(b.name.toLowerCase());
-      });
-    return rows.map(_account).toList();
+    return _sortedAccounts().map(_account).toList();
   }
+
+  /// Активные первыми, дальше по имени — как `ORDER BY active DESC, name`.
+  List<_AccountRow> _sortedAccounts() => [..._accounts]
+    ..sort((a, b) {
+      if (a.active != b.active) return a.active ? -1 : 1;
+      return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+    });
 
   @override
   Future<FinanceAccount> createAccount(AccountInput input) async {
@@ -278,8 +280,10 @@ class MockFinanceRepository implements FinanceRepository {
 
   // ---- сводка и долги ----
 
-  /// Доход — по дате продажи, вместе с неоплаченными (вопрос В1 открыт).
-  /// Остатки и долги — на сегодня, независимо от периода.
+  /// Как `FinanceSummaryService` бэкенда: доход — по дате продажи, вместе
+  /// с неоплаченными; категории — в порядке списка; счета — все, включая
+  /// скрытые, активные первыми. Остатки и долги — на сегодня, независимо
+  /// от периода.
   @override
   Future<FinanceSummary> getSummary(FinancePeriod period) async {
     await _respond();
@@ -296,16 +300,11 @@ class MockFinanceRepository implements FinanceRepository {
       byCategory[expense.category] =
           (byCategory[expense.category] ?? Money.zero) + expense.amount;
     }
-    final categories =
-        [
-          for (final entry in byCategory.entries)
-            CategoryAmount(category: entry.key, amount: entry.value),
-        ]..sort((a, b) {
-          final byAmount = b.amount.compareTo(a.amount);
-          return byAmount != 0
-              ? byAmount
-              : a.category.index.compareTo(b.category.index);
-        });
+    final categories = [
+      for (final category in ExpenseCategory.values)
+        if (byCategory[category] case final amount?)
+          CategoryAmount(category: category, amount: amount),
+    ];
 
     final unpaid = _sales.where((sale) => !sale.paid);
     final today = _today;
@@ -316,7 +315,7 @@ class MockFinanceRepository implements FinanceRepository {
       totalExpense: spent,
       profit: income - spent,
       accounts: [
-        for (final account in _accounts.where((a) => a.active))
+        for (final account in _sortedAccounts())
           AccountBalance(
             id: account.id,
             name: account.name,

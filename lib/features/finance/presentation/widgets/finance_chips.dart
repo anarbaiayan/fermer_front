@@ -120,17 +120,62 @@ class FinanceChip extends StatelessWidget {
 }
 
 /// Ряд чипов: одной прокручиваемой строкой или с переносом ([wrap]).
-class FinanceChipRow extends StatelessWidget {
+///
+/// В прокручиваемой строке выбранный чип сам выезжает в видимую часть,
+/// если выбран не пальцем: например, сводка открыла расходы сразу
+/// с категорией «Прочее» в конце ряда.
+class FinanceChipRow extends StatefulWidget {
   const FinanceChipRow({super.key, required this.children, this.wrap = false});
 
   final List<Widget> children;
   final bool wrap;
 
   @override
+  State<FinanceChipRow> createState() => _FinanceChipRowState();
+}
+
+class _FinanceChipRowState extends State<FinanceChipRow> {
+  final _selectedKey = GlobalKey();
+  int? _revealed;
+
+  int? get _selectedIndex {
+    for (var i = 0; i < widget.children.length; i++) {
+      final child = widget.children[i];
+      if (child is FinanceChip && child.selected) return i;
+    }
+    return null;
+  }
+
+  void _reveal() {
+    final context = _selectedKey.currentContext;
+    if (!mounted || context == null) return;
+    final box = context.findRenderObject();
+    final position = Scrollable.maybeOf(context)?.position;
+    if (box == null || position == null) return;
+    // Только горизонтально и только если чип не виден целиком.
+    for (final policy in [
+      ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+      ScrollPositionAlignmentPolicy.keepVisibleAtStart,
+    ]) {
+      position.ensureVisible(
+        box,
+        alignmentPolicy: policy,
+        duration: const Duration(milliseconds: 200),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (wrap) {
+    final children = widget.children;
+    if (widget.wrap) {
       return Wrap(spacing: 8, runSpacing: 8, children: children);
     }
+    final selected = _selectedIndex;
+    if (selected != null && selected != _revealed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _reveal());
+    }
+    _revealed = selected;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       clipBehavior: Clip.none,
@@ -138,7 +183,10 @@ class FinanceChipRow extends StatelessWidget {
         children: [
           for (var i = 0; i < children.length; i++) ...[
             if (i > 0) const SizedBox(width: 8),
-            children[i],
+            if (i == selected)
+              KeyedSubtree(key: _selectedKey, child: children[i])
+            else
+              children[i],
           ],
         ],
       ),

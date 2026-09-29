@@ -70,6 +70,9 @@ class FinanceFormat {
   String month(DateTime month) =>
       _capitalize(DateFormat('LLLL y', locale).format(month));
 
+  /// `сентябрь` — месяц без года внутри фразы: «Прибыль за сентябрь».
+  String monthName(DateTime month) => DateFormat('LLLL', locale).format(month);
+
   /// `19 сентября` — заголовок дня в списке операций.
   String dayTitle(DateTime day) => DateFormat('d MMMM', locale).format(day);
 

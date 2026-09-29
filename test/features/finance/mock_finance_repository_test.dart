@@ -319,10 +319,25 @@ void main() {
       expect(summary.expensesByCategory.first.amount, tenge(390000));
     });
 
-    test('balances cover active accounts only', () async {
+    test(
+      'balances list every account, active first, like the backend',
+      () async {
+        final summary = await repo.getSummary(FinancePeriod.month(_today));
+        expect(summary.accounts.map((a) => a.id), [_halyk, _kaspi, _cash, 4]);
+        expect(summary.totalBalance, tenge(161900 + 922000 + 350000));
+      },
+    );
+
+    test('categories come in list order', () async {
       final summary = await repo.getSummary(FinancePeriod.month(_today));
-      expect(summary.accounts.map((a) => a.id), [_cash, _kaspi, _halyk]);
-      expect(summary.totalBalance, tenge(161900 + 922000 + 350000));
+      expect(summary.expensesByCategory.map((c) => c.category), [
+        ExpenseCategory.feed,
+        ExpenseCategory.veterinary,
+        ExpenseCategory.salary,
+        ExpenseCategory.fuel,
+        ExpenseCategory.equipment,
+        ExpenseCategory.other,
+      ]);
     });
 
     test('debts: total and overdue as of today', () async {

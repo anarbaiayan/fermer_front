@@ -2751,4 +2751,41 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get financeSaleNotFound => 'Сату табылмады';
+
+  @override
+  String financeProfitFor(String month) {
+    return '$month пайдасы';
+  }
+
+  @override
+  String get financeBalancesTitle => 'Шоттардағы қалдық';
+
+  @override
+  String get financeOwedToYou => 'Сізге қарыз';
+
+  @override
+  String financeOverdueAmount(String amount) {
+    return 'Мерзімі өткені $amount';
+  }
+
+  @override
+  String financeDebtOverdueDays(int days) {
+    return '$days күн кешікті';
+  }
+
+  @override
+  String financeDebtDueUntil(String date) {
+    return '$date дейін';
+  }
+
+  @override
+  String get financeExpensesByCategory => 'Санаттар бойынша шығыс';
+
+  @override
+  String get financeTotal => 'Барлығы';
+
+  @override
+  String financeNoExpensesFor(String month) {
+    return '$month айында шығыс жоқ';
+  }
 }

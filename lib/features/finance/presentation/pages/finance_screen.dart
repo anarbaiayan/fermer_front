@@ -11,8 +11,8 @@ import '../../application/finance_providers.dart';
 import '../widgets/finance_common.dart';
 import '../tabs/finance_expense_tab.dart';
 import '../tabs/finance_income_tab.dart';
+import '../tabs/finance_summary_tab.dart';
 import '../widgets/finance_onboarding.dart';
-import '../widgets/finance_period_switcher.dart';
 import '../widgets/finance_tab_bar.dart';
 
 /// Вкладки раздела. В адресе — `/finance?tab=income`.
@@ -93,7 +93,10 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> {
         onDone: () => setState(() => _onboarding = false),
       );
     } else {
-      content = _TabBody(tab: _tab);
+      content = _TabBody(
+        tab: _tab,
+        onOpenTab: (tab) => setState(() => _tab = tab),
+      );
     }
 
     return AppScaffold(
@@ -199,35 +202,28 @@ class _FinanceHeader extends StatelessWidget {
   }
 }
 
-/// Содержимое вкладки. Вкладки, чьи модули ещё не готовы, — заглушка под
-/// переключателем месяца.
+/// Содержимое вкладки. Вкладки, чьи модули ещё не готовы, — заглушка.
 class _TabBody extends StatelessWidget {
-  const _TabBody({required this.tab});
+  const _TabBody({required this.tab, required this.onOpenTab});
 
   final FinanceTab tab;
 
+  /// Сводка открывает доход и расход по нажатию на итоги.
+  final ValueChanged<FinanceTab> onOpenTab;
+
   @override
   Widget build(BuildContext context) {
-    switch (tab) {
-      case FinanceTab.income:
-        return const FinanceIncomeTab();
-      case FinanceTab.expense:
-        return const FinanceExpenseTab();
-      case FinanceTab.summary:
-      case FinanceTab.report:
-        break;
-    }
-
-    return ListView(
-      // Снизу место под плавающую кнопку.
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 96),
-      children: [
-        if (tab != FinanceTab.report) ...[
-          const FinanceMonthSwitcher(),
-          const SizedBox(height: 20),
-        ],
-        FinanceMessageCard(title: context.l10n.financeStubMessage),
-      ],
-    );
+    return switch (tab) {
+      FinanceTab.summary => FinanceSummaryTab(
+        onOpenIncome: () => onOpenTab(FinanceTab.income),
+        onOpenExpenses: () => onOpenTab(FinanceTab.expense),
+      ),
+      FinanceTab.income => const FinanceIncomeTab(),
+      FinanceTab.expense => const FinanceExpenseTab(),
+      FinanceTab.report => ListView(
+        padding: const EdgeInsets.all(24),
+        children: [FinanceMessageCard(title: context.l10n.financeStubMessage)],
+      ),
+    };
   }
 }

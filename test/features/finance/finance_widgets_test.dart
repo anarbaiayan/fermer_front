@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/features/finance/application/finance_providers.dart';
+import 'package:frontend/features/finance/data/mock/mock_finance_repository.dart';
 import 'package:frontend/features/finance/domain/entities/finance_entities.dart';
 import 'package:frontend/features/finance/domain/entities/finance_enums.dart';
 import 'package:frontend/features/finance/domain/entities/money.dart';
@@ -11,6 +12,7 @@ import 'package:frontend/features/finance/presentation/widgets/expense_category_
 import 'package:frontend/features/finance/presentation/widgets/finance_chips.dart';
 import 'package:frontend/features/finance/presentation/widgets/finance_common.dart';
 import 'package:frontend/features/finance/presentation/widgets/finance_segmented_control.dart';
+import 'package:frontend/features/finance/presentation/widgets/finance_tab_bar.dart';
 import 'package:frontend/features/more/presentation/pages/more_screen.dart';
 import 'package:frontend/features/notifications/application/notifications_providers.dart';
 import 'package:frontend/l10n/app_localizations.dart';
@@ -21,6 +23,13 @@ final _ru = lookupAppLocalizations(const Locale('ru'));
 final _kk = lookupAppLocalizations(const Locale('kk'));
 
 final _overrides = [
+  // Без задержки мока: иначе после теста остаются таймеры запросов.
+  financeRepositoryProvider.overrideWith(
+    (ref) => MockFinanceRepository(
+      clock: () => DateTime(2026, 9, 19, 12),
+      latency: Duration.zero,
+    ),
+  ),
   financeClockProvider.overrideWithValue(() => DateTime(2026, 9, 19, 12)),
   unreadNotificationsCountProvider.overrideWith((ref) async => 0),
 ];
@@ -96,7 +105,13 @@ void main() {
         _ru.financeTabExpense,
         _ru.financeTabReport,
       ]) {
-        expect(find.text(tab), findsOneWidget);
+        expect(
+          find.descendant(
+            of: find.byType(FinanceTabBar),
+            matching: find.text(tab),
+          ),
+          findsOneWidget,
+        );
       }
       expect(find.text('Сентябрь 2026'), findsOneWidget);
       expect(find.byType(FinanceAddButton), findsNothing);

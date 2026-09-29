@@ -1339,5 +1339,49 @@
     "financeSaleSaved": "Сату сақталды",
     "financeSaleUpdated": "Сату өзгертілді",
     "financeSaleDeleted": "Сату жойылды",
-    "financeSaleNotFound": "Сату табылмады"
+    "financeSaleNotFound": "Сату табылмады",
+    "financeProfitFor": "{month} пайдасы",
+    "@financeProfitFor": {
+        "placeholders": {
+            "month": {
+                "type": "String"
+            }
+        }
+    },
+    "financeBalancesTitle": "Шоттардағы қалдық",
+    "financeOwedToYou": "Сізге қарыз",
+    "financeOverdueAmount": "Мерзімі өткені {amount}",
+    "@financeOverdueAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeDebtOverdueDays": "{days} күн кешікті",
+    "@financeDebtOverdueDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeDebtDueUntil": "{date} дейін",
+    "@financeDebtDueUntil": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeExpensesByCategory": "Санаттар бойынша шығыс",
+    "financeTotal": "Барлығы",
+    "financeNoExpensesFor": "{month} айында шығыс жоқ",
+    "@financeNoExpensesFor": {
+        "placeholders": {
+            "month": {
+                "type": "String"
+            }
+        }
+    }
 }

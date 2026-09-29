@@ -5113,6 +5113,60 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Продажа не найдена'**
   String get financeSaleNotFound;
+
+  /// No description provided for @financeProfitFor.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прибыль за {month}'**
+  String financeProfitFor(String month);
+
+  /// No description provided for @financeBalancesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Остатки на счетах'**
+  String get financeBalancesTitle;
+
+  /// No description provided for @financeOwedToYou.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вам должны'**
+  String get financeOwedToYou;
+
+  /// No description provided for @financeOverdueAmount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Просрочено {amount}'**
+  String financeOverdueAmount(String amount);
+
+  /// No description provided for @financeDebtOverdueDays.
+  ///
+  /// In ru, this message translates to:
+  /// **'просрочка {days} дн.'**
+  String financeDebtOverdueDays(int days);
+
+  /// No description provided for @financeDebtDueUntil.
+  ///
+  /// In ru, this message translates to:
+  /// **'до {date}'**
+  String financeDebtDueUntil(String date);
+
+  /// No description provided for @financeExpensesByCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расходы по категориям'**
+  String get financeExpensesByCategory;
+
+  /// No description provided for @financeTotal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Всего'**
+  String get financeTotal;
+
+  /// No description provided for @financeNoExpensesFor.
+  ///
+  /// In ru, this message translates to:
+  /// **'За {month} расходов нет'**
+  String financeNoExpensesFor(String month);
 }
 
 class _AppLocalizationsDelegate
