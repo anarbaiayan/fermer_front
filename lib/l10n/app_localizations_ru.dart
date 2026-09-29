@@ -2921,4 +2921,68 @@ class AppLocalizationsRu extends AppLocalizations {
   String financeFileSizeMb(String size) {
     return '$size МБ';
   }
+
+  @override
+  String get todayTitle => 'Сегодня';
+
+  @override
+  String get todayMilk => 'Надой';
+
+  @override
+  String todayMilkSessions(String morning, String evening) {
+    return 'утро $morning · вечер $evening';
+  }
+
+  @override
+  String todayMilkCows(int count) {
+    return 'коров: $count';
+  }
+
+  @override
+  String todayMilkLiters(String liters) {
+    return '$liters л';
+  }
+
+  @override
+  String get todayMilkEmpty => 'Надой за сегодня';
+
+  @override
+  String get todayMilkEmptyHint => 'Ещё не записан';
+
+  @override
+  String get todayMilkRecord => 'Записать';
+
+  @override
+  String get todayMilkError => 'Надой не загрузился — нажмите, чтобы повторить';
+
+  @override
+  String get todaySold => 'Продано';
+
+  @override
+  String get todayNoSales => 'Продаж пока нет';
+
+  @override
+  String get todayNoSalesHint => 'Запишите, если сегодня продавали';
+
+  @override
+  String get todayNoExpenses => 'Расходов нет';
+
+  @override
+  String get todayNoExpensesHint => 'Купили корм, заправились?';
+
+  @override
+  String get todayMoney => 'Деньги';
+
+  @override
+  String get todayTotalOnAccounts => 'Всего на счетах';
+
+  @override
+  String get todaySetUpFinance =>
+      'Укажите, сколько денег в кассе и на карте — и здесь будут остатки и долги';
+
+  @override
+  String get todayTasks => 'Дела на сегодня';
+
+  @override
+  String get todayNoTasks => 'На сегодня дел нет';
 }

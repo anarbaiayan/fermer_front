@@ -163,6 +163,72 @@ class FinanceAddButton extends StatelessWidget {
   }
 }
 
+/// «+ Продажа» и «+ Расход» рядом — на сводке и в блоке «Сегодня».
+/// Поля меньше, чем у общих кнопок: пара помещается и в узкую карточку.
+class FinanceQuickAddButtons extends StatelessWidget {
+  const FinanceQuickAddButtons({
+    super.key,
+    required this.onAddSale,
+    required this.onAddExpense,
+  });
+
+  final VoidCallback onAddSale;
+  final VoidCallback onAddExpense;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    Widget label(String text, Color color) => FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        '+ $text',
+        maxLines: 1,
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
+    );
+    const padding = EdgeInsets.symmetric(horizontal: 10);
+    const shape = StadiumBorder();
+
+    return Row(
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 40,
+            child: FilledButton(
+              onPressed: onAddSale,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.primary1,
+                padding: padding,
+                shape: shape,
+              ),
+              child: label(l10n.financeAddSale, Colors.white),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: SizedBox(
+            height: 40,
+            child: OutlinedButton(
+              onPressed: onAddExpense,
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.primary1, width: 1.5),
+                padding: padding,
+                shape: shape,
+              ),
+              child: label(l10n.financeAddExpense, AppColors.primary1),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 /// Белая карточка с рамкой — основной контейнер списков «Финансов».
 class FinanceCard extends StatelessWidget {
   const FinanceCard({

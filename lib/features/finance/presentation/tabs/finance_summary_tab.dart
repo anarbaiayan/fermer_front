@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/theme/app_colors.dart';
-import 'package:frontend/core/widgets/app_outlined_button.dart';
-import 'package:frontend/core/widgets/app_primary_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -335,25 +333,9 @@ class _AddButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Row(
-      children: [
-        Expanded(
-          child: AppPrimaryButton(
-            text: '+ ${l10n.financeAddSale}',
-            height: 40,
-            onPressed: () => context.push('/finance/sales/new'),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: AppOutlinedButton(
-            text: '+ ${l10n.financeAddExpense}',
-            height: 40,
-            onPressed: () => context.push('/finance/expenses/new'),
-          ),
-        ),
-      ],
+    return FinanceQuickAddButtons(
+      onAddSale: () => context.push('/finance/sales/new'),
+      onAddExpense: () => context.push('/finance/expenses/new'),
     );
   }
 }

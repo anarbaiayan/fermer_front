@@ -2911,4 +2911,68 @@ class AppLocalizationsKk extends AppLocalizations {
   String financeFileSizeMb(String size) {
     return '$size МБ';
   }
+
+  @override
+  String get todayTitle => 'Бүгін';
+
+  @override
+  String get todayMilk => 'Сауын';
+
+  @override
+  String todayMilkSessions(String morning, String evening) {
+    return 'таңертең $morning · кешке $evening';
+  }
+
+  @override
+  String todayMilkCows(int count) {
+    return 'сиыр: $count';
+  }
+
+  @override
+  String todayMilkLiters(String liters) {
+    return '$liters л';
+  }
+
+  @override
+  String get todayMilkEmpty => 'Бүгінгі сауын';
+
+  @override
+  String get todayMilkEmptyHint => 'Әлі жазылмаған';
+
+  @override
+  String get todayMilkRecord => 'Жазу';
+
+  @override
+  String get todayMilkError => 'Сауын жүктелмеді — қайталау үшін басыңыз';
+
+  @override
+  String get todaySold => 'Сатылды';
+
+  @override
+  String get todayNoSales => 'Әзірге сату жоқ';
+
+  @override
+  String get todayNoSalesHint => 'Бүгін сатсаңыз, жазып қойыңыз';
+
+  @override
+  String get todayNoExpenses => 'Шығыс жоқ';
+
+  @override
+  String get todayNoExpensesHint => 'Жем алдыңыз ба, жанармай құйдыңыз ба?';
+
+  @override
+  String get todayMoney => 'Ақша';
+
+  @override
+  String get todayTotalOnAccounts => 'Шоттарда барлығы';
+
+  @override
+  String get todaySetUpFinance =>
+      'Кассада және картада қанша ақша бар екенін көрсетіңіз — мұнда қалдықтар мен қарыздар шығады';
+
+  @override
+  String get todayTasks => 'Бүгінгі істер';
+
+  @override
+  String get todayNoTasks => 'Бүгінге іс жоқ';
 }

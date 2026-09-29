@@ -5389,6 +5389,120 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'{size} МБ'**
   String financeFileSizeMb(String size);
+
+  /// No description provided for @todayTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сегодня'**
+  String get todayTitle;
+
+  /// No description provided for @todayMilk.
+  ///
+  /// In ru, this message translates to:
+  /// **'Надой'**
+  String get todayMilk;
+
+  /// No description provided for @todayMilkSessions.
+  ///
+  /// In ru, this message translates to:
+  /// **'утро {morning} · вечер {evening}'**
+  String todayMilkSessions(String morning, String evening);
+
+  /// No description provided for @todayMilkCows.
+  ///
+  /// In ru, this message translates to:
+  /// **'коров: {count}'**
+  String todayMilkCows(int count);
+
+  /// No description provided for @todayMilkLiters.
+  ///
+  /// In ru, this message translates to:
+  /// **'{liters} л'**
+  String todayMilkLiters(String liters);
+
+  /// No description provided for @todayMilkEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Надой за сегодня'**
+  String get todayMilkEmpty;
+
+  /// No description provided for @todayMilkEmptyHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ещё не записан'**
+  String get todayMilkEmptyHint;
+
+  /// No description provided for @todayMilkRecord.
+  ///
+  /// In ru, this message translates to:
+  /// **'Записать'**
+  String get todayMilkRecord;
+
+  /// No description provided for @todayMilkError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Надой не загрузился — нажмите, чтобы повторить'**
+  String get todayMilkError;
+
+  /// No description provided for @todaySold.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продано'**
+  String get todaySold;
+
+  /// No description provided for @todayNoSales.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продаж пока нет'**
+  String get todayNoSales;
+
+  /// No description provided for @todayNoSalesHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Запишите, если сегодня продавали'**
+  String get todayNoSalesHint;
+
+  /// No description provided for @todayNoExpenses.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расходов нет'**
+  String get todayNoExpenses;
+
+  /// No description provided for @todayNoExpensesHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Купили корм, заправились?'**
+  String get todayNoExpensesHint;
+
+  /// No description provided for @todayMoney.
+  ///
+  /// In ru, this message translates to:
+  /// **'Деньги'**
+  String get todayMoney;
+
+  /// No description provided for @todayTotalOnAccounts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Всего на счетах'**
+  String get todayTotalOnAccounts;
+
+  /// No description provided for @todaySetUpFinance.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите, сколько денег в кассе и на карте — и здесь будут остатки и долги'**
+  String get todaySetUpFinance;
+
+  /// No description provided for @todayTasks.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дела на сегодня'**
+  String get todayTasks;
+
+  /// No description provided for @todayNoTasks.
+  ///
+  /// In ru, this message translates to:
+  /// **'На сегодня дел нет'**
+  String get todayNoTasks;
 }
 
 class _AppLocalizationsDelegate

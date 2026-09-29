@@ -1483,5 +1483,48 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "todayTitle": "Сегодня",
+    "todayMilk": "Надой",
+    "todayMilkSessions": "утро {morning} · вечер {evening}",
+    "@todayMilkSessions": {
+        "placeholders": {
+            "morning": {
+                "type": "String"
+            },
+            "evening": {
+                "type": "String"
+            }
+        }
+    },
+    "todayMilkCows": "коров: {count}",
+    "@todayMilkCows": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "todayMilkLiters": "{liters} л",
+    "@todayMilkLiters": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "todayMilkEmpty": "Надой за сегодня",
+    "todayMilkEmptyHint": "Ещё не записан",
+    "todayMilkRecord": "Записать",
+    "todayMilkError": "Надой не загрузился — нажмите, чтобы повторить",
+    "todaySold": "Продано",
+    "todayNoSales": "Продаж пока нет",
+    "todayNoSalesHint": "Запишите, если сегодня продавали",
+    "todayNoExpenses": "Расходов нет",
+    "todayNoExpensesHint": "Купили корм, заправились?",
+    "todayMoney": "Деньги",
+    "todayTotalOnAccounts": "Всего на счетах",
+    "todaySetUpFinance": "Укажите, сколько денег в кассе и на карте — и здесь будут остатки и долги",
+    "todayTasks": "Дела на сегодня",
+    "todayNoTasks": "На сегодня дел нет"
 }
