@@ -99,98 +99,103 @@ class _FinanceOnboardingState extends ConsumerState<FinanceOnboarding> {
     final l10n = context.l10n;
     final format = FinanceFormat.of(context);
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
-      children: [
-        const Center(
-          child: FinanceIconSquare.large(
-            icon: 'money_plain',
-            color: AppColors.primary1,
+    return FinanceKeyboardDismiss(
+      child: ListView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+        children: [
+          const Center(
+            child: FinanceIconSquare.large(
+              icon: 'money_plain',
+              color: AppColors.primary1,
+            ),
           ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          l10n.financeOnboardingTitle,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: AppColors.primary3,
+          const SizedBox(height: 12),
+          Text(
+            l10n.financeOnboardingTitle,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: AppColors.primary3,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 300),
-            child: Text(
-              l10n.financeOnboardingText,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 13,
-                height: 1.4,
-                color: AppColors.additional3,
+          const SizedBox(height: 8),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 300),
+              child: Text(
+                l10n.financeOnboardingText,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 13,
+                  height: 1.4,
+                  color: AppColors.additional3,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 20),
-        for (final (controller, name, type) in [
-          (_cash, l10n.financeCashboxName, AccountType.cash),
-          (_card, 'Kaspi', AccountType.card),
-        ]) ...[
-          _AccountCard(
-            name: name,
-            type: type,
-            controller: controller,
-            enabled: !_created.contains(controller),
-            onChanged: () => setState(() => _error = null),
-          ),
-          const SizedBox(height: 12),
-        ],
-        if (widget.createdAccounts.isNotEmpty) ...[
-          FinanceCardList(
-            children: [
-              for (final account in widget.createdAccounts)
-                FinanceListRow(
-                  leading: FinanceIconSquare.small(
-                    icon: account.type.iconName,
-                    color: AppColors.primary1,
-                  ),
-                  title: account.name,
-                  subtitle: account.type.localizedLabel(l10n),
-                  trailing: Text(
-                    format.money(account.balance),
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary3,
+          const SizedBox(height: 20),
+          for (final (controller, name, type) in [
+            (_cash, l10n.financeCashboxName, AccountType.cash),
+            (_card, 'Kaspi', AccountType.card),
+          ]) ...[
+            _AccountCard(
+              name: name,
+              type: type,
+              controller: controller,
+              enabled: !_created.contains(controller),
+              onChanged: () => setState(() => _error = null),
+            ),
+            const SizedBox(height: 12),
+          ],
+          if (widget.createdAccounts.isNotEmpty) ...[
+            FinanceCardList(
+              children: [
+                for (final account in widget.createdAccounts)
+                  FinanceListRow(
+                    leading: FinanceIconSquare.small(
+                      icon: account.type.iconName,
+                      color: AppColors.primary1,
+                    ),
+                    title: account.name,
+                    subtitle: account.type.localizedLabel(l10n),
+                    trailing: Text(
+                      format.money(account.balance),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary3,
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: FinanceChip.add(
+              label: l10n.financeOnboardingOtherAccount,
+              onTap: _saving
+                  ? null
+                  : () => context.push('/finance/accounts/new'),
+            ),
           ),
-          const SizedBox(height: 12),
-        ],
-        Align(
-          alignment: Alignment.centerLeft,
-          child: FinanceChip.add(
-            label: l10n.financeOnboardingOtherAccount,
-            onTap: _saving ? null : () => context.push('/finance/accounts/new'),
+          const SizedBox(height: 22),
+          if (_error != null) ...[
+            FinanceNote(_error!, color: AppColors.error),
+            const SizedBox(height: 12),
+          ],
+          AppPrimaryButton(
+            text: l10n.financeOnboardingStart,
+            isLoading: _saving,
+            onPressed: _start,
           ),
-        ),
-        const SizedBox(height: 22),
-        if (_error != null) ...[
-          FinanceNote(_error!, color: AppColors.error),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
+          FinanceNote(l10n.financeOnboardingLater),
         ],
-        AppPrimaryButton(
-          text: l10n.financeOnboardingStart,
-          isLoading: _saving,
-          onPressed: _start,
-        ),
-        const SizedBox(height: 10),
-        FinanceNote(l10n.financeOnboardingLater),
-      ],
+      ),
     );
   }
 }

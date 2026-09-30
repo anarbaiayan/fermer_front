@@ -32,8 +32,9 @@ MockFinanceRepository _repo({bool demo = true}) => MockFinanceRepository(
 Future<void> _pump(
   WidgetTester tester,
   String location,
-  MockFinanceRepository repo,
-) async {
+  MockFinanceRepository repo, {
+  Locale locale = const Locale('ru'),
+}) async {
   tester.view.physicalSize = const Size(1080, 2400);
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
@@ -52,7 +53,7 @@ Future<void> _pump(
       ],
       child: MaterialApp.router(
         routerConfig: router,
-        locale: const Locale('ru'),
+        locale: locale,
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
       ),
@@ -138,6 +139,19 @@ void main() {
       _sale(id: 3, product: 'Молоко', day: 12, price: 300),
       _sale(id: 4, product: 'Творог', day: 15, buyer: 5, price: 2200),
     ];
+
+    test(
+      'list products go to the API in Russian, shown in the app language',
+      () {
+        final kk = lookupAppLocalizations(const Locale('kk'));
+        expect(SaleProduct.apiName(kk.financeProductMilk), 'Молоко');
+        expect(SaleProduct.apiName(' молоко '), 'Молоко');
+        // Свой товар уходит как введён.
+        expect(SaleProduct.apiName(' Айран '), 'Айран');
+        expect(SaleProduct.displayName('Молоко', kk), kk.financeProductMilk);
+        expect(SaleProduct.displayName('Айран', kk), 'Айран');
+      },
+    );
 
     test('the price hint prefers the same buyer, then the latest sale', () {
       expect(lastSaleOf(sales, 'Молоко', 5)?.id, 1);
@@ -430,6 +444,40 @@ void main() {
       final saved = (await repo.getSales(const SaleFilter())).first;
       expect(saved.productName, 'Қымыз');
       expect(saved.amount, Money.tenge(4500));
+    });
+
+    // На iPhone у цифровой клавиатуры нет «Готово».
+    testWidgets('a tap outside the fields hides the keyboard', (tester) async {
+      await _pump(tester, '/finance/sales/new', _repo());
+      await tester.tap(_field(0));
+      await tester.pump();
+      expect(tester.testTextInput.isVisible, isTrue);
+
+      await tester.tap(find.text(_l10n.financeSaleProductLabel));
+      await tester.pump();
+      expect(tester.testTextInput.isVisible, isFalse);
+    });
+
+    testWidgets('a list product from the Kazakh form is saved in Russian', (
+      tester,
+    ) async {
+      final kk = lookupAppLocalizations(const Locale('kk'));
+      final repo = _repo();
+      await _pump(
+        tester,
+        '/finance/sales/new',
+        repo,
+        locale: const Locale('kk'),
+      );
+
+      await _tap(tester, _chip(kk.financeProductMilk));
+      await tester.enterText(_field(0), '10');
+      await tester.enterText(_field(1), '250');
+      await _tap(tester, find.text(kk.financeSaleSaveNew));
+
+      final saved = (await repo.getSales(const SaleFilter())).first;
+      expect(saved.productName, _l10n.financeProductMilk);
+      expect(saved.amount, Money.tenge(2500));
     });
 
     testWidgets('editing a paid sale returns the old amount first', (

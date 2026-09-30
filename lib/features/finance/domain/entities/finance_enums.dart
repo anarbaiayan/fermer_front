@@ -1,3 +1,5 @@
+import 'dart:ui' show Locale;
+
 import 'package:frontend/l10n/app_localizations.dart';
 
 /// Тип счёта (`AccountType` на бэкенде).
@@ -105,9 +107,10 @@ enum FinanceReportType {
 
 /// Товар для быстрого выбора в форме продажи.
 ///
-/// В API уходит свободный текст `productName`, поэтому название берётся
-/// из локализации: фермер видит и сохраняет его на своём языке. Единица
-/// подставляется в форму, но её можно поменять.
+/// В API уходит свободный текст `productName`. Товар из списка сохраняется
+/// всегда по-русски ([apiName]), чтобы в базе и в PDF было одно название
+/// на любом языке приложения, а показывается на языке фермера
+/// ([displayName]). Единица подставляется в форму, но её можно поменять.
 enum SaleProduct {
   kurt(SaleUnit.kilogram),
   butter(SaleUnit.kilogram),
@@ -146,10 +149,22 @@ enum SaleProduct {
     return null;
   }
 
+  /// Название для API: товар из списка — по-русски («Сүт» → «Молоко»),
+  /// свой товар — как введён.
+  static String apiName(String name) =>
+      matching(name)?.localizedLabel(_russian) ?? name.trim();
+
+  /// Название для экрана: товар из списка — на языке приложения, свой —
+  /// как сохранён.
+  static String displayName(String name, AppLocalizations l10n) =>
+      matching(name)?.localizedLabel(l10n) ?? name;
+
   static final _allLocalizations = [
     for (final locale in AppLocalizations.supportedLocales)
       lookupAppLocalizations(locale),
   ];
+
+  static final _russian = lookupAppLocalizations(const Locale('ru'));
 }
 
 /// Ключ товара для сравнения продаж: товар из списка — на любом языке,

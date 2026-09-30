@@ -7,6 +7,7 @@ import 'package:frontend/features/cattle_events/application/planned_events_provi
 import 'package:frontend/features/finance/application/finance_providers.dart';
 import 'package:frontend/features/finance/domain/entities/finance_date.dart';
 import 'package:frontend/features/finance/domain/entities/finance_entities.dart';
+import 'package:frontend/features/finance/domain/entities/finance_enums.dart';
 import 'package:frontend/features/finance/domain/entities/finance_inputs.dart';
 import 'package:frontend/features/finance/domain/entities/money.dart';
 import 'package:frontend/features/finance/presentation/finance_format.dart';
@@ -191,7 +192,7 @@ class _DayCard extends ConsumerWidget {
             .map(
               (s) => [
                 s.counterpartyName ?? l10n.financeNoBuyer,
-                '${s.productName.toLowerCase()} '
+                '${SaleProduct.displayName(s.productName, l10n).toLowerCase()} '
                     '${format.quantity(s.quantity)} '
                     '${s.unit.localizedLabel(l10n)}',
               ].join(' · '),
@@ -364,7 +365,8 @@ class _Money extends ConsumerWidget {
     final l10n = context.l10n;
     final format = FinanceFormat.of(context);
     final accounts = ref.watch(financeAccountsProvider).valueOrNull;
-    final active = accounts?.where((a) => a.active).toList();
+    // Скрытый счёт с деньгами тоже в итоге, как в сводке.
+    final shown = accounts == null ? null : balanceAccounts(accounts);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -374,9 +376,9 @@ class _Money extends ConsumerWidget {
           link: l10n.financeTitle,
           onLink: () => context.push('/finance'),
         ),
-        if (active == null)
+        if (accounts == null || shown == null)
           const SizedBox(height: 72)
-        else if (active.isEmpty)
+        else if (accounts.isEmpty)
           // Первый вход в «Финансы» ещё не пройден.
           FinanceCard(
             padding: const EdgeInsets.all(16),
@@ -408,14 +410,16 @@ class _Money extends ConsumerWidget {
               children: [
                 _AccountTile(
                   label: l10n.todayTotalOnAccounts,
-                  amount: format.money(Money.sum(active.map((a) => a.balance))),
+                  amount: format.money(Money.sum(shown.map((a) => a.balance))),
                   highlighted: true,
                   onTap: () => context.push('/finance'),
                 ),
-                for (final account in active) ...[
+                for (final account in shown) ...[
                   const SizedBox(width: 10),
                   _AccountTile(
-                    label: account.name,
+                    label: account.active
+                        ? account.name
+                        : '${account.name} · ${l10n.financeAccountHiddenTag}',
                     icon: account.type.iconName,
                     amount: format.money(account.balance),
                     onTap: () => context.push('/finance/settings'),

@@ -10,11 +10,8 @@ import '../../domain/entities/finance_inputs.dart';
 import '../../domain/finance_repository.dart';
 import '../models/finance_json.dart';
 
-/// [FinanceRepository] поверх `/api/finance/**`.
-///
-/// Пока бэкенд не выкатил модуль, экраны работают на моке
-/// (см. `financeRepositoryProvider`). Сводка и долги вызывают пути из ТЗ —
-/// на бэкенде их ещё нет.
+/// [FinanceRepository] поверх `/api/finance/**`. Контракт сверен с веткой
+/// бэкенда `finance` (коммит df38a37 от 30.09.2026).
 class FinanceApi implements FinanceRepository {
   FinanceApi(this._dio);
 
@@ -131,10 +128,9 @@ class FinanceApi implements FinanceRepository {
   Future<Sale> updateSale(int id, SaleInput input) =>
       _send('PUT', '/finance/sales/$id', saleInputToJson(input), saleFromJson);
 
-  /// В ТЗ — `POST`, на бэкенде — `PUT /sales/{id}/pay`.
   @override
   Future<Sale> paySale(int id, SalePayment payment) => _send(
-    'PUT',
+    'POST',
     '/finance/sales/$id/pay',
     salePaymentToJson(payment),
     saleFromJson,
@@ -171,7 +167,7 @@ class FinanceApi implements FinanceRepository {
   @override
   Future<void> deleteExpense(int id) => _delete('/finance/expenses/$id');
 
-  // ---- сводка и долги (контракт из ТЗ) ----
+  // ---- сводка и долги ----
 
   @override
   Future<FinanceSummary> getSummary(FinancePeriod period) => _call(() async {
@@ -182,11 +178,13 @@ class FinanceApi implements FinanceRepository {
     return summaryFromJson(r.data as Map<String, dynamic>);
   });
 
+  /// Бэкенд группирует долги в порядке свежих продаж, а экраны ждут самых
+  /// просроченных сверху — сортируем сами.
   @override
-  Future<List<CounterpartyDebt>> getDebts() =>
-      _getList('/finance/debts', debtFromJson);
+  Future<List<CounterpartyDebt>> getDebts() async =>
+      sortDebts(await _getList('/finance/debts', debtFromJson));
 
-  // ---- отчёт (контракт из ТЗ) ----
+  // ---- отчёт ----
 
   @override
   Future<FinanceReportFile> getReportPdf(FinanceReportRequest request) async {

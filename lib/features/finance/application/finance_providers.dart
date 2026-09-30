@@ -9,10 +9,9 @@ import '../domain/entities/finance_enums.dart';
 import '../domain/entities/finance_inputs.dart';
 import '../domain/finance_repository.dart';
 
-/// Мок или реальный API. Бэкенд ещё не выкатил `/api/finance/**`, поэтому
-/// по умолчанию мок. Проверить модуль на dev-сервере:
-/// `flutter run --dart-define=FINANCE_API=true --dart-define=API_BASE_URL=...`.
-const bool kFinanceUseMock = !bool.fromEnvironment('FINANCE_API');
+/// Реальный API или мок. По умолчанию — API (`/api/finance/**`). Мок —
+/// для демо без сервера: `flutter run --dart-define=FINANCE_MOCK=true`.
+const bool kFinanceUseMock = bool.fromEnvironment('FINANCE_MOCK');
 
 /// Часы модуля. В тестах подменяется, чтобы «сегодня» было фиксированным.
 final financeClockProvider = Provider<DateTime Function()>(
@@ -164,6 +163,14 @@ List<Counterparty> recentCounterparties(
     return a.name.toLowerCase().compareTo(b.name.toLowerCase());
   });
 }
+
+/// Счета для остатков в сводке и на главной: активные, а за ними скрытые,
+/// на которых остались деньги. Без них итог был бы меньше реальных денег;
+/// пустые скрытые счета не показываем.
+List<FinanceAccount> balanceAccounts(List<FinanceAccount> accounts) => [
+  ...accounts.where((account) => account.active),
+  ...accounts.where((account) => !account.active && !account.balance.isZero),
+];
 
 /// Счёт по умолчанию для новой записи: последний использованный, иначе
 /// первая касса, иначе первый активный.

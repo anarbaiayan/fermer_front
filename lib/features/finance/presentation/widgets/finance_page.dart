@@ -28,22 +28,44 @@ class FinancePage extends StatelessWidget {
       showBell: false,
       farmName: context.l10n.farmName,
       body: AppPage(
-        child: ListView(
-          padding: const EdgeInsets.only(top: 16, bottom: 40),
-          children: [
-            HerdPageHeader(
-              title: title,
-              maxLines: 2,
-              onBack: () => closeFinancePage(context),
-            ),
-            const SizedBox(height: 16),
-            for (var i = 0; i < children.length; i++) ...[
-              if (i > 0) SizedBox(height: spacing),
-              children[i],
+        child: FinanceKeyboardDismiss(
+          child: ListView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: const EdgeInsets.only(top: 16, bottom: 40),
+            children: [
+              HerdPageHeader(
+                title: title,
+                maxLines: 2,
+                onBack: () => closeFinancePage(context),
+              ),
+              const SizedBox(height: 16),
+              for (var i = 0; i < children.length; i++) ...[
+                if (i > 0) SizedBox(height: spacing),
+                children[i],
+              ],
             ],
-          ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// Закрывает клавиатуру тапом по пустому месту. На iPhone у цифровой
+/// клавиатуры нет кнопки «Готово», а тап мимо поля её сам не закрывает —
+/// она осталась бы поверх кнопки «Сохранить». Список под ним закрывает
+/// клавиатуру ещё и прокруткой (`keyboardDismissBehavior`).
+class FinanceKeyboardDismiss extends StatelessWidget {
+  const FinanceKeyboardDismiss({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: child,
     );
   }
 }

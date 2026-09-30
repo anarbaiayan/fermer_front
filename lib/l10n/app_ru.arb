@@ -1186,6 +1186,7 @@
     },
     "financeAccountSaved": "Счёт сохранён",
     "financeAccountHidden": "Счёт скрыт",
+    "financeAccountHiddenTag": "скрыт",
     "financeAccountNotFound": "Счёт не найден",
     "financeCounterpartyNameHint": "Магазин Береке",
     "financeCounterpartyNameError": "Укажите название",

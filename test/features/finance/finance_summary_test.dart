@@ -88,6 +88,10 @@ Future<void> _tap(WidgetTester tester, Finder finder) async {
   await tester.pumpAndSettle();
 }
 
+String _backTooltip(WidgetTester tester) => MaterialLocalizations.of(
+  tester.element(find.byType(FinanceSummaryTab)),
+).backButtonTooltip;
+
 Future<void> _expectOne(WidgetTester tester, Finder finder) async {
   await _reveal(tester, finder);
   expect(finder, findsOneWidget);
@@ -139,6 +143,42 @@ void main() {
     await _tap(tester, find.text('Kaspi'));
     expect(find.byType(FinanceSummaryTab), findsNothing);
     expect(find.text(_l10n.financeAccountBalanceNow), findsOneWidget);
+  });
+
+  testWidgets('a hidden account with money stays in the total', (tester) async {
+    final repo = _repo();
+    final halyk = (await repo.getAccounts()).firstWhere(
+      (account) => account.name == 'Halyk',
+    );
+    await repo.deactivateAccount(halyk.id);
+    await _pump(tester, repo);
+
+    await _expectOne(tester, find.text(_l10n.financeBalancesTitle));
+    expect(find.text(_money('1 433 900')), findsOneWidget);
+    await _expectOne(tester, find.text('Halyk'));
+    expect(find.text(_l10n.financeAccountHidden), findsOneWidget);
+    // Пустой скрытый счёт не показываем.
+    expect(find.text('Старая карта'), findsNothing);
+  });
+
+  testWidgets('back returns to More', (tester) async {
+    await _pump(tester, _repo(), location: '/more');
+    await _tap(tester, find.text(_l10n.financeTitle));
+    expect(find.byType(FinanceSummaryTab), findsOneWidget);
+
+    await tester.tap(find.byTooltip(_backTooltip(tester)));
+    await tester.pumpAndSettle();
+    expect(find.byType(FinanceSummaryTab), findsNothing);
+    expect(find.text(_l10n.financeTitle), findsOneWidget);
+  });
+
+  testWidgets('back from a direct link goes to More', (tester) async {
+    await _pump(tester, _repo());
+
+    await tester.tap(find.byTooltip(_backTooltip(tester)));
+    await tester.pumpAndSettle();
+    expect(find.byType(FinanceSummaryTab), findsNothing);
+    expect(find.text(_l10n.financeTitle), findsOneWidget);
   });
 
   testWidgets('debts: who owes and how long it is overdue', (tester) async {

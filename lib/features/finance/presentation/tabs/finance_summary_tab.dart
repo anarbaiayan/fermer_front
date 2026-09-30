@@ -340,8 +340,8 @@ class _AddButtons extends StatelessWidget {
   }
 }
 
-/// Остатки по активным счетам и их сумма. Скрытые счета в новые записи не
-/// попадают и здесь не показываются, как в прототипе.
+/// Остатки по счетам и их сумма. Скрытый счёт виден внизу, пока на нём
+/// есть деньги, и входит в итог — иначе итог меньше реальных денег.
 class _Balances extends ConsumerWidget {
   const _Balances();
 
@@ -349,9 +349,9 @@ class _Balances extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final format = FinanceFormat.of(context);
-    final accounts = (ref.watch(financeAccountsProvider).valueOrNull ?? [])
-        .where((account) => account.active)
-        .toList();
+    final accounts = balanceAccounts(
+      ref.watch(financeAccountsProvider).valueOrNull ?? [],
+    );
     const amountStyle = TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.w700,
@@ -380,10 +380,14 @@ class _Balances extends ConsumerWidget {
                 FinanceListRow(
                   leading: FinanceIconSquare.small(
                     icon: account.type.iconName,
-                    color: AppColors.primary1,
+                    color: account.active
+                        ? AppColors.primary1
+                        : AppColors.additional3,
                   ),
                   title: account.name,
-                  subtitle: account.type.localizedLabel(l10n),
+                  subtitle: account.active
+                      ? account.type.localizedLabel(l10n)
+                      : l10n.financeAccountHidden,
                   trailing: Text(
                     format.money(account.balance),
                     style: amountStyle,

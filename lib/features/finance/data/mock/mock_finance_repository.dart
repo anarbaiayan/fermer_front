@@ -348,14 +348,9 @@ class MockFinanceRepository implements FinanceRepository {
       groups.putIfAbsent(sale.counterpartyId, () => []).add(sale);
     }
 
-    final debts = [
-      for (final entry in groups.entries)
-        _debt(entry.key, entry.value..sort(_bySaleDate), today),
-    ];
-    return debts..sort((a, b) {
-      final byDays = b.overdueDays.compareTo(a.overdueDays);
-      return byDays != 0 ? byDays : b.totalDebt.compareTo(a.totalDebt);
-    });
+    return sortDebts([
+      for (final entry in groups.entries) _debt(entry.key, entry.value, today),
+    ]);
   }
 
   CounterpartyDebt _debt(
@@ -387,11 +382,6 @@ class MockFinanceRepository implements FinanceRepository {
           ),
       ],
     );
-  }
-
-  static int _bySaleDate(_SaleRow a, _SaleRow b) {
-    final byDate = a.saleDate.compareTo(b.saleDate);
-    return byDate != 0 ? byDate : a.id.compareTo(b.id);
   }
 
   // ---- отчёт ----

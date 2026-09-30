@@ -157,11 +157,28 @@ class _FinanceHeader extends StatelessWidget {
   /// `null` — шестерёнка скрыта (первый вход, загрузка).
   final VoidCallback? onSettings;
 
+  /// Назад туда, откуда открыли: «Ещё» или главная. Открыт по ссылке —
+  /// в «Ещё», где живёт раздел.
+  void _back(BuildContext context) {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/more');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Row(
       children: [
+        IconButton(
+          padding: EdgeInsets.zero,
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          icon: AppIcons.svg('arrow', size: 32),
+          onPressed: () => _back(context),
+        ),
+        const SizedBox(width: 6),
         Expanded(
           child: Text(
             l10n.financeTitle,

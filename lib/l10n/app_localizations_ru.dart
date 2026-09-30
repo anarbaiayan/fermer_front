@@ -2453,6 +2453,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get financeAccountHidden => 'Счёт скрыт';
 
   @override
+  String get financeAccountHiddenTag => 'скрыт';
+
+  @override
   String get financeAccountNotFound => 'Счёт не найден';
 
   @override

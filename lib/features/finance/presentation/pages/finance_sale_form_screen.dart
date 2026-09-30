@@ -444,7 +444,7 @@ class _SaleFormState extends ConsumerState<_SaleForm> {
     final input = SaleInput(
       counterpartyId: _buyerId,
       saleDate: _saleDate,
-      productName: product,
+      productName: SaleProduct.apiName(product),
       quantity: quantity!,
       unit: _unit,
       pricePerUnit: price!,
@@ -491,7 +491,8 @@ class _SaleFormState extends ConsumerState<_SaleForm> {
     final l10n = context.l10n;
     final format = FinanceFormat.of(context);
     final name =
-        '${sale.productName}, ${format.quantity(sale.quantity)} '
+        '${SaleProduct.displayName(sale.productName, l10n)}, '
+        '${format.quantity(sale.quantity)} '
         '${sale.unit.localizedLabel(l10n)}';
     final confirmed = await showConfirmDialog(
       context: context,
@@ -737,13 +738,16 @@ class _SaleFormState extends ConsumerState<_SaleForm> {
         _product != null &&
         saleProductKey(_product!) == saleProductKey(name);
 
+    // Товары из общего списка в подсказки не берём: они уже есть чипами.
     final typed = _productName.text.trim().toLowerCase();
     final suggestions = !_otherProduct || typed.isEmpty
         ? const <String>[]
         : pastNames
               .where((name) {
                 final key = name.toLowerCase();
-                return key.contains(typed) && key != typed;
+                return key.contains(typed) &&
+                    key != typed &&
+                    SaleProduct.matching(name) == null;
               })
               .take(4)
               .toList();

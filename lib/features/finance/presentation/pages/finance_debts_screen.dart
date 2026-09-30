@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../application/finance_providers.dart';
 import '../../domain/entities/finance_entities.dart';
+import '../../domain/entities/finance_enums.dart';
 import '../../domain/entities/finance_inputs.dart';
 import '../../domain/entities/money.dart';
 import '../finance_contact.dart';
@@ -355,7 +356,8 @@ class _DebtSaleRow extends StatelessWidget {
     final sale = this.sale;
     final product = sale == null
         ? null
-        : '${sale.productName}, ${format.quantity(sale.quantity)} '
+        : '${SaleProduct.displayName(sale.productName, l10n)}, '
+              '${format.quantity(sale.quantity)} '
               '${sale.unit.localizedLabel(l10n)}';
     final due = debtSale.dueDate;
     final overdue = debtSale.isOverdueOn(today);

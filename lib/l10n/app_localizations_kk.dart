@@ -2448,6 +2448,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get financeAccountHidden => 'Шот жасырылды';
 
   @override
+  String get financeAccountHiddenTag => 'жасырылған';
+
+  @override
   String get financeAccountNotFound => 'Шот табылмады';
 
   @override

@@ -4,12 +4,8 @@ import '../../domain/entities/finance_enums.dart';
 import '../../domain/entities/finance_inputs.dart';
 import '../../domain/entities/money.dart';
 
-// JSON-контракт `/api/finance/**`.
-//
-// Счета, покупатели, продажи и расходы сверены с веткой бэкенда `finance`
-// (коммит 56cfd72 от 27.09.2026), сводка — с коммитом 06c84b1 от 28.09.2026.
-// Долги и PDF-отчёт пока только в ТЗ, раздел 4: эндпоинтов ещё нет, форма
-// ответа может поменяться.
+// JSON-контракт `/api/finance/**`, сверен с веткой бэкенда `finance`
+// (коммит df38a37 от 30.09.2026).
 
 int _id(Object? value) => (value as num).toInt();
 
@@ -85,7 +81,7 @@ Expense expenseFromJson(Map<String, dynamic> json) => Expense(
   cattleId: _idOrNull(json['cattleId']),
 );
 
-/// Сводка по ТЗ.
+/// `FinanceSummaryResponse`.
 FinanceSummary summaryFromJson(Map<String, dynamic> json) => FinanceSummary(
   periodFrom: parseApiDate(json['periodFrom'].toString()),
   periodTo: parseApiDate(json['periodTo'].toString()),
@@ -111,10 +107,14 @@ FinanceSummary summaryFromJson(Map<String, dynamic> json) => FinanceSummary(
   overdueDebt: Money.fromJsonOrNull(json['overdueDebt']) ?? Money.zero,
 );
 
-/// Элемент `GET /api/finance/debts` по ТЗ.
+/// `DebtResponse`. Для продаж без покупателя бэкенд пишет имя
+/// «Без контрагента» по-русски — отбрасываем его, экран подставит своё
+/// на языке приложения.
 CounterpartyDebt debtFromJson(Map<String, dynamic> json) => CounterpartyDebt(
   counterpartyId: _idOrNull(json['counterpartyId']),
-  counterpartyName: _textOrNull(json['counterpartyName']),
+  counterpartyName: json['counterpartyId'] == null
+      ? null
+      : _textOrNull(json['counterpartyName']),
   phone: _textOrNull(json['phone']),
   totalDebt: Money.fromJsonOrNull(json['totalDebt']) ?? Money.zero,
   overdueDays: (json['overdueDays'] as num?)?.toInt() ?? 0,
@@ -181,13 +181,12 @@ Map<String, dynamic> expenseInputToJson(ExpenseInput input) => {
   'cattleId': input.cattleId,
 };
 
-/// Query для `GET /api/finance/sales`. Параметр оплаты на бэкенде — `paid`,
-/// а не `isPaid`, как в ТЗ.
+/// Query для `GET /api/finance/sales`.
 Map<String, dynamic> saleFilterToQuery(SaleFilter filter) => {
   if (filter.from != null) 'from': formatApiDate(filter.from!),
   if (filter.to != null) 'to': formatApiDate(filter.to!),
   if (filter.counterpartyId != null) 'counterpartyId': filter.counterpartyId,
-  if (filter.paid != null) 'paid': filter.paid,
+  if (filter.paid != null) 'isPaid': filter.paid,
 };
 
 /// Query для `GET /api/finance/expenses`.
@@ -203,7 +202,7 @@ Map<String, dynamic> periodToQuery(FinancePeriod period) => {
   'to': formatApiDate(period.to),
 };
 
-/// `GET /api/finance/report/pdf?from=&to=&type=` (ТЗ, раздел 4).
+/// `GET /api/finance/report/pdf?from=&to=&type=`.
 Map<String, dynamic> reportRequestToQuery(FinanceReportRequest request) => {
   ...periodToQuery(request.period),
   'type': request.type.apiValue,

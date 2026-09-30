@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../application/finance_providers.dart';
 import '../../domain/entities/finance_date.dart';
 import '../../domain/entities/finance_entities.dart';
+import '../../domain/entities/finance_enums.dart';
 import '../../domain/entities/finance_inputs.dart';
 import '../../domain/entities/money.dart';
 import '../finance_format.dart';
@@ -98,7 +99,8 @@ Future<void> showSalePaySheet(BuildContext context, Sale sale) {
   final format = FinanceFormat.of(context);
   final caption = [
     sale.counterpartyName ?? l10n.financeNoBuyer,
-    '${sale.productName}, ${format.quantity(sale.quantity)} '
+    '${SaleProduct.displayName(sale.productName, l10n)}, '
+        '${format.quantity(sale.quantity)} '
         '${sale.unit.localizedLabel(l10n)}',
     l10n.financeSaleOfDate(format.date(sale.saleDate)),
   ].join(' · ');
@@ -210,7 +212,9 @@ class FinanceSaleRow extends StatelessWidget {
     final unit = sale.unit.localizedLabel(l10n);
     final comment = sale.comment;
     return FinanceListRow(
-      title: '${sale.productName} · ${format.quantity(sale.quantity)} $unit',
+      title:
+          '${SaleProduct.displayName(sale.productName, l10n)} · '
+          '${format.quantity(sale.quantity)} $unit',
       subtitle: [
         sale.counterpartyName ?? l10n.financeNoBuyer,
         '${format.money(sale.pricePerUnit)}/$unit',

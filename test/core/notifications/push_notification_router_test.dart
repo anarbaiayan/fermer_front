@@ -49,23 +49,20 @@ void main() {
   });
 
   test('opens debts with the buyer for an overdue debt', () {
+    // Данные пуша, как их шлёт бэкенд: пустой cattleId FCM отбрасывает.
     router.navigateAuthenticated(
-      const PushNotificationPayload(
-        notificationId: '1',
-        type: 'FINANCE_OVERDUE',
-        cattleId: null,
-        title: null,
-        body: null,
-        counterpartyId: 5,
+      PushNotificationPayload.fromMessage(
+        data: const {
+          'notificationId': '1',
+          'type': 'FINANCE_OVERDUE',
+          'counterpartyId': '5',
+        },
       ),
     );
+    // Долг по продаже без покупателя.
     router.navigateAuthenticated(
-      const PushNotificationPayload(
-        notificationId: '2',
-        type: 'FINANCE_OVERDUE',
-        cattleId: null,
-        title: null,
-        body: null,
+      PushNotificationPayload.fromMessage(
+        data: const {'notificationId': '2', 'type': 'FINANCE_OVERDUE'},
       ),
     );
 

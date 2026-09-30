@@ -4586,6 +4586,12 @@ abstract class AppLocalizations {
   /// **'Счёт скрыт'**
   String get financeAccountHidden;
 
+  /// No description provided for @financeAccountHiddenTag.
+  ///
+  /// In ru, this message translates to:
+  /// **'скрыт'**
+  String get financeAccountHiddenTag;
+
   /// No description provided for @financeAccountNotFound.
   ///
   /// In ru, this message translates to:

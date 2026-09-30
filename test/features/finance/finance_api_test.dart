@@ -144,7 +144,7 @@ void main() {
       expect(expense.category, ExpenseCategory.other);
     });
 
-    test('summary and debts in the shape from the spec', () async {
+    test('summary and debts in the backend shape', () async {
       final (api, adapter) = _api((options) {
         if (options.path == '/finance/summary') {
           return {
@@ -163,9 +163,33 @@ void main() {
             ],
             'totalDebt': 287000,
             'overdueDebt': 145000,
+            'hasSales': true,
+            'hasExpenses': true,
           };
         }
+        // Бэкенд отдаёт покупателей в порядке свежих продаж.
         return [
+          {
+            'counterpartyId': null,
+            'counterpartyName': 'Без контрагента',
+            'phone': null,
+            'totalDebt': 142000,
+            'overdueDays': 0,
+            'sales': [
+              {
+                'id': 91,
+                'saleDate': '2026-09-18',
+                'amount': 42000,
+                'dueDate': '2026-10-02',
+              },
+              {
+                'id': 90,
+                'saleDate': '2026-09-15',
+                'amount': 100000,
+                'dueDate': '2026-09-29',
+              },
+            ],
+          },
           {
             'counterpartyId': 3,
             'counterpartyName': 'Магазин Береке',
@@ -196,15 +220,22 @@ void main() {
       expect(summary.expensesByCategory.first.category, ExpenseCategory.feed);
       expect(summary.overdueDebt, Money.tenge(145000));
 
-      final debt = (await api.getDebts()).single;
+      final debts = await api.getDebts();
       expect(adapter.requests.last.path, '/finance/debts');
-      expect(debt.overdueDays, 6);
-      expect(debt.sales.single.dueDate, DateTime.utc(2026, 9, 13));
+      // Самые просроченные сверху, продажи — от старой к новой.
+      final [overdue, noBuyer] = debts;
+      expect(overdue.counterpartyName, 'Магазин Береке');
+      expect(overdue.overdueDays, 6);
+      expect(overdue.sales.single.dueDate, DateTime.utc(2026, 9, 13));
+      // Русское «Без контрагента» заменит подпись на языке приложения.
+      expect(noBuyer.counterpartyId, isNull);
+      expect(noBuyer.counterpartyName, isNull);
+      expect(noBuyer.sales.map((s) => s.id), [90, 91]);
     });
   });
 
   group('requests', () {
-    test('sale filter uses the backend name `paid`', () async {
+    test('sale filter uses the backend name `isPaid`', () async {
       final (api, adapter) = _api((_) => []);
       await api.getSales(
         SaleFilter(
@@ -218,7 +249,7 @@ void main() {
         'from': '2026-09-01',
         'to': '2026-09-30',
         'counterpartyId': 3,
-        'paid': false,
+        'isPaid': false,
       });
     });
 
@@ -293,14 +324,14 @@ void main() {
       expect(body.containsKey('amount'), isFalse);
     });
 
-    test('payment goes to PUT /sales/{id}/pay', () async {
+    test('payment goes to POST /sales/{id}/pay', () async {
       final (api, adapter) = _api((_) => {..._saleJson, 'paid': true});
       await api.paySale(
         88,
         SalePayment(accountId: 2, paidAt: DateTime.utc(2026, 9, 19)),
       );
       final request = adapter.requests.single;
-      expect(request.method, 'PUT');
+      expect(request.method, 'POST');
       expect(request.path, '/finance/sales/88/pay');
       expect(_body(request), {'accountId': 2, 'paidAt': '2026-09-19'});
     });

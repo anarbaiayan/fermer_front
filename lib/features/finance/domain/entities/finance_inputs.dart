@@ -59,8 +59,8 @@ class SaleInput {
   final int? accountId;
   final DateTime? paidAt;
 
-  /// Срок для продажи в долг. Бэкенд сам его не подставляет, поэтому форма
-  /// всегда присылает значение, по умолчанию [defaultDueDate].
+  /// Срок для продажи в долг. Форма всегда присылает значение, по умолчанию
+  /// [defaultDueDate] — то же, что бэкенд ставит сам, если срока нет.
   final DateTime? dueDate;
   final String? comment;
 

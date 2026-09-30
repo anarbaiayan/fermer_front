@@ -229,3 +229,27 @@ class CounterpartyDebt {
     sales.where((sale) => sale.isOverdueOn(today)).map((sale) => sale.amount),
   );
 }
+
+/// Порядок «Долгов»: самые просроченные сверху, при равной просрочке —
+/// больший долг. Продажи покупателя — от старой к новой.
+List<CounterpartyDebt> sortDebts(List<CounterpartyDebt> debts) {
+  int bySaleDate(DebtSale a, DebtSale b) {
+    final byDate = a.saleDate.compareTo(b.saleDate);
+    return byDate != 0 ? byDate : a.id.compareTo(b.id);
+  }
+
+  return [
+    for (final debt in debts)
+      CounterpartyDebt(
+        counterpartyId: debt.counterpartyId,
+        counterpartyName: debt.counterpartyName,
+        phone: debt.phone,
+        totalDebt: debt.totalDebt,
+        overdueDays: debt.overdueDays,
+        sales: [...debt.sales]..sort(bySaleDate),
+      ),
+  ]..sort((a, b) {
+    final byDays = b.overdueDays.compareTo(a.overdueDays);
+    return byDays != 0 ? byDays : b.totalDebt.compareTo(a.totalDebt);
+  });
+}
