@@ -1,3 +1,5 @@
+import 'package:frontend/core/config/feature_flags.dart';
+
 import 'notification_status.dart';
 import 'notification_type.dart';
 
@@ -26,6 +28,9 @@ class AppNotification {
   final bool archived;
   final NotificationCattleInfo? cattleInfo;
 
+  /// Покупатель с просроченным долгом (`FINANCE_OVERDUE`).
+  final int? counterpartyId;
+
   const AppNotification({
     required this.id,
     required this.type,
@@ -38,9 +43,25 @@ class AppNotification {
     required this.readAt,
     required this.archived,
     required this.cattleInfo,
+    this.counterpartyId,
   });
 
   bool get isUnread => readAt == null;
+
+  /// Куда ведёт нажатие: карточка животного или «Долги» с покупателем.
+  /// `null` — уведомление никуда не ведёт.
+  String? get target {
+    if (type == NotificationType.financeOverdue) {
+      // Пока «Финансы» скрыты флагом, маршрута нет.
+      if (!kFinanceEnabled) return null;
+      final id = counterpartyId;
+      return id == null
+          ? '/finance/debts'
+          : '/finance/debts?counterpartyId=$id';
+    }
+    final cattleId = cattleInfo?.cattleId;
+    return cattleId == null ? null : '/herd/$cattleId';
+  }
 
   AppNotification copyWith({
     int? id,
@@ -54,6 +75,7 @@ class AppNotification {
     DateTime? readAt,
     bool? archived,
     NotificationCattleInfo? cattleInfo,
+    int? counterpartyId,
   }) {
     return AppNotification(
       id: id ?? this.id,
@@ -67,6 +89,7 @@ class AppNotification {
       readAt: readAt ?? this.readAt,
       archived: archived ?? this.archived,
       cattleInfo: cattleInfo ?? this.cattleInfo,
+      counterpartyId: counterpartyId ?? this.counterpartyId,
     );
   }
 }

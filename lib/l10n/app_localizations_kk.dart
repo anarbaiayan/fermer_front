@@ -2143,4 +2143,839 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get controlMilkingTabUnfilledEmpty => 'Толтырылмағандар';
+
+  @override
+  String get financeTitle => 'Қаржы';
+
+  @override
+  String get financeNewBadge => 'Жаңа';
+
+  @override
+  String get financeTabSummary => 'Жиынтық';
+
+  @override
+  String get financeTabIncome => 'Кіріс';
+
+  @override
+  String get financeTabExpense => 'Шығыс';
+
+  @override
+  String get financeTabReport => 'Есеп';
+
+  @override
+  String get financeSettingsTitle => 'Шоттар мен сатып алушылар';
+
+  @override
+  String get financePrevMonth => 'Алдыңғы ай';
+
+  @override
+  String get financeNextMonth => 'Келесі ай';
+
+  @override
+  String get financeAddSale => 'Сату';
+
+  @override
+  String get financeAddExpense => 'Шығыс';
+
+  @override
+  String financeDateToday(String date) {
+    return 'Бүгін, $date';
+  }
+
+  @override
+  String get financeAccountTypeCash => 'Қолма-қол';
+
+  @override
+  String get financeAccountTypeCard => 'Карта';
+
+  @override
+  String get financeAccountTypeBank => 'Банк';
+
+  @override
+  String get financeCategoryFeed => 'Жем-шөп';
+
+  @override
+  String get financeCategoryVeterinary => 'Ветпрепараттар';
+
+  @override
+  String get financeCategorySalary => 'Жалақы';
+
+  @override
+  String get financeCategoryFuel => 'Жанармай';
+
+  @override
+  String get financeCategoryRent => 'Жалдау';
+
+  @override
+  String get financeCategoryEquipment => 'Жабдық';
+
+  @override
+  String get financeCategoryOther => 'Басқа';
+
+  @override
+  String get financeUnitLiter => 'л';
+
+  @override
+  String get financeUnitKg => 'кг';
+
+  @override
+  String get financeUnitPiece => 'дана';
+
+  @override
+  String get financeProductKurt => 'Құрт';
+
+  @override
+  String get financeProductButter => 'Сары май';
+
+  @override
+  String get financeProductSourCream => 'Қаймақ';
+
+  @override
+  String get financeProductMilk => 'Сүт';
+
+  @override
+  String get financeProductKefir => 'Кефир';
+
+  @override
+  String get financeProductCottageCheese => 'Сүзбе';
+
+  @override
+  String get financeProductGhee => 'Гхи';
+
+  @override
+  String get financeProductCheese => 'Ірімшік';
+
+  @override
+  String get financeProductOther => 'Басқа';
+
+  @override
+  String get financeSaleStatusPaid => 'Төленді';
+
+  @override
+  String financeSaleStatusDue(String date) {
+    return '$date дейін қарыз';
+  }
+
+  @override
+  String financeSaleStatusOverdue(int days) {
+    return '$days күн кешікті';
+  }
+
+  @override
+  String get financeSaleStatusDebt => 'Қарызға';
+
+  @override
+  String get financeLoadError => 'Деректерді жүктеу мүмкін болмады';
+
+  @override
+  String get financeRetry => 'Қайталау';
+
+  @override
+  String get financeDebtsTitle => 'Қарыздар';
+
+  @override
+  String get financeAccountNewTitle => 'Жаңа шот';
+
+  @override
+  String get financeAccountTitle => 'Шот';
+
+  @override
+  String get financeCounterpartyNewTitle => 'Жаңа сатып алушы';
+
+  @override
+  String get financeCounterpartyTitle => 'Сатып алушы';
+
+  @override
+  String get financeSaleNewTitle => 'Жаңа сату';
+
+  @override
+  String get financeSaleTitle => 'Сату';
+
+  @override
+  String get financeExpenseNewTitle => 'Жаңа шығыс';
+
+  @override
+  String get financeExpenseTitle => 'Шығыс';
+
+  @override
+  String get financeReportReadyTitle => 'Есеп дайын';
+
+  @override
+  String get financeSave => 'Сақтау';
+
+  @override
+  String get financeOptional => 'міндетті емес';
+
+  @override
+  String get financeHideAction => 'Жасыру';
+
+  @override
+  String get financeNameLabel => 'Атауы';
+
+  @override
+  String get financeCashboxName => 'Касса';
+
+  @override
+  String get financeOnboardingTitle => 'Қолыңыздағы ақшадан бастайық';
+
+  @override
+  String get financeOnboardingText =>
+      'Кассада және картада қазір қанша бар екенін көрсетіңіз. Одан әрі сату мен шығыс қалдықты өздері өзгертеді.';
+
+  @override
+  String get financeOnboardingAmountLabel => 'Қазір қанша';
+
+  @override
+  String get financeOnboardingAmountHint => 'Мысалы, 245 000';
+
+  @override
+  String get financeOnboardingOtherAccount => 'Басқа шот';
+
+  @override
+  String get financeOnboardingStart => 'Бастау';
+
+  @override
+  String get financeOnboardingLater =>
+      'Қалдықты кейін «Шоттар мен сатып алушылар» бөлімінде түзетуге болады';
+
+  @override
+  String get financeOnboardingEmptyError =>
+      'Кемінде бір шоттың қалдығын көрсетіңіз. Ақша жоқ болса, 0 деп жазыңыз.';
+
+  @override
+  String get financeOnboardingDone =>
+      'Шоттар құрылды — енді сату мен шығысты жазыңыз';
+
+  @override
+  String get financeSettingsAccountsTab => 'Шоттар';
+
+  @override
+  String get financeSettingsBuyersTab => 'Сатып алушылар';
+
+  @override
+  String get financeAddAccount => 'Шот қосу';
+
+  @override
+  String get financeAddCounterparty => 'Сатып алушы қосу';
+
+  @override
+  String get financeHiddenSection => 'Жасырылғандар';
+
+  @override
+  String get financeHiddenHint => 'Жаңа жазбаларда ұсынылмайды';
+
+  @override
+  String get financeAccountsCallout =>
+      'Шот жойылмайды, тек жасырылады: ол жаңа жазбаларда ұсынылмайды, бірақ тарихта қалады.';
+
+  @override
+  String get financeBuyersCallout =>
+      'Сатып алушы жойылмайды, тек жасырылады: ескі сатуларда ол қалады.';
+
+  @override
+  String get financeNoPhone => 'телефонсыз';
+
+  @override
+  String financeBuyerOwes(String amount) {
+    return '$amount қарыз';
+  }
+
+  @override
+  String get financeAccountsEmptyTitle => 'Әзірге шот жоқ';
+
+  @override
+  String get financeAccountsEmptyText =>
+      'Сату мен шығысты жазу үшін касса немесе карта қосыңыз';
+
+  @override
+  String get financeBuyersEmptyTitle => 'Әзірге сатып алушы жоқ';
+
+  @override
+  String get financeBuyersEmptyText =>
+      'Дүкенді не жеке сатып алушыны осы жерде немесе сату кезінде қосыңыз';
+
+  @override
+  String get financeAccountNameError => 'Шотқа атау беріңіз, мысалы «Касса»';
+
+  @override
+  String get financeAccountTypeLabel => 'Түрі';
+
+  @override
+  String get financeAccountInitialNewLabel => 'Шотта қазір қанша';
+
+  @override
+  String get financeAccountInitialEditLabel => 'Бастапқы қалдық';
+
+  @override
+  String get financeAccountInitialError => 'Соманы көрсетіңіз, 0 болса да';
+
+  @override
+  String get financeAccountInitialCallout =>
+      'Қолма-қол ақшаны санаңыз немесе банк қосымшасынан балансты қараңыз. Қалдық осы сомадан есептеледі — онсыз сандар шындыққа сәйкес келмейді.';
+
+  @override
+  String get financeAccountBalanceNow => 'Шотта қазір';
+
+  @override
+  String financeBalanceWillBe(String name, String amount) {
+    return '«$name» қалдығы $amount болады';
+  }
+
+  @override
+  String get financeAccountCreate => 'Шот құру';
+
+  @override
+  String get financeAccountHide => 'Шотты жасыру';
+
+  @override
+  String financeAccountHideConfirm(String name) {
+    return '«$name» шотын жасыру керек пе?';
+  }
+
+  @override
+  String get financeAccountHideNote =>
+      'Жасырылған шот жаңа жазбаларда ұсынылмайды, бірақ тарихта қалады';
+
+  @override
+  String financeAccountCreated(String name) {
+    return '«$name» шоты құрылды';
+  }
+
+  @override
+  String get financeAccountSaved => 'Шот сақталды';
+
+  @override
+  String get financeAccountHidden => 'Шот жасырылды';
+
+  @override
+  String get financeAccountHiddenTag => 'жасырылған';
+
+  @override
+  String get financeAccountNotFound => 'Шот табылмады';
+
+  @override
+  String get financeCounterpartyNameHint => 'Береке дүкені';
+
+  @override
+  String get financeCounterpartyNameError => 'Атауын көрсетіңіз';
+
+  @override
+  String get financePhoneLabel => 'Телефон';
+
+  @override
+  String get financePhoneHint => '+7 (777) 777-77-77';
+
+  @override
+  String get financePhoneHelper => 'Қарызды бір түртумен еске салу үшін';
+
+  @override
+  String get financePhoneError => 'Нөмірді толық енгізіңіз';
+
+  @override
+  String get financeCounterpartyAdd => 'Қосу';
+
+  @override
+  String get financeCounterpartyHide => 'Сатып алушыны жасыру';
+
+  @override
+  String financeCounterpartyHideConfirm(String name) {
+    return '«$name» сатып алушысын жасыру керек пе?';
+  }
+
+  @override
+  String get financeCounterpartyHideNote => 'Ескі сатуларда сатып алушы қалады';
+
+  @override
+  String get financeCounterpartyCreated => 'Сатып алушы қосылды';
+
+  @override
+  String get financeCounterpartySaved => 'Сатып алушы сақталды';
+
+  @override
+  String get financeCounterpartyHidden => 'Сатып алушы жасырылды';
+
+  @override
+  String get financeCounterpartyNotFound => 'Сатып алушы табылмады';
+
+  @override
+  String financeDateYesterday(String date) {
+    return 'Кеше, $date';
+  }
+
+  @override
+  String get financeFilterAll => 'Барлығы';
+
+  @override
+  String get financeAllAccounts => 'Барлық шоттар';
+
+  @override
+  String get financeSpentLabel => 'Жұмсалды';
+
+  @override
+  String financeRecordsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count жазба',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get financeExpensesEmptyTitle => 'Шығыс табылмады';
+
+  @override
+  String get financeExpensesEmptyText =>
+      'Сүзгіні өзгертіңіз немесе шығыс қосыңыз';
+
+  @override
+  String get financeDeleteAction => 'Жою';
+
+  @override
+  String get financeDateLabel => 'Күні';
+
+  @override
+  String get financeAmountLabel => 'Сома';
+
+  @override
+  String get financeAmountError => 'Соманы көрсетіңіз';
+
+  @override
+  String get financeCommentLabel => 'Түсініктеме';
+
+  @override
+  String get financeNoActiveAccounts =>
+      'Алдымен шот қосыңыз — ақша төлейтін және түсетін касса немесе карта';
+
+  @override
+  String get financeExpenseCategoryLabel => 'Санат';
+
+  @override
+  String get financeExpenseCategoryError => 'Санатты таңдаңыз';
+
+  @override
+  String get financeExpenseNameLabel => 'Не үшін';
+
+  @override
+  String get financeExpenseNameHintFeed => 'Құрама жем КК-60, 2 қап';
+
+  @override
+  String get financeExpenseNameHint => 'Мысалы, дизель 50 л';
+
+  @override
+  String get financeExpenseNameError => 'Не үшін жұмсағаныңызды жазыңыз';
+
+  @override
+  String get financeExpenseAccountLabel => 'Қайдан төледіңіз';
+
+  @override
+  String get financeExpenseCommentHint => 'Мысалы, кімнен сатып алдыңыз';
+
+  @override
+  String get financeExpenseSaveNew => 'Шығысты сақтау';
+
+  @override
+  String get financeExpenseDelete => 'Шығысты жою';
+
+  @override
+  String financeExpenseDeleteConfirm(String name) {
+    return '«$name» шығысын жою керек пе?';
+  }
+
+  @override
+  String get financeExpenseSaved => 'Шығыс сақталды';
+
+  @override
+  String get financeExpenseUpdated => 'Шығыс өзгертілді';
+
+  @override
+  String get financeExpenseDeleted => 'Шығыс жойылды';
+
+  @override
+  String get financeExpenseNotFound => 'Шығыс табылмады';
+
+  @override
+  String get financeIncomeFilterPaid => 'Төленді';
+
+  @override
+  String get financeIncomeFilterDebt => 'Қарызға';
+
+  @override
+  String get financeIncomeFilterOverdue => 'Мерзімі өткен';
+
+  @override
+  String get financeSoldLabel => 'Сатылды';
+
+  @override
+  String financeUnpaidAmount(String amount) {
+    return 'төленбегені $amount';
+  }
+
+  @override
+  String get financeSalesEmptyTitle => 'Сату табылмады';
+
+  @override
+  String get financeSalesEmptyText =>
+      'Сүзгіні өзгертіңіз немесе сатуды жазыңыз';
+
+  @override
+  String get financeGetPayment => 'Төлемді алу';
+
+  @override
+  String get financeNoBuyer => 'Сатып алушысыз';
+
+  @override
+  String financeSaleOfDate(String date) {
+    return 'сату $date';
+  }
+
+  @override
+  String get financePayAccountLabel => 'Ақша қайда түсті';
+
+  @override
+  String get financePayDateLabel => 'Төлем күні';
+
+  @override
+  String get financePayConfirm => 'Ақша алынды';
+
+  @override
+  String financePaymentReceived(String amount, String account) {
+    return '$amount «$account» шотына түсті';
+  }
+
+  @override
+  String get financeSaleBuyerLabel => 'Сатып алушы';
+
+  @override
+  String get financeSaleBuyerNote => 'міндетті емес';
+
+  @override
+  String get financeAllBuyers => 'Барлық сатып алушылар';
+
+  @override
+  String get financeNewBuyer => 'Жаңа';
+
+  @override
+  String get financeSaleProductLabel => 'Тауар';
+
+  @override
+  String get financeSaleProductHint => 'Мысалы, айран';
+
+  @override
+  String get financeSaleProductError => 'Тауарды таңдаңыз';
+
+  @override
+  String get financeSaleProductNameError => 'Не сатқаныңызды жазыңыз';
+
+  @override
+  String get financeSaleQuantityLabel => 'Саны';
+
+  @override
+  String get financeSaleQuantityError => 'Нөлден көп санды көрсетіңіз';
+
+  @override
+  String financeSalePriceLabel(String unit) {
+    return '1 $unit бағасы';
+  }
+
+  @override
+  String get financeSalePriceError => 'Бағасын көрсетіңіз';
+
+  @override
+  String financeSalePriceHintBuyer(String price) {
+    return 'Осы сатып алушыға өткен жолғыдай: $price';
+  }
+
+  @override
+  String financeSalePriceHintLast(String price) {
+    return 'Соңғы баға: $price';
+  }
+
+  @override
+  String get financeSaleAmountNote => 'өзі есептеледі';
+
+  @override
+  String get financeSalePaymentLabel => 'Төлем';
+
+  @override
+  String get financeSaleDueLabel => 'Төлеу мерзімі';
+
+  @override
+  String financeSaleDueHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Сатудан кейін $days күн. Өзгертуге болады.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get financeSaleDateLabel => 'Сату күні';
+
+  @override
+  String get financeSaleCommentHint => 'Мысалы, жеткізіп бердім';
+
+  @override
+  String get financeSaleSaveNew => 'Сатуды сақтау';
+
+  @override
+  String get financeSaleDebtNote =>
+      'Шот қалдықтары өзгермейді — ақша төлемді белгілегенде түседі';
+
+  @override
+  String get financeSaleDebtBuyerError =>
+      'Қарызға сату үшін сатып алушыны таңдаңыз';
+
+  @override
+  String get financeSaleHiddenAccountError =>
+      'Бұл шот жасырылған — ақша қайда түскенін таңдаңыз';
+
+  @override
+  String get financeSaleDelete => 'Сатуды жою';
+
+  @override
+  String financeSaleDeleteConfirm(String name) {
+    return '«$name» сатуын жою керек пе?';
+  }
+
+  @override
+  String get financeSaleSaved => 'Сату сақталды';
+
+  @override
+  String get financeSaleUpdated => 'Сату өзгертілді';
+
+  @override
+  String get financeSaleDeleted => 'Сату жойылды';
+
+  @override
+  String get financeSaleNotFound => 'Сату табылмады';
+
+  @override
+  String financeProfitFor(String month) {
+    return '$month пайдасы';
+  }
+
+  @override
+  String get financeBalancesTitle => 'Шоттардағы қалдық';
+
+  @override
+  String get financeOwedToYou => 'Сізге қарыз';
+
+  @override
+  String financeOverdueAmount(String amount) {
+    return 'Мерзімі өткені $amount';
+  }
+
+  @override
+  String financeDebtOverdueDays(int days) {
+    return '$days күн кешікті';
+  }
+
+  @override
+  String financeDebtDueUntil(String date) {
+    return '$date дейін';
+  }
+
+  @override
+  String get financeExpensesByCategory => 'Санаттар бойынша шығыс';
+
+  @override
+  String get financeTotal => 'Барлығы';
+
+  @override
+  String financeNoExpensesFor(String month) {
+    return '$month айында шығыс жоқ';
+  }
+
+  @override
+  String get financeDebtsTotal => 'Барлық қарыз';
+
+  @override
+  String get financeNoPhoneFull => 'телефон көрсетілмеген';
+
+  @override
+  String financeDueUntilPill(String date) {
+    return '$date дейін';
+  }
+
+  @override
+  String financeSaleDueWas(String date) {
+    return 'мерзімі $date болатын';
+  }
+
+  @override
+  String financeSalePayUntil(String date) {
+    return '$date дейін төлеу';
+  }
+
+  @override
+  String get financeGetPaymentShort => 'Алу';
+
+  @override
+  String get financeCall => 'Қоңырау шалу';
+
+  @override
+  String get financeRemind => 'Еске салу';
+
+  @override
+  String financeDebtReminderText(String amount) {
+    return 'Сәлеметсіз бе! $amount төлемді еске саламын. Рақмет!';
+  }
+
+  @override
+  String get financeCallError => 'Қоңырау шалу мүмкін болмады';
+
+  @override
+  String get financeNoDebtsTitle => 'Қарыз жоқ';
+
+  @override
+  String get financeNoDebtsText => 'Барлық сату төленді';
+
+  @override
+  String get financeReportPeriodLabel => 'Кезең';
+
+  @override
+  String get financeReportThisMonth => 'Осы ай';
+
+  @override
+  String get financeReportLastMonth => 'Өткен ай';
+
+  @override
+  String get financeReportQuarter => 'Тоқсан';
+
+  @override
+  String get financeReportCustom => 'Өз кезеңім';
+
+  @override
+  String get financeReportFrom => 'Басы';
+
+  @override
+  String get financeReportTo => 'Соңы';
+
+  @override
+  String get financeReportTypeLabel => 'Есепте не болады';
+
+  @override
+  String get financeReportFull => 'Толық';
+
+  @override
+  String get financeReportFullHint => 'Кіріс, шығыс және пайда';
+
+  @override
+  String get financeReportIncome => 'Кірістер';
+
+  @override
+  String get financeReportIncomeHint => 'Кезеңдегі барлық сату';
+
+  @override
+  String get financeReportExpense => 'Шығыстар';
+
+  @override
+  String get financeReportExpenseHint => 'Санаттар бойынша шығын';
+
+  @override
+  String get financeReportDebtsHint => 'Кім қанша қарыз';
+
+  @override
+  String get financeReportContents => 'Құжатқа кіреді';
+
+  @override
+  String get financeReportFarm => 'Шаруашылық';
+
+  @override
+  String get financeProfit => 'Пайда';
+
+  @override
+  String get financeReportOperations => 'Операциялар';
+
+  @override
+  String get financeReportMake => 'PDF жасау';
+
+  @override
+  String get financeReportShare => 'Жіберу';
+
+  @override
+  String get financeReportShareHint =>
+      '«Жіберу» арқылы файлды WhatsApp, Telegram немесе поштаға жіберуге болады — сол жерде телефонға сақтауға да болады';
+
+  @override
+  String get financeReportMissing => 'Есеп табылмады — оны қайта жасаңыз';
+
+  @override
+  String get financeReportFilePrefix => 'Қаржы';
+
+  @override
+  String financeFileSizeKb(String size) {
+    return '$size КБ';
+  }
+
+  @override
+  String financeFileSizeMb(String size) {
+    return '$size МБ';
+  }
+
+  @override
+  String get todayTitle => 'Бүгін';
+
+  @override
+  String get todayMilk => 'Сауын';
+
+  @override
+  String todayMilkSessions(String morning, String evening) {
+    return 'таңертең $morning · кешке $evening';
+  }
+
+  @override
+  String todayMilkCows(int count) {
+    return 'сиыр: $count';
+  }
+
+  @override
+  String todayMilkLiters(String liters) {
+    return '$liters л';
+  }
+
+  @override
+  String get todayMilkEmpty => 'Бүгінгі сауын';
+
+  @override
+  String get todayMilkEmptyHint => 'Әлі жазылмаған';
+
+  @override
+  String get todayMilkRecord => 'Жазу';
+
+  @override
+  String get todayMilkError => 'Сауын жүктелмеді — қайталау үшін басыңыз';
+
+  @override
+  String get todaySold => 'Сатылды';
+
+  @override
+  String get todayNoSales => 'Әзірге сату жоқ';
+
+  @override
+  String get todayNoSalesHint => 'Бүгін сатсаңыз, жазып қойыңыз';
+
+  @override
+  String get todayNoExpenses => 'Шығыс жоқ';
+
+  @override
+  String get todayNoExpensesHint => 'Жем алдыңыз ба, жанармай құйдыңыз ба?';
+
+  @override
+  String get todayMoney => 'Ақша';
+
+  @override
+  String get todayTotalOnAccounts => 'Шоттарда барлығы';
+
+  @override
+  String get todaySetUpFinance =>
+      'Кассада және картада қанша ақша бар екенін көрсетіңіз — мұнда қалдықтар мен қарыздар шығады';
+
+  @override
+  String get todayTasks => 'Бүгінгі істер';
+
+  @override
+  String get todayNoTasks => 'Бүгінге іс жоқ';
 }

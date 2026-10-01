@@ -2148,4 +2148,844 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get controlMilkingTabUnfilledEmpty => 'Незаполненные';
+
+  @override
+  String get financeTitle => 'Финансы';
+
+  @override
+  String get financeNewBadge => 'Новое';
+
+  @override
+  String get financeTabSummary => 'Сводка';
+
+  @override
+  String get financeTabIncome => 'Доход';
+
+  @override
+  String get financeTabExpense => 'Расход';
+
+  @override
+  String get financeTabReport => 'Отчёт';
+
+  @override
+  String get financeSettingsTitle => 'Счета и покупатели';
+
+  @override
+  String get financePrevMonth => 'Предыдущий месяц';
+
+  @override
+  String get financeNextMonth => 'Следующий месяц';
+
+  @override
+  String get financeAddSale => 'Продажа';
+
+  @override
+  String get financeAddExpense => 'Расход';
+
+  @override
+  String financeDateToday(String date) {
+    return 'Сегодня, $date';
+  }
+
+  @override
+  String get financeAccountTypeCash => 'Наличные';
+
+  @override
+  String get financeAccountTypeCard => 'Карта';
+
+  @override
+  String get financeAccountTypeBank => 'Банк';
+
+  @override
+  String get financeCategoryFeed => 'Корма';
+
+  @override
+  String get financeCategoryVeterinary => 'Ветпрепараты';
+
+  @override
+  String get financeCategorySalary => 'Зарплата';
+
+  @override
+  String get financeCategoryFuel => 'Топливо';
+
+  @override
+  String get financeCategoryRent => 'Аренда';
+
+  @override
+  String get financeCategoryEquipment => 'Оборудование';
+
+  @override
+  String get financeCategoryOther => 'Прочее';
+
+  @override
+  String get financeUnitLiter => 'л';
+
+  @override
+  String get financeUnitKg => 'кг';
+
+  @override
+  String get financeUnitPiece => 'шт';
+
+  @override
+  String get financeProductKurt => 'Құрт';
+
+  @override
+  String get financeProductButter => 'Масло';
+
+  @override
+  String get financeProductSourCream => 'Сметана';
+
+  @override
+  String get financeProductMilk => 'Молоко';
+
+  @override
+  String get financeProductKefir => 'Кефир';
+
+  @override
+  String get financeProductCottageCheese => 'Творог';
+
+  @override
+  String get financeProductGhee => 'Гхи';
+
+  @override
+  String get financeProductCheese => 'Сыр';
+
+  @override
+  String get financeProductOther => 'Другое';
+
+  @override
+  String get financeSaleStatusPaid => 'Оплачено';
+
+  @override
+  String financeSaleStatusDue(String date) {
+    return 'В долг до $date';
+  }
+
+  @override
+  String financeSaleStatusOverdue(int days) {
+    return 'Просрочено $days дн.';
+  }
+
+  @override
+  String get financeSaleStatusDebt => 'В долг';
+
+  @override
+  String get financeLoadError => 'Не удалось загрузить данные';
+
+  @override
+  String get financeRetry => 'Повторить';
+
+  @override
+  String get financeDebtsTitle => 'Долги';
+
+  @override
+  String get financeAccountNewTitle => 'Новый счёт';
+
+  @override
+  String get financeAccountTitle => 'Счёт';
+
+  @override
+  String get financeCounterpartyNewTitle => 'Новый покупатель';
+
+  @override
+  String get financeCounterpartyTitle => 'Покупатель';
+
+  @override
+  String get financeSaleNewTitle => 'Новая продажа';
+
+  @override
+  String get financeSaleTitle => 'Продажа';
+
+  @override
+  String get financeExpenseNewTitle => 'Новый расход';
+
+  @override
+  String get financeExpenseTitle => 'Расход';
+
+  @override
+  String get financeReportReadyTitle => 'Отчёт готов';
+
+  @override
+  String get financeSave => 'Сохранить';
+
+  @override
+  String get financeOptional => 'необязательно';
+
+  @override
+  String get financeHideAction => 'Скрыть';
+
+  @override
+  String get financeNameLabel => 'Название';
+
+  @override
+  String get financeCashboxName => 'Касса';
+
+  @override
+  String get financeOnboardingTitle => 'Начнём с денег, которые у вас есть';
+
+  @override
+  String get financeOnboardingText =>
+      'Укажите, сколько сейчас в кассе и на карте. Продажи и расходы дальше будут менять остаток сами.';
+
+  @override
+  String get financeOnboardingAmountLabel => 'Сколько сейчас';
+
+  @override
+  String get financeOnboardingAmountHint => 'Например, 245 000';
+
+  @override
+  String get financeOnboardingOtherAccount => 'Другой счёт';
+
+  @override
+  String get financeOnboardingStart => 'Начать';
+
+  @override
+  String get financeOnboardingLater =>
+      'Остаток можно поправить позже в «Счета и покупатели»';
+
+  @override
+  String get financeOnboardingEmptyError =>
+      'Укажите остаток хотя бы для одного счёта. Если денег нет, впишите 0.';
+
+  @override
+  String get financeOnboardingDone =>
+      'Счета созданы — теперь записывайте продажи и расходы';
+
+  @override
+  String get financeSettingsAccountsTab => 'Счета';
+
+  @override
+  String get financeSettingsBuyersTab => 'Покупатели';
+
+  @override
+  String get financeAddAccount => 'Добавить счёт';
+
+  @override
+  String get financeAddCounterparty => 'Добавить покупателя';
+
+  @override
+  String get financeHiddenSection => 'Скрытые';
+
+  @override
+  String get financeHiddenHint => 'Не предлагается в новых записях';
+
+  @override
+  String get financeAccountsCallout =>
+      'Счёт не удаляется, а скрывается: он не предлагается в новых записях, но остаётся в истории.';
+
+  @override
+  String get financeBuyersCallout =>
+      'Покупатель не удаляется, а скрывается: в старых продажах он останется.';
+
+  @override
+  String get financeNoPhone => 'без телефона';
+
+  @override
+  String financeBuyerOwes(String amount) {
+    return 'должен $amount';
+  }
+
+  @override
+  String get financeAccountsEmptyTitle => 'Счетов пока нет';
+
+  @override
+  String get financeAccountsEmptyText =>
+      'Добавьте кассу или карту, чтобы записывать продажи и расходы';
+
+  @override
+  String get financeBuyersEmptyTitle => 'Покупателей пока нет';
+
+  @override
+  String get financeBuyersEmptyText =>
+      'Добавьте магазин или частника здесь или прямо при продаже';
+
+  @override
+  String get financeAccountNameError => 'Назовите счёт, например «Касса»';
+
+  @override
+  String get financeAccountTypeLabel => 'Тип';
+
+  @override
+  String get financeAccountInitialNewLabel => 'Сколько на счёте сейчас';
+
+  @override
+  String get financeAccountInitialEditLabel => 'Начальный остаток';
+
+  @override
+  String get financeAccountInitialError => 'Укажите сумму, даже если это 0';
+
+  @override
+  String get financeAccountInitialCallout =>
+      'Пересчитайте наличные или посмотрите баланс в приложении банка. От этой суммы считается остаток — без неё цифры разойдутся с реальными.';
+
+  @override
+  String get financeAccountBalanceNow => 'Сейчас на счёте';
+
+  @override
+  String financeBalanceWillBe(String name, String amount) {
+    return 'Остаток «$name» станет $amount';
+  }
+
+  @override
+  String get financeAccountCreate => 'Создать счёт';
+
+  @override
+  String get financeAccountHide => 'Скрыть счёт';
+
+  @override
+  String financeAccountHideConfirm(String name) {
+    return 'Скрыть счёт «$name»?';
+  }
+
+  @override
+  String get financeAccountHideNote =>
+      'Скрытый счёт не предлагается в новых записях, но остаётся в истории';
+
+  @override
+  String financeAccountCreated(String name) {
+    return 'Счёт «$name» создан';
+  }
+
+  @override
+  String get financeAccountSaved => 'Счёт сохранён';
+
+  @override
+  String get financeAccountHidden => 'Счёт скрыт';
+
+  @override
+  String get financeAccountHiddenTag => 'скрыт';
+
+  @override
+  String get financeAccountNotFound => 'Счёт не найден';
+
+  @override
+  String get financeCounterpartyNameHint => 'Магазин Береке';
+
+  @override
+  String get financeCounterpartyNameError => 'Укажите название';
+
+  @override
+  String get financePhoneLabel => 'Телефон';
+
+  @override
+  String get financePhoneHint => '+7 (777) 777-77-77';
+
+  @override
+  String get financePhoneHelper => 'Чтобы напомнить о долге в один тап';
+
+  @override
+  String get financePhoneError => 'Введите номер полностью';
+
+  @override
+  String get financeCounterpartyAdd => 'Добавить';
+
+  @override
+  String get financeCounterpartyHide => 'Скрыть покупателя';
+
+  @override
+  String financeCounterpartyHideConfirm(String name) {
+    return 'Скрыть покупателя «$name»?';
+  }
+
+  @override
+  String get financeCounterpartyHideNote =>
+      'В старых продажах покупатель останется';
+
+  @override
+  String get financeCounterpartyCreated => 'Покупатель добавлен';
+
+  @override
+  String get financeCounterpartySaved => 'Покупатель сохранён';
+
+  @override
+  String get financeCounterpartyHidden => 'Покупатель скрыт';
+
+  @override
+  String get financeCounterpartyNotFound => 'Покупатель не найден';
+
+  @override
+  String financeDateYesterday(String date) {
+    return 'Вчера, $date';
+  }
+
+  @override
+  String get financeFilterAll => 'Все';
+
+  @override
+  String get financeAllAccounts => 'Все счета';
+
+  @override
+  String get financeSpentLabel => 'Потрачено';
+
+  @override
+  String financeRecordsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count записи',
+      many: '$count записей',
+      few: '$count записи',
+      one: '$count запись',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get financeExpensesEmptyTitle => 'Расходов не найдено';
+
+  @override
+  String get financeExpensesEmptyText => 'Измените фильтр или добавьте расход';
+
+  @override
+  String get financeDeleteAction => 'Удалить';
+
+  @override
+  String get financeDateLabel => 'Дата';
+
+  @override
+  String get financeAmountLabel => 'Сумма';
+
+  @override
+  String get financeAmountError => 'Укажите сумму';
+
+  @override
+  String get financeCommentLabel => 'Комментарий';
+
+  @override
+  String get financeNoActiveAccounts =>
+      'Сначала добавьте счёт — кассу или карту, откуда платите и куда приходят деньги';
+
+  @override
+  String get financeExpenseCategoryLabel => 'Категория';
+
+  @override
+  String get financeExpenseCategoryError => 'Выберите категорию';
+
+  @override
+  String get financeExpenseNameLabel => 'На что';
+
+  @override
+  String get financeExpenseNameHintFeed => 'Комбикорм КК-60, 2 мешка';
+
+  @override
+  String get financeExpenseNameHint => 'Например, дизель 50 л';
+
+  @override
+  String get financeExpenseNameError => 'Напишите, на что потратили';
+
+  @override
+  String get financeExpenseAccountLabel => 'Откуда платили';
+
+  @override
+  String get financeExpenseCommentHint => 'Например, у кого покупали';
+
+  @override
+  String get financeExpenseSaveNew => 'Сохранить расход';
+
+  @override
+  String get financeExpenseDelete => 'Удалить расход';
+
+  @override
+  String financeExpenseDeleteConfirm(String name) {
+    return 'Удалить расход «$name»?';
+  }
+
+  @override
+  String get financeExpenseSaved => 'Расход сохранён';
+
+  @override
+  String get financeExpenseUpdated => 'Расход изменён';
+
+  @override
+  String get financeExpenseDeleted => 'Расход удалён';
+
+  @override
+  String get financeExpenseNotFound => 'Расход не найден';
+
+  @override
+  String get financeIncomeFilterPaid => 'Оплачено';
+
+  @override
+  String get financeIncomeFilterDebt => 'В долг';
+
+  @override
+  String get financeIncomeFilterOverdue => 'Просрочено';
+
+  @override
+  String get financeSoldLabel => 'Продано на';
+
+  @override
+  String financeUnpaidAmount(String amount) {
+    return 'не оплачено $amount';
+  }
+
+  @override
+  String get financeSalesEmptyTitle => 'Продаж не найдено';
+
+  @override
+  String get financeSalesEmptyText => 'Измените фильтр или запишите продажу';
+
+  @override
+  String get financeGetPayment => 'Получить оплату';
+
+  @override
+  String get financeNoBuyer => 'Без покупателя';
+
+  @override
+  String financeSaleOfDate(String date) {
+    return 'продажа $date';
+  }
+
+  @override
+  String get financePayAccountLabel => 'Куда пришли деньги';
+
+  @override
+  String get financePayDateLabel => 'Дата оплаты';
+
+  @override
+  String get financePayConfirm => 'Деньги получены';
+
+  @override
+  String financePaymentReceived(String amount, String account) {
+    return '$amount зачислено на «$account»';
+  }
+
+  @override
+  String get financeSaleBuyerLabel => 'Покупатель';
+
+  @override
+  String get financeSaleBuyerNote => 'можно пропустить';
+
+  @override
+  String get financeAllBuyers => 'Все покупатели';
+
+  @override
+  String get financeNewBuyer => 'Новый';
+
+  @override
+  String get financeSaleProductLabel => 'Товар';
+
+  @override
+  String get financeSaleProductHint => 'Например, айран';
+
+  @override
+  String get financeSaleProductError => 'Выберите товар';
+
+  @override
+  String get financeSaleProductNameError => 'Напишите, что продали';
+
+  @override
+  String get financeSaleQuantityLabel => 'Количество';
+
+  @override
+  String get financeSaleQuantityError => 'Укажите количество больше нуля';
+
+  @override
+  String financeSalePriceLabel(String unit) {
+    return 'Цена за 1 $unit';
+  }
+
+  @override
+  String get financeSalePriceError => 'Укажите цену';
+
+  @override
+  String financeSalePriceHintBuyer(String price) {
+    return 'Как в прошлый раз у этого покупателя: $price';
+  }
+
+  @override
+  String financeSalePriceHintLast(String price) {
+    return 'Последняя цена: $price';
+  }
+
+  @override
+  String get financeSaleAmountNote => 'считается сама';
+
+  @override
+  String get financeSalePaymentLabel => 'Оплата';
+
+  @override
+  String get financeSaleDueLabel => 'Оплатить до';
+
+  @override
+  String financeSaleDueHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Через $days дня после продажи. Можно изменить.',
+      many: 'Через $days дней после продажи. Можно изменить.',
+      few: 'Через $days дня после продажи. Можно изменить.',
+      one: 'Через $days день после продажи. Можно изменить.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get financeSaleDateLabel => 'Дата продажи';
+
+  @override
+  String get financeSaleCommentHint => 'Например, отдал с доставкой';
+
+  @override
+  String get financeSaleSaveNew => 'Сохранить продажу';
+
+  @override
+  String get financeSaleDebtNote =>
+      'Остатки счетов не изменятся — деньги придут, когда отметите оплату';
+
+  @override
+  String get financeSaleDebtBuyerError =>
+      'Для продажи в долг выберите покупателя';
+
+  @override
+  String get financeSaleHiddenAccountError =>
+      'Этот счёт скрыт — выберите, куда пришли деньги';
+
+  @override
+  String get financeSaleDelete => 'Удалить продажу';
+
+  @override
+  String financeSaleDeleteConfirm(String name) {
+    return 'Удалить продажу «$name»?';
+  }
+
+  @override
+  String get financeSaleSaved => 'Продажа сохранена';
+
+  @override
+  String get financeSaleUpdated => 'Продажа изменена';
+
+  @override
+  String get financeSaleDeleted => 'Продажа удалена';
+
+  @override
+  String get financeSaleNotFound => 'Продажа не найдена';
+
+  @override
+  String financeProfitFor(String month) {
+    return 'Прибыль за $month';
+  }
+
+  @override
+  String get financeBalancesTitle => 'Остатки на счетах';
+
+  @override
+  String get financeOwedToYou => 'Вам должны';
+
+  @override
+  String financeOverdueAmount(String amount) {
+    return 'Просрочено $amount';
+  }
+
+  @override
+  String financeDebtOverdueDays(int days) {
+    return 'просрочка $days дн.';
+  }
+
+  @override
+  String financeDebtDueUntil(String date) {
+    return 'до $date';
+  }
+
+  @override
+  String get financeExpensesByCategory => 'Расходы по категориям';
+
+  @override
+  String get financeTotal => 'Всего';
+
+  @override
+  String financeNoExpensesFor(String month) {
+    return 'За $month расходов нет';
+  }
+
+  @override
+  String get financeDebtsTotal => 'Всего должны';
+
+  @override
+  String get financeNoPhoneFull => 'телефон не указан';
+
+  @override
+  String financeDueUntilPill(String date) {
+    return 'До $date';
+  }
+
+  @override
+  String financeSaleDueWas(String date) {
+    return 'срок был $date';
+  }
+
+  @override
+  String financeSalePayUntil(String date) {
+    return 'оплатить до $date';
+  }
+
+  @override
+  String get financeGetPaymentShort => 'Получить';
+
+  @override
+  String get financeCall => 'Позвонить';
+
+  @override
+  String get financeRemind => 'Напомнить';
+
+  @override
+  String financeDebtReminderText(String amount) {
+    return 'Здравствуйте! Напоминаю об оплате $amount. Спасибо!';
+  }
+
+  @override
+  String get financeCallError => 'Не удалось открыть звонок';
+
+  @override
+  String get financeNoDebtsTitle => 'Долгов нет';
+
+  @override
+  String get financeNoDebtsText => 'Все продажи оплачены';
+
+  @override
+  String get financeReportPeriodLabel => 'Период';
+
+  @override
+  String get financeReportThisMonth => 'Этот месяц';
+
+  @override
+  String get financeReportLastMonth => 'Прошлый месяц';
+
+  @override
+  String get financeReportQuarter => 'Квартал';
+
+  @override
+  String get financeReportCustom => 'Свой период';
+
+  @override
+  String get financeReportFrom => 'Начало';
+
+  @override
+  String get financeReportTo => 'Конец';
+
+  @override
+  String get financeReportTypeLabel => 'Что в отчёте';
+
+  @override
+  String get financeReportFull => 'Полный';
+
+  @override
+  String get financeReportFullHint => 'Доход, расход и прибыль';
+
+  @override
+  String get financeReportIncome => 'Доходы';
+
+  @override
+  String get financeReportIncomeHint => 'Все продажи за период';
+
+  @override
+  String get financeReportExpense => 'Расходы';
+
+  @override
+  String get financeReportExpenseHint => 'Траты по категориям';
+
+  @override
+  String get financeReportDebtsHint => 'Кто и сколько должен';
+
+  @override
+  String get financeReportContents => 'В документ попадут';
+
+  @override
+  String get financeReportFarm => 'Хозяйство';
+
+  @override
+  String get financeProfit => 'Прибыль';
+
+  @override
+  String get financeReportOperations => 'Операций';
+
+  @override
+  String get financeReportMake => 'Сформировать PDF';
+
+  @override
+  String get financeReportShare => 'Отправить';
+
+  @override
+  String get financeReportShareHint =>
+      'Через «Отправить» файл уходит в WhatsApp, Telegram или на почту — там же его можно сохранить на телефон';
+
+  @override
+  String get financeReportMissing => 'Отчёт не найден — сформируйте его заново';
+
+  @override
+  String get financeReportFilePrefix => 'Финансы';
+
+  @override
+  String financeFileSizeKb(String size) {
+    return '$size КБ';
+  }
+
+  @override
+  String financeFileSizeMb(String size) {
+    return '$size МБ';
+  }
+
+  @override
+  String get todayTitle => 'Сегодня';
+
+  @override
+  String get todayMilk => 'Надой';
+
+  @override
+  String todayMilkSessions(String morning, String evening) {
+    return 'утро $morning · вечер $evening';
+  }
+
+  @override
+  String todayMilkCows(int count) {
+    return 'коров: $count';
+  }
+
+  @override
+  String todayMilkLiters(String liters) {
+    return '$liters л';
+  }
+
+  @override
+  String get todayMilkEmpty => 'Надой за сегодня';
+
+  @override
+  String get todayMilkEmptyHint => 'Ещё не записан';
+
+  @override
+  String get todayMilkRecord => 'Записать';
+
+  @override
+  String get todayMilkError => 'Надой не загрузился — нажмите, чтобы повторить';
+
+  @override
+  String get todaySold => 'Продано';
+
+  @override
+  String get todayNoSales => 'Продаж пока нет';
+
+  @override
+  String get todayNoSalesHint => 'Запишите, если сегодня продавали';
+
+  @override
+  String get todayNoExpenses => 'Расходов нет';
+
+  @override
+  String get todayNoExpensesHint => 'Купили корм, заправились?';
+
+  @override
+  String get todayMoney => 'Деньги';
+
+  @override
+  String get todayTotalOnAccounts => 'Всего на счетах';
+
+  @override
+  String get todaySetUpFinance =>
+      'Укажите, сколько денег в кассе и на карте — и здесь будут остатки и долги';
+
+  @override
+  String get todayTasks => 'Дела на сегодня';
+
+  @override
+  String get todayNoTasks => 'На сегодня дел нет';
 }

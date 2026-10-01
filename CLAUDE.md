@@ -58,6 +58,7 @@
   - the `ShellRoute` stays last in the route list so `/rations/stocks/:type` does not swallow `/rations/stocks/add`;
   - from a screen outside the shell, reach shell screens with `context.go`, never `context.push` — push would build a second shell with the same navigator key.
 - On the More screen, use `context.go` for primary bottom-navigation destinations and `context.push` for nested sections, so Back returns to More.
+- Finance: `/finance` is one shell screen (bar index `4`); its tabs Summary / Income / Expense / Report switch inside `FinanceScreen`, deep link `/finance?tab=income`. Forms, debts, accounts and buyers, and the ready PDF live under `/finance/**` outside the shell, without the bar.
 - `FermerPlusDrawer` keeps profile, settings, FAQ, support, referral, and logout. Pharmacy must not be added back to the drawer.
 - Preserve route semantics already used in the app:
   - `/herd/:id`
@@ -87,6 +88,22 @@
 - If user has no available feeds, ration-related screens should show the proper empty state, not a raw server error.
 - Sidebar logout and profile delete-account are different flows; do not merge them casually.
 - Notifications use pagination, unread badge, archive/read actions, and navigation to herd item if cattle exists.
+
+## Finance Module (`lib/features/finance`)
+- Hidden behind `kFinanceEnabled` (`lib/core/config/feature_flags.dart`), debug only until the backend branch `finance` is deployed to prod (`fer-mer-plus.ru` has no `/api/finance/**` yet). Then set it to `true`.
+- Screens use only `FinanceRepository` via `financeRepositoryProvider`. Default source is `FinanceApi`; `--dart-define=FINANCE_MOCK=true` switches to `MockFinanceRepository` (same rules as the backend) for demos without a server.
+- `test/features/finance/finance_api_live_test.dart` checks `FinanceApi` against a running backend (local or dev only, it registers a new user): `flutter test test/features/finance/finance_api_live_test.dart --dart-define=FINANCE_LIVE_API=http://localhost:8888/api`. Run it after backend contract changes.
+- Mutations go through `financeMutationsProvider`, which invalidates the exact affected providers.
+- Money is `Money` (integer tiyn) and quantities are `Quantity` (thousandths); no arithmetic on `double`. Format with `FinanceFormat`.
+- Account balance = initial balance + paid sales − expenses. A debt sale never changes balances until it is paid.
+- UI says "Покупатели" for backend `counterparties`.
+- `FinanceApi` is checked against backend branch `finance` (commit df38a37 plus local fixes of 30.09.2026), which follows the spec: `isPaid` filter, `POST /finance/sales/{id}/pay`, `/debts`, `/report/pdf`, debt due date defaults to sale date + 14 days (the form still sends it). `DELETE` on accounts and counterparties only deactivates; there is no restore (not needed for now). Differences the app handles: `GET /debts` is not sorted (the app sorts most overdue first), a debt without a buyer comes named «Без контрагента» (the app shows its own localized label). The backend also has `GET /finance/today`; the Home block does not use it because it needs the day's sales and expenses in detail.
+- A product from the fixed list is sent in Russian (`SaleProduct.apiName`), so the database and the backend PDF have one name in any app language; screens show it in the app language (`SaleProduct.displayName`). Own products go as typed.
+- Balances in Summary and on Home use `balanceAccounts`: active accounts, then hidden ones that still hold money (marked hidden), all counted in the total.
+- Finance forms close the keyboard on a tap outside the fields and on scroll (`FinanceKeyboardDismiss`): the iPhone number pad has no Done key. The Finance header has a back arrow: back through the stack, else `/more`.
+- iOS: `share_plus` is not in `ios/Podfile.lock` yet; the first `flutter build ios` / `pod install` on a Mac adds it — commit the updated lock file.
+- Product decisions for the module (payment, price hint, PDF sharing, overdue push) are in `docs/business-decisions.md`, section Finance.
+- The home "Today" block lives in `lib/features/home/presentation/widgets/todaySection/` and is shown only with `kFinanceEnabled`. A `FINANCE_OVERDUE` push or notification opens `/finance/debts`, with `?counterpartyId=` when the payload has it (null for a debt without a buyer).
 
 ## Platform / Release Rules
 - Android release must keep `INTERNET` permission in `android/app/src/main/AndroidManifest.xml`.

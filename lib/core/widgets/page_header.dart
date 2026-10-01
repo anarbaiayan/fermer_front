@@ -6,7 +6,16 @@ class HerdPageHeader extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
 
-  const HerdPageHeader({super.key, required this.title, required this.onBack});
+  /// Длинные заголовки (особенно на казахском) можно перенести на вторую
+  /// строку вместо обрезки.
+  final int maxLines;
+
+  const HerdPageHeader({
+    super.key,
+    required this.title,
+    required this.onBack,
+    this.maxLines = 1,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +34,7 @@ class HerdPageHeader extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+            maxLines: maxLines,
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,

@@ -15,6 +15,18 @@ class AppTextField extends StatelessWidget {
   final String? errorText;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final ValueChanged<String>? onChanged;
+  final FocusNode? focusNode;
+
+  /// Small grey note next to the label, e.g. "optional".
+  final String? labelNote;
+
+  /// Grey hint under the field, hidden while [errorText] is shown.
+  final String? helperText;
+  final TextCapitalization textCapitalization;
+
+  /// More than one line turns the pill into a text area with softer corners.
+  final int maxLines;
 
   const AppTextField({
     super.key,
@@ -26,29 +38,61 @@ class AppTextField extends StatelessWidget {
     this.errorText,
     this.keyboardType,
     this.inputFormatters,
+    this.onChanged,
+    this.focusNode,
+    this.labelNote,
+    this.helperText,
+    this.textCapitalization = TextCapitalization.none,
+    this.maxLines = 1,
   });
 
   @override
   Widget build(BuildContext context) {
     final hasError = errorText != null;
+    final radius = BorderRadius.circular(maxLines > 1 ? 22 : 40);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: AppColors.primary3,
+        // Пустой label — подпись рисует сам экран.
+        if (label.isNotEmpty) ...[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary3,
+                  ),
+                ),
+              ),
+              if (labelNote != null)
+                Text(
+                  labelNote!,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.additional3,
+                  ),
+                ),
+            ],
           ),
-        ),
-        const SizedBox(height: 8),
+          const SizedBox(height: 8),
+        ],
         TextField(
           controller: controller,
+          focusNode: focusNode,
           obscureText: obscureText,
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
+          onChanged: onChanged,
+          textCapitalization: textCapitalization,
+          minLines: maxLines > 1 ? 2 : null,
+          maxLines: maxLines,
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(
@@ -64,17 +108,17 @@ class AppTextField extends StatelessWidget {
             ),
             suffixIcon: suffixIcon,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: radius,
               borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: radius,
               borderSide: hasError
                   ? const BorderSide(color: AppColors.error, width: 1)
                   : BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: radius,
               borderSide: hasError
                   ? const BorderSide(color: AppColors.error, width: 1.5)
                   : BorderSide.none,
@@ -86,6 +130,18 @@ class AppTextField extends StatelessWidget {
           Text(
             errorText!,
             style: const TextStyle(fontSize: 12, color: AppColors.error),
+          ),
+        ] else if (helperText != null) ...[
+          const SizedBox(height: 6),
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              helperText!,
+              style: const TextStyle(
+                fontSize: 12,
+                color: AppColors.additional3,
+              ),
+            ),
           ),
         ],
       ],

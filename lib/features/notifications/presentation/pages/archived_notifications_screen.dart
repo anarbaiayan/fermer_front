@@ -5,6 +5,7 @@ import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/core/widgets/page_header.dart';
 import 'package:frontend/features/notifications/application/notifications_providers.dart';
+import 'package:frontend/features/notifications/domain/entities/app_notification.dart';
 import 'package:frontend/features/notifications/presentation/widgets/notification_tile.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -42,11 +43,11 @@ class _ArchivedNotificationsScreenState
     }
   }
 
-  Future<void> _onTapNotification(int id, int? cattleId) async {
+  Future<void> _onTapNotification(AppNotification notification) async {
     final notifier = ref.read(notificationsFeedProvider(true).notifier);
 
     try {
-      await notifier.markAsRead(id);
+      await notifier.markAsRead(notification.id);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -54,8 +55,9 @@ class _ArchivedNotificationsScreenState
       );
     }
 
-    if (!mounted || cattleId == null) return;
-    context.push('/herd/$cattleId');
+    final target = notification.target;
+    if (!mounted || target == null) return;
+    context.push(target);
   }
 
   @override
@@ -111,8 +113,7 @@ class _ArchivedNotificationsScreenState
                               final n = feed.items[index];
                               return NotificationTile(
                                 notification: n,
-                                onTap: () =>
-                                    _onTapNotification(n.id, n.cattleInfo?.cattleId),
+                                onTap: () => _onTapNotification(n),
                               );
                             },
                           ),

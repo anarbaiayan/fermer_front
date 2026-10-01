@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
+import 'package:frontend/core/config/feature_flags.dart';
 import 'package:frontend/core/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,10 +77,25 @@ class PushNotificationRouter {
     _navigate(payload);
   }
 
+  /// Просрочка долга по продаже (FP-503): пуш открывает «Долги».
+  static const financeOverdueType = 'FINANCE_OVERDUE';
+
+  static String _target(PushNotificationPayload payload) {
+    if (payload.type == 'PLANNED_EVENT' && payload.cattleId != null) {
+      return '/herd/${payload.cattleId}';
+    }
+    // Пока «Финансы» скрыты флагом, маршрута нет — ведём в уведомления.
+    if (payload.type == financeOverdueType && kFinanceEnabled) {
+      final id = payload.counterpartyId;
+      return id == null
+          ? '/finance/debts'
+          : '/finance/debts?counterpartyId=$id';
+    }
+    return '/notifications';
+  }
+
   void _navigate(PushNotificationPayload payload) {
-    final target = payload.type == 'PLANNED_EVENT' && payload.cattleId != null
-        ? '/herd/${payload.cattleId}'
-        : '/notifications';
+    final target = _target(payload);
 
     // Раньше здесь был go(target): он заменял весь стек одним экраном, и
     // на карточке, открытой из пуша, "Закрыть" и "Назад" никуда не вели.

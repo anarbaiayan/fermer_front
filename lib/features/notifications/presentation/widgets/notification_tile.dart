@@ -149,6 +149,8 @@ class NotificationTile extends StatelessWidget {
         return Icons.info_outline;
       case NotificationType.reminder:
         return Icons.alarm;
+      case NotificationType.financeOverdue:
+        return Icons.payments_outlined;
       case NotificationType.info:
       case NotificationType.unknown:
         return Icons.notifications_none;
@@ -158,6 +160,7 @@ class NotificationTile extends StatelessWidget {
   Color _iconBg(NotificationType type) {
     switch (type) {
       case NotificationType.overdueCalving:
+      case NotificationType.financeOverdue:
         return const Color(0xFFD9534F);
       case NotificationType.calvingSoon:
       case NotificationType.heatCheck:

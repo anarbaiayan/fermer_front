@@ -48,6 +48,32 @@ void main() {
     expect(navigation, ['go /home', 'push /notifications']);
   });
 
+  test('opens debts with the buyer for an overdue debt', () {
+    // Данные пуша, как их шлёт бэкенд: пустой cattleId FCM отбрасывает.
+    router.navigateAuthenticated(
+      PushNotificationPayload.fromMessage(
+        data: const {
+          'notificationId': '1',
+          'type': 'FINANCE_OVERDUE',
+          'counterpartyId': '5',
+        },
+      ),
+    );
+    // Долг по продаже без покупателя.
+    router.navigateAuthenticated(
+      PushNotificationPayload.fromMessage(
+        data: const {'notificationId': '2', 'type': 'FINANCE_OVERDUE'},
+      ),
+    );
+
+    expect(navigation, [
+      'go /home',
+      'push /finance/debts?counterpartyId=5',
+      'go /home',
+      'push /finance/debts',
+    ]);
+  });
+
   test('does not navigate to cattle without cattle id', () {
     router.navigateAuthenticated(
       const PushNotificationPayload(

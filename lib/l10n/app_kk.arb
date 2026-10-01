@@ -1019,5 +1019,492 @@
     "milkProductivityEmptyHint": "Өлшемдер «Лактация» → «Бақылау сауымы» бөлімінде енгізіледі.",
     "controlMilkingColumnCow": "Есімі / биркасы",
     "controlMilkingColumnMilk": "Сүт",
-    "controlMilkingTabUnfilledEmpty": "Толтырылмағандар"
+    "controlMilkingTabUnfilledEmpty": "Толтырылмағандар",
+    "financeTitle": "Қаржы",
+    "financeNewBadge": "Жаңа",
+    "financeTabSummary": "Жиынтық",
+    "financeTabIncome": "Кіріс",
+    "financeTabExpense": "Шығыс",
+    "financeTabReport": "Есеп",
+    "financeSettingsTitle": "Шоттар мен сатып алушылар",
+    "financePrevMonth": "Алдыңғы ай",
+    "financeNextMonth": "Келесі ай",
+    "financeAddSale": "Сату",
+    "financeAddExpense": "Шығыс",
+    "financeDateToday": "Бүгін, {date}",
+    "@financeDateToday": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountTypeCash": "Қолма-қол",
+    "financeAccountTypeCard": "Карта",
+    "financeAccountTypeBank": "Банк",
+    "financeCategoryFeed": "Жем-шөп",
+    "financeCategoryVeterinary": "Ветпрепараттар",
+    "financeCategorySalary": "Жалақы",
+    "financeCategoryFuel": "Жанармай",
+    "financeCategoryRent": "Жалдау",
+    "financeCategoryEquipment": "Жабдық",
+    "financeCategoryOther": "Басқа",
+    "financeUnitLiter": "л",
+    "financeUnitKg": "кг",
+    "financeUnitPiece": "дана",
+    "financeProductKurt": "Құрт",
+    "financeProductButter": "Сары май",
+    "financeProductSourCream": "Қаймақ",
+    "financeProductMilk": "Сүт",
+    "financeProductKefir": "Кефир",
+    "financeProductCottageCheese": "Сүзбе",
+    "financeProductGhee": "Гхи",
+    "financeProductCheese": "Ірімшік",
+    "financeProductOther": "Басқа",
+    "financeSaleStatusPaid": "Төленді",
+    "financeSaleStatusDue": "{date} дейін қарыз",
+    "@financeSaleStatusDue": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleStatusOverdue": "{days} күн кешікті",
+    "@financeSaleStatusOverdue": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeSaleStatusDebt": "Қарызға",
+    "financeLoadError": "Деректерді жүктеу мүмкін болмады",
+    "financeRetry": "Қайталау",
+    "financeDebtsTitle": "Қарыздар",
+    "financeAccountNewTitle": "Жаңа шот",
+    "financeAccountTitle": "Шот",
+    "financeCounterpartyNewTitle": "Жаңа сатып алушы",
+    "financeCounterpartyTitle": "Сатып алушы",
+    "financeSaleNewTitle": "Жаңа сату",
+    "financeSaleTitle": "Сату",
+    "financeExpenseNewTitle": "Жаңа шығыс",
+    "financeExpenseTitle": "Шығыс",
+    "financeReportReadyTitle": "Есеп дайын",
+    "financeSave": "Сақтау",
+    "financeOptional": "міндетті емес",
+    "financeHideAction": "Жасыру",
+    "financeNameLabel": "Атауы",
+    "financeCashboxName": "Касса",
+    "financeOnboardingTitle": "Қолыңыздағы ақшадан бастайық",
+    "financeOnboardingText": "Кассада және картада қазір қанша бар екенін көрсетіңіз. Одан әрі сату мен шығыс қалдықты өздері өзгертеді.",
+    "financeOnboardingAmountLabel": "Қазір қанша",
+    "financeOnboardingAmountHint": "Мысалы, 245 000",
+    "financeOnboardingOtherAccount": "Басқа шот",
+    "financeOnboardingStart": "Бастау",
+    "financeOnboardingLater": "Қалдықты кейін «Шоттар мен сатып алушылар» бөлімінде түзетуге болады",
+    "financeOnboardingEmptyError": "Кемінде бір шоттың қалдығын көрсетіңіз. Ақша жоқ болса, 0 деп жазыңыз.",
+    "financeOnboardingDone": "Шоттар құрылды — енді сату мен шығысты жазыңыз",
+    "financeSettingsAccountsTab": "Шоттар",
+    "financeSettingsBuyersTab": "Сатып алушылар",
+    "financeAddAccount": "Шот қосу",
+    "financeAddCounterparty": "Сатып алушы қосу",
+    "financeHiddenSection": "Жасырылғандар",
+    "financeHiddenHint": "Жаңа жазбаларда ұсынылмайды",
+    "financeAccountsCallout": "Шот жойылмайды, тек жасырылады: ол жаңа жазбаларда ұсынылмайды, бірақ тарихта қалады.",
+    "financeBuyersCallout": "Сатып алушы жойылмайды, тек жасырылады: ескі сатуларда ол қалады.",
+    "financeNoPhone": "телефонсыз",
+    "financeBuyerOwes": "{amount} қарыз",
+    "@financeBuyerOwes": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountsEmptyTitle": "Әзірге шот жоқ",
+    "financeAccountsEmptyText": "Сату мен шығысты жазу үшін касса немесе карта қосыңыз",
+    "financeBuyersEmptyTitle": "Әзірге сатып алушы жоқ",
+    "financeBuyersEmptyText": "Дүкенді не жеке сатып алушыны осы жерде немесе сату кезінде қосыңыз",
+    "financeAccountNameError": "Шотқа атау беріңіз, мысалы «Касса»",
+    "financeAccountTypeLabel": "Түрі",
+    "financeAccountInitialNewLabel": "Шотта қазір қанша",
+    "financeAccountInitialEditLabel": "Бастапқы қалдық",
+    "financeAccountInitialError": "Соманы көрсетіңіз, 0 болса да",
+    "financeAccountInitialCallout": "Қолма-қол ақшаны санаңыз немесе банк қосымшасынан балансты қараңыз. Қалдық осы сомадан есептеледі — онсыз сандар шындыққа сәйкес келмейді.",
+    "financeAccountBalanceNow": "Шотта қазір",
+    "financeBalanceWillBe": "«{name}» қалдығы {amount} болады",
+    "@financeBalanceWillBe": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            },
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountCreate": "Шот құру",
+    "financeAccountHide": "Шотты жасыру",
+    "financeAccountHideConfirm": "«{name}» шотын жасыру керек пе?",
+    "@financeAccountHideConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountHideNote": "Жасырылған шот жаңа жазбаларда ұсынылмайды, бірақ тарихта қалады",
+    "financeAccountCreated": "«{name}» шоты құрылды",
+    "@financeAccountCreated": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountSaved": "Шот сақталды",
+    "financeAccountHidden": "Шот жасырылды",
+    "financeAccountHiddenTag": "жасырылған",
+    "financeAccountNotFound": "Шот табылмады",
+    "financeCounterpartyNameHint": "Береке дүкені",
+    "financeCounterpartyNameError": "Атауын көрсетіңіз",
+    "financePhoneLabel": "Телефон",
+    "financePhoneHint": "+7 (777) 777-77-77",
+    "financePhoneHelper": "Қарызды бір түртумен еске салу үшін",
+    "financePhoneError": "Нөмірді толық енгізіңіз",
+    "financeCounterpartyAdd": "Қосу",
+    "financeCounterpartyHide": "Сатып алушыны жасыру",
+    "financeCounterpartyHideConfirm": "«{name}» сатып алушысын жасыру керек пе?",
+    "@financeCounterpartyHideConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeCounterpartyHideNote": "Ескі сатуларда сатып алушы қалады",
+    "financeCounterpartyCreated": "Сатып алушы қосылды",
+    "financeCounterpartySaved": "Сатып алушы сақталды",
+    "financeCounterpartyHidden": "Сатып алушы жасырылды",
+    "financeCounterpartyNotFound": "Сатып алушы табылмады",
+    "financeDateYesterday": "Кеше, {date}",
+    "@financeDateYesterday": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeFilterAll": "Барлығы",
+    "financeAllAccounts": "Барлық шоттар",
+    "financeSpentLabel": "Жұмсалды",
+    "financeRecordsCount": "{count, plural, other{{count} жазба}}",
+    "@financeRecordsCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "financeExpensesEmptyTitle": "Шығыс табылмады",
+    "financeExpensesEmptyText": "Сүзгіні өзгертіңіз немесе шығыс қосыңыз",
+    "financeDeleteAction": "Жою",
+    "financeDateLabel": "Күні",
+    "financeAmountLabel": "Сома",
+    "financeAmountError": "Соманы көрсетіңіз",
+    "financeCommentLabel": "Түсініктеме",
+    "financeNoActiveAccounts": "Алдымен шот қосыңыз — ақша төлейтін және түсетін касса немесе карта",
+    "financeExpenseCategoryLabel": "Санат",
+    "financeExpenseCategoryError": "Санатты таңдаңыз",
+    "financeExpenseNameLabel": "Не үшін",
+    "financeExpenseNameHintFeed": "Құрама жем КК-60, 2 қап",
+    "financeExpenseNameHint": "Мысалы, дизель 50 л",
+    "financeExpenseNameError": "Не үшін жұмсағаныңызды жазыңыз",
+    "financeExpenseAccountLabel": "Қайдан төледіңіз",
+    "financeExpenseCommentHint": "Мысалы, кімнен сатып алдыңыз",
+    "financeExpenseSaveNew": "Шығысты сақтау",
+    "financeExpenseDelete": "Шығысты жою",
+    "financeExpenseDeleteConfirm": "«{name}» шығысын жою керек пе?",
+    "@financeExpenseDeleteConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeExpenseSaved": "Шығыс сақталды",
+    "financeExpenseUpdated": "Шығыс өзгертілді",
+    "financeExpenseDeleted": "Шығыс жойылды",
+    "financeExpenseNotFound": "Шығыс табылмады",
+    "financeIncomeFilterPaid": "Төленді",
+    "financeIncomeFilterDebt": "Қарызға",
+    "financeIncomeFilterOverdue": "Мерзімі өткен",
+    "financeSoldLabel": "Сатылды",
+    "financeUnpaidAmount": "төленбегені {amount}",
+    "@financeUnpaidAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalesEmptyTitle": "Сату табылмады",
+    "financeSalesEmptyText": "Сүзгіні өзгертіңіз немесе сатуды жазыңыз",
+    "financeGetPayment": "Төлемді алу",
+    "financeNoBuyer": "Сатып алушысыз",
+    "financeSaleOfDate": "сату {date}",
+    "@financeSaleOfDate": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financePayAccountLabel": "Ақша қайда түсті",
+    "financePayDateLabel": "Төлем күні",
+    "financePayConfirm": "Ақша алынды",
+    "financePaymentReceived": "{amount} «{account}» шотына түсті",
+    "@financePaymentReceived": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            },
+            "account": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleBuyerLabel": "Сатып алушы",
+    "financeSaleBuyerNote": "міндетті емес",
+    "financeAllBuyers": "Барлық сатып алушылар",
+    "financeNewBuyer": "Жаңа",
+    "financeSaleProductLabel": "Тауар",
+    "financeSaleProductHint": "Мысалы, айран",
+    "financeSaleProductError": "Тауарды таңдаңыз",
+    "financeSaleProductNameError": "Не сатқаныңызды жазыңыз",
+    "financeSaleQuantityLabel": "Саны",
+    "financeSaleQuantityError": "Нөлден көп санды көрсетіңіз",
+    "financeSalePriceLabel": "1 {unit} бағасы",
+    "@financeSalePriceLabel": {
+        "placeholders": {
+            "unit": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePriceError": "Бағасын көрсетіңіз",
+    "financeSalePriceHintBuyer": "Осы сатып алушыға өткен жолғыдай: {price}",
+    "@financeSalePriceHintBuyer": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePriceHintLast": "Соңғы баға: {price}",
+    "@financeSalePriceHintLast": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleAmountNote": "өзі есептеледі",
+    "financeSalePaymentLabel": "Төлем",
+    "financeSaleDueLabel": "Төлеу мерзімі",
+    "financeSaleDueHint": "{days, plural, other{Сатудан кейін {days} күн. Өзгертуге болады.}}",
+    "@financeSaleDueHint": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeSaleDateLabel": "Сату күні",
+    "financeSaleCommentHint": "Мысалы, жеткізіп бердім",
+    "financeSaleSaveNew": "Сатуды сақтау",
+    "financeSaleDebtNote": "Шот қалдықтары өзгермейді — ақша төлемді белгілегенде түседі",
+    "financeSaleDebtBuyerError": "Қарызға сату үшін сатып алушыны таңдаңыз",
+    "financeSaleHiddenAccountError": "Бұл шот жасырылған — ақша қайда түскенін таңдаңыз",
+    "financeSaleDelete": "Сатуды жою",
+    "financeSaleDeleteConfirm": "«{name}» сатуын жою керек пе?",
+    "@financeSaleDeleteConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleSaved": "Сату сақталды",
+    "financeSaleUpdated": "Сату өзгертілді",
+    "financeSaleDeleted": "Сату жойылды",
+    "financeSaleNotFound": "Сату табылмады",
+    "financeProfitFor": "{month} пайдасы",
+    "@financeProfitFor": {
+        "placeholders": {
+            "month": {
+                "type": "String"
+            }
+        }
+    },
+    "financeBalancesTitle": "Шоттардағы қалдық",
+    "financeOwedToYou": "Сізге қарыз",
+    "financeOverdueAmount": "Мерзімі өткені {amount}",
+    "@financeOverdueAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeDebtOverdueDays": "{days} күн кешікті",
+    "@financeDebtOverdueDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeDebtDueUntil": "{date} дейін",
+    "@financeDebtDueUntil": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeExpensesByCategory": "Санаттар бойынша шығыс",
+    "financeTotal": "Барлығы",
+    "financeNoExpensesFor": "{month} айында шығыс жоқ",
+    "@financeNoExpensesFor": {
+        "placeholders": {
+            "month": {
+                "type": "String"
+            }
+        }
+    },
+    "financeDebtsTotal": "Барлық қарыз",
+    "financeNoPhoneFull": "телефон көрсетілмеген",
+    "financeDueUntilPill": "{date} дейін",
+    "@financeDueUntilPill": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleDueWas": "мерзімі {date} болатын",
+    "@financeSaleDueWas": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePayUntil": "{date} дейін төлеу",
+    "@financeSalePayUntil": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeGetPaymentShort": "Алу",
+    "financeCall": "Қоңырау шалу",
+    "financeRemind": "Еске салу",
+    "financeDebtReminderText": "Сәлеметсіз бе! {amount} төлемді еске саламын. Рақмет!",
+    "@financeDebtReminderText": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeCallError": "Қоңырау шалу мүмкін болмады",
+    "financeNoDebtsTitle": "Қарыз жоқ",
+    "financeNoDebtsText": "Барлық сату төленді",
+    "financeReportPeriodLabel": "Кезең",
+    "financeReportThisMonth": "Осы ай",
+    "financeReportLastMonth": "Өткен ай",
+    "financeReportQuarter": "Тоқсан",
+    "financeReportCustom": "Өз кезеңім",
+    "financeReportFrom": "Басы",
+    "financeReportTo": "Соңы",
+    "financeReportTypeLabel": "Есепте не болады",
+    "financeReportFull": "Толық",
+    "financeReportFullHint": "Кіріс, шығыс және пайда",
+    "financeReportIncome": "Кірістер",
+    "financeReportIncomeHint": "Кезеңдегі барлық сату",
+    "financeReportExpense": "Шығыстар",
+    "financeReportExpenseHint": "Санаттар бойынша шығын",
+    "financeReportDebtsHint": "Кім қанша қарыз",
+    "financeReportContents": "Құжатқа кіреді",
+    "financeReportFarm": "Шаруашылық",
+    "financeProfit": "Пайда",
+    "financeReportOperations": "Операциялар",
+    "financeReportMake": "PDF жасау",
+    "financeReportShare": "Жіберу",
+    "financeReportShareHint": "«Жіберу» арқылы файлды WhatsApp, Telegram немесе поштаға жіберуге болады — сол жерде телефонға сақтауға да болады",
+    "financeReportMissing": "Есеп табылмады — оны қайта жасаңыз",
+    "financeReportFilePrefix": "Қаржы",
+    "financeFileSizeKb": "{size} КБ",
+    "@financeFileSizeKb": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "financeFileSizeMb": "{size} МБ",
+    "@financeFileSizeMb": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "todayTitle": "Бүгін",
+    "todayMilk": "Сауын",
+    "todayMilkSessions": "таңертең {morning} · кешке {evening}",
+    "@todayMilkSessions": {
+        "placeholders": {
+            "morning": {
+                "type": "String"
+            },
+            "evening": {
+                "type": "String"
+            }
+        }
+    },
+    "todayMilkCows": "сиыр: {count}",
+    "@todayMilkCows": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "todayMilkLiters": "{liters} л",
+    "@todayMilkLiters": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "todayMilkEmpty": "Бүгінгі сауын",
+    "todayMilkEmptyHint": "Әлі жазылмаған",
+    "todayMilkRecord": "Жазу",
+    "todayMilkError": "Сауын жүктелмеді — қайталау үшін басыңыз",
+    "todaySold": "Сатылды",
+    "todayNoSales": "Әзірге сату жоқ",
+    "todayNoSalesHint": "Бүгін сатсаңыз, жазып қойыңыз",
+    "todayNoExpenses": "Шығыс жоқ",
+    "todayNoExpensesHint": "Жем алдыңыз ба, жанармай құйдыңыз ба?",
+    "todayMoney": "Ақша",
+    "todayTotalOnAccounts": "Шоттарда барлығы",
+    "todaySetUpFinance": "Кассада және картада қанша ақша бар екенін көрсетіңіз — мұнда қалдықтар мен қарыздар шығады",
+    "todayTasks": "Бүгінгі істер",
+    "todayNoTasks": "Бүгінге іс жоқ"
 }

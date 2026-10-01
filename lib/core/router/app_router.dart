@@ -1,3 +1,4 @@
+import 'package:frontend/core/config/feature_flags.dart';
 import 'package:frontend/core/screens/not_found_screen.dart';
 import 'package:frontend/core/widgets/app_shell.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_code_screen.dart';
@@ -11,6 +12,16 @@ import 'package:frontend/features/auth/presentation/register_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_bulk_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/events_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_account_form_screen.dart';
+import 'package:frontend/features/finance/domain/entities/finance_entities.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_counterparty_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_debts_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_expense_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_sale_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_settings_screen.dart';
+import 'package:frontend/features/finance/application/finance_report.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_report_ready_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
@@ -211,6 +222,78 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
+    // «Финансы»: формы, долги, справочники и готовый PDF открываются без
+    // нижнего бара. Пока модули не готовы, здесь заглушки; раздел скрыт
+    // флагом, пока работает на моковых данных.
+    if (kFinanceEnabled) ...[
+      GoRoute(
+        path: '/finance/debts',
+        builder: (context, state) => FinanceDebtsScreen(
+          counterpartyId: int.tryParse(
+            state.uri.queryParameters['counterpartyId'] ?? '',
+          ),
+        ),
+      ),
+      GoRoute(
+        path: '/finance/settings',
+        builder: (context, state) => FinanceSettingsScreen(
+          initialTab: FinanceSettingsTab.fromQuery(
+            state.uri.queryParameters['tab'],
+          ),
+        ),
+      ),
+      GoRoute(
+        path: '/finance/accounts/new',
+        builder: (context, state) => const FinanceAccountFormScreen(),
+      ),
+      GoRoute(
+        path: '/finance/accounts/:id',
+        builder: (context, state) => FinanceAccountFormScreen(
+          accountId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+        ),
+      ),
+      GoRoute(
+        path: '/finance/counterparties/new',
+        builder: (context, state) => const FinanceCounterpartyFormScreen(),
+      ),
+      GoRoute(
+        path: '/finance/counterparties/:id',
+        builder: (context, state) => FinanceCounterpartyFormScreen(
+          counterpartyId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+        ),
+      ),
+      GoRoute(
+        path: '/finance/sales/new',
+        builder: (context, state) => const FinanceSaleFormScreen(),
+      ),
+      GoRoute(
+        path: '/finance/sales/:id',
+        builder: (context, state) => FinanceSaleFormScreen(
+          saleId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+          initial: state.extra is Sale ? state.extra as Sale : null,
+        ),
+      ),
+      GoRoute(
+        path: '/finance/expenses/new',
+        builder: (context, state) => const FinanceExpenseFormScreen(),
+      ),
+      GoRoute(
+        path: '/finance/expenses/:id',
+        builder: (context, state) => FinanceExpenseFormScreen(
+          expenseId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+          initial: state.extra is Expense ? state.extra as Expense : null,
+        ),
+      ),
+      GoRoute(
+        path: '/finance/report/ready',
+        builder: (context, state) => FinanceReportReadyScreen(
+          document: state.extra is FinanceReportDocument
+              ? state.extra as FinanceReportDocument
+              : null,
+        ),
+      ),
+    ],
+
     // Экраны с нижним баром. Оболочка держит бар и drawer вне анимаций
     // перехода, поэтому при смене экрана меняется только содержимое.
     // Маршрут стоит последним: '/rations/stocks/:type' не должен перехватывать
@@ -292,6 +375,16 @@ final GoRouter appRouter = GoRouter(
           path: '/vet-consultants',
           builder: (context, state) => const VetConsultantsScreen(),
         ),
+        // Вкладки «Финансов» переключаются внутри экрана: `?tab=income`.
+        if (kFinanceEnabled)
+          GoRoute(
+            path: '/finance',
+            builder: (context, state) => FinanceScreen(
+              initialTab: FinanceTab.fromQuery(
+                state.uri.queryParameters['tab'],
+              ),
+            ),
+          ),
       ],
     ),
   ],
