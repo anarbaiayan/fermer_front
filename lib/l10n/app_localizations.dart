@@ -5509,6 +5509,36 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'На сегодня дел нет'**
   String get todayNoTasks;
+
+  /// No description provided for @updateRequiredTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нужно обновить приложение'**
+  String get updateRequiredTitle;
+
+  /// No description provided for @updateRequiredText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Эта версия Фермер+ больше не поддерживается. Обновите приложение, чтобы продолжить работу — ваши данные сохранятся.'**
+  String get updateRequiredText;
+
+  /// No description provided for @updateRequiredAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обновить'**
+  String get updateRequiredAction;
+
+  /// No description provided for @updateRequiredStoreError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось открыть магазин приложений. Найдите «Фермер+» в Google Play или App Store и обновите вручную.'**
+  String get updateRequiredStoreError;
+
+  /// No description provided for @updateRequiredInstalledVersion.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ваша версия: {version}'**
+  String updateRequiredInstalledVersion(String version);
 }
 
 class _AppLocalizationsDelegate

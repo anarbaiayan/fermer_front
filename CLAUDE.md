@@ -105,6 +105,12 @@
 - Product decisions for the module (payment, price hint, PDF sharing, overdue push) are in `docs/business-decisions.md`, section Finance.
 - The home "Today" block lives in `lib/features/home/presentation/widgets/todaySection/`. A `FINANCE_OVERDUE` push or notification opens `/finance/debts`, with `?counterpartyId=` when the payload has it (null for a debt without a buyer).
 
+## Forced Update (`lib/features/app_update`)
+- `AppUpdateGate` sits in `MaterialApp.builder` above all routes: a build below the backend minimum sees only `UpdateRequiredScreen` with an "Update" button to Google Play / App Store.
+- The minimum comes from public `GET /api/public/app-version?platform=ANDROID|IOS` (`minBuild`, `storeUrl`) through `rawDioProvider`, so it works before login. The installed build is the number after `+` in `pubspec.yaml` (`package_info_plus`).
+- Checked at start and on every resume. The last known rule is cached in SharedPreferences, so an outdated build stays blocked offline; with no known rule and no network the app stays open.
+- Backend settings: `APP_ANDROID_MIN_BUILD`, `APP_IOS_MIN_BUILD` (default 0 — nobody blocked), store URLs. Only builds that contain this module (1.4.0+10 and later) react to it.
+
 ## Platform / Release Rules
 - Android release must keep `INTERNET` permission in `android/app/src/main/AndroidManifest.xml`.
 - Before Play upload:

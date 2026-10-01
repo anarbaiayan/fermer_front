@@ -58,6 +58,11 @@ Source: spec v1.0 (19.09.2026) and the "Фермер+ Финансы" prototype.
 - Home "Today" block (FP-505) sits above the existing home: milk, sales and expenses of the day, money on accounts, debts, and tasks. Empty rows turn into invitations ("+ Sale", "+ Expense", "Record milk") instead of disappearing. Milk is read from `GET /lactations/user/daily-summary`; recording it opens the existing group milking screen, because a group record needs the milking session and the number of cows (kept instead of the prototype's inline field, product decision, 30.09.2026). Tasks are pending planned events due today or overdue, three at most.
 - Category, account, and document icons are temporary, taken from the prototype. Kazakh strings are reviewed by the product owner at the end.
 
+## Forced Update
+- An outdated build sees only the "Update the app" screen: no way into the app, one button to the store page, the installed version shown below. Back minimises the app.
+- The backend decides which builds are outdated, separately for Android and iOS, so one platform can be forced without the other.
+- Offline, an app already known to be outdated stays blocked; an app that never got the rule stays open.
+
 ## Localization
 - UI strings must exist in Russian and Kazakh.
 - Backend translations should be used where available instead of duplicating text in frontend.

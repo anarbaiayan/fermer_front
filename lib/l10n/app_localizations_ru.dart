@@ -2988,4 +2988,23 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get todayNoTasks => 'На сегодня дел нет';
+
+  @override
+  String get updateRequiredTitle => 'Нужно обновить приложение';
+
+  @override
+  String get updateRequiredText =>
+      'Эта версия Фермер+ больше не поддерживается. Обновите приложение, чтобы продолжить работу — ваши данные сохранятся.';
+
+  @override
+  String get updateRequiredAction => 'Обновить';
+
+  @override
+  String get updateRequiredStoreError =>
+      'Не удалось открыть магазин приложений. Найдите «Фермер+» в Google Play или App Store и обновите вручную.';
+
+  @override
+  String updateRequiredInstalledVersion(String version) {
+    return 'Ваша версия: $version';
+  }
 }

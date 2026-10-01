@@ -2978,4 +2978,23 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get todayNoTasks => 'Бүгінге іс жоқ';
+
+  @override
+  String get updateRequiredTitle => 'Қосымшаны жаңарту қажет';
+
+  @override
+  String get updateRequiredText =>
+      'Фермер+ қосымшасының бұл нұсқасына енді қолдау көрсетілмейді. Жұмысты жалғастыру үшін қосымшаны жаңартыңыз — деректеріңіз сақталады.';
+
+  @override
+  String get updateRequiredAction => 'Жаңарту';
+
+  @override
+  String get updateRequiredStoreError =>
+      'Қосымшалар дүкенін ашу мүмкін болмады. Google Play немесе App Store ішінен «Фермер+» қосымшасын тауып, қолмен жаңартыңыз.';
+
+  @override
+  String updateRequiredInstalledVersion(String version) {
+    return 'Сіздің нұсқаңыз: $version';
+  }
 }

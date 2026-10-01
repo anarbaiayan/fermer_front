@@ -7,6 +7,8 @@ import 'package:frontend/core/localization/locale_controller.dart';
 import 'package:frontend/core/notifications/push_notification_providers.dart';
 import 'package:frontend/core/router/app_router.dart';
 import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/features/app_update/application/app_update_providers.dart';
+import 'package:frontend/features/app_update/presentation/app_update_gate.dart';
 import 'package:frontend/features/auth/application/auth_providers.dart';
 import 'package:frontend/features/auth/session_events.dart';
 import 'package:frontend/features/notifications/application/notifications_providers.dart';
@@ -44,6 +46,8 @@ class _FermerPlusAppState extends ConsumerState<FermerPlusApp> {
       onResume: () {
         ref.invalidate(unreadNotificationsCountProvider);
         unawaited(ref.read(pushNotificationServiceProvider).onResume());
+        // Приложение могло пролежать в фоне, пока вышла обязательная версия.
+        unawaited(ref.read(appUpdateProvider.notifier).check());
       },
       onPause: () => ref.read(pushNotificationServiceProvider).onPause(),
     );
@@ -91,7 +95,8 @@ class _FermerPlusAppState extends ConsumerState<FermerPlusApp> {
         // (login/register/splash и т.п.). Зелёный app bar сам ставит светлые.
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: _defaultSystemOverlay,
-          child: child ?? const SizedBox.shrink(),
+          // Устаревшая сборка видит только экран обновления.
+          child: AppUpdateGate(child: child ?? const SizedBox.shrink()),
         );
       },
     );

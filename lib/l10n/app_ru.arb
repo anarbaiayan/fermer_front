@@ -1527,5 +1527,17 @@
     "todayTotalOnAccounts": "Всего на счетах",
     "todaySetUpFinance": "Укажите, сколько денег в кассе и на карте — и здесь будут остатки и долги",
     "todayTasks": "Дела на сегодня",
-    "todayNoTasks": "На сегодня дел нет"
+    "todayNoTasks": "На сегодня дел нет",
+    "updateRequiredTitle": "Нужно обновить приложение",
+    "updateRequiredText": "Эта версия Фермер+ больше не поддерживается. Обновите приложение, чтобы продолжить работу — ваши данные сохранятся.",
+    "updateRequiredAction": "Обновить",
+    "updateRequiredStoreError": "Не удалось открыть магазин приложений. Найдите «Фермер+» в Google Play или App Store и обновите вручную.",
+    "updateRequiredInstalledVersion": "Ваша версия: {version}",
+    "@updateRequiredInstalledVersion": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    }
 }
