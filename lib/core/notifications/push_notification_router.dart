@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
-import 'package:frontend/core/config/feature_flags.dart';
 import 'package:frontend/core/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -84,8 +83,7 @@ class PushNotificationRouter {
     if (payload.type == 'PLANNED_EVENT' && payload.cattleId != null) {
       return '/herd/${payload.cattleId}';
     }
-    // Пока «Финансы» скрыты флагом, маршрута нет — ведём в уведомления.
-    if (payload.type == financeOverdueType && kFinanceEnabled) {
+    if (payload.type == financeOverdueType) {
       final id = payload.counterpartyId;
       return id == null
           ? '/finance/debts'

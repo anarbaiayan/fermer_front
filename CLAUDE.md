@@ -90,7 +90,7 @@
 - Notifications use pagination, unread badge, archive/read actions, and navigation to herd item if cattle exists.
 
 ## Finance Module (`lib/features/finance`)
-- Hidden behind `kFinanceEnabled` (`lib/core/config/feature_flags.dart`), debug only until the backend branch `finance` is deployed to prod (`fer-mer-plus.ru` has no `/api/finance/**` yet). Then set it to `true`.
+- Enabled in every build: the backend `/api/finance/**` is on prod since 01.10.2026, so there is no feature flag any more.
 - Screens use only `FinanceRepository` via `financeRepositoryProvider`. Default source is `FinanceApi`; `--dart-define=FINANCE_MOCK=true` switches to `MockFinanceRepository` (same rules as the backend) for demos without a server.
 - `test/features/finance/finance_api_live_test.dart` checks `FinanceApi` against a running backend (local or dev only, it registers a new user): `flutter test test/features/finance/finance_api_live_test.dart --dart-define=FINANCE_LIVE_API=http://localhost:8888/api`. Run it after backend contract changes.
 - Mutations go through `financeMutationsProvider`, which invalidates the exact affected providers.
@@ -103,7 +103,7 @@
 - Finance forms close the keyboard on a tap outside the fields and on scroll (`FinanceKeyboardDismiss`): the iPhone number pad has no Done key. The Finance header has a back arrow: back through the stack, else `/more`.
 - iOS: `share_plus` is not in `ios/Podfile.lock` yet; the first `flutter build ios` / `pod install` on a Mac adds it — commit the updated lock file.
 - Product decisions for the module (payment, price hint, PDF sharing, overdue push) are in `docs/business-decisions.md`, section Finance.
-- The home "Today" block lives in `lib/features/home/presentation/widgets/todaySection/` and is shown only with `kFinanceEnabled`. A `FINANCE_OVERDUE` push or notification opens `/finance/debts`, with `?counterpartyId=` when the payload has it (null for a debt without a buyer).
+- The home "Today" block lives in `lib/features/home/presentation/widgets/todaySection/`. A `FINANCE_OVERDUE` push or notification opens `/finance/debts`, with `?counterpartyId=` when the payload has it (null for a debt without a buyer).
 
 ## Platform / Release Rules
 - Android release must keep `INTERNET` permission in `android/app/src/main/AndroidManifest.xml`.

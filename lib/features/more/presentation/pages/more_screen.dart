@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/config/feature_flags.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
@@ -63,14 +62,13 @@ class MoreScreen extends StatelessWidget {
             _MoreSection(
               title: l10n.moreFarmSection,
               items: [
-                if (kFinanceEnabled)
-                  _MoreItem(
-                    icon: 'money_plain',
-                    title: l10n.financeTitle,
-                    color: AppColors.primary1,
-                    badge: l10n.financeNewBadge,
-                    onTap: () => context.push('/finance'),
-                  ),
+                _MoreItem(
+                  icon: 'money_plain',
+                  title: l10n.financeTitle,
+                  color: AppColors.primary1,
+                  badge: l10n.financeNewBadge,
+                  onTap: () => context.push('/finance'),
+                ),
                 _MoreItem(
                   icon: 'diet1',
                   title: l10n.navRation,

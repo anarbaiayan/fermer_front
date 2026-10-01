@@ -1,5 +1,3 @@
-import 'package:frontend/core/config/feature_flags.dart';
-
 import 'notification_status.dart';
 import 'notification_type.dart';
 
@@ -52,8 +50,6 @@ class AppNotification {
   /// `null` — уведомление никуда не ведёт.
   String? get target {
     if (type == NotificationType.financeOverdue) {
-      // Пока «Финансы» скрыты флагом, маршрута нет.
-      if (!kFinanceEnabled) return null;
       final id = counterpartyId;
       return id == null
           ? '/finance/debts'

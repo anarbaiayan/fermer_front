@@ -30,7 +30,7 @@ Fermer+ is a Flutter mobile app for cattle and farm operations management.
 - `lactation`
 - `rations`
 - `pharmacy`
-- `finance` (behind a debug-only flag, runs on mock data until the backend is ready)
+- `finance` (sales, expenses, accounts, debts, PDF report; `/api/finance/**`)
 - `notifications`
 - `profile`
 - `settings`
