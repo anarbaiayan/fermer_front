@@ -6,6 +6,16 @@ import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/data/models/cattle_mappers.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 
+void invalidateCattleListProvider(Ref ref) {
+  ref.read(herdApiProvider).invalidateCattleListCache();
+  ref.invalidate(cattleListProvider);
+}
+
+void invalidateCattleListProviderFromWidget(WidgetRef ref) {
+  ref.read(herdApiProvider).invalidateCattleListCache();
+  ref.invalidate(cattleListProvider);
+}
+
 /// Загружает список животных с бэка
 final cattleListProvider = FutureProvider.autoDispose<List<Cattle>>((ref) {
   final api = ref.read(herdApiProvider);

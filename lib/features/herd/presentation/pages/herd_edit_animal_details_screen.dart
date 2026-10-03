@@ -85,7 +85,7 @@ class _HerdEditAnimalDetailsScreenState
     final l10n = context.l10n;
     setState(() => _isSaving = true);
     try {
-      ref.invalidate(cattleListProvider);
+      invalidateCattleListProviderFromWidget(ref);
       ref.invalidate(cattleByIdProvider(widget.draft.id));
 
       if (!mounted) return;

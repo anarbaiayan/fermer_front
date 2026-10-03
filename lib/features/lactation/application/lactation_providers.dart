@@ -46,9 +46,9 @@ final createLactationProvider =
           lactationPeriodSummaryProvider,
           cattleDetailsProvider(entity.cattleId),
           cattleByIdProvider(entity.cattleId),
-          cattleListProvider,
           cattleStatisticsProvider,
         ]);
+        invalidateCattleListProvider(ref);
         return entity;
       };
     });
@@ -75,6 +75,7 @@ final createBulkLactationProvider =
           lactationBulkListProvider,
           lactationPeriodSummaryProvider,
         ]);
+        invalidateCattleListProvider(ref);
 
         return created;
       };

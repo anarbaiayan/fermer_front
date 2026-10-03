@@ -108,7 +108,6 @@ class FermerPlusDrawer extends ConsumerWidget {
 
                   ref.invalidate(plannedEventsProvider('PENDING'));
                   ref.invalidate(plannedEventsProvider('COMPLETED'));
-                  ref.invalidate(cattleListProvider);
                   ref.invalidate(cattleStatisticsProvider);
 
                   Navigator.of(context).pop();

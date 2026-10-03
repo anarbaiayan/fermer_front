@@ -46,7 +46,7 @@ class ProfileScreen extends ConsumerWidget {
 
     ref.invalidate(plannedEventsProvider('PENDING'));
     ref.invalidate(plannedEventsProvider('COMPLETED'));
-    ref.invalidate(cattleListProvider);
+    invalidateCattleListProviderFromWidget(ref);
     ref.invalidate(cattleStatisticsProvider);
     ref.invalidate(unreadNotificationsCountProvider);
     ref.invalidate(notificationsFeedProvider(false));

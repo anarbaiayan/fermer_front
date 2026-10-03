@@ -88,7 +88,7 @@ class _HerdAddAnimalDetailsScreenState
 
         ref.invalidate(cattleDetailsProvider(widget.cattleId));
         ref.invalidate(cattleByIdProvider(widget.cattleId));
-        ref.invalidate(cattleListProvider);
+        invalidateCattleListProviderFromWidget(ref);
       }
 
       if (!mounted) return;

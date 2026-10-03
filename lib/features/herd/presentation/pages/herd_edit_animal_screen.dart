@@ -206,7 +206,7 @@ class _HerdEditAnimalScreenState extends ConsumerState<HerdEditAnimalScreen> {
       await herdApi.updateCattleMain(id: widget.cattle.id, dto: dto);
 
       // (не обязательно, но полезно)
-      ref.invalidate(cattleListProvider);
+      invalidateCattleListProviderFromWidget(ref);
       ref.invalidate(cattleByIdProvider(widget.cattle.id));
 
       // draft для details экрана - берём то, что уже было в details

@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:frontend/core/network/network_providers.dart';
 import 'package:frontend/core/notifications/push_notification_providers.dart';
+import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 
 import '../data/datasources/auth_api.dart';
 import 'auth_controller.dart';
@@ -15,6 +16,12 @@ final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
     final api = ref.read(authApiProvider);
     final tokensRepo = ref.read(tokenRepositoryProvider); // вот это
     final pushNotifications = ref.read(pushNotificationServiceProvider);
-    return AuthController(api, tokensRepo, pushNotifications);
+    final herdApi = ref.read(herdApiProvider);
+    return AuthController(
+      api,
+      tokensRepo,
+      pushNotifications,
+      herdApi.invalidateCattleListCache,
+    );
   },
 );

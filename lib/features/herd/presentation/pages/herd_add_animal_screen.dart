@@ -192,7 +192,7 @@ class _HerdAddAnimalScreenState extends ConsumerState<HerdAddAnimalScreen> {
       final id = created.id;
       if (id == null) throw Exception(l10n.animalNoIdReturned);
 
-      ref.invalidate(cattleListProvider);
+      invalidateCattleListProviderFromWidget(ref);
       ref.invalidate(cattleStatisticsProvider); // чтобы “open”/total обновились
 
       if (!mounted) return;

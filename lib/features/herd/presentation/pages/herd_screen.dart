@@ -103,7 +103,7 @@ class _HerdScreenState extends ConsumerState<HerdScreen> {
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (err, _) => _ErrorView(
                   error: err,
-                  onRetry: () => ref.invalidate(cattleListProvider),
+                  onRetry: () => invalidateCattleListProviderFromWidget(ref),
                 ),
                 data: (cattle) {
                   if (cattle.isEmpty) {
@@ -169,6 +169,12 @@ class _HerdScreenState extends ConsumerState<HerdScreen> {
                         ref.read(cattleListProvider.future),
                         ref.read(cattleStatisticsProvider.future),
                       ]);
+                    } catch (e) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(l10n.errorPrefix('$e'))),
+                        );
+                      }
                     } finally {
                       ref.read(herdRefreshingProvider.notifier).state = false;
                     }
