@@ -6,7 +6,6 @@ import 'package:frontend/features/lactation/data/models/lactation_daily_summary_
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../data/datasources/lactation_api.dart';
-import '../data/models/create_lactation_dto.dart';
 import '../data/models/lactation_mappers.dart';
 import '../domain/entities/lactation.dart';
 import '../domain/entities/lactation_period_summary.dart';
@@ -31,26 +30,6 @@ final lactationsByCattleProvider = FutureProvider.autoDispose
         cancelToken: cancelToken,
       );
       return records.map(lactationFromDto).toList();
-    });
-
-final createLactationProvider =
-    Provider<Future<Lactation> Function(CreateLactationDto dto)>((ref) {
-      return (dto) async {
-        final api = ref.read(lactationApiProvider);
-        final created = await api.create(dto);
-        final entity = lactationFromDto(created);
-
-        _invalidateExisting(ref, [
-          lactationsByCattleProvider(entity.cattleId),
-          lactationDailySummaryProvider,
-          lactationPeriodSummaryProvider,
-          cattleDetailsProvider(entity.cattleId),
-          cattleByIdProvider(entity.cattleId),
-          cattleStatisticsProvider,
-        ]);
-        invalidateCattleListProvider(ref);
-        return entity;
-      };
     });
 
 final lactationDailySummaryProvider =

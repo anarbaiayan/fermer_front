@@ -519,15 +519,27 @@ abstract class AppLocalizations {
   String get registerFarmNameHint;
 
   /// No description provided for @registerCity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Город'**
   String get registerCity;
 
   /// No description provided for @registerCityHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите город'**
   String get registerCityHint;
 
   /// No description provided for @registerRegion.
+  ///
+  /// In ru, this message translates to:
+  /// **'Регион'**
   String get registerRegion;
 
   /// No description provided for @registerRegionHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите регион'**
   String get registerRegionHint;
 
   /// No description provided for @registerFillAll.
@@ -3213,21 +3225,39 @@ abstract class AppLocalizations {
   String get profileFarmLabel;
 
   /// No description provided for @profileCityLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Город'**
   String get profileCityLabel;
 
   /// No description provided for @profileRegionLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Регион'**
   String get profileRegionLabel;
 
   /// No description provided for @profileEditFarmTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Изменить название фермы'**
   String get profileEditFarmTitle;
 
   /// No description provided for @profileFarmNameHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите новое название'**
   String get profileFarmNameHint;
 
   /// No description provided for @profileSaveButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
   String get profileSaveButton;
 
   /// No description provided for @profileSavedMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название фермы обновлено'**
   String get profileSavedMessage;
 
   /// No description provided for @profileResetPasswordTitle.
@@ -3625,6 +3655,1890 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Открываем WhatsApp...'**
   String get vetOpeningWhatsapp;
+
+  /// No description provided for @lactationAddSheetTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить данные о надое'**
+  String get lactationAddSheetTitle;
+
+  /// No description provided for @lactationAddSheetFarmHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ежедневный общий отчёт'**
+  String get lactationAddSheetFarmHint;
+
+  /// No description provided for @lactationAddSheetControlHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Замер продуктивности отдельных коров'**
+  String get lactationAddSheetControlHint;
+
+  /// No description provided for @controlMilkingTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Контрольный надой'**
+  String get controlMilkingTitle;
+
+  /// No description provided for @controlMilkingStep.
+  ///
+  /// In ru, this message translates to:
+  /// **'Шаг {step} из {total}'**
+  String controlMilkingStep(int step, int total);
+
+  /// No description provided for @controlMilkingSelectCows.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите коров'**
+  String get controlMilkingSelectCows;
+
+  /// No description provided for @controlMilkingSearchHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск по бирке или имени'**
+  String get controlMilkingSearchHint;
+
+  /// No description provided for @controlMilkingFilterAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get controlMilkingFilterAll;
+
+  /// No description provided for @controlMilkingFilterLactating.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дойные'**
+  String get controlMilkingFilterLactating;
+
+  /// No description provided for @controlMilkingFilterGroup.
+  ///
+  /// In ru, this message translates to:
+  /// **'Группа'**
+  String get controlMilkingFilterGroup;
+
+  /// No description provided for @controlMilkingGroupTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Группа'**
+  String get controlMilkingGroupTitle;
+
+  /// No description provided for @controlMilkingGroupAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get controlMilkingGroupAll;
+
+  /// No description provided for @controlMilkingGroupNone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Без группы'**
+  String get controlMilkingGroupNone;
+
+  /// No description provided for @controlMilkingSelectAllCount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбрать все ({count})'**
+  String controlMilkingSelectAllCount(int count);
+
+  /// No description provided for @controlMilkingSelected.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбрано: {count}'**
+  String controlMilkingSelected(int count);
+
+  /// No description provided for @controlMilkingNext.
+  ///
+  /// In ru, this message translates to:
+  /// **'Далее'**
+  String get controlMilkingNext;
+
+  /// No description provided for @controlMilkingEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет доступных коров'**
+  String get controlMilkingEmptyTitle;
+
+  /// No description provided for @controlMilkingEmptySubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте животных в раздел «Стадо», чтобы провести контрольный надой.'**
+  String get controlMilkingEmptySubtitle;
+
+  /// No description provided for @controlMilkingNotFoundTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Коровы не найдены'**
+  String get controlMilkingNotFoundTitle;
+
+  /// No description provided for @controlMilkingNotFoundSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Измените параметры поиска или фильтры.'**
+  String get controlMilkingNotFoundSubtitle;
+
+  /// No description provided for @controlMilkingSearchEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'По запросу «{query}» ничего не найдено.'**
+  String controlMilkingSearchEmpty(String query);
+
+  /// No description provided for @controlMilkingLoading.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загрузка коров...'**
+  String get controlMilkingLoading;
+
+  /// No description provided for @controlMilkingLoadErrorTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось загрузить список коров'**
+  String get controlMilkingLoadErrorTitle;
+
+  /// No description provided for @controlMilkingLoadErrorSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверьте подключение к интернету и попробуйте снова.'**
+  String get controlMilkingLoadErrorSubtitle;
+
+  /// No description provided for @controlMilkingCowsSelected.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} коров выбрано'**
+  String controlMilkingCowsSelected(int count);
+
+  /// No description provided for @controlMilkingTabUnfilled.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не заполнено {count}'**
+  String controlMilkingTabUnfilled(int count);
+
+  /// No description provided for @controlMilkingFilledProgress.
+  ///
+  /// In ru, this message translates to:
+  /// **'{filled} из {total} заполнено'**
+  String controlMilkingFilledProgress(int filled, int total);
+
+  /// No description provided for @controlMilkingTotalVolume.
+  ///
+  /// In ru, this message translates to:
+  /// **'{liters} л всего'**
+  String controlMilkingTotalVolume(String liters);
+
+  /// No description provided for @controlMilkingInvalidValue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Проверьте количество молока: допустимы только числа от нуля.'**
+  String get controlMilkingInvalidValue;
+
+  /// No description provided for @controlMilkingNothingToSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите количество молока хотя бы для одной коровы.'**
+  String get controlMilkingNothingToSave;
+
+  /// No description provided for @controlMilkingPartialTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не заполнены данные для {count} коров'**
+  String controlMilkingPartialTitle(int count);
+
+  /// No description provided for @controlMilkingPartialMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для некоторых выбранных коров количество молока не указано.'**
+  String get controlMilkingPartialMessage;
+
+  /// No description provided for @controlMilkingPartialContinue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продолжить заполнение'**
+  String get controlMilkingPartialContinue;
+
+  /// No description provided for @controlMilkingPartialSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить только {count}'**
+  String controlMilkingPartialSave(int count);
+
+  /// No description provided for @controlMilkingDuplicateTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Замеры уже существуют'**
+  String get controlMilkingDuplicateTitle;
+
+  /// No description provided for @controlMilkingDuplicateMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для {count} коров на {date} • {time} уже есть контрольный замер.'**
+  String controlMilkingDuplicateMessage(int count, String date, String time);
+
+  /// No description provided for @controlMilkingDuplicateKeep.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оставить существующие'**
+  String get controlMilkingDuplicateKeep;
+
+  /// No description provided for @controlMilkingDuplicateUpdate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Изменить значения'**
+  String get controlMilkingDuplicateUpdate;
+
+  /// No description provided for @controlMilkingSavedTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Контрольный надой сохранён'**
+  String get controlMilkingSavedTitle;
+
+  /// No description provided for @controlMilkingSavedMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} коров\nОбщий объём контрольных замеров: {liters} л'**
+  String controlMilkingSavedMessage(int count, String liters);
+
+  /// No description provided for @controlMilkingSaveErrorTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось сохранить контрольный надой'**
+  String get controlMilkingSaveErrorTitle;
+
+  /// No description provided for @controlMilkingSaveErrorSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введённые данные сохранены на экране.'**
+  String get controlMilkingSaveErrorSubtitle;
+
+  /// No description provided for @controlMilkingSavePartialFailed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось сохранить данные для {count} коров. Введённые значения остались на экране.'**
+  String controlMilkingSavePartialFailed(int count);
+
+  /// No description provided for @controlMilkingRetrySave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Попробовать снова'**
+  String get controlMilkingRetrySave;
+
+  /// No description provided for @controlMilkingCancelTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отменить контрольный надой?'**
+  String get controlMilkingCancelTitle;
+
+  /// No description provided for @controlMilkingCancelMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введённые данные не будут сохранены.'**
+  String get controlMilkingCancelMessage;
+
+  /// No description provided for @controlMilkingCancelStay.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продолжить заполнение'**
+  String get controlMilkingCancelStay;
+
+  /// No description provided for @controlMilkingCancelExit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выйти без сохранения'**
+  String get controlMilkingCancelExit;
+
+  /// No description provided for @controlMilkingRemoveTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Убрать корову из контрольного надоя?'**
+  String get controlMilkingRemoveTitle;
+
+  /// No description provided for @controlMilkingRemoveMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для этой коровы уже введено {liters} л.'**
+  String controlMilkingRemoveMessage(String liters);
+
+  /// No description provided for @controlMilkingRemoveConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Убрать'**
+  String get controlMilkingRemoveConfirm;
+
+  /// No description provided for @milkProductivityLastControl.
+  ///
+  /// In ru, this message translates to:
+  /// **'Последний контрольный надой'**
+  String get milkProductivityLastControl;
+
+  /// No description provided for @milkProductivityAverage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Средний надой'**
+  String get milkProductivityAverage;
+
+  /// No description provided for @milkProductivityAverageHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'за последние {count} замеров'**
+  String milkProductivityAverageHint(int count);
+
+  /// No description provided for @milkProductivityMax.
+  ///
+  /// In ru, this message translates to:
+  /// **'Максимальный надой'**
+  String get milkProductivityMax;
+
+  /// No description provided for @milkProductivityMeasurements.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество замеров'**
+  String get milkProductivityMeasurements;
+
+  /// No description provided for @milkProductivityHistory.
+  ///
+  /// In ru, this message translates to:
+  /// **'История замеров'**
+  String get milkProductivityHistory;
+
+  /// No description provided for @milkProductivityEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Контрольных надоев ещё нет'**
+  String get milkProductivityEmpty;
+
+  /// No description provided for @milkProductivityEmptyHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Замеры вносятся в разделе «Лактация» → «Контрольный надой».'**
+  String get milkProductivityEmptyHint;
+
+  /// No description provided for @controlMilkingColumnCow.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кличка / бирка'**
+  String get controlMilkingColumnCow;
+
+  /// No description provided for @controlMilkingColumnMilk.
+  ///
+  /// In ru, this message translates to:
+  /// **'Молоко'**
+  String get controlMilkingColumnMilk;
+
+  /// No description provided for @controlMilkingTabUnfilledEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Незаполненные'**
+  String get controlMilkingTabUnfilledEmpty;
+
+  /// No description provided for @financeTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Финансы'**
+  String get financeTitle;
+
+  /// No description provided for @financeNewBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новое'**
+  String get financeNewBadge;
+
+  /// No description provided for @financeTabSummary.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сводка'**
+  String get financeTabSummary;
+
+  /// No description provided for @financeTabIncome.
+  ///
+  /// In ru, this message translates to:
+  /// **'Доход'**
+  String get financeTabIncome;
+
+  /// No description provided for @financeTabExpense.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход'**
+  String get financeTabExpense;
+
+  /// No description provided for @financeTabReport.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отчёт'**
+  String get financeTabReport;
+
+  /// No description provided for @financeSettingsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счета и покупатели'**
+  String get financeSettingsTitle;
+
+  /// No description provided for @financePrevMonth.
+  ///
+  /// In ru, this message translates to:
+  /// **'Предыдущий месяц'**
+  String get financePrevMonth;
+
+  /// No description provided for @financeNextMonth.
+  ///
+  /// In ru, this message translates to:
+  /// **'Следующий месяц'**
+  String get financeNextMonth;
+
+  /// No description provided for @financeAddSale.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа'**
+  String get financeAddSale;
+
+  /// No description provided for @financeAddExpense.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход'**
+  String get financeAddExpense;
+
+  /// No description provided for @financeDateToday.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сегодня, {date}'**
+  String financeDateToday(String date);
+
+  /// No description provided for @financeAccountTypeCash.
+  ///
+  /// In ru, this message translates to:
+  /// **'Наличные'**
+  String get financeAccountTypeCash;
+
+  /// No description provided for @financeAccountTypeCard.
+  ///
+  /// In ru, this message translates to:
+  /// **'Карта'**
+  String get financeAccountTypeCard;
+
+  /// No description provided for @financeAccountTypeBank.
+  ///
+  /// In ru, this message translates to:
+  /// **'Банк'**
+  String get financeAccountTypeBank;
+
+  /// No description provided for @financeCategoryFeed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Корма'**
+  String get financeCategoryFeed;
+
+  /// No description provided for @financeCategoryVeterinary.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ветпрепараты'**
+  String get financeCategoryVeterinary;
+
+  /// No description provided for @financeCategorySalary.
+  ///
+  /// In ru, this message translates to:
+  /// **'Зарплата'**
+  String get financeCategorySalary;
+
+  /// No description provided for @financeCategoryFuel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Топливо'**
+  String get financeCategoryFuel;
+
+  /// No description provided for @financeCategoryRent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аренда'**
+  String get financeCategoryRent;
+
+  /// No description provided for @financeCategoryEquipment.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оборудование'**
+  String get financeCategoryEquipment;
+
+  /// No description provided for @financeCategoryOther.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прочее'**
+  String get financeCategoryOther;
+
+  /// No description provided for @financeUnitLiter.
+  ///
+  /// In ru, this message translates to:
+  /// **'л'**
+  String get financeUnitLiter;
+
+  /// No description provided for @financeUnitKg.
+  ///
+  /// In ru, this message translates to:
+  /// **'кг'**
+  String get financeUnitKg;
+
+  /// No description provided for @financeUnitPiece.
+  ///
+  /// In ru, this message translates to:
+  /// **'шт'**
+  String get financeUnitPiece;
+
+  /// No description provided for @financeProductKurt.
+  ///
+  /// In ru, this message translates to:
+  /// **'Құрт'**
+  String get financeProductKurt;
+
+  /// No description provided for @financeProductButter.
+  ///
+  /// In ru, this message translates to:
+  /// **'Масло'**
+  String get financeProductButter;
+
+  /// No description provided for @financeProductSourCream.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сметана'**
+  String get financeProductSourCream;
+
+  /// No description provided for @financeProductMilk.
+  ///
+  /// In ru, this message translates to:
+  /// **'Молоко'**
+  String get financeProductMilk;
+
+  /// No description provided for @financeProductKefir.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кефир'**
+  String get financeProductKefir;
+
+  /// No description provided for @financeProductCottageCheese.
+  ///
+  /// In ru, this message translates to:
+  /// **'Творог'**
+  String get financeProductCottageCheese;
+
+  /// No description provided for @financeProductGhee.
+  ///
+  /// In ru, this message translates to:
+  /// **'Гхи'**
+  String get financeProductGhee;
+
+  /// No description provided for @financeProductCheese.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сыр'**
+  String get financeProductCheese;
+
+  /// No description provided for @financeProductOther.
+  ///
+  /// In ru, this message translates to:
+  /// **'Другое'**
+  String get financeProductOther;
+
+  /// No description provided for @financeSaleStatusPaid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оплачено'**
+  String get financeSaleStatusPaid;
+
+  /// No description provided for @financeSaleStatusDue.
+  ///
+  /// In ru, this message translates to:
+  /// **'В долг до {date}'**
+  String financeSaleStatusDue(String date);
+
+  /// No description provided for @financeSaleStatusOverdue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Просрочено {days} дн.'**
+  String financeSaleStatusOverdue(int days);
+
+  /// No description provided for @financeSaleStatusDebt.
+  ///
+  /// In ru, this message translates to:
+  /// **'В долг'**
+  String get financeSaleStatusDebt;
+
+  /// No description provided for @financeLoadError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось загрузить данные'**
+  String get financeLoadError;
+
+  /// No description provided for @financeRetry.
+  ///
+  /// In ru, this message translates to:
+  /// **'Повторить'**
+  String get financeRetry;
+
+  /// No description provided for @financeDebtsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Долги'**
+  String get financeDebtsTitle;
+
+  /// No description provided for @financeAccountNewTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый счёт'**
+  String get financeAccountNewTitle;
+
+  /// No description provided for @financeAccountTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт'**
+  String get financeAccountTitle;
+
+  /// No description provided for @financeCounterpartyNewTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый покупатель'**
+  String get financeCounterpartyNewTitle;
+
+  /// No description provided for @financeCounterpartyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель'**
+  String get financeCounterpartyTitle;
+
+  /// No description provided for @financeSaleNewTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новая продажа'**
+  String get financeSaleNewTitle;
+
+  /// No description provided for @financeSaleTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа'**
+  String get financeSaleTitle;
+
+  /// No description provided for @financeExpenseNewTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый расход'**
+  String get financeExpenseNewTitle;
+
+  /// No description provided for @financeExpenseTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход'**
+  String get financeExpenseTitle;
+
+  /// No description provided for @financeReportReadyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отчёт готов'**
+  String get financeReportReadyTitle;
+
+  /// No description provided for @financeSave.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
+  String get financeSave;
+
+  /// No description provided for @financeOptional.
+  ///
+  /// In ru, this message translates to:
+  /// **'необязательно'**
+  String get financeOptional;
+
+  /// No description provided for @financeHideAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть'**
+  String get financeHideAction;
+
+  /// No description provided for @financeNameLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название'**
+  String get financeNameLabel;
+
+  /// No description provided for @financeCashboxName.
+  ///
+  /// In ru, this message translates to:
+  /// **'Касса'**
+  String get financeCashboxName;
+
+  /// No description provided for @financeOnboardingTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начнём с денег, которые у вас есть'**
+  String get financeOnboardingTitle;
+
+  /// No description provided for @financeOnboardingText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите, сколько сейчас в кассе и на карте. Продажи и расходы дальше будут менять остаток сами.'**
+  String get financeOnboardingText;
+
+  /// No description provided for @financeOnboardingAmountLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сколько сейчас'**
+  String get financeOnboardingAmountLabel;
+
+  /// No description provided for @financeOnboardingAmountHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, 245 000'**
+  String get financeOnboardingAmountHint;
+
+  /// No description provided for @financeOnboardingOtherAccount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Другой счёт'**
+  String get financeOnboardingOtherAccount;
+
+  /// No description provided for @financeOnboardingStart.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начать'**
+  String get financeOnboardingStart;
+
+  /// No description provided for @financeOnboardingLater.
+  ///
+  /// In ru, this message translates to:
+  /// **'Остаток можно поправить позже в «Счета и покупатели»'**
+  String get financeOnboardingLater;
+
+  /// No description provided for @financeOnboardingEmptyError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите остаток хотя бы для одного счёта. Если денег нет, впишите 0.'**
+  String get financeOnboardingEmptyError;
+
+  /// No description provided for @financeOnboardingDone.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счета созданы — теперь записывайте продажи и расходы'**
+  String get financeOnboardingDone;
+
+  /// No description provided for @financeSettingsAccountsTab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счета'**
+  String get financeSettingsAccountsTab;
+
+  /// No description provided for @financeSettingsBuyersTab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатели'**
+  String get financeSettingsBuyersTab;
+
+  /// No description provided for @financeAddAccount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить счёт'**
+  String get financeAddAccount;
+
+  /// No description provided for @financeAddCounterparty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить покупателя'**
+  String get financeAddCounterparty;
+
+  /// No description provided for @financeHiddenSection.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрытые'**
+  String get financeHiddenSection;
+
+  /// No description provided for @financeHiddenHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не предлагается в новых записях'**
+  String get financeHiddenHint;
+
+  /// No description provided for @financeAccountsCallout.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт не удаляется, а скрывается: он не предлагается в новых записях, но остаётся в истории.'**
+  String get financeAccountsCallout;
+
+  /// No description provided for @financeBuyersCallout.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель не удаляется, а скрывается: в старых продажах он останется.'**
+  String get financeBuyersCallout;
+
+  /// No description provided for @financeNoPhone.
+  ///
+  /// In ru, this message translates to:
+  /// **'без телефона'**
+  String get financeNoPhone;
+
+  /// No description provided for @financeBuyerOwes.
+  ///
+  /// In ru, this message translates to:
+  /// **'должен {amount}'**
+  String financeBuyerOwes(String amount);
+
+  /// No description provided for @financeAccountsEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счетов пока нет'**
+  String get financeAccountsEmptyTitle;
+
+  /// No description provided for @financeAccountsEmptyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте кассу или карту, чтобы записывать продажи и расходы'**
+  String get financeAccountsEmptyText;
+
+  /// No description provided for @financeBuyersEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупателей пока нет'**
+  String get financeBuyersEmptyTitle;
+
+  /// No description provided for @financeBuyersEmptyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавьте магазин или частника здесь или прямо при продаже'**
+  String get financeBuyersEmptyText;
+
+  /// No description provided for @financeAccountNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Назовите счёт, например «Касса»'**
+  String get financeAccountNameError;
+
+  /// No description provided for @financeAccountTypeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тип'**
+  String get financeAccountTypeLabel;
+
+  /// No description provided for @financeAccountInitialNewLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сколько на счёте сейчас'**
+  String get financeAccountInitialNewLabel;
+
+  /// No description provided for @financeAccountInitialEditLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начальный остаток'**
+  String get financeAccountInitialEditLabel;
+
+  /// No description provided for @financeAccountInitialError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите сумму, даже если это 0'**
+  String get financeAccountInitialError;
+
+  /// No description provided for @financeAccountInitialCallout.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пересчитайте наличные или посмотрите баланс в приложении банка. От этой суммы считается остаток — без неё цифры разойдутся с реальными.'**
+  String get financeAccountInitialCallout;
+
+  /// No description provided for @financeAccountBalanceNow.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сейчас на счёте'**
+  String get financeAccountBalanceNow;
+
+  /// No description provided for @financeBalanceWillBe.
+  ///
+  /// In ru, this message translates to:
+  /// **'Остаток «{name}» станет {amount}'**
+  String financeBalanceWillBe(String name, String amount);
+
+  /// No description provided for @financeAccountCreate.
+  ///
+  /// In ru, this message translates to:
+  /// **'Создать счёт'**
+  String get financeAccountCreate;
+
+  /// No description provided for @financeAccountHide.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть счёт'**
+  String get financeAccountHide;
+
+  /// No description provided for @financeAccountHideConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть счёт «{name}»?'**
+  String financeAccountHideConfirm(String name);
+
+  /// No description provided for @financeAccountHideNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрытый счёт не предлагается в новых записях, но остаётся в истории'**
+  String get financeAccountHideNote;
+
+  /// No description provided for @financeAccountCreated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт «{name}» создан'**
+  String financeAccountCreated(String name);
+
+  /// No description provided for @financeAccountSaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт сохранён'**
+  String get financeAccountSaved;
+
+  /// No description provided for @financeAccountHidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт скрыт'**
+  String get financeAccountHidden;
+
+  /// No description provided for @financeAccountHiddenTag.
+  ///
+  /// In ru, this message translates to:
+  /// **'скрыт'**
+  String get financeAccountHiddenTag;
+
+  /// No description provided for @financeAccountNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Счёт не найден'**
+  String get financeAccountNotFound;
+
+  /// No description provided for @financeCounterpartyNameHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Магазин Береке'**
+  String get financeCounterpartyNameHint;
+
+  /// No description provided for @financeCounterpartyNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите название'**
+  String get financeCounterpartyNameError;
+
+  /// No description provided for @financePhoneLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Телефон'**
+  String get financePhoneLabel;
+
+  /// No description provided for @financePhoneHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'+7 (777) 777-77-77'**
+  String get financePhoneHint;
+
+  /// No description provided for @financePhoneHelper.
+  ///
+  /// In ru, this message translates to:
+  /// **'Чтобы напомнить о долге в один тап'**
+  String get financePhoneHelper;
+
+  /// No description provided for @financePhoneError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите номер полностью'**
+  String get financePhoneError;
+
+  /// No description provided for @financeCounterpartyAdd.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить'**
+  String get financeCounterpartyAdd;
+
+  /// No description provided for @financeCounterpartyHide.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть покупателя'**
+  String get financeCounterpartyHide;
+
+  /// No description provided for @financeCounterpartyHideConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скрыть покупателя «{name}»?'**
+  String financeCounterpartyHideConfirm(String name);
+
+  /// No description provided for @financeCounterpartyHideNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'В старых продажах покупатель останется'**
+  String get financeCounterpartyHideNote;
+
+  /// No description provided for @financeCounterpartyCreated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель добавлен'**
+  String get financeCounterpartyCreated;
+
+  /// No description provided for @financeCounterpartySaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель сохранён'**
+  String get financeCounterpartySaved;
+
+  /// No description provided for @financeCounterpartyHidden.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель скрыт'**
+  String get financeCounterpartyHidden;
+
+  /// No description provided for @financeCounterpartyNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель не найден'**
+  String get financeCounterpartyNotFound;
+
+  /// No description provided for @financeDateYesterday.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вчера, {date}'**
+  String financeDateYesterday(String date);
+
+  /// No description provided for @financeFilterAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get financeFilterAll;
+
+  /// No description provided for @financeAllAccounts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все счета'**
+  String get financeAllAccounts;
+
+  /// No description provided for @financeSpentLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Потрачено'**
+  String get financeSpentLabel;
+
+  /// No description provided for @financeRecordsCount.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count, plural, one{{count} запись} few{{count} записи} many{{count} записей} other{{count} записи}}'**
+  String financeRecordsCount(int count);
+
+  /// No description provided for @financeExpensesEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расходов не найдено'**
+  String get financeExpensesEmptyTitle;
+
+  /// No description provided for @financeExpensesEmptyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Измените фильтр или добавьте расход'**
+  String get financeExpensesEmptyText;
+
+  /// No description provided for @financeDeleteAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get financeDeleteAction;
+
+  /// No description provided for @financeDateLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата'**
+  String get financeDateLabel;
+
+  /// No description provided for @financeAmountLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сумма'**
+  String get financeAmountLabel;
+
+  /// No description provided for @financeAmountError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите сумму'**
+  String get financeAmountError;
+
+  /// No description provided for @financeCommentLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Комментарий'**
+  String get financeCommentLabel;
+
+  /// No description provided for @financeNoActiveAccounts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сначала добавьте счёт — кассу или карту, откуда платите и куда приходят деньги'**
+  String get financeNoActiveAccounts;
+
+  /// No description provided for @financeExpenseCategoryLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория'**
+  String get financeExpenseCategoryLabel;
+
+  /// No description provided for @financeExpenseCategoryError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите категорию'**
+  String get financeExpenseCategoryError;
+
+  /// No description provided for @financeExpenseNameLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'На что'**
+  String get financeExpenseNameLabel;
+
+  /// No description provided for @financeExpenseNameHintFeed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Комбикорм КК-60, 2 мешка'**
+  String get financeExpenseNameHintFeed;
+
+  /// No description provided for @financeExpenseNameHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, дизель 50 л'**
+  String get financeExpenseNameHint;
+
+  /// No description provided for @financeExpenseNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Напишите, на что потратили'**
+  String get financeExpenseNameError;
+
+  /// No description provided for @financeExpenseAccountLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Откуда платили'**
+  String get financeExpenseAccountLabel;
+
+  /// No description provided for @financeExpenseCommentHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, у кого покупали'**
+  String get financeExpenseCommentHint;
+
+  /// No description provided for @financeExpenseSaveNew.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить расход'**
+  String get financeExpenseSaveNew;
+
+  /// No description provided for @financeExpenseDelete.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить расход'**
+  String get financeExpenseDelete;
+
+  /// No description provided for @financeExpenseDeleteConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить расход «{name}»?'**
+  String financeExpenseDeleteConfirm(String name);
+
+  /// No description provided for @financeExpenseSaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход сохранён'**
+  String get financeExpenseSaved;
+
+  /// No description provided for @financeExpenseUpdated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход изменён'**
+  String get financeExpenseUpdated;
+
+  /// No description provided for @financeExpenseDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход удалён'**
+  String get financeExpenseDeleted;
+
+  /// No description provided for @financeExpenseNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расход не найден'**
+  String get financeExpenseNotFound;
+
+  /// No description provided for @financeIncomeFilterPaid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оплачено'**
+  String get financeIncomeFilterPaid;
+
+  /// No description provided for @financeIncomeFilterDebt.
+  ///
+  /// In ru, this message translates to:
+  /// **'В долг'**
+  String get financeIncomeFilterDebt;
+
+  /// No description provided for @financeIncomeFilterOverdue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Просрочено'**
+  String get financeIncomeFilterOverdue;
+
+  /// No description provided for @financeSoldLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продано на'**
+  String get financeSoldLabel;
+
+  /// No description provided for @financeUnpaidAmount.
+  ///
+  /// In ru, this message translates to:
+  /// **'не оплачено {amount}'**
+  String financeUnpaidAmount(String amount);
+
+  /// No description provided for @financeSalesEmptyTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продаж не найдено'**
+  String get financeSalesEmptyTitle;
+
+  /// No description provided for @financeSalesEmptyText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Измените фильтр или запишите продажу'**
+  String get financeSalesEmptyText;
+
+  /// No description provided for @financeGetPayment.
+  ///
+  /// In ru, this message translates to:
+  /// **'Получить оплату'**
+  String get financeGetPayment;
+
+  /// No description provided for @financeNoBuyer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Без покупателя'**
+  String get financeNoBuyer;
+
+  /// No description provided for @financeSaleOfDate.
+  ///
+  /// In ru, this message translates to:
+  /// **'продажа {date}'**
+  String financeSaleOfDate(String date);
+
+  /// No description provided for @financePayAccountLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Куда пришли деньги'**
+  String get financePayAccountLabel;
+
+  /// No description provided for @financePayDateLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата оплаты'**
+  String get financePayDateLabel;
+
+  /// No description provided for @financePayConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Деньги получены'**
+  String get financePayConfirm;
+
+  /// No description provided for @financePaymentReceived.
+  ///
+  /// In ru, this message translates to:
+  /// **'{amount} зачислено на «{account}»'**
+  String financePaymentReceived(String amount, String account);
+
+  /// No description provided for @financeSaleBuyerLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Покупатель'**
+  String get financeSaleBuyerLabel;
+
+  /// No description provided for @financeSaleBuyerNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'можно пропустить'**
+  String get financeSaleBuyerNote;
+
+  /// No description provided for @financeAllBuyers.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все покупатели'**
+  String get financeAllBuyers;
+
+  /// No description provided for @financeNewBuyer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый'**
+  String get financeNewBuyer;
+
+  /// No description provided for @financeSaleProductLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар'**
+  String get financeSaleProductLabel;
+
+  /// No description provided for @financeSaleProductHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, айран'**
+  String get financeSaleProductHint;
+
+  /// No description provided for @financeSaleProductError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите товар'**
+  String get financeSaleProductError;
+
+  /// No description provided for @financeSaleProductNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Напишите, что продали'**
+  String get financeSaleProductNameError;
+
+  /// No description provided for @financeSaleQuantityLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество'**
+  String get financeSaleQuantityLabel;
+
+  /// No description provided for @financeSaleQuantityError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите количество больше нуля'**
+  String get financeSaleQuantityError;
+
+  /// No description provided for @financeSalePriceLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Цена за 1 {unit}'**
+  String financeSalePriceLabel(String unit);
+
+  /// No description provided for @financeSalePriceError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите цену'**
+  String get financeSalePriceError;
+
+  /// No description provided for @financeSalePriceHintBuyer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Как в прошлый раз у этого покупателя: {price}'**
+  String financeSalePriceHintBuyer(String price);
+
+  /// No description provided for @financeSalePriceHintLast.
+  ///
+  /// In ru, this message translates to:
+  /// **'Последняя цена: {price}'**
+  String financeSalePriceHintLast(String price);
+
+  /// No description provided for @financeSaleAmountNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'считается сама'**
+  String get financeSaleAmountNote;
+
+  /// No description provided for @financeSalePaymentLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оплата'**
+  String get financeSalePaymentLabel;
+
+  /// No description provided for @financeSaleDueLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Оплатить до'**
+  String get financeSaleDueLabel;
+
+  /// No description provided for @financeSaleDueHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'{days, plural, one{Через {days} день после продажи. Можно изменить.} few{Через {days} дня после продажи. Можно изменить.} many{Через {days} дней после продажи. Можно изменить.} other{Через {days} дня после продажи. Можно изменить.}}'**
+  String financeSaleDueHint(int days);
+
+  /// No description provided for @financeSaleDateLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата продажи'**
+  String get financeSaleDateLabel;
+
+  /// No description provided for @financeSaleCommentHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Например, отдал с доставкой'**
+  String get financeSaleCommentHint;
+
+  /// No description provided for @financeSaleSaveNew.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить продажу'**
+  String get financeSaleSaveNew;
+
+  /// No description provided for @financeSaleDebtNote.
+  ///
+  /// In ru, this message translates to:
+  /// **'Остатки счетов не изменятся — деньги придут, когда отметите оплату'**
+  String get financeSaleDebtNote;
+
+  /// No description provided for @financeSaleDebtBuyerError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для продажи в долг выберите покупателя'**
+  String get financeSaleDebtBuyerError;
+
+  /// No description provided for @financeSaleHiddenAccountError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Этот счёт скрыт — выберите, куда пришли деньги'**
+  String get financeSaleHiddenAccountError;
+
+  /// No description provided for @financeSaleDelete.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить продажу'**
+  String get financeSaleDelete;
+
+  /// No description provided for @financeSaleDeleteConfirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить продажу «{name}»?'**
+  String financeSaleDeleteConfirm(String name);
+
+  /// No description provided for @financeSaleSaved.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа сохранена'**
+  String get financeSaleSaved;
+
+  /// No description provided for @financeSaleUpdated.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа изменена'**
+  String get financeSaleUpdated;
+
+  /// No description provided for @financeSaleDeleted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа удалена'**
+  String get financeSaleDeleted;
+
+  /// No description provided for @financeSaleNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продажа не найдена'**
+  String get financeSaleNotFound;
+
+  /// No description provided for @financeProfitFor.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прибыль за {month}'**
+  String financeProfitFor(String month);
+
+  /// No description provided for @financeBalancesTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Остатки на счетах'**
+  String get financeBalancesTitle;
+
+  /// No description provided for @financeOwedToYou.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вам должны'**
+  String get financeOwedToYou;
+
+  /// No description provided for @financeOverdueAmount.
+  ///
+  /// In ru, this message translates to:
+  /// **'Просрочено {amount}'**
+  String financeOverdueAmount(String amount);
+
+  /// No description provided for @financeDebtOverdueDays.
+  ///
+  /// In ru, this message translates to:
+  /// **'просрочка {days} дн.'**
+  String financeDebtOverdueDays(int days);
+
+  /// No description provided for @financeDebtDueUntil.
+  ///
+  /// In ru, this message translates to:
+  /// **'до {date}'**
+  String financeDebtDueUntil(String date);
+
+  /// No description provided for @financeExpensesByCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расходы по категориям'**
+  String get financeExpensesByCategory;
+
+  /// No description provided for @financeTotal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Всего'**
+  String get financeTotal;
+
+  /// No description provided for @financeNoExpensesFor.
+  ///
+  /// In ru, this message translates to:
+  /// **'За {month} расходов нет'**
+  String financeNoExpensesFor(String month);
+
+  /// No description provided for @financeDebtsTotal.
+  ///
+  /// In ru, this message translates to:
+  /// **'Всего должны'**
+  String get financeDebtsTotal;
+
+  /// No description provided for @financeNoPhoneFull.
+  ///
+  /// In ru, this message translates to:
+  /// **'телефон не указан'**
+  String get financeNoPhoneFull;
+
+  /// No description provided for @financeDueUntilPill.
+  ///
+  /// In ru, this message translates to:
+  /// **'До {date}'**
+  String financeDueUntilPill(String date);
+
+  /// No description provided for @financeSaleDueWas.
+  ///
+  /// In ru, this message translates to:
+  /// **'срок был {date}'**
+  String financeSaleDueWas(String date);
+
+  /// No description provided for @financeSalePayUntil.
+  ///
+  /// In ru, this message translates to:
+  /// **'оплатить до {date}'**
+  String financeSalePayUntil(String date);
+
+  /// No description provided for @financeGetPaymentShort.
+  ///
+  /// In ru, this message translates to:
+  /// **'Получить'**
+  String get financeGetPaymentShort;
+
+  /// No description provided for @financeCall.
+  ///
+  /// In ru, this message translates to:
+  /// **'Позвонить'**
+  String get financeCall;
+
+  /// No description provided for @financeRemind.
+  ///
+  /// In ru, this message translates to:
+  /// **'Напомнить'**
+  String get financeRemind;
+
+  /// No description provided for @financeDebtReminderText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Здравствуйте! Напоминаю об оплате {amount}. Спасибо!'**
+  String financeDebtReminderText(String amount);
+
+  /// No description provided for @financeCallError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось открыть звонок'**
+  String get financeCallError;
+
+  /// No description provided for @financeNoDebtsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Долгов нет'**
+  String get financeNoDebtsTitle;
+
+  /// No description provided for @financeNoDebtsText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все продажи оплачены'**
+  String get financeNoDebtsText;
+
+  /// No description provided for @financeReportPeriodLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Период'**
+  String get financeReportPeriodLabel;
+
+  /// No description provided for @financeReportThisMonth.
+  ///
+  /// In ru, this message translates to:
+  /// **'Этот месяц'**
+  String get financeReportThisMonth;
+
+  /// No description provided for @financeReportLastMonth.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прошлый месяц'**
+  String get financeReportLastMonth;
+
+  /// No description provided for @financeReportQuarter.
+  ///
+  /// In ru, this message translates to:
+  /// **'Квартал'**
+  String get financeReportQuarter;
+
+  /// No description provided for @financeReportCustom.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свой период'**
+  String get financeReportCustom;
+
+  /// No description provided for @financeReportFrom.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начало'**
+  String get financeReportFrom;
+
+  /// No description provided for @financeReportTo.
+  ///
+  /// In ru, this message translates to:
+  /// **'Конец'**
+  String get financeReportTo;
+
+  /// No description provided for @financeReportTypeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Что в отчёте'**
+  String get financeReportTypeLabel;
+
+  /// No description provided for @financeReportFull.
+  ///
+  /// In ru, this message translates to:
+  /// **'Полный'**
+  String get financeReportFull;
+
+  /// No description provided for @financeReportFullHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Доход, расход и прибыль'**
+  String get financeReportFullHint;
+
+  /// No description provided for @financeReportIncome.
+  ///
+  /// In ru, this message translates to:
+  /// **'Доходы'**
+  String get financeReportIncome;
+
+  /// No description provided for @financeReportIncomeHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все продажи за период'**
+  String get financeReportIncomeHint;
+
+  /// No description provided for @financeReportExpense.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расходы'**
+  String get financeReportExpense;
+
+  /// No description provided for @financeReportExpenseHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Траты по категориям'**
+  String get financeReportExpenseHint;
+
+  /// No description provided for @financeReportDebtsHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кто и сколько должен'**
+  String get financeReportDebtsHint;
+
+  /// No description provided for @financeReportContents.
+  ///
+  /// In ru, this message translates to:
+  /// **'В документ попадут'**
+  String get financeReportContents;
+
+  /// No description provided for @financeReportFarm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Хозяйство'**
+  String get financeReportFarm;
+
+  /// No description provided for @financeProfit.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прибыль'**
+  String get financeProfit;
+
+  /// No description provided for @financeReportOperations.
+  ///
+  /// In ru, this message translates to:
+  /// **'Операций'**
+  String get financeReportOperations;
+
+  /// No description provided for @financeReportMake.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сформировать PDF'**
+  String get financeReportMake;
+
+  /// No description provided for @financeReportShare.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить'**
+  String get financeReportShare;
+
+  /// No description provided for @financeReportShareHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Через «Отправить» файл уходит в WhatsApp, Telegram или на почту — там же его можно сохранить на телефон'**
+  String get financeReportShareHint;
+
+  /// No description provided for @financeReportMissing.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отчёт не найден — сформируйте его заново'**
+  String get financeReportMissing;
+
+  /// No description provided for @financeReportFilePrefix.
+  ///
+  /// In ru, this message translates to:
+  /// **'Финансы'**
+  String get financeReportFilePrefix;
+
+  /// No description provided for @financeFileSizeKb.
+  ///
+  /// In ru, this message translates to:
+  /// **'{size} КБ'**
+  String financeFileSizeKb(String size);
+
+  /// No description provided for @financeFileSizeMb.
+  ///
+  /// In ru, this message translates to:
+  /// **'{size} МБ'**
+  String financeFileSizeMb(String size);
+
+  /// No description provided for @todayTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сегодня'**
+  String get todayTitle;
+
+  /// No description provided for @todayMilk.
+  ///
+  /// In ru, this message translates to:
+  /// **'Надой'**
+  String get todayMilk;
+
+  /// No description provided for @todayMilkSessions.
+  ///
+  /// In ru, this message translates to:
+  /// **'утро {morning} · вечер {evening}'**
+  String todayMilkSessions(String morning, String evening);
+
+  /// No description provided for @todayMilkCows.
+  ///
+  /// In ru, this message translates to:
+  /// **'коров: {count}'**
+  String todayMilkCows(int count);
+
+  /// No description provided for @todayMilkLiters.
+  ///
+  /// In ru, this message translates to:
+  /// **'{liters} л'**
+  String todayMilkLiters(String liters);
+
+  /// No description provided for @todayMilkEmpty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Надой за сегодня'**
+  String get todayMilkEmpty;
+
+  /// No description provided for @todayMilkEmptyHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ещё не записан'**
+  String get todayMilkEmptyHint;
+
+  /// No description provided for @todayMilkRecord.
+  ///
+  /// In ru, this message translates to:
+  /// **'Записать'**
+  String get todayMilkRecord;
+
+  /// No description provided for @todayMilkError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Надой не загрузился — нажмите, чтобы повторить'**
+  String get todayMilkError;
+
+  /// No description provided for @todaySold.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продано'**
+  String get todaySold;
+
+  /// No description provided for @todayNoSales.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продаж пока нет'**
+  String get todayNoSales;
+
+  /// No description provided for @todayNoSalesHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Запишите, если сегодня продавали'**
+  String get todayNoSalesHint;
+
+  /// No description provided for @todayNoExpenses.
+  ///
+  /// In ru, this message translates to:
+  /// **'Расходов нет'**
+  String get todayNoExpenses;
+
+  /// No description provided for @todayNoExpensesHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Купили корм, заправились?'**
+  String get todayNoExpensesHint;
+
+  /// No description provided for @todayMoney.
+  ///
+  /// In ru, this message translates to:
+  /// **'Деньги'**
+  String get todayMoney;
+
+  /// No description provided for @todayTotalOnAccounts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Всего на счетах'**
+  String get todayTotalOnAccounts;
+
+  /// No description provided for @todaySetUpFinance.
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите, сколько денег в кассе и на карте — и здесь будут остатки и долги'**
+  String get todaySetUpFinance;
+
+  /// No description provided for @todayTasks.
+  ///
+  /// In ru, this message translates to:
+  /// **'Дела на сегодня'**
+  String get todayTasks;
+
+  /// No description provided for @todayNoTasks.
+  ///
+  /// In ru, this message translates to:
+  /// **'На сегодня дел нет'**
+  String get todayNoTasks;
+
+  /// No description provided for @updateRequiredTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нужно обновить приложение'**
+  String get updateRequiredTitle;
+
+  /// No description provided for @updateRequiredText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Эта версия Фермер+ больше не поддерживается. Обновите приложение, чтобы продолжить работу — ваши данные сохранятся.'**
+  String get updateRequiredText;
+
+  /// No description provided for @updateRequiredAction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обновить'**
+  String get updateRequiredAction;
+
+  /// No description provided for @updateRequiredStoreError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось открыть магазин приложений. Найдите «Фермер+» в Google Play или App Store и обновите вручную.'**
+  String get updateRequiredStoreError;
+
+  /// No description provided for @updateRequiredInstalledVersion.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ваша версия: {version}'**
+  String updateRequiredInstalledVersion(String version);
 }
 
 class _AppLocalizationsDelegate

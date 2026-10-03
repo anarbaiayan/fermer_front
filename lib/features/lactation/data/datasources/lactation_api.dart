@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:frontend/core/network/network_providers.dart';
 import '../../domain/entities/lactation_validation.dart';
 
+import '../models/create_lactation_batch_dto.dart';
 import '../models/create_lactation_dto.dart';
 import '../models/lactation_dto.dart';
 import '../models/paged_response_dto.dart';
@@ -22,6 +23,21 @@ class LactationApi {
   Future<LactationDto> create(CreateLactationDto dto) async {
     final r = await _dio.post('/lactations', data: dto.toJson());
     return LactationDto.fromJson(r.data as Map<String, dynamic>);
+  }
+
+  /// Создаёт до [CreateLactationBatchDto.maxRecords] индивидуальных замеров
+  /// одним запросом. Сервер сохраняет пакет атомарно и возвращает записи
+  /// в порядке запроса.
+  Future<List<LactationDto>> createBatch(CreateLactationBatchDto dto) async {
+    final r = await _dio.post('/lactations/batch', data: dto.toJson());
+    final data = r.data;
+    if (data is! List) throw const FormatException('Invalid batch response');
+    return data.map((item) {
+      if (item is! Map<String, dynamic>) {
+        throw const FormatException('Invalid batch item');
+      }
+      return LactationDto.fromJson(item);
+    }).toList();
   }
 
   Future<LactationDto> getById(int id) async {
@@ -64,6 +80,44 @@ class LactationApi {
       r.data as Map<String, dynamic>,
       (m) => LactationDto.fromJson(m),
     );
+  }
+
+  /// Ищет уже существующий индивидуальный замер коровы на дату и время доения.
+  ///
+  /// Отдельного эндпоинта проверки дубликата на бэкенде нет, поэтому идём по
+  /// истории коровы, отсортированной от новых к старым, и выходим, как только
+  /// страница ушла раньше искомой даты.
+  Future<LactationDto?> findByCattleDateAndTime({
+    required int cattleId,
+    required String milkingDate, // yyyy-MM-dd
+    required String milkingTime, // MORNING/EVENING
+    CancelToken? cancelToken,
+  }) async {
+    for (var number = 0; ; number++) {
+      if (cancelToken?.isCancelled ?? false) throw cancelToken!.cancelError!;
+
+      final page = await getByCattle(
+        cattleId: cattleId,
+        page: number,
+        size: 100,
+        sortBy: 'milkingDate',
+        sortDirection: 'DESC',
+        cancelToken: cancelToken,
+      );
+
+      for (final item in page.content) {
+        if (item.milkingDate == milkingDate &&
+            item.milkingTime == milkingTime) {
+          return item;
+        }
+      }
+
+      if (page.content.isEmpty || number + 1 >= page.totalPages) return null;
+
+      // Даты в формате yyyy-MM-dd сравнимы лексикографически.
+      final oldest = page.content.last.milkingDate;
+      if (oldest != null && oldest.compareTo(milkingDate) < 0) return null;
+    }
   }
 
   Future<PagedResponseDto<BulkLactationDto>> getBulk({

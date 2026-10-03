@@ -14,6 +14,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'widgets/briefSection/animal_status_card.dart';
 import 'widgets/briefSection/quick_actions_section.dart';
 import 'widgets/briefSection/summary_tabs.dart';
+import 'widgets/todaySection/today_section.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -46,6 +47,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             return ListView(
               children: [
                 const SizedBox(height: 16),
+                // «Сегодня» (FP-505): надой, деньги, долги и дела.
+                const TodaySection(),
+                const SizedBox(height: 28),
                 const SearchField(),
                 const SizedBox(height: 22),
                 Text(

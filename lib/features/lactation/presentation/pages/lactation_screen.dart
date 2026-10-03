@@ -4,9 +4,11 @@ import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
+import 'package:frontend/features/lactation/application/control_milking_providers.dart';
 import 'package:frontend/features/lactation/application/lactation_providers.dart';
 import 'package:frontend/features/lactation/data/models/lactation_daily_summary_dto.dart';
 import 'package:frontend/features/lactation/presentation/pages/lactation_milk_accounting_screen.dart';
+import 'package:frontend/features/lactation/presentation/widgets/add_lactation_type_sheet.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -51,9 +53,24 @@ class LactationScreen extends ConsumerWidget {
     }
 
     String milkText(LactationDailySummaryDto s) {
+      // Раздел показывает надой по ферме. Контрольные замеры отдельных коров
+      // сюда не попадают, иначе молоко считалось бы дважды.
       return l10n.lactationMilkPerDay(
-        NumberFormat('0.##', l10n.localeName).format(s.totalLiters),
+        NumberFormat('0.##', l10n.localeName).format(s.bulkLiters ?? 0),
       );
+    }
+
+    Future<void> openAddSheet() async {
+      final kind = await showAddLactationTypeSheet(context);
+      if (kind == null || !context.mounted) return;
+
+      switch (kind) {
+        case AddLactationKind.bulk:
+          context.push('/lactation/bulk/add');
+        case AddLactationKind.control:
+          ref.read(controlMilkingDraftProvider.notifier).startNew();
+          context.push('/lactation/control');
+      }
     }
 
     return AppScaffold(
@@ -65,7 +82,7 @@ class LactationScreen extends ConsumerWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(12),
         child: FloatingActionButton(
-          onPressed: () => context.push('/lactation/bulk/add'),
+          onPressed: openAddSheet,
           backgroundColor: AppColors.primary1,
           elevation: 4,
           shape: const CircleBorder(),

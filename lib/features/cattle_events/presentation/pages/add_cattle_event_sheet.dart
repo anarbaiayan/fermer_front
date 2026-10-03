@@ -4,6 +4,7 @@ import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/features/cattle_events/presentation/widgets/dynamic_event_fields.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -339,6 +340,7 @@ class _AddCattleEventSheetState extends ConsumerState<AddCattleEventSheet> {
 
       // как в screen - чтобы обновилось превью/лист сразу
       ref.invalidate(cattleEventsPreviewProvider(widget.cattleId));
+      invalidateCattleListProviderFromWidget(ref);
 
       if (!mounted) return;
       context.pop();

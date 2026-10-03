@@ -5,6 +5,7 @@ class PushNotificationPayload {
     required this.cattleId,
     required this.title,
     required this.body,
+    this.counterpartyId,
   });
 
   final String? notificationId;
@@ -12,6 +13,9 @@ class PushNotificationPayload {
   final int? cattleId;
   final String? title;
   final String? body;
+
+  /// Покупатель из пуша о просрочке долга (`FINANCE_OVERDUE`).
+  final int? counterpartyId;
 
   factory PushNotificationPayload.fromMessage({
     required Map<String, dynamic> data,
@@ -25,6 +29,7 @@ class PushNotificationPayload {
       cattleId: cattleIdValue == null ? null : int.tryParse(cattleIdValue),
       title: title,
       body: body,
+      counterpartyId: int.tryParse(data['counterpartyId']?.toString() ?? ''),
     );
   }
 
@@ -38,6 +43,7 @@ class PushNotificationPayload {
           : int.tryParse(cattleIdValue?.toString() ?? ''),
       title: json['title'] as String?,
       body: json['body'] as String?,
+      counterpartyId: int.tryParse(json['counterpartyId']?.toString() ?? ''),
     );
   }
 
@@ -47,5 +53,6 @@ class PushNotificationPayload {
     'cattleId': cattleId,
     'title': title,
     'body': body,
+    'counterpartyId': counterpartyId,
   };
 }

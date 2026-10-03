@@ -1,0 +1,10 @@
+{
+  // Flutter builds Android through its own Gradle wrapper. Java/Gradle
+  // extensions would otherwise import every plugin's android/ folder from the
+  // pub cache as a standalone project and report bogus configuration errors.
+  "java.import.gradle.enabled": false,
+  "java.import.maven.enabled": false,
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "java.gradle.buildServer.enabled": "off",
+  "gradle.autoDetect": "off"
+}

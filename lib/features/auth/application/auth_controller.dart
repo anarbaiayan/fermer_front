@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/network/token_repository.dart';
@@ -46,9 +48,10 @@ class AuthController extends StateNotifier<AuthState> {
   AuthController(
     this._api,
     this._tokens,
-    this._pushNotifications,
-    this._onSessionCleared,
-  ) : super(const AuthState());
+    this._pushNotifications, {
+    void Function()? onSessionCleared,
+  }) : _onSessionCleared = onSessionCleared ?? (() {}),
+       super(const AuthState());
 
   String _mapDioError(DioException e, {required bool isLogin}) {
     final status = e.response?.statusCode;
@@ -122,7 +125,7 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
-      await _pushNotifications.registerCurrentToken();
+      unawaited(_pushNotifications.registerCurrentToken());
     } on DioException catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -187,7 +190,7 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
-      await _pushNotifications.registerCurrentToken();
+      unawaited(_pushNotifications.registerCurrentToken());
     } on DioException catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -235,21 +238,27 @@ class AuthController extends StateNotifier<AuthState> {
         refresh: tokens.refreshToken,
         type: tokens.tokenType,
       );
-      final profile = await _api.getProfile();
-      state = state.copyWith(
-        user: User(
-          id: profile.id,
-          phoneNumber: profile.phoneNumber,
-          email: profile.email,
-          firstName: profile.firstName,
-          lastName: profile.lastName,
-          farmName: profile.farmName,
-          city: profile.city,
-          region: profile.region,
-          roles: profile.roles,
-          phoneVerified: profile.phoneVerified,
-        ),
-      );
+      unawaited(_pushNotifications.registerCurrentToken());
+
+      // Профиль подгружается отдельно: пока на бэкенде нет GET /users/profile,
+      // запрос падает, и это не должно ломать вход по сохранённым токенам.
+      try {
+        final profile = await _api.getProfile();
+        state = state.copyWith(
+          user: User(
+            id: profile.id,
+            phoneNumber: profile.phoneNumber,
+            email: profile.email,
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            farmName: profile.farmName,
+            city: profile.city,
+            region: profile.region,
+            roles: profile.roles,
+            phoneVerified: profile.phoneVerified,
+          ),
+        );
+      } catch (_) {}
     } catch (_) {}
   }
 
@@ -258,6 +267,9 @@ class AuthController extends StateNotifier<AuthState> {
 
     try {
       await _api.deleteAccount();
+      await _pushNotifications
+          .unregisterCurrentToken(unregisterFromBackend: false)
+          .timeout(const Duration(seconds: 2), onTimeout: () {});
       await _tokens.clear();
       _onSessionCleared();
       state = const AuthState();
@@ -277,10 +289,9 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
+  /// Не требует загруженного профиля: пользователя определяет токен, а ответ
+  /// возвращает актуальные данные профиля.
   Future<void> updateFarmName(String farmName) async {
-    final currentUser = state.user;
-    if (currentUser == null) return;
-
     state = state.copyWith(isLoading: true, error: null);
     try {
       final dto = await _api.updateProfile(
@@ -346,7 +357,6 @@ class AuthController extends StateNotifier<AuthState> {
       const Duration(seconds: 2),
       onTimeout: () {},
     );
-    _pushNotifications.onLogout();
     await _tokens.clear();
     _onSessionCleared();
     state = const AuthState();

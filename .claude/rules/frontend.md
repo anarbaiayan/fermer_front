@@ -21,6 +21,7 @@ Keep Flutter UI changes aligned with the current project structure and UX patter
 - Back navigation and deep-link entry points checked
 - Related provider invalidation covered after mutation
 - Bottom-nav selected index checked for every screen moved to or opened from More
+- Screen with the bottom bar registered inside the `ShellRoute` and mapped in `AppShell.indexForPath`
 
 ## UI Constraints
 - Preserve current mobile-first layout style.

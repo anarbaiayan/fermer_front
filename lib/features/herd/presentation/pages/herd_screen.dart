@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/network/api_exceptions.dart';
 import 'package:frontend/core/icons/app_icons.dart';
 import 'package:frontend/core/localization/l10n_extension.dart';
 import 'package:frontend/core/theme/app_colors.dart';
@@ -172,7 +173,14 @@ class _HerdScreenState extends ConsumerState<HerdScreen> {
                     } catch (e) {
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.errorPrefix('$e'))),
+                          SnackBar(
+                            content: Text(
+                              extractApiMessage(
+                                e,
+                                fallback: l10n.errorLoadingList,
+                              ),
+                            ),
+                          ),
                         );
                       }
                     } finally {

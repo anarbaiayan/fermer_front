@@ -11,6 +11,9 @@ enum NotificationType {
   stateChanged,
   reminder,
   info,
+
+  /// Продажа в долг просрочена (FP-503) — ведёт в «Долги».
+  financeOverdue,
   unknown,
 }
 
@@ -41,6 +44,8 @@ extension NotificationTypeX on NotificationType {
         return NotificationType.reminder;
       case 'INFO':
         return NotificationType.info;
+      case 'FINANCE_OVERDUE':
+        return NotificationType.financeOverdue;
       default:
         return NotificationType.unknown;
     }

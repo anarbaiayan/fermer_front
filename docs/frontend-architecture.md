@@ -57,6 +57,7 @@ Each feature usually contains:
 - `MoreScreen` lives in `lib/features/more/presentation/pages/more_screen.dart` and is the app directory for both primary destinations and secondary sections.
 - More groups screens into primary sections, farm management, and account/support.
 - Rations, feed stock, pharmacy, and pharmacy requests are not standalone bottom tabs; their screens show More as the selected bottom-nav item when applicable.
+- Finance is one shell screen `/finance` (More selected) with tabs inside it; its forms and lists live under `/finance/**` outside the shell. Its data comes from `FinanceRepository`: the real API by default, a mock with `--dart-define=FINANCE_MOCK=true`.
 - Drawer remains a secondary account/help menu. It intentionally excludes pharmacy, which is accessed through More.
 
 ## State Management

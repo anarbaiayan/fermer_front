@@ -21,7 +21,7 @@ final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
       api,
       tokensRepo,
       pushNotifications,
-      herdApi.invalidateCattleListCache,
+      onSessionCleared: herdApi.invalidateCattleListCache,
     );
   },
 );

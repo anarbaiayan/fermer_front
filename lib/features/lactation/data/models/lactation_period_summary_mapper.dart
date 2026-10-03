@@ -7,10 +7,12 @@ LactationPeriodSummary lactationPeriodSummaryFromDtos(
   List<BulkLactationDto> bulk,
 ) {
   return LactationPeriodSummary(
+    // Bulk-статистика фермы считается только по суточным отчётам. Контрольные
+    // замеры отдельных коров — отдельный набор данных: если сложить их с
+    // отчётами по ферме, молоко будет учтено дважды.
     // The API cannot identify individual cows within bulk records.
-    reportedCowCount: days.fold(0, (sum, day) => sum + day.cowCount),
-    // Daily totals already include bulk milk: do not add it a second time.
-    totalMilkLiters: days.fold(0, (sum, day) => sum + day.totalLiters),
+    reportedCowCount: days.fold(0, (sum, day) => sum + (day.bulkCowCount ?? 0)),
+    totalMilkLiters: days.fold(0, (sum, day) => sum + (day.bulkLiters ?? 0)),
     milkUsedForCalves: bulk.fold(
       0,
       (sum, item) => sum + (item.milkUsedForCalves ?? 0),

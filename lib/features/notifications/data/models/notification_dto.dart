@@ -46,6 +46,9 @@ class NotificationDto {
   final bool archived;
   final NotificationCattleInfoDto? cattleInfo;
 
+  /// Для `FINANCE_OVERDUE`: покупатель, чей долг просрочен.
+  final int? counterpartyId;
+
   const NotificationDto({
     required this.id,
     required this.typeRaw,
@@ -56,6 +59,7 @@ class NotificationDto {
     required this.readAt,
     required this.archived,
     required this.cattleInfo,
+    this.counterpartyId,
   });
 
   factory NotificationDto.fromJson(Map<String, dynamic> json) {
@@ -73,6 +77,7 @@ class NotificationDto {
               json['cattleInfo'] as Map<String, dynamic>,
             )
           : null,
+      counterpartyId: (json['counterpartyId'] as num?)?.toInt(),
     );
   }
 
@@ -89,6 +94,7 @@ class NotificationDto {
       readAt: readAt,
       archived: archived,
       cattleInfo: cattleInfo?.toEntity(),
+      counterpartyId: counterpartyId,
     );
   }
 }

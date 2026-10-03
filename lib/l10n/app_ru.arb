@@ -858,5 +858,686 @@
     "vetConsultantPriceLabel": "Консультация",
     "vetConsultantsEmptyTitle": "Нет доступных ветврачей",
     "vetConsultantsEmptySubtitle": "Загляните сюда чуть позже",
-    "vetOpeningWhatsapp": "Открываем WhatsApp..."
+    "vetOpeningWhatsapp": "Открываем WhatsApp...",
+    "lactationAddSheetTitle": "Добавить данные о надое",
+    "lactationAddSheetFarmHint": "Ежедневный общий отчёт",
+    "lactationAddSheetControlHint": "Замер продуктивности отдельных коров",
+    "controlMilkingTitle": "Контрольный надой",
+    "controlMilkingStep": "Шаг {step} из {total}",
+    "@controlMilkingStep": {
+        "placeholders": {
+            "step": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingSelectCows": "Выберите коров",
+    "controlMilkingSearchHint": "Поиск по бирке или имени",
+    "controlMilkingFilterAll": "Все",
+    "controlMilkingFilterLactating": "Дойные",
+    "controlMilkingFilterGroup": "Группа",
+    "controlMilkingGroupTitle": "Группа",
+    "controlMilkingGroupAll": "Все",
+    "controlMilkingGroupNone": "Без группы",
+    "controlMilkingSelectAllCount": "Выбрать все ({count})",
+    "@controlMilkingSelectAllCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingSelected": "Выбрано: {count}",
+    "@controlMilkingSelected": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingNext": "Далее",
+    "controlMilkingEmptyTitle": "Нет доступных коров",
+    "controlMilkingEmptySubtitle": "Добавьте животных в раздел «Стадо», чтобы провести контрольный надой.",
+    "controlMilkingNotFoundTitle": "Коровы не найдены",
+    "controlMilkingNotFoundSubtitle": "Измените параметры поиска или фильтры.",
+    "controlMilkingSearchEmpty": "По запросу «{query}» ничего не найдено.",
+    "@controlMilkingSearchEmpty": {
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingLoading": "Загрузка коров...",
+    "controlMilkingLoadErrorTitle": "Не удалось загрузить список коров",
+    "controlMilkingLoadErrorSubtitle": "Проверьте подключение к интернету и попробуйте снова.",
+    "controlMilkingCowsSelected": "{count} коров выбрано",
+    "@controlMilkingCowsSelected": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingTabUnfilled": "Не заполнено {count}",
+    "@controlMilkingTabUnfilled": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingFilledProgress": "{filled} из {total} заполнено",
+    "@controlMilkingFilledProgress": {
+        "placeholders": {
+            "filled": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingTotalVolume": "{liters} л всего",
+    "@controlMilkingTotalVolume": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingInvalidValue": "Проверьте количество молока: допустимы только числа от нуля.",
+    "controlMilkingNothingToSave": "Введите количество молока хотя бы для одной коровы.",
+    "controlMilkingPartialTitle": "Не заполнены данные для {count} коров",
+    "@controlMilkingPartialTitle": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingPartialMessage": "Для некоторых выбранных коров количество молока не указано.",
+    "controlMilkingPartialContinue": "Продолжить заполнение",
+    "controlMilkingPartialSave": "Сохранить только {count}",
+    "@controlMilkingPartialSave": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingDuplicateTitle": "Замеры уже существуют",
+    "controlMilkingDuplicateMessage": "Для {count} коров на {date} • {time} уже есть контрольный замер.",
+    "@controlMilkingDuplicateMessage": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingDuplicateKeep": "Оставить существующие",
+    "controlMilkingDuplicateUpdate": "Изменить значения",
+    "controlMilkingSavedTitle": "Контрольный надой сохранён",
+    "controlMilkingSavedMessage": "{count} коров\nОбщий объём контрольных замеров: {liters} л",
+    "@controlMilkingSavedMessage": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingSaveErrorTitle": "Не удалось сохранить контрольный надой",
+    "controlMilkingSaveErrorSubtitle": "Введённые данные сохранены на экране.",
+    "controlMilkingSavePartialFailed": "Не удалось сохранить данные для {count} коров. Введённые значения остались на экране.",
+    "@controlMilkingSavePartialFailed": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "controlMilkingRetrySave": "Попробовать снова",
+    "controlMilkingCancelTitle": "Отменить контрольный надой?",
+    "controlMilkingCancelMessage": "Введённые данные не будут сохранены.",
+    "controlMilkingCancelStay": "Продолжить заполнение",
+    "controlMilkingCancelExit": "Выйти без сохранения",
+    "controlMilkingRemoveTitle": "Убрать корову из контрольного надоя?",
+    "controlMilkingRemoveMessage": "Для этой коровы уже введено {liters} л.",
+    "@controlMilkingRemoveMessage": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "controlMilkingRemoveConfirm": "Убрать",
+    "milkProductivityLastControl": "Последний контрольный надой",
+    "milkProductivityAverage": "Средний надой",
+    "milkProductivityAverageHint": "за последние {count} замеров",
+    "@milkProductivityAverageHint": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "milkProductivityMax": "Максимальный надой",
+    "milkProductivityMeasurements": "Количество замеров",
+    "milkProductivityHistory": "История замеров",
+    "milkProductivityEmpty": "Контрольных надоев ещё нет",
+    "milkProductivityEmptyHint": "Замеры вносятся в разделе «Лактация» → «Контрольный надой».",
+    "controlMilkingColumnCow": "Кличка / бирка",
+    "controlMilkingColumnMilk": "Молоко",
+    "controlMilkingTabUnfilledEmpty": "Незаполненные",
+    "financeTitle": "Финансы",
+    "financeNewBadge": "Новое",
+    "financeTabSummary": "Сводка",
+    "financeTabIncome": "Доход",
+    "financeTabExpense": "Расход",
+    "financeTabReport": "Отчёт",
+    "financeSettingsTitle": "Счета и покупатели",
+    "financePrevMonth": "Предыдущий месяц",
+    "financeNextMonth": "Следующий месяц",
+    "financeAddSale": "Продажа",
+    "financeAddExpense": "Расход",
+    "financeDateToday": "Сегодня, {date}",
+    "@financeDateToday": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountTypeCash": "Наличные",
+    "financeAccountTypeCard": "Карта",
+    "financeAccountTypeBank": "Банк",
+    "financeCategoryFeed": "Корма",
+    "financeCategoryVeterinary": "Ветпрепараты",
+    "financeCategorySalary": "Зарплата",
+    "financeCategoryFuel": "Топливо",
+    "financeCategoryRent": "Аренда",
+    "financeCategoryEquipment": "Оборудование",
+    "financeCategoryOther": "Прочее",
+    "financeUnitLiter": "л",
+    "financeUnitKg": "кг",
+    "financeUnitPiece": "шт",
+    "financeProductKurt": "Құрт",
+    "financeProductButter": "Масло",
+    "financeProductSourCream": "Сметана",
+    "financeProductMilk": "Молоко",
+    "financeProductKefir": "Кефир",
+    "financeProductCottageCheese": "Творог",
+    "financeProductGhee": "Гхи",
+    "financeProductCheese": "Сыр",
+    "financeProductOther": "Другое",
+    "financeSaleStatusPaid": "Оплачено",
+    "financeSaleStatusDue": "В долг до {date}",
+    "@financeSaleStatusDue": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleStatusOverdue": "Просрочено {days} дн.",
+    "@financeSaleStatusOverdue": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeSaleStatusDebt": "В долг",
+    "financeLoadError": "Не удалось загрузить данные",
+    "financeRetry": "Повторить",
+    "financeDebtsTitle": "Долги",
+    "financeAccountNewTitle": "Новый счёт",
+    "financeAccountTitle": "Счёт",
+    "financeCounterpartyNewTitle": "Новый покупатель",
+    "financeCounterpartyTitle": "Покупатель",
+    "financeSaleNewTitle": "Новая продажа",
+    "financeSaleTitle": "Продажа",
+    "financeExpenseNewTitle": "Новый расход",
+    "financeExpenseTitle": "Расход",
+    "financeReportReadyTitle": "Отчёт готов",
+    "financeSave": "Сохранить",
+    "financeOptional": "необязательно",
+    "financeHideAction": "Скрыть",
+    "financeNameLabel": "Название",
+    "financeCashboxName": "Касса",
+    "financeOnboardingTitle": "Начнём с денег, которые у вас есть",
+    "financeOnboardingText": "Укажите, сколько сейчас в кассе и на карте. Продажи и расходы дальше будут менять остаток сами.",
+    "financeOnboardingAmountLabel": "Сколько сейчас",
+    "financeOnboardingAmountHint": "Например, 245 000",
+    "financeOnboardingOtherAccount": "Другой счёт",
+    "financeOnboardingStart": "Начать",
+    "financeOnboardingLater": "Остаток можно поправить позже в «Счета и покупатели»",
+    "financeOnboardingEmptyError": "Укажите остаток хотя бы для одного счёта. Если денег нет, впишите 0.",
+    "financeOnboardingDone": "Счета созданы — теперь записывайте продажи и расходы",
+    "financeSettingsAccountsTab": "Счета",
+    "financeSettingsBuyersTab": "Покупатели",
+    "financeAddAccount": "Добавить счёт",
+    "financeAddCounterparty": "Добавить покупателя",
+    "financeHiddenSection": "Скрытые",
+    "financeHiddenHint": "Не предлагается в новых записях",
+    "financeAccountsCallout": "Счёт не удаляется, а скрывается: он не предлагается в новых записях, но остаётся в истории.",
+    "financeBuyersCallout": "Покупатель не удаляется, а скрывается: в старых продажах он останется.",
+    "financeNoPhone": "без телефона",
+    "financeBuyerOwes": "должен {amount}",
+    "@financeBuyerOwes": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountsEmptyTitle": "Счетов пока нет",
+    "financeAccountsEmptyText": "Добавьте кассу или карту, чтобы записывать продажи и расходы",
+    "financeBuyersEmptyTitle": "Покупателей пока нет",
+    "financeBuyersEmptyText": "Добавьте магазин или частника здесь или прямо при продаже",
+    "financeAccountNameError": "Назовите счёт, например «Касса»",
+    "financeAccountTypeLabel": "Тип",
+    "financeAccountInitialNewLabel": "Сколько на счёте сейчас",
+    "financeAccountInitialEditLabel": "Начальный остаток",
+    "financeAccountInitialError": "Укажите сумму, даже если это 0",
+    "financeAccountInitialCallout": "Пересчитайте наличные или посмотрите баланс в приложении банка. От этой суммы считается остаток — без неё цифры разойдутся с реальными.",
+    "financeAccountBalanceNow": "Сейчас на счёте",
+    "financeBalanceWillBe": "Остаток «{name}» станет {amount}",
+    "@financeBalanceWillBe": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            },
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountCreate": "Создать счёт",
+    "financeAccountHide": "Скрыть счёт",
+    "financeAccountHideConfirm": "Скрыть счёт «{name}»?",
+    "@financeAccountHideConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountHideNote": "Скрытый счёт не предлагается в новых записях, но остаётся в истории",
+    "financeAccountCreated": "Счёт «{name}» создан",
+    "@financeAccountCreated": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeAccountSaved": "Счёт сохранён",
+    "financeAccountHidden": "Счёт скрыт",
+    "financeAccountHiddenTag": "скрыт",
+    "financeAccountNotFound": "Счёт не найден",
+    "financeCounterpartyNameHint": "Магазин Береке",
+    "financeCounterpartyNameError": "Укажите название",
+    "financePhoneLabel": "Телефон",
+    "financePhoneHint": "+7 (777) 777-77-77",
+    "financePhoneHelper": "Чтобы напомнить о долге в один тап",
+    "financePhoneError": "Введите номер полностью",
+    "financeCounterpartyAdd": "Добавить",
+    "financeCounterpartyHide": "Скрыть покупателя",
+    "financeCounterpartyHideConfirm": "Скрыть покупателя «{name}»?",
+    "@financeCounterpartyHideConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeCounterpartyHideNote": "В старых продажах покупатель останется",
+    "financeCounterpartyCreated": "Покупатель добавлен",
+    "financeCounterpartySaved": "Покупатель сохранён",
+    "financeCounterpartyHidden": "Покупатель скрыт",
+    "financeCounterpartyNotFound": "Покупатель не найден",
+    "financeDateYesterday": "Вчера, {date}",
+    "@financeDateYesterday": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeFilterAll": "Все",
+    "financeAllAccounts": "Все счета",
+    "financeSpentLabel": "Потрачено",
+    "financeRecordsCount": "{count, plural, one{{count} запись} few{{count} записи} many{{count} записей} other{{count} записи}}",
+    "@financeRecordsCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "financeExpensesEmptyTitle": "Расходов не найдено",
+    "financeExpensesEmptyText": "Измените фильтр или добавьте расход",
+    "financeDeleteAction": "Удалить",
+    "financeDateLabel": "Дата",
+    "financeAmountLabel": "Сумма",
+    "financeAmountError": "Укажите сумму",
+    "financeCommentLabel": "Комментарий",
+    "financeNoActiveAccounts": "Сначала добавьте счёт — кассу или карту, откуда платите и куда приходят деньги",
+    "financeExpenseCategoryLabel": "Категория",
+    "financeExpenseCategoryError": "Выберите категорию",
+    "financeExpenseNameLabel": "На что",
+    "financeExpenseNameHintFeed": "Комбикорм КК-60, 2 мешка",
+    "financeExpenseNameHint": "Например, дизель 50 л",
+    "financeExpenseNameError": "Напишите, на что потратили",
+    "financeExpenseAccountLabel": "Откуда платили",
+    "financeExpenseCommentHint": "Например, у кого покупали",
+    "financeExpenseSaveNew": "Сохранить расход",
+    "financeExpenseDelete": "Удалить расход",
+    "financeExpenseDeleteConfirm": "Удалить расход «{name}»?",
+    "@financeExpenseDeleteConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeExpenseSaved": "Расход сохранён",
+    "financeExpenseUpdated": "Расход изменён",
+    "financeExpenseDeleted": "Расход удалён",
+    "financeExpenseNotFound": "Расход не найден",
+    "financeIncomeFilterPaid": "Оплачено",
+    "financeIncomeFilterDebt": "В долг",
+    "financeIncomeFilterOverdue": "Просрочено",
+    "financeSoldLabel": "Продано на",
+    "financeUnpaidAmount": "не оплачено {amount}",
+    "@financeUnpaidAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalesEmptyTitle": "Продаж не найдено",
+    "financeSalesEmptyText": "Измените фильтр или запишите продажу",
+    "financeGetPayment": "Получить оплату",
+    "financeNoBuyer": "Без покупателя",
+    "financeSaleOfDate": "продажа {date}",
+    "@financeSaleOfDate": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financePayAccountLabel": "Куда пришли деньги",
+    "financePayDateLabel": "Дата оплаты",
+    "financePayConfirm": "Деньги получены",
+    "financePaymentReceived": "{amount} зачислено на «{account}»",
+    "@financePaymentReceived": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            },
+            "account": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleBuyerLabel": "Покупатель",
+    "financeSaleBuyerNote": "можно пропустить",
+    "financeAllBuyers": "Все покупатели",
+    "financeNewBuyer": "Новый",
+    "financeSaleProductLabel": "Товар",
+    "financeSaleProductHint": "Например, айран",
+    "financeSaleProductError": "Выберите товар",
+    "financeSaleProductNameError": "Напишите, что продали",
+    "financeSaleQuantityLabel": "Количество",
+    "financeSaleQuantityError": "Укажите количество больше нуля",
+    "financeSalePriceLabel": "Цена за 1 {unit}",
+    "@financeSalePriceLabel": {
+        "placeholders": {
+            "unit": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePriceError": "Укажите цену",
+    "financeSalePriceHintBuyer": "Как в прошлый раз у этого покупателя: {price}",
+    "@financeSalePriceHintBuyer": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePriceHintLast": "Последняя цена: {price}",
+    "@financeSalePriceHintLast": {
+        "placeholders": {
+            "price": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleAmountNote": "считается сама",
+    "financeSalePaymentLabel": "Оплата",
+    "financeSaleDueLabel": "Оплатить до",
+    "financeSaleDueHint": "{days, plural, one{Через {days} день после продажи. Можно изменить.} few{Через {days} дня после продажи. Можно изменить.} many{Через {days} дней после продажи. Можно изменить.} other{Через {days} дня после продажи. Можно изменить.}}",
+    "@financeSaleDueHint": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeSaleDateLabel": "Дата продажи",
+    "financeSaleCommentHint": "Например, отдал с доставкой",
+    "financeSaleSaveNew": "Сохранить продажу",
+    "financeSaleDebtNote": "Остатки счетов не изменятся — деньги придут, когда отметите оплату",
+    "financeSaleDebtBuyerError": "Для продажи в долг выберите покупателя",
+    "financeSaleHiddenAccountError": "Этот счёт скрыт — выберите, куда пришли деньги",
+    "financeSaleDelete": "Удалить продажу",
+    "financeSaleDeleteConfirm": "Удалить продажу «{name}»?",
+    "@financeSaleDeleteConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleSaved": "Продажа сохранена",
+    "financeSaleUpdated": "Продажа изменена",
+    "financeSaleDeleted": "Продажа удалена",
+    "financeSaleNotFound": "Продажа не найдена",
+    "financeProfitFor": "Прибыль за {month}",
+    "@financeProfitFor": {
+        "placeholders": {
+            "month": {
+                "type": "String"
+            }
+        }
+    },
+    "financeBalancesTitle": "Остатки на счетах",
+    "financeOwedToYou": "Вам должны",
+    "financeOverdueAmount": "Просрочено {amount}",
+    "@financeOverdueAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeDebtOverdueDays": "просрочка {days} дн.",
+    "@financeDebtOverdueDays": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "financeDebtDueUntil": "до {date}",
+    "@financeDebtDueUntil": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeExpensesByCategory": "Расходы по категориям",
+    "financeTotal": "Всего",
+    "financeNoExpensesFor": "За {month} расходов нет",
+    "@financeNoExpensesFor": {
+        "placeholders": {
+            "month": {
+                "type": "String"
+            }
+        }
+    },
+    "financeDebtsTotal": "Всего должны",
+    "financeNoPhoneFull": "телефон не указан",
+    "financeDueUntilPill": "До {date}",
+    "@financeDueUntilPill": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSaleDueWas": "срок был {date}",
+    "@financeSaleDueWas": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeSalePayUntil": "оплатить до {date}",
+    "@financeSalePayUntil": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "financeGetPaymentShort": "Получить",
+    "financeCall": "Позвонить",
+    "financeRemind": "Напомнить",
+    "financeDebtReminderText": "Здравствуйте! Напоминаю об оплате {amount}. Спасибо!",
+    "@financeDebtReminderText": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "financeCallError": "Не удалось открыть звонок",
+    "financeNoDebtsTitle": "Долгов нет",
+    "financeNoDebtsText": "Все продажи оплачены",
+    "financeReportPeriodLabel": "Период",
+    "financeReportThisMonth": "Этот месяц",
+    "financeReportLastMonth": "Прошлый месяц",
+    "financeReportQuarter": "Квартал",
+    "financeReportCustom": "Свой период",
+    "financeReportFrom": "Начало",
+    "financeReportTo": "Конец",
+    "financeReportTypeLabel": "Что в отчёте",
+    "financeReportFull": "Полный",
+    "financeReportFullHint": "Доход, расход и прибыль",
+    "financeReportIncome": "Доходы",
+    "financeReportIncomeHint": "Все продажи за период",
+    "financeReportExpense": "Расходы",
+    "financeReportExpenseHint": "Траты по категориям",
+    "financeReportDebtsHint": "Кто и сколько должен",
+    "financeReportContents": "В документ попадут",
+    "financeReportFarm": "Хозяйство",
+    "financeProfit": "Прибыль",
+    "financeReportOperations": "Операций",
+    "financeReportMake": "Сформировать PDF",
+    "financeReportShare": "Отправить",
+    "financeReportShareHint": "Через «Отправить» файл уходит в WhatsApp, Telegram или на почту — там же его можно сохранить на телефон",
+    "financeReportMissing": "Отчёт не найден — сформируйте его заново",
+    "financeReportFilePrefix": "Финансы",
+    "financeFileSizeKb": "{size} КБ",
+    "@financeFileSizeKb": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "financeFileSizeMb": "{size} МБ",
+    "@financeFileSizeMb": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "todayTitle": "Сегодня",
+    "todayMilk": "Надой",
+    "todayMilkSessions": "утро {morning} · вечер {evening}",
+    "@todayMilkSessions": {
+        "placeholders": {
+            "morning": {
+                "type": "String"
+            },
+            "evening": {
+                "type": "String"
+            }
+        }
+    },
+    "todayMilkCows": "коров: {count}",
+    "@todayMilkCows": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "todayMilkLiters": "{liters} л",
+    "@todayMilkLiters": {
+        "placeholders": {
+            "liters": {
+                "type": "String"
+            }
+        }
+    },
+    "todayMilkEmpty": "Надой за сегодня",
+    "todayMilkEmptyHint": "Ещё не записан",
+    "todayMilkRecord": "Записать",
+    "todayMilkError": "Надой не загрузился — нажмите, чтобы повторить",
+    "todaySold": "Продано",
+    "todayNoSales": "Продаж пока нет",
+    "todayNoSalesHint": "Запишите, если сегодня продавали",
+    "todayNoExpenses": "Расходов нет",
+    "todayNoExpensesHint": "Купили корм, заправились?",
+    "todayMoney": "Деньги",
+    "todayTotalOnAccounts": "Всего на счетах",
+    "todaySetUpFinance": "Укажите, сколько денег в кассе и на карте — и здесь будут остатки и долги",
+    "todayTasks": "Дела на сегодня",
+    "todayNoTasks": "На сегодня дел нет",
+    "updateRequiredTitle": "Нужно обновить приложение",
+    "updateRequiredText": "Эта версия Фермер+ больше не поддерживается. Обновите приложение, чтобы продолжить работу — ваши данные сохранятся.",
+    "updateRequiredAction": "Обновить",
+    "updateRequiredStoreError": "Не удалось открыть магазин приложений. Найдите «Фермер+» в Google Play или App Store и обновите вручную.",
+    "updateRequiredInstalledVersion": "Ваша версия: {version}",
+    "@updateRequiredInstalledVersion": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    }
 }

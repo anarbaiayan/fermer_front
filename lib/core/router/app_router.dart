@@ -1,4 +1,5 @@
 import 'package:frontend/core/screens/not_found_screen.dart';
+import 'package:frontend/core/widgets/app_shell.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_code_screen.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_new_password_screen.dart';
 import 'package:frontend/features/auth/presentation/forgot_password_phone_screen.dart';
@@ -10,6 +11,16 @@ import 'package:frontend/features/auth/presentation/register_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_bulk_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/add_cattle_event_screen.dart';
 import 'package:frontend/features/cattle_events/presentation/pages/events_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_account_form_screen.dart';
+import 'package:frontend/features/finance/domain/entities/finance_entities.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_counterparty_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_debts_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_expense_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_sale_form_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_screen.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_settings_screen.dart';
+import 'package:frontend/features/finance/application/finance_report.dart';
+import 'package:frontend/features/finance/presentation/pages/finance_report_ready_screen.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/cattle_edit_data.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
@@ -19,7 +30,8 @@ import 'package:frontend/features/herd/presentation/pages/herd_animal_screen.dar
 import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_details_screen.dart';
 import 'package:frontend/features/herd/presentation/pages/herd_edit_animal_screen.dart';
 import 'package:frontend/features/lactation/presentation/pages/add_bulk_lactation_screen.dart';
-import 'package:frontend/features/lactation/presentation/pages/add_lactation_screen.dart';
+import 'package:frontend/features/lactation/presentation/pages/control_milking_select_screen.dart';
+import 'package:frontend/features/lactation/presentation/pages/control_milking_values_screen.dart';
 import 'package:frontend/features/lactation/presentation/pages/lactation_screen.dart';
 import 'package:frontend/features/more/presentation/pages/more_screen.dart';
 import 'package:frontend/features/notifications/presentation/pages/archived_notifications_screen.dart';
@@ -58,16 +70,6 @@ final GoRouter appRouter = GoRouter(
         return RegisterStep2Screen(initialData: data);
       },
     ),
-    GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
-    GoRoute(path: '/more', builder: (context, state) => const MoreScreen()),
-    GoRoute(
-      path: '/herd',
-      builder: (context, state) {
-        final filter = state.extra as HerdFilterType?;
-        return HerdScreen(filter: filter);
-      },
-    ),
-
     // сначала add
     GoRoute(
       path: '/herd/add',
@@ -154,25 +156,20 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: '/lactation',
-      builder: (context, state) => const LactationScreen(),
-    ),
-
-    GoRoute(
-      path: '/herd/:id/lactation/add',
-      builder: (context, state) {
-        final id = int.parse(state.pathParameters['id']!);
-        final extra = state.extra;
-        final tag = (extra is Map && extra['cattleTagNumber'] is String)
-            ? extra['cattleTagNumber'] as String
-            : '';
-        return AddLactationScreen(cattleId: id, cattleTagNumber: tag);
-      },
-    ),
-
-    GoRoute(
       path: '/lactation/bulk/add',
       builder: (context, state) => const AddBulkLactationScreen(),
+    ),
+
+    // Контрольный надой: двухшаговый сценарий, доступный только из раздела
+    // "Лактация". Индивидуальные замеры из карточки животного больше не
+    // создаются.
+    GoRoute(
+      path: '/lactation/control',
+      builder: (context, state) => const ControlMilkingSelectScreen(),
+    ),
+    GoRoute(
+      path: '/lactation/control/values',
+      builder: (context, state) => const ControlMilkingValuesScreen(),
     ),
 
     GoRoute(
@@ -196,25 +193,9 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const ArchivedNotificationsScreen(),
     ),
 
-    GoRoute(path: '/events', builder: (context, state) => const EventsScreen()),
     GoRoute(
       path: '/events/bulk/add',
       builder: (context, state) => const AddBulkCattleEventScreen(),
-    ),
-    GoRoute(
-      path: '/rations',
-      builder: (context, state) {
-        final extra = state.extra;
-        int? cattleId;
-
-        if (extra is Map<String, dynamic>) {
-          final v = extra['cattleId'];
-          if (v is int) cattleId = v;
-          if (v is String) cattleId = int.tryParse(v);
-        }
-
-        return RationsScreen(cattleId: cattleId);
-      },
     ),
     GoRoute(
       path: '/rations/cattle/:cattleId',
@@ -227,22 +208,7 @@ final GoRouter appRouter = GoRouter(
       path: '/rations/stocks/add',
       builder: (context, state) => const AddUserRationsScreen(),
     ),
-    GoRoute(
-      path: '/rations/stocks',
-      builder: (context, state) => const UserRationsStocksScreen(),
-    ),
-    GoRoute(
-      path: '/rations/stocks/:type',
-      builder: (context, state) {
-        final type = state.pathParameters['type'];
-        return UserRationsStocksScreen(filterType: type);
-      },
-    ),
 
-    GoRoute(
-      path: '/pharmacy',
-      builder: (context, state) => const PharmacyScreen(),
-    ),
     GoRoute(
       path: '/pharmacy/requests',
       builder: (context, state) => const PharmacyRequestsScreen(),
@@ -255,9 +221,164 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
+    // «Финансы»: формы, долги, справочники и готовый PDF открываются без
+    // нижнего бара.
     GoRoute(
-      path: '/vet-consultants',
-      builder: (context, state) => const VetConsultantsScreen(),
+      path: '/finance/debts',
+      builder: (context, state) => FinanceDebtsScreen(
+        counterpartyId: int.tryParse(
+          state.uri.queryParameters['counterpartyId'] ?? '',
+        ),
+      ),
+    ),
+    GoRoute(
+      path: '/finance/settings',
+      builder: (context, state) => FinanceSettingsScreen(
+        initialTab: FinanceSettingsTab.fromQuery(
+          state.uri.queryParameters['tab'],
+        ),
+      ),
+    ),
+    GoRoute(
+      path: '/finance/accounts/new',
+      builder: (context, state) => const FinanceAccountFormScreen(),
+    ),
+    GoRoute(
+      path: '/finance/accounts/:id',
+      builder: (context, state) => FinanceAccountFormScreen(
+        accountId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+      ),
+    ),
+    GoRoute(
+      path: '/finance/counterparties/new',
+      builder: (context, state) => const FinanceCounterpartyFormScreen(),
+    ),
+    GoRoute(
+      path: '/finance/counterparties/:id',
+      builder: (context, state) => FinanceCounterpartyFormScreen(
+        counterpartyId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+      ),
+    ),
+    GoRoute(
+      path: '/finance/sales/new',
+      builder: (context, state) => const FinanceSaleFormScreen(),
+    ),
+    GoRoute(
+      path: '/finance/sales/:id',
+      builder: (context, state) => FinanceSaleFormScreen(
+        saleId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+        initial: state.extra is Sale ? state.extra as Sale : null,
+      ),
+    ),
+    GoRoute(
+      path: '/finance/expenses/new',
+      builder: (context, state) => const FinanceExpenseFormScreen(),
+    ),
+    GoRoute(
+      path: '/finance/expenses/:id',
+      builder: (context, state) => FinanceExpenseFormScreen(
+        expenseId: int.tryParse(state.pathParameters['id'] ?? '') ?? -1,
+        initial: state.extra is Expense ? state.extra as Expense : null,
+      ),
+    ),
+    GoRoute(
+      path: '/finance/report/ready',
+      builder: (context, state) => FinanceReportReadyScreen(
+        document: state.extra is FinanceReportDocument
+            ? state.extra as FinanceReportDocument
+            : null,
+      ),
+    ),
+
+    // Экраны с нижним баром. Оболочка держит бар и drawer вне анимаций
+    // перехода, поэтому при смене экрана меняется только содержимое.
+    // Маршрут стоит последним: '/rations/stocks/:type' не должен перехватывать
+    // '/rations/stocks/add'. В экраны оболочки из экранов вне неё переходить
+    // через context.go, не push: push создал бы вторую копию оболочки.
+    ShellRoute(
+      builder: (context, state, child) => AppShell(
+        currentIndex: AppShell.indexForPath(state.topRoute?.path),
+        child: child,
+      ),
+      routes: [
+        // Вкладки переключаются без анимации, как нативный tab bar.
+        GoRoute(
+          path: '/home',
+          pageBuilder: (context, state) =>
+              NoTransitionPage(key: state.pageKey, child: const HomeScreen()),
+        ),
+        GoRoute(
+          path: '/herd',
+          pageBuilder: (context, state) {
+            final filter = state.extra as HerdFilterType?;
+            return NoTransitionPage(
+              key: state.pageKey,
+              child: HerdScreen(filter: filter),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/events',
+          pageBuilder: (context, state) =>
+              NoTransitionPage(key: state.pageKey, child: const EventsScreen()),
+        ),
+        GoRoute(
+          path: '/lactation',
+          pageBuilder: (context, state) => NoTransitionPage(
+            key: state.pageKey,
+            child: const LactationScreen(),
+          ),
+        ),
+        GoRoute(
+          path: '/more',
+          pageBuilder: (context, state) =>
+              NoTransitionPage(key: state.pageKey, child: const MoreScreen()),
+        ),
+
+        // Разделы из "Ещё" открываются обычным переходом платформы, свайп
+        // назад на iOS работает; анимируется только содержимое над баром.
+        GoRoute(
+          path: '/rations',
+          builder: (context, state) {
+            final extra = state.extra;
+            int? cattleId;
+
+            if (extra is Map<String, dynamic>) {
+              final v = extra['cattleId'];
+              if (v is int) cattleId = v;
+              if (v is String) cattleId = int.tryParse(v);
+            }
+
+            return RationsScreen(cattleId: cattleId);
+          },
+        ),
+        GoRoute(
+          path: '/rations/stocks',
+          builder: (context, state) => const UserRationsStocksScreen(),
+        ),
+        GoRoute(
+          path: '/rations/stocks/:type',
+          builder: (context, state) {
+            final type = state.pathParameters['type'];
+            return UserRationsStocksScreen(filterType: type);
+          },
+        ),
+        GoRoute(
+          path: '/pharmacy',
+          builder: (context, state) => const PharmacyScreen(),
+        ),
+        GoRoute(
+          path: '/vet-consultants',
+          builder: (context, state) => const VetConsultantsScreen(),
+        ),
+        // Вкладки «Финансов» переключаются внутри экрана: `?tab=income`.
+        GoRoute(
+          path: '/finance',
+          builder: (context, state) => FinanceScreen(
+            initialTab: FinanceTab.fromQuery(state.uri.queryParameters['tab']),
+          ),
+        ),
+      ],
     ),
   ],
 );
