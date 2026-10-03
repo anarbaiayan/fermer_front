@@ -7,19 +7,31 @@ import 'package:frontend/features/herd/data/models/cattle_mappers.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 
 /// Загружает список животных с бэка
-final cattleListProvider = FutureProvider.autoDispose<List<Cattle>>((
-  ref,
-) async {
+final cattleListProvider = FutureProvider.autoDispose<List<Cattle>>((ref) {
   final api = ref.read(herdApiProvider);
+  const page = 0;
+  const size = 200;
+  const sortBy = 'createdAt';
+  const sortDirection = 'DESC';
 
-  final dtos = await api.getCattleList(
-    page: 0,
-    size: 200,
-    sortBy: 'createdAt',
-    sortDirection: 'DESC',
+  final cached = api.getCachedCattleList(
+    page: page,
+    size: size,
+    sortBy: sortBy,
+    sortDirection: sortDirection,
   );
+  if (cached != null) {
+    return cached.map(cattleFromDto).toList();
+  }
 
-  return dtos.map(cattleFromDto).toList();
+  return api
+      .getCattleList(
+        page: page,
+        size: size,
+        sortBy: sortBy,
+        sortDirection: sortDirection,
+      )
+      .then((dtos) => dtos.map(cattleFromDto).toList());
 });
 
 final cattleDetailsProvider = FutureProvider.autoDispose

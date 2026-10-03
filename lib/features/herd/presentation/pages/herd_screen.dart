@@ -5,6 +5,7 @@ import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/widgets/app_page.dart';
 import 'package:frontend/core/widgets/app_scaffold.dart';
 import 'package:frontend/features/herd/application/herd_providers.dart';
+import 'package:frontend/features/herd/data/datasources/herd_api.dart';
 import 'package:frontend/features/herd/domain/entities/cattle.dart';
 import 'package:frontend/features/herd/domain/entities/herd_filter.dart';
 import 'package:frontend/features/herd/presentation/widgets/herd_list_item.dart';
@@ -151,6 +152,13 @@ class _HerdScreenState extends ConsumerState<HerdScreen> {
                     if (ref.read(herdRefreshingProvider)) return;
                     ref.read(herdRefreshingProvider.notifier).state = true;
                     try {
+                      final api = ref.read(herdApiProvider);
+                      await api.forceRefreshCattleList(
+                        page: 0,
+                        size: 200,
+                        sortBy: 'createdAt',
+                        sortDirection: 'DESC',
+                      );
                       ref.invalidate(cattleListProvider);
                       ref.invalidate(cattleStatisticsProvider);
                       for (final c in cattle) {
