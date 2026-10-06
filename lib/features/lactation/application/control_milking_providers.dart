@@ -288,7 +288,6 @@ void _invalidateAfterSave(Ref ref, {required List<int> savedIds}) {
     ],
     // Первый замер переводит корову в LACTATING — список и статистика стада
     // должны это увидеть.
-    cattleListProvider,
     cattleStatisticsProvider,
     milkingCandidatesProvider,
   ];
@@ -297,4 +296,5 @@ void _invalidateAfterSave(Ref ref, {required List<int> savedIds}) {
   for (final provider in providers) {
     if (ref.exists(provider)) ref.invalidate(provider);
   }
+  invalidateCattleListProvider(ref);
 }

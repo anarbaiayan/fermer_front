@@ -421,7 +421,7 @@ class _AddCattleEventScreenState extends ConsumerState<AddCattleEventScreen> {
       ref.invalidate(cattleDetailsProvider(widget.cattleId));
       ref.invalidate(cattleByIdProvider(widget.cattleId));
       ref.invalidate(cattleStatisticsProvider);
-      ref.invalidate(cattleListProvider);
+      invalidateCattleListProviderFromWidget(ref);
 
       if (!mounted) return;
       Navigator.of(context).pop(true);

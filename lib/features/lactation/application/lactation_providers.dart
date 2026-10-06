@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:frontend/features/lactation/data/models/bulk_lactation_dto.dart';
 import 'package:frontend/features/lactation/data/models/create_bulk_lactation_dto.dart';
 import 'package:frontend/features/lactation/data/models/lactation_daily_summary_dto.dart';
@@ -53,6 +54,7 @@ final createBulkLactationProvider =
           lactationBulkListProvider,
           lactationPeriodSummaryProvider,
         ]);
+        invalidateCattleListProvider(ref);
 
         return created;
       };

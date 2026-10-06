@@ -82,7 +82,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
       final api = ref.read(herdApiProvider);
       await api.deleteCattle(cattle.id);
 
-      ref.invalidate(cattleListProvider);
+      invalidateCattleListProviderFromWidget(ref);
       ref.invalidate(cattleStatisticsProvider);
       ref.invalidate(cattleDetailsProvider(cattle.id));
       ref.invalidate(cattleByIdProvider(cattle.id));
@@ -586,7 +586,7 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                     cattleDetailsProvider(cattle.id),
                                   );
                                   ref.invalidate(cattleByIdProvider(cattle.id));
-                                  ref.invalidate(cattleListProvider);
+                                  invalidateCattleListProviderFromWidget(ref);
                                   ref.invalidate(cattleStatisticsProvider);
                                 }
                               },
@@ -767,7 +767,9 @@ class _HerdAnimalContentState extends ConsumerState<HerdAnimalContent> {
                                             ref.invalidate(
                                               cattleByIdProvider(cattle.id),
                                             );
-                                            ref.invalidate(cattleListProvider);
+                                            invalidateCattleListProviderFromWidget(
+                                              ref,
+                                            );
                                             ref.invalidate(
                                               cattleStatisticsProvider,
                                             );

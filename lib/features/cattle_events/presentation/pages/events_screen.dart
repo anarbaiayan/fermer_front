@@ -8,6 +8,7 @@ import 'package:frontend/core/widgets/masked_date_picker.dart';
 import 'package:frontend/features/cattle_events/application/cattle_events_providers.dart';
 import 'package:frontend/features/cattle_events/application/planned_events_providers.dart';
 import 'package:frontend/features/cattle_events/domain/entities/planned_event.dart';
+import 'package:frontend/features/herd/application/herd_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -121,6 +122,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                               completeCattleEventProvider,
                             );
                             await complete(e.cattleId, e.id);
+                            invalidateCattleListProviderFromWidget(ref);
 
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(

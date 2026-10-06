@@ -43,9 +43,15 @@ class AuthController extends StateNotifier<AuthState> {
   final AuthApi _api;
   final TokenRepository _tokens;
   final PushNotificationService _pushNotifications;
+  final void Function() _onSessionCleared;
 
-  AuthController(this._api, this._tokens, this._pushNotifications)
-    : super(const AuthState());
+  AuthController(
+    this._api,
+    this._tokens,
+    this._pushNotifications, {
+    void Function()? onSessionCleared,
+  }) : _onSessionCleared = onSessionCleared ?? (() {}),
+       super(const AuthState());
 
   String _mapDioError(DioException e, {required bool isLogin}) {
     final status = e.response?.statusCode;
@@ -265,6 +271,7 @@ class AuthController extends StateNotifier<AuthState> {
           .unregisterCurrentToken(unregisterFromBackend: false)
           .timeout(const Duration(seconds: 2), onTimeout: () {});
       await _tokens.clear();
+      _onSessionCleared();
       state = const AuthState();
     } on DioException catch (e) {
       state = state.copyWith(
@@ -351,6 +358,7 @@ class AuthController extends StateNotifier<AuthState> {
       onTimeout: () {},
     );
     await _tokens.clear();
+    _onSessionCleared();
     state = const AuthState();
   }
 }

@@ -126,6 +126,7 @@ final deletePlannedEventProvider =
 
         ref.invalidate(cattleEventsPreviewProvider(cattleId));
         ref.invalidate(cattleEventsListProvider(cattleId));
+        invalidateCattleListProvider(ref);
       };
     });
 
@@ -141,7 +142,7 @@ final createBulkCattleEventsProvider =
 
         // общий herd
         ref.invalidate(cattleStatisticsProvider);
-        ref.invalidate(cattleListProvider);
+        invalidateCattleListProvider(ref);
 
         // КЛЮЧ: обновляем детали КАЖДОГО выбранного животного
         for (final id in dto.cattleIds) {

@@ -16,7 +16,10 @@ final herdApiProvider = Provider<HerdApi>((ref) {
 });
 
 class HerdApi {
+  static const _cattleListCacheTtl = Duration(minutes: 5);
+
   final Dio _dio;
+  final Map<String, _CattleListCacheEntry> _cattleListCache = {};
 
   HerdApi(this._dio);
 
@@ -26,6 +29,73 @@ class HerdApi {
     int size = 10,
     String sortBy = 'createdAt',
     String sortDirection = 'DESC',
+  }) async {
+    final cacheKey = _cattleListCacheKey(
+      page: page,
+      size: size,
+      sortBy: sortBy,
+      sortDirection: sortDirection,
+    );
+    final cached = _validCachedCattleList(cacheKey);
+    if (cached != null) return cached;
+
+    return _fetchCattleList(
+      page: page,
+      size: size,
+      sortBy: sortBy,
+      sortDirection: sortDirection,
+      cacheKey: cacheKey,
+    );
+  }
+
+  /// Returns a valid cached list without starting a network request.
+  List<CattleDto>? getCachedCattleList({
+    int page = 0,
+    int size = 10,
+    String sortBy = 'createdAt',
+    String sortDirection = 'DESC',
+  }) {
+    final cacheKey = _cattleListCacheKey(
+      page: page,
+      size: size,
+      sortBy: sortBy,
+      sortDirection: sortDirection,
+    );
+    return _validCachedCattleList(cacheKey);
+  }
+
+  /// Fetches the cattle list directly and replaces its cached value.
+  Future<List<CattleDto>> forceRefreshCattleList({
+    int page = 0,
+    int size = 10,
+    String sortBy = 'createdAt',
+    String sortDirection = 'DESC',
+  }) {
+    final cacheKey = _cattleListCacheKey(
+      page: page,
+      size: size,
+      sortBy: sortBy,
+      sortDirection: sortDirection,
+    );
+    return _fetchCattleList(
+      page: page,
+      size: size,
+      sortBy: sortBy,
+      sortDirection: sortDirection,
+      cacheKey: cacheKey,
+    );
+  }
+
+  void invalidateCattleListCache() {
+    _cattleListCache.clear();
+  }
+
+  Future<List<CattleDto>> _fetchCattleList({
+    required int page,
+    required int size,
+    required String sortBy,
+    required String sortDirection,
+    required String cacheKey,
   }) async {
     try {
       final response = await _dio.get(
@@ -61,15 +131,36 @@ class HerdApi {
         );
       }
 
-      return list
+      final cattle = list
           .map((e) => CattleDto.fromJson(e as Map<String, dynamic>))
           .toList();
+      _cattleListCache[cacheKey] = _CattleListCacheEntry(
+        data: cattle,
+        fetchedAt: DateTime.now(),
+      );
+      return cattle;
     } on DioException catch (e) {
       throw ApiException(
         e.message ?? 'Ошибка при получении списка животных',
         e.response?.statusCode,
       );
     }
+  }
+
+  String _cattleListCacheKey({
+    required int page,
+    required int size,
+    required String sortBy,
+    required String sortDirection,
+  }) => '$page|$size|$sortBy|$sortDirection';
+
+  List<CattleDto>? _validCachedCattleList(String cacheKey) {
+    final entry = _cattleListCache[cacheKey];
+    if (entry == null ||
+        DateTime.now().difference(entry.fetchedAt) >= _cattleListCacheTtl) {
+      return null;
+    }
+    return entry.data;
   }
 
   /// GET /api/cattle/{id}
@@ -97,7 +188,9 @@ class HerdApi {
       debugPrint(
         'POST /cattle status=${response.statusCode} body=${response.data}',
       );
-      return CattleDto.fromJson(response.data as Map<String, dynamic>);
+      final result = CattleDto.fromJson(response.data as Map<String, dynamic>);
+      invalidateCattleListCache();
+      return result;
     } on DioException catch (e) {
       final status = e.response?.statusCode;
       final data = e.response?.data;
@@ -134,7 +227,9 @@ class HerdApi {
       debugPrint(
         'PUT /cattle/$id status=${response.statusCode} body=${response.data}',
       );
-      return CattleDto.fromJson(response.data as Map<String, dynamic>);
+      final result = CattleDto.fromJson(response.data as Map<String, dynamic>);
+      invalidateCattleListCache();
+      return result;
     } on DioException catch (e) {
       throw ApiException(
         e.message ?? 'Ошибка при обновлении животного',
@@ -157,7 +252,11 @@ class HerdApi {
       debugPrint(
         'PATCH /details/$cattleId status=${response.statusCode} body=${response.data}',
       );
-      return CattleDetailsDto.fromJson(response.data as Map<String, dynamic>);
+      final result = CattleDetailsDto.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+      invalidateCattleListCache();
+      return result;
     } on DioException catch (e) {
       debugPrint(
         'PATCH /details/$cattleId DioException: ${e.response?.statusCode} ${e.response?.data}',
@@ -210,7 +309,9 @@ class HerdApi {
         final s = (r.data as String).trim();
         if (s.startsWith('{')) {
           final map = jsonDecode(s) as Map<String, dynamic>;
-          return CattleDetailsDto.fromJson(map);
+          final result = CattleDetailsDto.fromJson(map);
+          invalidateCattleListCache();
+          return result;
         }
       }
 
@@ -242,6 +343,7 @@ class HerdApi {
       );
 
       debugPrint('PATCH /details/$id status=${r.statusCode}');
+      invalidateCattleListCache();
     } on DioException catch (e) {
       debugPrint('PATCH /details/$id failed status=${e.response?.statusCode}');
       debugPrint('PATCH /details/$id failed body=${e.response?.data}');
@@ -256,6 +358,7 @@ class HerdApi {
   Future<void> deleteCattle(int id) async {
     try {
       await _dio.delete('/cattle/$id');
+      invalidateCattleListCache();
     } on DioException catch (e) {
       throw ApiException(
         e.message ?? 'Ошибка при удалении животного',
@@ -310,4 +413,11 @@ class HerdApi {
       );
     }
   }
+}
+
+class _CattleListCacheEntry {
+  final List<CattleDto> data;
+  final DateTime fetchedAt;
+
+  const _CattleListCacheEntry({required this.data, required this.fetchedAt});
 }
